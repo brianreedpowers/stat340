@@ -1,0 +1,24 @@
+project:
+  type: book
+
+book:
+  title: "STAT 340: Data Science II"
+  author: "Brian Powers"
+  date: "5/7/2025"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - rv.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
