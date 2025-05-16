@@ -10,9 +10,14 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - part: "Sampling"
     - rv.qmd
     - cov.qmd
-    - references.qmd
+    - part: "Testing"
+    - part: "Estimation"
+    - part: "Prediction"
+    - part: "Practice"
+    - rv_practice.qmd
 bibliography: references.bib
 
 format:

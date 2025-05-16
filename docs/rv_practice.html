@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 5&nbsp; Probability and Random Variables Practice</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./cov.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rv_practice.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Sampling</span></span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Testing</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Estimation</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Prediction</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Practice</span></span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv_practice.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">6</span> Practice Problems</a>
+  <ul class="collapse">
+  <li><a href="#using-wikipedia-in-college" id="toc-using-wikipedia-in-college" class="nav-link" data-scroll-target="#using-wikipedia-in-college"><span class="header-section-number">6.1</span> 1. Using Wikipedia in college</a></li>
+  <li><a href="#choose-the-distribution" id="toc-choose-the-distribution" class="nav-link" data-scroll-target="#choose-the-distribution"><span class="header-section-number">6.2</span> 2. Choose the distribution</a></li>
+  <li><a href="#variance-formula" id="toc-variance-formula" class="nav-link" data-scroll-target="#variance-formula"><span class="header-section-number">6.3</span> 3. Variance Formula</a></li>
+  <li><a href="#expectation-and-binomial" id="toc-expectation-and-binomial" class="nav-link" data-scroll-target="#expectation-and-binomial"><span class="header-section-number">6.4</span> 4. Expectation and Binomial</a></li>
+  <li><a href="#pmf-practice" id="toc-pmf-practice" class="nav-link" data-scroll-target="#pmf-practice"><span class="header-section-number">6.5</span> 5. PMF practice</a></li>
+  <li><a href="#dice-difference" id="toc-dice-difference" class="nav-link" data-scroll-target="#dice-difference"><span class="header-section-number">6.6</span> 6. Dice Difference</a></li>
+  <li><a href="#pmf-formula-ii" id="toc-pmf-formula-ii" class="nav-link" data-scroll-target="#pmf-formula-ii"><span class="header-section-number">6.7</span> 8. PMF Formula II</a></li>
+  <li><a href="#voltage-random-variable" id="toc-voltage-random-variable" class="nav-link" data-scroll-target="#voltage-random-variable"><span class="header-section-number">6.8</span> 9. Voltage random variable</a></li>
+  <li><a href="#golf-score" id="toc-golf-score" class="nav-link" data-scroll-target="#golf-score"><span class="header-section-number">6.9</span> 10. Golf Score</a></li>
+  <li><a href="#functions-of-a-random-variable" id="toc-functions-of-a-random-variable" class="nav-link" data-scroll-target="#functions-of-a-random-variable"><span class="header-section-number">6.10</span> 11. Functions of a random variable</a></li>
+  <li><a href="#voltage-ii" id="toc-voltage-ii" class="nav-link" data-scroll-target="#voltage-ii"><span class="header-section-number">6.11</span> 12. Voltage II</a></li>
+  <li><a href="#discrete-random-variable-problems" id="toc-discrete-random-variable-problems" class="nav-link" data-scroll-target="#discrete-random-variable-problems"><span class="header-section-number">6.12</span> 13. Discrete Random Variable Problems</a></li>
+  <li><a href="#hard-drive-failures" id="toc-hard-drive-failures" class="nav-link" data-scroll-target="#hard-drive-failures"><span class="header-section-number">6.13</span> 14. Hard Drive Failures</a></li>
+  <li><a href="#bit-errors" id="toc-bit-errors" class="nav-link" data-scroll-target="#bit-errors"><span class="header-section-number">6.14</span> 15. Bit Errors</a></li>
+  <li><a href="#processing-orders" id="toc-processing-orders" class="nav-link" data-scroll-target="#processing-orders"><span class="header-section-number">6.15</span> 16. Processing Orders</a></li>
+  <li><a href="#normal-random-variable" id="toc-normal-random-variable" class="nav-link" data-scroll-target="#normal-random-variable"><span class="header-section-number">6.16</span> 17. Normal Random Variable</a></li>
+  <li><a href="#identify-the-distribution" id="toc-identify-the-distribution" class="nav-link" data-scroll-target="#identify-the-distribution"><span class="header-section-number">6.17</span> 18. Identify the Distribution</a></li>
+  </ul></li>
+  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">7</span> Beyond STAT 340</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practice-problems" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Practice Problems</h1>
+<section id="using-wikipedia-in-college" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="using-wikipedia-in-college"><span class="header-section-number">6.1</span> 1. Using Wikipedia in college</h2>
+<p>A recent national study showed that approximately 44.7% of college students have used Wikipedia as a source in at least one of their term papers. Let <span class="math inline">\(X\)</span> equal the number of students in a random sample of size <span class="math inline">\(n = 31\)</span> who have used Wikipedia as a source.</p>
+<ol type="a">
+<li>How is <span class="math inline">\(X\)</span> distributed?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Assuming independence in sampling, and a representative sample, we can use a Binomial distribution with</strong> <span class="math inline">\(n=31\)</span> and <span class="math inline">\(p=0.447\)</span>.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Sketch the probability mass function (roughly).</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>, <span class="dv">31</span>,.<span class="dv">447</span>), <span class="at">names=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>, <span class="at">ylab=</span><span class="st">"probability"</span>, <span class="at">main=</span><span class="st">"PMF of Binomial(31,.447)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Sketch the cumulative distribution function (roughly).</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">pbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>, <span class="dv">31</span>, .<span class="dv">447</span>), <span class="at">type=</span><span class="st">"s"</span>, <span class="at">ylab=</span><span class="st">"cumulative prob."</span>, <span class="at">main=</span><span class="st">"CDF of Binomial(31, .447)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Find the probability that <span class="math inline">\(X\)</span> is equal to 17.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">17</span>, <span class="dv">31</span>, .<span class="dv">447</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07532248</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="5" type="a">
+<li>Find the probability that <span class="math inline">\(X\)</span> is at most 13.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">13</span>, <span class="dv">31</span>, .<span class="dv">447</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.451357</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="6" type="a">
+<li>Find the probability that <span class="math inline">\(X\)</span> is bigger than 11.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="dv">12</span><span class="sc">:</span><span class="dv">31</span>, <span class="dv">31</span>, .<span class="dv">447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8020339</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">11</span>, <span class="dv">31</span>, .<span class="dv">447</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8020339</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pbinom</span>(<span class="dv">11</span>, <span class="dv">31</span>, .<span class="dv">447</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8020339</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="7" type="a">
+<li>Find the probability that <span class="math inline">\(X\)</span> is at least 15.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#P(X at least 15)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="dv">15</span><span class="sc">:</span><span class="dv">31</span>,<span class="dv">31</span>,.<span class="dv">447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.406024</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="8" type="a">
+<li>Find the probability that <span class="math inline">\(X\)</span> is between 16 and 19, inclusive.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="dv">16</span><span class="sc">:</span><span class="dv">19</span>, <span class="dv">31</span>, .<span class="dv">447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2544758</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol type="i">
+<li>Give the mean of <span class="math inline">\(X\)</span>, denoted <span class="math inline">\(\mathbb{E}X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#E(X)=n*p</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="dv">31</span><span class="sc">*</span>.<span class="dv">447</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13.857</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or you can also do this (but it's too much work)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( (<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>) <span class="sc">*</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>, <span class="dv">31</span>, .<span class="dv">447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13.857</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="10" type="a">
+<li>Give the variance of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Var(X) = n * p * (1-p)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dv">31</span> <span class="sc">*</span> .<span class="dv">447</span> <span class="sc">*</span> (<span class="dv">1</span><span class="fl">-.447</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.662921</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or - if you want (but why would you want to?)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span> <span class="sc">-</span> <span class="dv">31</span><span class="sc">*</span>.<span class="dv">447</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">31</span>, <span class="dv">31</span>, .<span class="dv">447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.662921</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="11" type="a">
+<li>Give the standard deviation of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SD(X) = sqrt(n*p*(1-p))</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">31</span><span class="sc">*</span>.<span class="dv">447</span><span class="sc">*</span>(<span class="dv">1</span><span class="fl">-.447</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.768198</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="12" type="a">
+<li>Find <span class="math inline">\(\mathbb{E}(4X+51.324)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#E(4X+51.324) = 4*E(X)+51.324</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">*</span>(<span class="dv">31</span><span class="sc">*</span>.<span class="dv">447</span>) <span class="sc">+</span> <span class="fl">51.324</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 106.752</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="choose-the-distribution" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="choose-the-distribution"><span class="header-section-number">6.2</span> 2. Choose the distribution</h2>
+<ol start="2" type="1">
+<li>For the following situations, decide what the distribution of <span class="math inline">\(X\)</span> should be. In nearly every case, there are additional assumptions that should be made for the distribution to apply; identify those assumptions (which may or may not hold in practice.)</li>
+</ol>
+<ol type="a">
+<li>We shoot basketballs at a basketball hoop, and count the number of shots until we make a basket. Let X denote the number of missed shots. On a normal day we would typically make about 37% of the shots.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The number of missed shots before the first basket, assuming independence, can be modeled by a Geometric random variable with parameter</strong> <span class="math inline">\(p=.37\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>In a local lottery in which a three digit number is selected randomly, let X be the number selected.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Assuming that all 3 digit numbers are equally likely (A reasonable assumption) the number selected can be modeled by a discrete uniform distribution with minimum 100 and maximum 999.</strong></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>We drop a Styrofoam cup to the floor twenty times, each time recording whether the cup comes to rest perfectly right side up, or not. Let X be the number of times the cup lands perfectly right side up.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>If we drop the cup 20 times, and the result each time is independent with a constant probability of landing right side up, the number of times it does can be modeled by a Binomial random variable with parameters</strong> <span class="math inline">\(n=20\)</span> <strong>and</strong> <span class="math inline">\(p\)</span> <strong>(unknown).</strong></p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>We toss a piece of trash at the garbage can from across the room. If we miss the trash can, we retrieve the trash and try again, continuing to toss until we make the shot. Let X denote the number of missed shots.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Geometric random variable (unknown parameter value for</strong> <span class="math inline">\(p\)</span><strong>).</strong></p>
+</div>
+</div>
+</div>
+<ol start="5" type="a">
+<li>Working for the border patrol, we inspect shipping cargo as when it enters the harbor looking for contraband. A certain ship comes to port with 557 cargo containers. Standard practice is to select 10 containers randomly and inspect each one very carefully, classifying it as either having contraband or not. Let X count the number of containers that illegally contain contraband.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Technically we should use a hypergeometric random variable for this situation (since it is a small population size of 557), but since we do not cover the hypergeometric the closest random variable we have is the binomial.</strong></p>
+</div>
+</div>
+</div>
+<ol start="6" type="a">
+<li>At the same time every year, some migratory birds land in a bush outside for a short rest. On a certain day, we look outside and let X denote the number of birds in the bush.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This is a discrete random variable, but without other information it’s hard to say. The distribution is likely unimodal and bell-curved. You could probably model this using a normal distribution rounded off to the nearest integer.</strong></p>
+</div>
+</div>
+</div>
+<ol start="7" type="a">
+<li>We count the number of rain drops that fall in a circular area on a sidewalk during a ten minute period of a thunder storm.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The observation window is the circular area, and the 10 minutes during observation. Assuming the rate of rainfall is constant, the number of raindrops in the circle can be modeled using a Poisson random variable.</strong></p>
+</div>
+</div>
+</div>
+<ol start="8" type="a">
+<li>We count the number of moth eggs on our window screen.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Counting indicates a discrete random variable. A binomial or a rounded normal distribution may be appropriate, but we lack enough details to be sure.</strong></p>
+</div>
+</div>
+</div>
+<ol type="i">
+<li>We count the number of blades of grass in a one square foot patch of land.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The location of the sprouting grass could be modeled well by a Poisson random variable - the</strong> <span class="math inline">\(\lambda\)</span> <strong>parameter would likely be very large, in the range of 1000 or 10000, and as such the distribution would look very much like a normal distribution.</strong></p>
+</div>
+</div>
+</div>
+<ol start="10" type="a">
+<li>We count the number of pats on a baby’s back until (s)he burps.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>As we define a geometric random variable, we let</strong> <span class="math inline">\(X\)</span> <strong>be the number of failures before the first success. The last pat (that causes the burp) is the success in this context. So we could use a geometric random variable, but we would have to add 1 to it in order to count all burps (the failures + 1 success).</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="variance-formula" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="variance-formula"><span class="header-section-number">6.3</span> 3. Variance Formula</h2>
+<p><strong>move to chapter on covariance</strong></p>
+<p>Show that <span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2-\mu^2\)</span>. <em>Hint:</em> expand the quantity <span class="math inline">\((X-\mu)^2\)</span> and distribute the expectation over the resulting terms.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The proof goes like this: We first FOIL</strong> <span class="math inline">\((X-\mu)^2\)</span><strong>:</strong></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}(X^2 - 2\mu X + \mu^2)\)</span></p>
+<p><strong>We next split the expected value into 3 expected values using the fact that</strong> <span class="math inline">\(\mathbb{E}\)</span> <strong>is a linear operator.</strong></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mathbb{E}X + \mathbb{E}\mu^2\)</span></p>
+<p><strong>We next observe that</strong> <span class="math inline">\(\mu^2\)</span> <strong>is constant and</strong> <span class="math inline">\(\mathbb{X}=\mu\)</span></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mu + \mu^2\)</span></p>
+<p><strong>We can simplify the expression and we’re done!</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="expectation-and-binomial" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="expectation-and-binomial"><span class="header-section-number">6.4</span> 4. Expectation and Binomial</h2>
+<p><strong>extra</strong> If <span class="math inline">\(X \sim \text{Binom}(n,p)\)</span> show that <span class="math inline">\(\mathbb{E}X(X-1)=n(n-1)p^2\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>We can just expand the product</strong> <span class="math inline">\(\mathbb{E}(X^2-X)\)</span> <strong>and we can split this up into two expected values:</strong> <span class="math inline">\(\mathbb{E}X^2 - \mathbb{E}X = \mathbb{E}X^2-\mu\)</span><strong>. Recall that</strong> <span class="math inline">\(Var(X)=\mathbb{E}X^2-\mu^2\)</span> <strong>So</strong> <span class="math inline">\(\mathbb{E}X^2=Var(X)+\mu^2\)</span><strong>. For a binomial,</strong> <span class="math inline">\(Var(X)=np(1-p)\)</span> <strong>and</strong> <span class="math inline">\(\mu=np\)</span><strong>. Thus we have</strong></p>
+<p><span class="math inline">\(\mathbb{E}X^2 - \mu=[np(1-p) + n^2p^2] - np = np\left(1-p+np-1\right)\)</span></p>
+<p><strong>Tidying up a little bit we get</strong> <span class="math inline">\(np(np-p)=np^2(n-1)\)</span><strong>, and we’re done.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="pmf-practice" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="pmf-practice"><span class="header-section-number">6.5</span> 5. PMF practice</h2>
+<p>Consider an information source that produces numbers <span class="math inline">\(k\)</span> in the set <span class="math inline">\(S_X=\{1,2,3,4\}\)</span>. Find and plot the pmf in the following cases:</p>
+<ol type="a">
+<li><span class="math inline">\(p_k = p_1/k\)</span> for <span class="math inline">\(k=1,2,3,4\)</span>. Hint: find <span class="math inline">\(p_1\)</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Use the fact that <span class="math inline">\(p_1+p_2+p_3+p_4=1\)</span>. In other words, <span class="math inline">\(p_1/1+p_1/2+p_1/3+p_1/4=p_1(12/12+6/12+4/12+3/12) = p_1(25/12) =1\)</span>, so <span class="math inline">\(p_1=12/25\)</span>. Then <span class="math inline">\(p_2=6/25\)</span>, <span class="math inline">\(p_3=4/25\)</span> and <span class="math inline">\(p_4=3/25\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span><span class="fu">c</span>(<span class="dv">12</span><span class="sc">/</span><span class="dv">25</span>, <span class="dv">6</span><span class="sc">/</span><span class="dv">25</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">25</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">25</span>), <span class="at">names=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li><span class="math inline">\(p_{k+1}=p_k/2\)</span> for <span class="math inline">\(k=1,2,3\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Starting with <span class="math inline">\(k=1\)</span> we have <span class="math inline">\(p_2 = p_1/2\)</span>. Following this pattern, <span class="math inline">\(p_3=p_1/4\)</span> and <span class="math inline">\(p_4=p_1/8\)</span>. If we add these together we have <span class="math inline">\(p_1(8/8 + 4/8 + 2/8 + 1/8) = 15/8\)</span>. Thus we have <span class="math inline">\(p_1=8/15, p_2=4/15, p_3=2/15\)</span> and <span class="math inline">\(p_4=1/15\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span><span class="fu">c</span>(<span class="dv">8</span><span class="sc">/</span><span class="dv">15</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">15</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">15</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">15</span>), <span class="at">names=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li><span class="math inline">\(p_{k+1}=p_k/2^k\)</span> for <span class="math inline">\(k=1,2,3\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Starting with <span class="math inline">\(k=1\)</span> we have <span class="math inline">\(p_2 = p_1/2\)</span>, <span class="math inline">\(p_3=p_2/2^2= p_2/4 = (p_1/2)/4 = p_1/8\)</span>. <span class="math inline">\(p_4 = p_3/2^3 = p_3/8 = (p_1/8)/8) = p_1/64\)</span>. The sum is <span class="math inline">\(p_1(64/64 + 32/64 + 8/64 + 1/64) = p_1(105/64)\)</span> so <span class="math inline">\(p_1 = 64/105, p_2=32/105, p_3=8/105, p_4=1/105\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span><span class="fu">c</span>(<span class="dv">64</span><span class="sc">/</span><span class="dv">105</span>, <span class="dv">32</span><span class="sc">/</span><span class="dv">105</span>, <span class="dv">8</span><span class="sc">/</span><span class="dv">105</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">105</span>), <span class="at">names=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Can the random variables in parts a. through c.&nbsp;be extended to take on values in the set <span class="math inline">\(\{1,2,\ldots,\}\)</span>? Why or why not? (<em>Hint:</em> You may use the fact that the series <span class="math inline">\(1+\frac12+\frac13+\cdots\)</span> diverges.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Consider the pmf for part a. The sum of the probabilities would be</strong> <span class="math inline">\(\sum_{k=1}^\infty p_1/k\)</span><strong>. However</strong> <span class="math inline">\(\sum_{k=1}^\infty \frac{1}{k}\)</span> <strong>does not converge, so no matter what</strong> <span class="math inline">\(p_1\)</span> <strong>is, the sum of probabilities will exceed 1.</strong></p>
+<p><strong>For part b, the sum of the probabilities is</strong> <span class="math inline">\(\sum_{k=1}^\infty 2p_1/{2^{k}}\)</span><strong>. Because</strong> <span class="math inline">\(\sum_{k=1}^\infty \frac{1}{2^k}=1\)</span><strong>, then it would be possible to define a random variable with support</strong> <span class="math inline">\(1,2,\ldots\)</span> <strong>with this pmf.</strong></p>
+<p><strong>For part c, because</strong> <span class="math inline">\(p_k/2^k \leq p_k/2\)</span><strong>, we at least know that</strong> <span class="math inline">\(\sum_k p_k\)</span> <strong>is finite, so such a random variable with infinite support is certainly feasible. The exact value of</strong> <span class="math inline">\(p_1\)</span> <strong>is not as simple to calculate, but we were not asked to do that.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="dice-difference" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="dice-difference"><span class="header-section-number">6.6</span> 6. Dice Difference</h2>
+<p>Two dice are tossed. Let <span class="math inline">\(X\)</span> be the absolute difference in the number of dots facing up.</p>
+<!-- -->
+<ol type="a">
+<li>Find and plot the pmf of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#It may be simplest to calculate all possible values of X. </span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"numeric"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>){</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>){</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>x[<span class="fu">length</span>(x)<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> <span class="fu">abs</span>(i<span class="sc">-</span>j)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#now that we have all equally likely values, we can just calculate the pmf in a prop.table</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>pX <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(x))</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co">#And create a barplot.</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(pX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Find the probability that <span class="math inline">\(X\leq 2\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The probability that X &lt;= 2 is easy to find using the pmf</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">#The columns are named with strings, so we can convert 0 1 and 2 to strings to pull out the proper probabilities.</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pX[<span class="fu">as.character</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6666667</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Find <span class="math inline">\(\mathbb{E}X\)</span> and <span class="math inline">\(\text{Var}X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The expected value and variance can be calculated from the pmf.</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>(EX <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span> <span class="sc">*</span> pX))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.944444</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>(VarX <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span> <span class="sc">-</span> EX)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> pX))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.052469</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or by taking the mean and population variance of the x values themselves</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.944444</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((x<span class="sc">-</span><span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.052469</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>##7. PMF Formula <strong>extra, move to next chapter</strong></p>
+<p>Let <span class="math inline">\(X\)</span> be a random variable with pmf <span class="math inline">\(p_k = c/2^k\)</span> for <span class="math inline">\(k=1,2,\ldots\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li>Determine the value of <span class="math inline">\(c\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-32" class="callout-32-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This was done above; because</strong> <span class="math inline">\(\sum_{i=1}^\infty 1/2^k = 1\)</span><strong>, the value of</strong> <span class="math inline">\(c\)</span> <strong>must be</strong> <span class="math inline">\(1\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Find <span class="math inline">\(\mathbb{P}(X&gt;4)\)</span> and <span class="math inline">\(\mathbb{P}(6\leq X \leq 8)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-33" class="callout-33-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(P(X&gt;4) = 1-P(X \leq 3)=1-(\frac12 + \frac14 + \frac18)\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span><span class="dv">4</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.125</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Find <span class="math inline">\(\mathbb{E}X\)</span> and <span class="math inline">\(\text{Var}X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-34" class="callout-34-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The expected value can be calculated by taking the sum</strong> <span class="math inline">\(\sum k p_k = \sum_{k=1}^\infty \frac{k}{2^k}\)</span> <strong>which we can show using facts from calculus equals 2. Why? Well, as long as</strong> <span class="math inline">\(|p|&lt;1, \sum_{k=1}^{\infty}p^k=\frac{p}{1-p}\)</span> <strong>(this is a geometric series). If we take a derivative of both sides we get</strong> <span class="math inline">\(\sum_{k=1}^\infty kp^{k-1}=\frac{1}{(1-p)^2}\)</span><strong>. Multiply both sides by</strong> <span class="math inline">\(p\)</span> <strong>to get</strong> <span class="math inline">\(\sum_{k=1}^\infty kp^{k}=\frac{p}{(1-p)^2}\)</span><strong>. In our case,</strong> <span class="math inline">\(p=\frac12\)</span><strong>. Plugging this in we get</strong> <span class="math inline">\(\frac{.5}{.5^2}=2\)</span><strong>.</strong></p>
+<p><strong>The variance is</strong> <span class="math inline">\(E(X^2)-(EX)^2=E(X^2)-4\)</span><strong>. The expected value of</strong> <span class="math inline">\(X^2\)</span> <strong>can be derived, though it’s not so fun…</strong></p>
+<p><strong>Start by taking the equation</strong> <span class="math inline">\(\sum_k kp^k = \frac{p}{(1-p)^2}\)</span> <strong>and take a derivative again. We get</strong> <span class="math inline">\(\sum_k k^2 p^{k-1} = \frac{(1-p)^2+2p(1-p)}{(1-p)^4}\)</span><strong>. Multiply through by</strong> <span class="math inline">\(p\)</span> <strong>to get</strong> <span class="math inline">\(\sum_k k^2 p^k = \frac{p(1-p)^2+2p^2(1-p)}{(1-p)^4}\)</span><strong>. If we let</strong> <span class="math inline">\(p=\frac12\)</span> <strong>we have found</strong> <span class="math inline">\(E(X^2)=\sum_{k=1}^\infty k^2(\frac12)^k=\dfrac{\frac18-\frac{2}{8}}{\frac{1}{16}}=6\)</span><strong>. Thus</strong> <span class="math inline">\(Var(X)=E(X^2)-E(X)^2 = 6-4=2\)</span><strong>. It should be noted that this random variable is actually a geometric random variable (well, according to the “number of trials until and including the first success definition). If we define</strong> <span class="math inline">\(Y\sim Geom(.5)\)</span> <strong>using our definition of “number of failures before the first success” then We can let</strong> <span class="math inline">\(X=Y+1\)</span><strong>.</strong> <span class="math inline">\(E(X)=E(Y+1)=\frac{1-.5}{.5}+1=2\)</span> <strong>and</strong> <span class="math inline">\(Var(X)=Var(Y)=\frac{1-p}{p2}=\frac{.5}{.25^2}=2\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="pmf-formula-ii" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="pmf-formula-ii"><span class="header-section-number">6.7</span> 8. PMF Formula II</h2>
+<p><strong>extra</strong></p>
+<p>Let <span class="math inline">\(X\)</span> be a random variable with pmf <span class="math inline">\(p_k = c/2^k\)</span> for <span class="math inline">\(k=-1,0,1,2,3,4,5\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li>Determine the value of <span class="math inline">\(c\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The sum of the probabilities are</strong> <span class="math inline">\(c(2 + 1 + \frac{1}{2}+\frac{1}{4}+\frac{1}8+\frac{1}{16}+\frac{1}{32})=c\frac{127}{32}\)</span> <strong>so</strong> <span class="math inline">\(c=\frac{32}{127}\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Find <span class="math inline">\(\mathbb{P}(1\leq X &lt; 3)\)</span> and <span class="math inline">\(\mathbb{P}(1 &lt; X \leq 5)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-36" class="callout-36-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>c<span class="ot">=</span><span class="dv">32</span><span class="sc">/</span><span class="dv">127</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">5</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>pk<span class="ot">=</span>c<span class="sc">/</span><span class="dv">2</span><span class="sc">^</span>k</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pk) <span class="ot">&lt;-</span> k</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pk[<span class="fu">as.character</span>(<span class="dv">2</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.06299213</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pk[<span class="fu">as.character</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1181102</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Find <span class="math inline">\(\mathbb{P}(X^3 &lt; 5)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-37" class="callout-37-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>If</strong> <span class="math inline">\(X^3 &lt; 5\)</span> <strong>that means</strong> <span class="math inline">\(X^3 \leq 4\)</span> <strong>and thus</strong> <span class="math inline">\(X \leq 4^{1/3}\approx 1.587\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pk[k<span class="sc">&lt;=</span><span class="dv">4</span><span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8818898</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pk[k<span class="sc">^</span><span class="dv">3</span><span class="sc">&lt;</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8818898</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Find the pmf and the cdf of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-38" class="callout-38-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span>pk, <span class="at">names=</span>k, <span class="at">main=</span><span class="st">'pmf of X'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span><span class="fu">cumsum</span>(pk), <span class="at">names=</span>k, <span class="at">main=</span><span class="st">'cdf of X'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-21-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="voltage-random-variable" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="voltage-random-variable"><span class="header-section-number">6.8</span> 9. Voltage random variable</h2>
+<p>A modem transmits a +2 voltage signal into a channel. The channel adds to this signal a noise term that is drawn from the set <span class="math inline">\(\{0,-1,-2,-3\}\)</span> with respective probabilities <span class="math inline">\(\{4/10, 3/10, 2/10, 1/10\}\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li>Find the pmf of the output <span class="math inline">\(Y\)</span> of the channel.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-39-contents" aria-controls="callout-39" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-39" class="callout-39-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Let X be the noise</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>pk <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="dv">2</span><span class="sc">+</span>k)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>py <span class="ot">&lt;-</span> pk[<span class="fu">order</span>(<span class="dv">2</span><span class="sc">+</span>k)]</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">height=</span>py, <span class="at">names=</span>y, <span class="at">main=</span><span class="st">"pmf of Y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="rv_practice_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>What is the probability that the channel’s output is equal to the input of the channel?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-40-contents" aria-controls="callout-40" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-40" class="callout-40-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This happens when there’s no noise, with probability 4/10.</strong></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>What is the probability that the channel’s output is positive?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-41-contents" aria-controls="callout-41" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-41" class="callout-41-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Interpreting 'positive' to be strictly positive, not zero:</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(py[y<span class="sc">&gt;</span><span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Find the expected value and variance of <span class="math inline">\(Y\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-42-contents" aria-controls="callout-42" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-42" class="callout-42-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(EY <span class="ot">&lt;-</span> <span class="fu">sum</span>(y<span class="sc">*</span>py))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>(VarY <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>EY)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>py))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="golf-score" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="golf-score"><span class="header-section-number">6.9</span> 10. Golf Score</h2>
+<p>On a given day, your golf score takes values from the numbers 1 through 10 with equal probability of getting each one. Assume that you play golf for three days, and assume that your three performances are independent. Let <span class="math inline">\(X_1, X_2\)</span> and <span class="math inline">\(X_3\)</span> be the scores that you get, and let <span class="math inline">\(X\)</span> be the minimum of these three scores.</p>
+<!-- -->
+<ol type="a">
+<li>Show that for any discrete random variable <span class="math inline">\(X\)</span> <span class="math inline">\(p_X(k)=\mathbb{P}(X &gt; k-1) - \mathbb{P}(X&gt;k)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-43-contents" aria-controls="callout-43" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-43" class="callout-43-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(P(X &gt; k-1) = P(X \geq k) =P(X = k)+P(X &gt; k)\)</span>, thus <span class="math inline">\(P(X=k)=P(X&gt;k-1)-P(X&gt;k)\)</span>.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>What is the probability that <span class="math inline">\(\mathbb{P}(X_1&gt;k)\)</span> for <span class="math inline">\(k=1,\ldots,10\)</span>?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-44-contents" aria-controls="callout-44" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-44" class="callout-44-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(P(X_1&gt;k)=\frac{10-k}{10}\)</span></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Use (a) to determine the pmf <span class="math inline">\(p_X(k)\)</span> for <span class="math inline">\(k=1,\ldots,10\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-45-contents" aria-controls="callout-45" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-45" class="callout-45-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(P(X &gt; k) = P(X_1,X_2,X_3 &gt; k) = P(X_1 &gt; k)P(X_2&gt;k)P(X_3&gt;k)\)</span></p>
+<p><strong>This means</strong> <span class="math inline">\(P(X&gt;k) =\frac{(10-k)^3}{10^3}\)</span><strong>, and</strong> <span class="math inline">\(P(X&gt;k-1)=\frac{(11-k)^3}{10^3}\)</span><strong>. From the previous result,</strong> <span class="math inline">\(P(X=k)=P(X&gt;k-1)-P(X&gt;k)=\frac{(11-k)^3-(10-k)^3}{10^3}\)</span></p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>What is the average score improvement if you play just for one day compared with playing for three days and taking the minimum?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-46-contents" aria-controls="callout-46" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-46" class="callout-46-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This is asking to take the difference of the two expected values. It’s obvious that</strong> <span class="math inline">\(E(X_1)=5.5\)</span><strong>; We need to find the expected value of</strong> <span class="math inline">\(X\)</span><strong>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> ((<span class="dv">11</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">3</span><span class="sc">-</span>(<span class="dv">10</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">3</span>)<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co">#double check</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(px)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>(EX <span class="ot">&lt;-</span> <span class="fu">sum</span>(x<span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.025</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fl">5.5</span><span class="sc">-</span>EX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.475</code></pre>
+</div>
+</div>
+<p><strong>The average (expected) point improvement when going from a 1 day point to a minimum of 3 days is 2.475.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="functions-of-a-random-variable" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="functions-of-a-random-variable"><span class="header-section-number">6.10</span> 11. Functions of a random variable</h2>
+<p>Let <span class="math inline">\(g(X) = \begin{cases}1 &amp; \text{if }X&gt;10\\0 &amp; \text{otherwise}\end{cases}\)</span> and <span class="math inline">\(h(X) = \begin{cases}X-10 &amp; \text{if }X-10&gt;0\\0 &amp; \text{otherwise}\end{cases}\)</span></p>
+<!-- -->
+<ol type="a">
+<li>For <span class="math inline">\(X \in S_X=\{1,2,\ldots,15\}\)</span> with <span class="math inline">\(p_k = p_1/k\)</span>, find <span class="math inline">\(\mathbb{E}\left[g(X)\right]\)</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-47-contents" aria-controls="callout-47" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-47" class="callout-47-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">15</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">sum</span>(<span class="dv">1</span><span class="sc">/</span>k))</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>pk <span class="ot">&lt;-</span> p1<span class="sc">/</span>k</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">as.numeric</span>(x<span class="sc">&gt;</span><span class="dv">10</span>))</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">g</span>(k)<span class="sc">*</span>pk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1173098</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>For <span class="math inline">\(X \in S_X=\{1,2,\ldots,15\}\)</span> with <span class="math inline">\(p_{k+1} = p_k/2\)</span> (for <span class="math inline">\(k&gt;1\)</span>), find <span class="math inline">\(\mathbb{E}\left[h(X)\right]\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-48-contents" aria-controls="callout-48" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-48" class="callout-48-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">max</span>(<span class="dv">0</span>, x<span class="dv">-10</span>))</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">sum</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span><span class="sc">^</span>(k<span class="dv">-1</span>)))</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>pk <span class="ot">&lt;-</span> p1<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span><span class="sc">^</span>(k<span class="dv">-1</span>))</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">h</span>(k)<span class="sc">*</span>pk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="voltage-ii" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="voltage-ii"><span class="header-section-number">6.11</span> 12. Voltage II</h2>
+<p>A voltage <span class="math inline">\(X\)</span> is uniformly distributed on the set <span class="math inline">\(\{-3,\ldots,3,4\}\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li>Find the mean and variance of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-49-contents" aria-controls="callout-49" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-49" class="callout-49-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">4</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">length</span>(x)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>(EX <span class="ot">&lt;-</span> <span class="fu">sum</span>(x<span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>(VarX <span class="ot">&lt;-</span> <span class="fu">sum</span>((x<span class="sc">-</span>EX)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.25</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Find the mean and variance of <span class="math inline">\(Y=-2X^2+3\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-50-contents" aria-controls="callout-50" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-50" class="callout-50-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span><span class="dv">3</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>(EY <span class="ot">&lt;-</span> <span class="fu">sum</span>(y<span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>(VarY <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>EY)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 105</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Find the mean and variance of <span class="math inline">\(W=\text{cos}(\pi X/8)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-51-contents" aria-controls="callout-51" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-51" class="callout-51-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">cos</span>(pi<span class="sc">*</span>x<span class="sc">/</span><span class="dv">8</span>)</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>(EW <span class="ot">&lt;-</span> <span class="fu">sum</span>(w<span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6284174</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>(VarW <span class="ot">&lt;-</span> <span class="fu">sum</span>((w<span class="sc">-</span>EW)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1050915</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Find the mean and variance of <span class="math inline">\(Z=\text{cos}^2(\pi X/8)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-52-contents" aria-controls="callout-52" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-52" class="callout-52-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> w<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>(EZ <span class="ot">&lt;-</span> <span class="fu">sum</span>(z<span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>(VarZ <span class="ot">&lt;-</span> <span class="fu">sum</span>((z<span class="sc">-</span>EZ)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>px))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.125</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="discrete-random-variable-problems" class="level2" data-number="6.12">
+<h2 data-number="6.12" class="anchored" data-anchor-id="discrete-random-variable-problems"><span class="header-section-number">6.12</span> 13. Discrete Random Variable Problems</h2>
+<!-- -->
+<ol type="a">
+<li>If <span class="math inline">\(X\)</span> is <span class="math inline">\(\text{Poisson}(\lambda)\)</span>, compute <span class="math inline">\(\mathbb{E}\left[1/(X+1)\right]\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-53-contents" aria-controls="callout-53" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-53" class="callout-53-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This can be handled mathematically. The formula for</strong> <span class="math inline">\(E(1/(X+1))\)</span> <strong>is</strong></p>
+<p><span class="math inline">\(E(1/(X+1))=\sum_{x=0}^{\infty}\frac{1}{x+1}\frac{\lambda^{x}}{x!}e^{-\lambda}=\sum_{x=0}^{\infty}\frac{\lambda^{x}}{(x+1)!}e^{-\lambda}\)</span></p>
+<p><strong>The trick is to get get the summation to equal 1 and simplify. We multiply by</strong> <span class="math inline">\(\lambda/\lambda\)</span></p>
+<p><span class="math inline">\(E(1/(X+1))=\frac{1}{\lambda}\sum_{x=0}^{\infty}\frac{\lambda^{x+1}}{(x+1)!}e^{-\lambda}\)</span></p>
+<p><strong>Now we can make a change of variables:</strong> <span class="math inline">\(y=x+1\)</span> <strong>and thus</strong> <span class="math inline">\(x=0\)</span> <strong>becomes</strong> <span class="math inline">\(y=1\)</span></p>
+<p><span class="math inline">\(E(1/(X+1)) = \frac{1}{\lambda}\sum_{y=1}^{\infty}\frac{\lambda^{y}}{y!}e^{-\lambda}\)</span></p>
+<p><strong>The only thing missing is that the summation starts at</strong> <span class="math inline">\(y=1\)</span> <strong>instead of</strong> <span class="math inline">\(y=0\)</span><strong>, But for</strong> <span class="math inline">\(Y \sim Poisson(\lambda)\)</span><strong>,</strong> <span class="math inline">\(P(Y=0)=e^{-\lambda}\)</span> <strong>so this summation is</strong> <span class="math inline">\(1-e^{-\lambda}\)</span><strong>.</strong></p>
+<p><span class="math inline">\(E(1/(X+1)) = \frac{1}{\lambda}(1-e^{-\lambda})\)</span></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>If <span class="math inline">\(X\)</span> is <span class="math inline">\(\text{Bernoulli}(p)\)</span> and <span class="math inline">\(Y\)</span> is <span class="math inline">\(\text{Bernoulli}(q)\)</span>, computer <span class="math inline">\(\mathbb{E}\left[(X+Y)^3\right]\)</span> assuming <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-54-contents" aria-controls="callout-54" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-54" class="callout-54-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\((X+Y)^3 = X^3+3X^2Y+3XY^2+Y^3\)</span> <strong>so</strong> <span class="math inline">\(E[(X+Y)^3]=E(X^3)+3E(X^2)E(Y)+3E(X)E(Y^2)+E(Y^2)\)</span></p>
+<p><strong>this is due to independence. Since</strong> <span class="math inline">\(X\)</span> <strong>an</strong> <span class="math inline">\(Y\)</span> <strong>are independent, so are</strong> <span class="math inline">\(X^2\)</span> <strong>and</strong> <span class="math inline">\(Y\)</span><strong>, and</strong> <span class="math inline">\(X\)</span> <strong>and</strong> <span class="math inline">\(Y^2\)</span><strong>.</strong> <span class="math inline">\(E(X)=E(X^2)=E(X^3)=p\)</span> <strong>and</strong> <span class="math inline">\(E(Y)=E(Y^2)=E(Y^3)=q\)</span><strong>. Thus</strong> <span class="math inline">\(E[(X+Y)^3]=p+6pq+q\)</span></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Let <span class="math inline">\(X\)</span> be a random variable with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. Let <span class="math inline">\(\Delta(\theta)=\mathbb{E}\left[(X-\theta)^2\right]\)</span>. Find <span class="math inline">\(\theta\)</span> that minimizes the error <span class="math inline">\(\Delta(\theta)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-55-contents" aria-controls="callout-55" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-55" class="callout-55-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>We can expand the expected value and attempt to find the minimum with respect to</strong> <span class="math inline">\(\theta\)</span><strong>.</strong> <span class="math inline">\(E[(X-\theta)^2]=E[X^2-2\theta X+\theta^2]=E(X^2)-2\theta\mu+\theta^2\)</span><strong>. Recall that</strong> <span class="math inline">\(Var(X)=E(X^2)-\mu^2\)</span> <strong>so</strong> <span class="math inline">\(E(X^2)=\sigma^2+\mu^2\)</span> <strong>So we can write</strong> <span class="math inline">\(\Delta(\theta)=\sigma^2 + \mu^2-2\theta\mu + \theta^2\)</span> <strong>We want to find what value of</strong> <span class="math inline">\(\theta\)</span> <strong>minimizes this function - derivative!</strong> <span class="math inline">\(\Delta'(\theta)=-2\mu+2\theta=0\)</span> <strong>thus</strong> <span class="math inline">\(\theta=\mu\)</span> <strong>minimizes this.</strong></p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Suppose that <span class="math inline">\(X_1, \ldots, X_n\)</span> are independent uniform random variables in <span class="math inline">\(\{0,1,\ldots,100\}\)</span>. Evaluate <span class="math inline">\(\mathbb{P}\left[\text{min}(X_1,\ldots, X_n) &gt; l\right]\)</span> for any <span class="math inline">\(l \in \{0,1,\ldots,100\}\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-56-contents" aria-controls="callout-56" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-56" class="callout-56-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Let</strong> <span class="math inline">\(Y=\min(X_1, \ldots, X_n)\)</span> <strong>If</strong> <span class="math inline">\(P(Y &gt;l)\)</span><strong>, that means the minimum exceeds</strong> <span class="math inline">\(l\)</span><strong>, so all of the values</strong> <span class="math inline">\(&gt;l\)</span><strong>.</strong> <span class="math inline">\(P(X_1 &gt; l)=(100-l)/101\)</span> <strong>- you can check:</strong> <span class="math inline">\(P(X_1&gt;0)=100/101\)</span><strong>. This is the same calculation for each</strong> <span class="math inline">\(i\)</span><strong>. So</strong> <span class="math inline">\(P(Y&gt;l)=\dfrac{(100-l)^n}{101^n}\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+<ol start="5" type="a">
+<li>Consider a binomial random variable <span class="math inline">\(X\)</span> with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>. <span class="math inline">\(p_X(k)={n \choose k} p^k(1-p)^{n-k}\)</span>. Show that the mean is <span class="math inline">\(\mathbb{E}X= np\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-57-contents" aria-controls="callout-57" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-57" class="callout-57-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(E(X)=\sum_{k=0}^n k{n \choose k} p^k(1-p)^{n-k}\)</span></p>
+<p><strong>The first term is zero so we could write</strong></p>
+<p><span class="math inline">\(\sum_{k=1}^n k{n \choose k} p^k(1-p)^{n-k}\)</span></p>
+<p><strong>Now the following is a fact that is needed but perhaps not well known. It’s the equivalence of</strong> <span class="math inline">\(k{n \choose k}=n{n-1 \choose k-1}\)</span><strong>. We make this subsitution</strong></p>
+<p><span class="math inline">\(\sum_{k=1}^n n{n-1 \choose k-1} p^k(1-p)^{n-k}=np\sum_{k=1}^n {n-1\choose k-1}p^{k-1}(1-p)^{n-k}\)</span></p>
+<p><strong>We could write</strong> <span class="math inline">\(n-k=(n-1)-(k-1)\)</span> <strong>and we’ll be making some substitutions:</strong> <span class="math inline">\(m=n-1\)</span> <strong>and</strong> <span class="math inline">\(j=k-1\)</span><strong>. This lets us write</strong></p>
+<p><span class="math inline">\(np\sum_{j=0}^m {m \choose j}p^j(1-p)^{m-j}=np\)</span> <strong>because the summation =1, as it is just the sum of the pmf of a binomial.</strong></p>
+</div>
+</div>
+</div>
+<ol start="6" type="a">
+<li><p><strong>(not for 340)</strong> Consider a geometric random variable <span class="math inline">\(X\)</span> with parameter <span class="math inline">\(p\)</span>. <span class="math inline">\(p_X(k)=p(1-p)^k\)</span> for <span class="math inline">\(k=0,1,\ldots\)</span>. Show that its mean is <span class="math inline">\(\mathbb{E}X=(1-p)/p\)</span>.</p></li>
+<li><p><strong>(not for 340)</strong> Consider a Poisson random variable <span class="math inline">\(X\)</span> with parameter <span class="math inline">\(\lambda\)</span>. <span class="math inline">\(p_X(k)=\dfrac{\lambda^k}{k!}e^{-\lambda}\)</span>. Show that <span class="math inline">\(\text{Var}X=\lambda\)</span>.</p></li>
+<li><p><strong>(not for 340)</strong> Consider the uniform random variable <span class="math inline">\(X\)</span> over values <span class="math inline">\(1,2,\ldots, L\)</span>. Show that <span class="math inline">\(\text{Var}X=\dfrac{L^2-1}{12}\)</span>. <em>Hint:</em> <span class="math inline">\(\sum_{i=1}^n i = \frac{n(n+1)}{2}\)</span> and <span class="math inline">\(\sum_{i=1}^n i^2=\frac{n^3}{3}+\frac{n^2}{2}+\frac{n}{6}\)</span></p></li>
+</ol>
+<!-- -->
+</section>
+<section id="hard-drive-failures" class="level2" data-number="6.13">
+<h2 data-number="6.13" class="anchored" data-anchor-id="hard-drive-failures"><span class="header-section-number">6.13</span> 14. Hard Drive Failures</h2>
+<p>An audio player uses a low-quality hard drive. The probability that the hard drive fails after being used for one month is 1/12. If it fails, the manufacturer offers a free-of-charge repair for the customer. For the cost of each repair, however, the manufacturer has to pay $20. The initial cost of building the player is $50, and the manufacturer offers a 1-year warranty. Within one year, the customer can ask for a free repair up to 12 times.</p>
+<!-- -->
+<ol type="a">
+<li>Let <span class="math inline">\(X\)</span> be the number of months when the player fails. What is the PMF of <span class="math inline">\(X\)</span>? <em>Hint:</em> <span class="math inline">\(\mathbb{P}(X = 1)\)</span> <em>may not be very high because if the hard drive fails it will be fixed by the manufacturer. Once fixed, the drive can fail again in the remaining months. So saying</em> <span class="math inline">\(X = 1\)</span> <em>is equivalent to saying that there is only one failure in the entire 12-month period.</em></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-58-contents" aria-controls="callout-58" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-58" class="callout-58-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The number of failures should follow a binomial distribution with</strong> <span class="math inline">\(n=12, p=1/12\)</span><strong>. Thus</strong> <span class="math inline">\(P(X=k)={n \choose k}(\frac{1}{12})^k(\frac{11}{12})^{n-k}\)</span></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>What is the average cost per player?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-59-contents" aria-controls="callout-59" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-59" class="callout-59-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The cost is</strong> <span class="math inline">\(50+20X\)</span> <strong>So</strong> <span class="math inline">\(E(50+20X)=50+20E(X)=50+20\cdot 12(\frac{1}{12})=70\)</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="bit-errors" class="level2" data-number="6.14">
+<h2 data-number="6.14" class="anchored" data-anchor-id="bit-errors"><span class="header-section-number">6.14</span> 15. Bit Errors</h2>
+<ol start="15" type="1">
+<li>A binary communication channel has a probability of bit error of <span class="math inline">\(p = 10^{-6}\)</span>. Suppose that transmission occurs in blocks of 10,000 bits. Let <span class="math inline">\(N\)</span> be the number of errors introduced by the channel in a transmission block.</li>
+</ol>
+<!-- -->
+<ol type="a">
+<li>What is the PMF of <span class="math inline">\(N\)</span>?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-60-contents" aria-controls="callout-60" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-60" class="callout-60-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(N\)</span> <strong>follows a binomial distribution with</strong> <span class="math inline">\(n=10000\)</span> <strong>and</strong> <span class="math inline">\(p=.000001\)</span></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Find <span class="math inline">\(\mathbb{P}(N = 0)\)</span> and $(N b $ 3)$.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-61-contents" aria-controls="callout-61" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-61" class="callout-61-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">0</span>, <span class="dv">10000</span>, .<span class="dv">000001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9900498</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">3</span>, <span class="dv">10000</span>, .<span class="dv">000001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>For what value of <span class="math inline">\(p\)</span> will the probability of 1 or more errors in a block be 99%?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-62-contents" aria-controls="callout-62" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-62" class="callout-62-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This can be solved directly.</strong> <span class="math inline">\(P(N \geq 1)=1-P(X=0)=1-(1-p)^{10000}\)</span><strong>. If we set this to .99 we can solve for</strong> <span class="math inline">\(p\)</span> <strong>:</strong> <span class="math inline">\(.99=1-(1-p)^{10000}\)</span> <strong>so</strong> <span class="math inline">\(.01 = (1-p)^{10000}\)</span> <strong>so</strong> <span class="math inline">\(p=1-.01^{1/10000}\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="fl">-.01</span><span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.000460411</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="processing-orders" class="level2" data-number="6.15">
+<h2 data-number="6.15" class="anchored" data-anchor-id="processing-orders"><span class="header-section-number">6.15</span> 16. Processing Orders</h2>
+<p>The number of orders waiting to be processed is given by a Poisson random variable with parameter <span class="math inline">\(\alpha = \frac{\lambda}{n\mu}\)</span>, where <span class="math inline">\(\lambda\)</span> is the average number of orders that arrive in a day, <span class="math inline">\(\mu\)</span> is the number of orders that an employee can process per day, and n is the number of employees. Let <span class="math inline">\(N; = 5\)</span> and <span class="math inline">\(N&lt; = 1\)</span>. Find the number of employees required so the probability that more than four orders are waiting is less than 10%.</p>
+<p>Hint: You need to use trial and error for a few <span class="math inline">\(n\)</span>’s.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-63-contents" aria-controls="callout-63" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-63" class="callout-63-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>lambda<span class="ot">=</span><span class="dv">5</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>mu<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">4</span>, lambda<span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">*</span> mu), <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.5595067149 0.1088219811 0.0275432568 0.0091242792 0.0036598468
+ [6] 0.0016844329 0.0008589296 0.0004739871 0.0002784618 0.0001721156</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co">#With 3 employees P(X&gt;4) is less than 10%.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="normal-random-variable" class="level2" data-number="6.16">
+<h2 data-number="6.16" class="anchored" data-anchor-id="normal-random-variable"><span class="header-section-number">6.16</span> 17. Normal Random Variable</h2>
+<p>If <span class="math inline">\(Z\sim \text{Normal}(\mu=0, \sigma^2=1^2)\)</span> find</p>
+<!-- -->
+<ol type="a">
+<li><span class="math inline">\(\mathbb{P}(Z &gt; 2.64)\)</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-64-contents" aria-controls="callout-64" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-64" class="callout-64-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">2.64</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004145301</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li><span class="math inline">\(\mathbb{P}(0 \leq Z &lt; 0.87)\)</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-65-contents" aria-controls="callout-65" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-65" class="callout-65-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(.<span class="dv">87</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3078498</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li><span class="math inline">\(\mathbb{P}(|Z| &gt; 1.39)\)</span> (<em>Hint:</em> draw a picture)</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-66-contents" aria-controls="callout-66" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-66" class="callout-66-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">1.39</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)<span class="sc">*</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1645289</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="identify-the-distribution" class="level2" data-number="6.17">
+<h2 data-number="6.17" class="anchored" data-anchor-id="identify-the-distribution"><span class="header-section-number">6.17</span> 18. Identify the Distribution</h2>
+<p>For the following random experiments, decide what the distribution of X should be. In nearly every case, there are additional assumptions that should be made for the distribution to apply; identify those assumptions (which may or may not strictly hold in practice).</p>
+<!-- -->
+<ol type="a">
+<li>We throw a dart at a dart board. Let X denote the squared linear distance from the bullseye to the where the dart landed.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-67-contents" aria-controls="callout-67" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-67" class="callout-67-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Assume the dart lands somewhere on the board, and any point is equally likely (not a good assumption for a skilled dart thrower). The probability density would be proportional to the distance to the center squared - Suppose the dart board has radius</strong> <span class="math inline">\(R\)</span>. <strong>Let</strong> <span class="math inline">\(X\)</span> <strong>be the distance to the dart from the bullseye. Then</strong> <span class="math inline">\(P(X&lt;r)=\pi r^2 / (\pi R^2)=(r/R)^2\)</span> <strong>. The question then is what is</strong> <span class="math inline">\(P(X^2&lt;r)\)</span><strong>? Well, take a square root of both sides.</strong> <span class="math inline">\(=P(X &lt; \sqrt{r})=\frac{r}{R^2}\)</span><strong>. This is a uniform distribution’s CDF.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>We randomly choose a textbook from the shelf at the bookstore and let P denote the proportion of the total pages of the book devoted to exercises.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-68-contents" aria-controls="callout-68" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-68" class="callout-68-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>A random proportion you might want to use uniform(0,1) however this is assuming that each proportion is equally likely. This is actually a great example for a beta distribution. Beta distributions are continuous distributions that can be parameterized to model a random proportion and the distribution can can be made to be skewed in different ways.</strong></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>We measure the time it takes for the water to completely drain out of the kitchen sink.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-69-contents" aria-controls="callout-69" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-69" class="callout-69-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Let’s assume the sink is filled to the maximum. We drain the sink and start our timer. In this case, it’s reasonable to model the length of time to drain as a normal distribution.</strong></p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>We randomly sample strangers at the grocery store and ask them how long it will take them to drive home.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-70-contents" aria-controls="callout-70" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-70" class="callout-70-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The time it takes to go home could be modeled by a gamma distribution since it is a continuous distribution capped below at 0 and it is a useful way to model the length of time a random process takes to complete.</strong></p>
+</div>
+</div>
+</div>
+<ol start="21" type="1">
+<li>Let <span class="math inline">\(X\)</span> be a Gaussian random variable with <span class="math inline">\(\mu=5\)</span> and <span class="math inline">\(\sigma^2=16\)</span>.</li>
+</ol>
+<!-- -->
+<ol type="a">
+<li>Find <span class="math inline">\(\mathbb{P}(X&gt;4)\)</span> and <span class="math inline">\(\mathbb{P}(2\leq X \leq 7)\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-71-contents" aria-controls="callout-71" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-71" class="callout-71-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co">#P(X&gt;4)</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">4</span>, <span class="at">mean=</span><span class="dv">5</span>, <span class="at">sd=</span><span class="dv">4</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5987063</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co">#P(2 &lt;= X &lt;= 7)</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">4</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2901688</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>If <span class="math inline">\(\mathbb{P}(X &lt; a)=0.8869\)</span>, find <span class="math inline">\(a\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-72-contents" aria-controls="callout-72" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-72" class="callout-72-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(.<span class="dv">88695</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.210466</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>If <span class="math inline">\(\mathbb{P}(X&gt;b)=0.1131\)</span>, find <span class="math inline">\(b\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-73-contents" aria-controls="callout-73" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-73" class="callout-73-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(.<span class="dv">1131</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.840823</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>If <span class="math inline">\(\mathbb{P}(13 &lt; X \leq c)=0.0011\)</span>, find <span class="math inline">\(c\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-74-contents" aria-controls="callout-74" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-74" class="callout-74-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First find the probability less than 13</span></span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a>p13 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(<span class="dv">13</span>, <span class="dv">5</span>, <span class="dv">4</span>)</span>
+<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="co">#now we can find the quantile for p13+.0011</span></span>
+<span id="cb111-4"><a href="#cb111-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(p13<span class="fl">+.0011</span>, <span class="dv">5</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13.08321</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co">#double check</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">13.08321</span>,<span class="dv">5</span>,<span class="dv">4</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">13</span>,<span class="dv">5</span>,<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001100025</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="22" type="1">
+<li>Consider a cdf</li>
+</ol>
+<p><span class="math inline">\(F_X(x)-\begin{cases}0,&amp;\text{if }x &lt; -1\\ 0.5 &amp; \text{if }-1 \leq x &lt; 0\\(1+x)/2 &amp; \text{if }0 \leq x &lt; 1\\1&amp;\text{otherwise}\end{cases}\)</span></p>
+<p>Find <span class="math inline">\(\mathbb{P}(X &lt; -1)\)</span>, <span class="math inline">\(\mathbb{P}(-0.5 &lt; X &lt; 0.5)\)</span>, and <span class="math inline">\(\mathbb{P}(X&gt;0.5)\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-75-contents" aria-controls="callout-75" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-75" class="callout-75-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="co">#P(X &lt; -1) = 0 because F(x) only goes up to .5 at x=-1, not when x &lt; -1</span></span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co">#P(-.5 &lt; X &lt; .5) = F(.5) - F(-.5)</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="fl">+.5</span>)<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> .<span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.25</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co">#P(X &gt; 0.5) = 1-P(X&lt;.5) = 1-F(.5) </span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span> (<span class="dv">1</span><span class="fl">+.5</span>)<span class="sc">/</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.25</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="beyond-stat-340" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Beyond STAT 340</h1>
+<p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
+<ol start="17" type="1">
+<li><p>Let <span class="math inline">\(X\)</span> be the number of photons counted by a receiver in an optical communication system. It is known that <span class="math inline">\(X\)</span> is a Poisson random variable with a rate <span class="math inline">\(N;_1\)</span> when a signal is present and a Poisson random variable with the rate <span class="math inline">\(\lambda_0&lt; \lambda_1\)</span> when a signal is absent. The probability that the signal is present is p.&nbsp;Suppose that we observe <span class="math inline">\(X = k\)</span> photons. We want to determine a threshold <span class="math inline">\(T\)</span> such that if <span class="math inline">\(k b % T\)</span> we claim that the signal is present, and if <span class="math inline">\(k&lt;T\)</span> we claim that the signal is absent. What is the value of <span class="math inline">\(T\)</span>?</p></li>
+<li><p>Calculate the variance of <span class="math inline">\(X \sim \text{Unif}(a,b)\)</span>. (<em>Hint:</em> First calculate <span class="math inline">\(\mathbb{E}X^2\)</span>)</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./cov.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
