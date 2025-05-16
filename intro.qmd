@@ -1,10 +1,17 @@
-## Introduction
+---
+title: "Introduction"
+format: html
+editor: source
+---
+## Overview
 
 In this introductory set of notes, we will:
 
 * get a flavor for what data science is
 * discuss why you might want to take a course like this one and 
 * highlight the topics that we will cover this semester.
+
+## Motivating Questions
 
 Consider the following questions:
 

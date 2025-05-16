@@ -175,18 +175,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-is-data-science" id="toc-what-is-data-science" class="nav-link active" data-scroll-target="#what-is-data-science"><span class="header-section-number">2.1</span> What is data science?</a></li>
-  <li><a href="#wearing-different-hats" id="toc-wearing-different-hats" class="nav-link" data-scroll-target="#wearing-different-hats"><span class="header-section-number">2.2</span> Wearing different hats</a></li>
-  <li><a href="#topics-covered" id="toc-topics-covered" class="nav-link" data-scroll-target="#topics-covered"><span class="header-section-number">2.3</span> Topics covered</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">2.1</span> Overview</a></li>
+  <li><a href="#motivating-questions" id="toc-motivating-questions" class="nav-link" data-scroll-target="#motivating-questions"><span class="header-section-number">2.2</span> Motivating Questions</a></li>
+  <li><a href="#what-is-data-science" id="toc-what-is-data-science" class="nav-link" data-scroll-target="#what-is-data-science"><span class="header-section-number">2.3</span> What is data science?</a></li>
+  <li><a href="#wearing-different-hats" id="toc-wearing-different-hats" class="nav-link" data-scroll-target="#wearing-different-hats"><span class="header-section-number">2.4</span> Wearing different hats</a></li>
+  <li><a href="#topics-covered" id="toc-topics-covered" class="nav-link" data-scroll-target="#topics-covered"><span class="header-section-number">2.5</span> Topics covered</a>
   <ul class="collapse">
-  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling"><span class="header-section-number">2.3.1</span> Sampling</a></li>
-  <li><a href="#testing" id="toc-testing" class="nav-link" data-scroll-target="#testing"><span class="header-section-number">2.3.2</span> Testing</a></li>
-  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">2.3.3</span> Estimation</a></li>
-  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">2.3.4</span> Prediction</a></li>
-  <li><a href="#observationalexploratory-data-analysis" id="toc-observationalexploratory-data-analysis" class="nav-link" data-scroll-target="#observationalexploratory-data-analysis"><span class="header-section-number">2.3.5</span> Observational/exploratory data analysis</a></li>
+  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling"><span class="header-section-number">2.5.1</span> Sampling</a></li>
+  <li><a href="#testing" id="toc-testing" class="nav-link" data-scroll-target="#testing"><span class="header-section-number">2.5.2</span> Testing</a></li>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">2.5.3</span> Estimation</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">2.5.4</span> Prediction</a></li>
+  <li><a href="#observationalexploratory-data-analysis" id="toc-observationalexploratory-data-analysis" class="nav-link" data-scroll-target="#observationalexploratory-data-analysis"><span class="header-section-number">2.5.5</span> Observational/exploratory data analysis</a></li>
   </ul></li>
-  <li><a href="#world-data-model-hat-tip-to-karl-rohe" id="toc-world-data-model-hat-tip-to-karl-rohe" class="nav-link" data-scroll-target="#world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.4</span> World, Data, Model (hat tip to Karl Rohe)</a></li>
-  <li><a href="#all-models-are-wrong-but-some-are-useful" id="toc-all-models-are-wrong-but-some-are-useful" class="nav-link" data-scroll-target="#all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.5</span> All models are wrong, but some are useful</a></li>
+  <li><a href="#world-data-model-hat-tip-to-karl-rohe" id="toc-world-data-model-hat-tip-to-karl-rohe" class="nav-link" data-scroll-target="#world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.6</span> World, Data, Model (hat tip to Karl Rohe)</a></li>
+  <li><a href="#all-models-are-wrong-but-some-are-useful" id="toc-all-models-are-wrong-but-some-are-useful" class="nav-link" data-scroll-target="#all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.7</span> All models are wrong, but some are useful</a></li>
   </ul>
 </nav>
     </div>
@@ -210,12 +212,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<section id="overview" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">2.1</span> Overview</h2>
 <p>In this introductory set of notes, we will:</p>
 <ul>
 <li>get a flavor for what data science is</li>
 <li>discuss why you might want to take a course like this one and</li>
 <li>highlight the topics that we will cover this semester.</li>
 </ul>
+</section>
+<section id="motivating-questions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="motivating-questions"><span class="header-section-number">2.2</span> Motivating Questions</h2>
 <p>Consider the following questions:</p>
 <ol type="1">
 <li><p>How effective is the Pfizer vaccine against the delta variant of COVID-19?</p></li>
@@ -226,16 +233,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Our job as data scientists is to draw on tools from statistics, computer science and mathematics, in collaboration with domain experts, to answer questions like these.</p>
 <p>That being said, collecting, cleaning and analyzing data is only part of the job.</p>
 <p>The most important skill you will learn in this course is not a statistical or computational tool (though those are important!). It is the abilitity to clearly organize and explain your findings in a way that is appropriate for your intended audience.</p>
-<section id="what-is-data-science" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-data-science"><span class="header-section-number">2.1</span> What is data science?</h2>
+</section>
+<section id="what-is-data-science" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="what-is-data-science"><span class="header-section-number">2.3</span> What is data science?</h2>
 <p><strong>Is “data science” just a rebranding of applied statistics?</strong></p>
 <p>Well, perhaps, to an extent. But the emergence of “data science” has coincided with huge changes in how science and statistics gets done.</p>
 <p>Computers and the internet have made it easy to collect, share and analyze data in ways that were unimaginable only a decade or two ago.</p>
 <p>Several times this semester, we will talk about fundamental parts of the data science toolkit that are usable only because computers are fast and cheap.</p>
 <p>This change in technology has changed how we do science. In this sense, <strong>“data science” is a culture or a way of thinking</strong>, more than it is a field.</p>
 </section>
-<section id="wearing-different-hats" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="wearing-different-hats"><span class="header-section-number">2.2</span> Wearing different hats</h2>
+<section id="wearing-different-hats" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="wearing-different-hats"><span class="header-section-number">2.4</span> Wearing different hats</h2>
 <p>Being a good data scientist requires that we be able to draw on many different fields and ways of thinking.</p>
 <p>A “well rounded” data scientist should move fluidly among multiple ways of thinking and approaching a problem.</p>
 <p>Here are a few of the different kinds of hats I (Keith) find myself wearing in my day-to-day work:</p>
@@ -249,8 +257,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This hints at why it is so hard to become a truly good data scientist– you need to be pretty good at a lot of different things.</p>
 <p>If nothing else, going into this line of work requires that you be ready and willing to be a life-long student There are always new techniques, methods, frameworks and application domains to be learned!</p>
 </section>
-<section id="topics-covered" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="topics-covered"><span class="header-section-number">2.3</span> Topics covered</h2>
+<section id="topics-covered" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="topics-covered"><span class="header-section-number">2.5</span> Topics covered</h2>
 <p>We will cover five basic topics this semester:</p>
 <ol type="1">
 <li>Sampling</li>
@@ -260,8 +268,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Observational/exploratory data analysis</li>
 </ol>
 <p>Let’s briefly discuss each of these.</p>
-<section id="sampling" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="sampling"><span class="header-section-number">2.3.1</span> Sampling</h3>
+<section id="sampling" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="sampling"><span class="header-section-number">2.5.1</span> Sampling</h3>
 <p>Election polls and other survey data often get reported with response rates and other details about how survey respondents were selected.</p>
 <p><strong>Example:</strong> At the end of October 2020, pollsters were trying to predict the outcome of the 2020 presidential election. A common technique for this is “random digit dialing”, which is exactly what it sounds like.</p>
 <p><a href="https://law.marquette.edu/poll/2020/10/28/new-marquette-law-school-poll-finds-biden-lead-over-trump-stable-at-five-percentage-points/">This poll</a> reached 806 registered voters in Wisconsin. After a significant amount of <a href="https://law.marquette.edu/poll/wp-content/uploads/2020/10/MLSP65Methodology.pdf">statistical work</a>, the pollsters reported that</p>
@@ -283,8 +291,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How might we explain the discrepancies?”</li>
 </ul>
 </section>
-<section id="testing" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="testing"><span class="header-section-number">2.3.2</span> Testing</h3>
+<section id="testing" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="testing"><span class="header-section-number">2.5.2</span> Testing</h3>
 <p>You have no doubt heard that “correlation does not imply causation”. Well, this is true.</p>
 <ul>
 <li>Ice cream consumption is correlated with drowning, but we don’t think that ice cream causes drowning.</li>
@@ -309,8 +317,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How do we know that we aren’t fooling ourselves when we say that the Moderna vaccine is effective?</li>
 </ul>
 </section>
-<section id="estimation" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="estimation"><span class="header-section-number">2.3.3</span> Estimation</h3>
+<section id="estimation" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="estimation"><span class="header-section-number">2.5.3</span> Estimation</h3>
 <p>The news is perpetually full of stories about different economic indicators and how they are changing over time.</p>
 <ul>
 <li>The <a href="https://www.bls.gov/cpi/">Consumer Price Index</a> (CPI) is meant to measure the change over time in prices of consumer goods and services.</li>
@@ -324,8 +332,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>More generally, what does it mean to give a confidence interval for a quantity of interest?”</li>
 </ul>
 </section>
-<section id="prediction" class="level3" data-number="2.3.4">
-<h3 data-number="2.3.4" class="anchored" data-anchor-id="prediction"><span class="header-section-number">2.3.4</span> Prediction</h3>
+<section id="prediction" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="prediction"><span class="header-section-number">2.5.4</span> Prediction</h3>
 <p>Investing successfully (in real estate, stocks, etc) requires that we be able to predict the future behavior of an asset based on what we know about it currently.</p>
 <ul>
 <li>Based on the size of a house, its proximity to schools or infrastructure, walkability of its neighborhood, etc., we might hope to predict its “true” price.</li>
@@ -343,8 +351,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>It certainly looks like more years of education correlate with higher income.</p>
 <p><strong>Question:</strong> Suppose I tell you that someone has 18 years of education. What would you predict their income to be?</p>
 </section>
-<section id="observationalexploratory-data-analysis" class="level3" data-number="2.3.5">
-<h3 data-number="2.3.5" class="anchored" data-anchor-id="observationalexploratory-data-analysis"><span class="header-section-number">2.3.5</span> Observational/exploratory data analysis</h3>
+<section id="observationalexploratory-data-analysis" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="observationalexploratory-data-analysis"><span class="header-section-number">2.5.5</span> Observational/exploratory data analysis</h3>
 <p>Suppose that a colleague or client gives you a data set that looks like this:</p>
 <p><img src="./images/stat340_L00_2clust.png" class="img-fluid" style="width:50.0%"></p>
 <p>What would you do? There is clearly some kind of a cluster structure present here.</p>
@@ -360,8 +368,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>There are lots of interesting scientific questions we might like to ask about such a data set, but because this data isn’t the result of a carefully-controlled experiment, we are often much more limited in what we can say.</p>
 </section>
 </section>
-<section id="world-data-model-hat-tip-to-karl-rohe" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.4</span> World, Data, Model (hat tip to <a href="http://pages.stat.wisc.edu/~karlrohe/index.html">Karl Rohe</a>)</h2>
+<section id="world-data-model-hat-tip-to-karl-rohe" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.6</span> World, Data, Model (hat tip to <a href="http://pages.stat.wisc.edu/~karlrohe/index.html">Karl Rohe</a>)</h2>
 <p>Unless you subscribe to some rather outlandish philosophical beliefs (see, e.g., <a href="https://en.wikipedia.org/wiki/Solipsism">here</a>), there is a world out there, which we would like to learn about.</p>
 <p>To figure things out about the world, we take measurements. That is to say, we collect data. These data describe the world, but it remains to build a <em>model</em> that explains how these data came to be.</p>
 <p>The process of inference is how we use a specific set of data to guide our beliefs about the world.</p>
@@ -396,8 +404,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Estimating the population average height then reduces to estimating the “true” value of the parameter <span class="math inline">\(\mu\)</span> based on the data.</p>
 <p>This step of using our data to determine something about our model is called <em>inference</em>. In this case, our goal is to estimate the value of the model parameter <span class="math inline">\(\mu\)</span>, which will in turn be our estimate of the average adult human height.</p>
 </section>
-<section id="all-models-are-wrong-but-some-are-useful" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.5</span> All models are wrong, but some are useful</h2>
+<section id="all-models-are-wrong-but-some-are-useful" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.7</span> All models are wrong, but some are useful</h2>
 <p>An important point in our human height example above was our <em>assumption</em> that heights are normally distributed. In practice, modeling assumptions like these are never strictly true.</p>
 <p>Our model is just that– a model of the world; a set of simplifying assumptions that we hope are at least a good approximation to the truth.</p>
 <p>Think of your physics courses, where we assume that things happen in a frictionless void and use Newtonian mechanics instead of quantum mechanics.</p>
