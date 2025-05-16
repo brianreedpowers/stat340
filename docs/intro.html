@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -61,6 +95,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -135,7 +171,24 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-data-science" id="toc-what-is-data-science" class="nav-link active" data-scroll-target="#what-is-data-science"><span class="header-section-number">2.1</span> What is data science?</a></li>
+  <li><a href="#wearing-different-hats" id="toc-wearing-different-hats" class="nav-link" data-scroll-target="#wearing-different-hats"><span class="header-section-number">2.2</span> Wearing different hats</a></li>
+  <li><a href="#topics-covered" id="toc-topics-covered" class="nav-link" data-scroll-target="#topics-covered"><span class="header-section-number">2.3</span> Topics covered</a>
+  <ul class="collapse">
+  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling"><span class="header-section-number">2.3.1</span> Sampling</a></li>
+  <li><a href="#testing" id="toc-testing" class="nav-link" data-scroll-target="#testing"><span class="header-section-number">2.3.2</span> Testing</a></li>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">2.3.3</span> Estimation</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">2.3.4</span> Prediction</a></li>
+  <li><a href="#observationalexploratory-data-analysis" id="toc-observationalexploratory-data-analysis" class="nav-link" data-scroll-target="#observationalexploratory-data-analysis"><span class="header-section-number">2.3.5</span> Observational/exploratory data analysis</a></li>
+  </ul></li>
+  <li><a href="#world-data-model-hat-tip-to-karl-rohe" id="toc-world-data-model-hat-tip-to-karl-rohe" class="nav-link" data-scroll-target="#world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.4</span> World, Data, Model (hat tip to Karl Rohe)</a></li>
+  <li><a href="#all-models-are-wrong-but-some-are-useful" id="toc-all-models-are-wrong-but-some-are-useful" class="nav-link" data-scroll-target="#all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.5</span> All models are wrong, but some are useful</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -157,8 +210,253 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>In this introductory set of notes, we will:</p>
+<ul>
+<li>get a flavor for what data science is</li>
+<li>discuss why you might want to take a course like this one and</li>
+<li>highlight the topics that we will cover this semester.</li>
+</ul>
+<p>Consider the following questions:</p>
+<ol type="1">
+<li><p>How effective is the Pfizer vaccine against the delta variant of COVID-19?</p></li>
+<li><p>Do early intervention programs (e.g., Head Start) improve educational outcomes for low-income children?</p></li>
+<li><p>Are record-high temperatures in recent years explainable by chance?</p></li>
+</ol>
+<p>These questions are a little too complicated for an introductory course like this, but they are the kinds of questions that data science is equipped to answer.</p>
+<p>Our job as data scientists is to draw on tools from statistics, computer science and mathematics, in collaboration with domain experts, to answer questions like these.</p>
+<p>That being said, collecting, cleaning and analyzing data is only part of the job.</p>
+<p>The most important skill you will learn in this course is not a statistical or computational tool (though those are important!). It is the abilitity to clearly organize and explain your findings in a way that is appropriate for your intended audience.</p>
+<section id="what-is-data-science" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-data-science"><span class="header-section-number">2.1</span> What is data science?</h2>
+<p><strong>Is “data science” just a rebranding of applied statistics?</strong></p>
+<p>Well, perhaps, to an extent. But the emergence of “data science” has coincided with huge changes in how science and statistics gets done.</p>
+<p>Computers and the internet have made it easy to collect, share and analyze data in ways that were unimaginable only a decade or two ago.</p>
+<p>Several times this semester, we will talk about fundamental parts of the data science toolkit that are usable only because computers are fast and cheap.</p>
+<p>This change in technology has changed how we do science. In this sense, <strong>“data science” is a culture or a way of thinking</strong>, more than it is a field.</p>
+</section>
+<section id="wearing-different-hats" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="wearing-different-hats"><span class="header-section-number">2.2</span> Wearing different hats</h2>
+<p>Being a good data scientist requires that we be able to draw on many different fields and ways of thinking.</p>
+<p>A “well rounded” data scientist should move fluidly among multiple ways of thinking and approaching a problem.</p>
+<p>Here are a few of the different kinds of hats I (Keith) find myself wearing in my day-to-day work:</p>
+<ul>
+<li><strong>scientist:</strong> understanding data domain, developing questions, “story telling”</li>
+<li><strong>software dev:</strong> data processing and wrangling / reproducibility</li>
+<li><strong>mathematician:</strong> linear algebra, probability theory, optimization</li>
+<li><strong>methodologist:</strong> regression, unsupervised learning, visualizations</li>
+<li><strong>science communicator:</strong> summarizing results, explaining broader impacts</li>
+</ul>
+<p>This hints at why it is so hard to become a truly good data scientist– you need to be pretty good at a lot of different things.</p>
+<p>If nothing else, going into this line of work requires that you be ready and willing to be a life-long student There are always new techniques, methods, frameworks and application domains to be learned!</p>
+</section>
+<section id="topics-covered" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="topics-covered"><span class="header-section-number">2.3</span> Topics covered</h2>
+<p>We will cover five basic topics this semester:</p>
+<ol type="1">
+<li>Sampling</li>
+<li>Estimation</li>
+<li>Testing</li>
+<li>Prediction</li>
+<li>Observational/exploratory data analysis</li>
+</ol>
+<p>Let’s briefly discuss each of these.</p>
+<section id="sampling" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="sampling"><span class="header-section-number">2.3.1</span> Sampling</h3>
+<p>Election polls and other survey data often get reported with response rates and other details about how survey respondents were selected.</p>
+<p><strong>Example:</strong> At the end of October 2020, pollsters were trying to predict the outcome of the 2020 presidential election. A common technique for this is “random digit dialing”, which is exactly what it sounds like.</p>
+<p><a href="https://law.marquette.edu/poll/2020/10/28/new-marquette-law-school-poll-finds-biden-lead-over-trump-stable-at-five-percentage-points/">This poll</a> reached 806 registered voters in Wisconsin. After a significant amount of <a href="https://law.marquette.edu/poll/wp-content/uploads/2020/10/MLSP65Methodology.pdf">statistical work</a>, the pollsters reported that</p>
+<ul>
+<li>48% of likely voters would choose Biden</li>
+<li>43% would vote for Trump</li>
+<li>2% for Jorgensen, and</li>
+<li>7% remained undecided.</li>
+</ul>
+<p>In order to reach those 806 participants, many more numbers need to be dialed. In this poll, the response rate was 4.3%. If you read the <a href="https://law.marquette.edu/poll/wp-content/uploads/2020/10/MLSP65Methodology.pdf">methodology report</a>, you’ll see that in fact over 100,000 numbers had to be dialed to get these 806 respondents. The vast majority of those 100,000 calls were never picked up. Among those who did pick up, 806 were registered voters and agreed to participate in the survey, but another were 1113 refused to participate (or hung up).</p>
+<p>In the actual election,</p>
+<ul>
+<li>Biden received 49.45% of votes cast in Wisconsin and</li>
+<li>Trump received 48.82%.</li>
+</ul>
+<p><strong>Questions:</strong></p>
+<ul>
+<li>How does this compare with the predicted vote shares of 48% for Biden and 43% for Trump?</li>
+<li>How might we explain the discrepancies?”</li>
+</ul>
+</section>
+<section id="testing" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="testing"><span class="header-section-number">2.3.2</span> Testing</h3>
+<p>You have no doubt heard that “correlation does not imply causation”. Well, this is true.</p>
+<ul>
+<li>Ice cream consumption is correlated with drowning, but we don’t think that ice cream causes drowning.</li>
+<li>Hospitals are full of sick people, but we don’t think that hospitals cause sickness.</li>
+</ul>
+<p>Nonetheless, to paraphrase a <a href="https://xkcd.com/552/">relevant comic</a>, causality often does give awfully strong hints.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/xkcd_corr.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Credit: Randall Munroe, XKCD (https://xkcd.com/552)</figcaption>
+</figure>
+</div>
+<p><strong>Example:</strong> On November 16, 2020 Moderna released <a href="https://investors.modernatx.com/news/news-details/2020/Modernas-COVID-19-Vaccine-Candidate-Meets-its-Primary-Efficacy-Endpoint-in-the-First-Interim-Analysis-of-the-Phase-3-COVE-Study/default.aspx">results from their phase 3 clinical trial</a> for their COVID-19 vaccine.</p>
+<p>There were approximately 30,000 people in the trial, split (approximately) evenly between treatment (got the vaccine) and control (got a placebo).</p>
+<ul>
+<li>In total, there were 95 cases of COVID-19 among the participants; 90 among the placebo group and 5 among the treated group.</li>
+<li>Of the 95 cases, 11 were severe cases, all in the placebo group.</li>
+</ul>
+<p>In this study, vaccination is correlated with reduced risk of infection.</p>
+<ul>
+<li>Does this mean that the vaccination causally reduced COVID-19 infection? Why or why not?</li>
+<li>How do we know that we aren’t fooling ourselves when we say that the Moderna vaccine is effective?</li>
+</ul>
+</section>
+<section id="estimation" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="estimation"><span class="header-section-number">2.3.3</span> Estimation</h3>
+<p>The news is perpetually full of stories about different economic indicators and how they are changing over time.</p>
+<ul>
+<li>The <a href="https://www.bls.gov/cpi/">Consumer Price Index</a> (CPI) is meant to measure the change over time in prices of consumer goods and services.</li>
+<li>Most surveys (e.g., public opinion or election surveys) are reported with a +/- 3% “confidence interval” or “sampling error”.</li>
+</ul>
+<p>What is that all about?</p>
+<p><strong>Example:</strong> In the Wisconsin poll discussed above, the margin of error was reported to be +/- 4.3%.</p>
+<p>Recall that the pollsters predicted 48% of likely voters would choose Biden and 43% Trump, while the actual outcome was 49.45% for Biden and 48.82% for Trump.</p>
+<ul>
+<li>Is this outcome within the stated margin of error?</li>
+<li>More generally, what does it mean to give a confidence interval for a quantity of interest?”</li>
+</ul>
+</section>
+<section id="prediction" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="prediction"><span class="header-section-number">2.3.4</span> Prediction</h3>
+<p>Investing successfully (in real estate, stocks, etc) requires that we be able to predict the future behavior of an asset based on what we know about it currently.</p>
+<ul>
+<li>Based on the size of a house, its proximity to schools or infrastructure, walkability of its neighborhood, etc., we might hope to predict its “true” price.</li>
+<li>Many psychology and sociology studies aim to predict future student outcomes based on performance on a standardized test</li>
+</ul>
+<p>In these kinds of problems, our goal is to predict an <em>outcome</em> or <em>response</em> (e.g., house price) based on one or more <em>predictors</em> (e.g., square footage of the house).</p>
+<p>Most of machine learning is concerned with prediction problems. For example, labeling an image according to whether or not it contains a cat can be stated as a prediction problem.</p>
+<p><strong>Example:</strong> this plot shows different people’s incomes (in tens of thousands of dollars per year) as a function of their years of education.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/income_by_edu.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Credit: ISLR2</figcaption>
+</figure>
+</div>
+<p>It certainly looks like more years of education correlate with higher income.</p>
+<p><strong>Question:</strong> Suppose I tell you that someone has 18 years of education. What would you predict their income to be?</p>
+</section>
+<section id="observationalexploratory-data-analysis" class="level3" data-number="2.3.5">
+<h3 data-number="2.3.5" class="anchored" data-anchor-id="observationalexploratory-data-analysis"><span class="header-section-number">2.3.5</span> Observational/exploratory data analysis</h3>
+<p>Suppose that a colleague or client gives you a data set that looks like this:</p>
+<p><img src="./images/stat340_L00_2clust.png" class="img-fluid" style="width:50.0%"></p>
+<p>What would you do? There is clearly some kind of a cluster structure present here.</p>
+<p>The goal of <em>exploratory data analysis</em> is to identify interesting structures in our data that might warrant further study.</p>
+<p><strong>Example:</strong> In my own research, I (Keith) collaborate a lot with neuroscientists, who are interested in identifying <em>functional subnetworks</em> of the brain. These are groups of neurons that work together, typically because they are associated with the same activity (e.g., attention, motion, speech).</p>
+<p>This is an example of <em>clustering</em>, in which our goal is to group data points in a sensible way, without necessarily saying ahead of time what those groups mean</p>
+<p>Oftentimes, we obtain <em>observational</em> data. That is, data that does not come from a carefully-designed experiment.</p>
+<p><strong>Example:</strong> Much data in the modern age of “big data” is collected by scraping the web or collected in other “messy” ways.</p>
+<ul>
+<li>Scraping data from a social media site such as Twitter.</li>
+<li>Measuring the socioeconomic status of people in different zip codes</li>
+</ul>
+<p>There are lots of interesting scientific questions we might like to ask about such a data set, but because this data isn’t the result of a carefully-controlled experiment, we are often much more limited in what we can say.</p>
+</section>
+</section>
+<section id="world-data-model-hat-tip-to-karl-rohe" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="world-data-model-hat-tip-to-karl-rohe"><span class="header-section-number">2.4</span> World, Data, Model (hat tip to <a href="http://pages.stat.wisc.edu/~karlrohe/index.html">Karl Rohe</a>)</h2>
+<p>Unless you subscribe to some rather outlandish philosophical beliefs (see, e.g., <a href="https://en.wikipedia.org/wiki/Solipsism">here</a>), there is a world out there, which we would like to learn about.</p>
+<p>To figure things out about the world, we take measurements. That is to say, we collect data. These data describe the world, but it remains to build a <em>model</em> that explains how these data came to be.</p>
+<p>The process of inference is how we use a specific set of data to guide our beliefs about the world.</p>
+<p>As a simple example, consider human height. What is the average adult human height?</p>
+<p>This is a question about the world. In fact, we could compute the average adult human height exactly if we could go out and measure the height of every adult human.</p>
+<ul>
+<li>Of course this would be a complicated and expensive process.</li>
+<li>Instead, we could just measure the heights of a few adult humans (say, a few thousand).</li>
+</ul>
+<p>Of course, this small collection of humans would need to be chosen randomly and in such a way that they would be representative of the population as a whole, but let’s ignore that concern until later in the course.</p>
+<p>The few thousand heights that we measure would constitute our data– measurements that were taken out there in the world.</p>
+<p>Here is a simulation of what that data might look like with a sample of size 2000.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># heights.R contains code for generating our synthetic data set.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'r_scripts/heights.R'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df_heights, <span class="fu">aes</span>(<span class="at">x=</span>heights ) );</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">fill=</span><span class="st">"grey"</span>, <span class="at">color=</span><span class="st">"black"</span>, <span class="at">binwidth=</span><span class="dv">2</span>, );</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">mean</span>(heights), <span class="at">color=</span><span class="st">"black"</span>, <span class="at">linetype=</span><span class="st">'f8'</span>, <span class="at">linewidth=</span><span class="dv">1</span>);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The vertical dashed line indicates the mean of these 2000 sampled heights.</p>
+<p>Because this is a random sample (and because heights vary due to factors like nutrition and genetics), this <em>sample mean</em> need not be equal to the population mean (i.e., the true average adult human height).</p>
+<p>Instead, the heights in our sample (and their mean) will vary randomly about the population average height. We use a <em>statistical model</em> (i.e., probability theory) to describe this variation.</p>
+<p>A common choice for modeling random variation like this is the normal distribution (in the coming lectures we will see plenty of other distributions).</p>
+<p>We <em>assume</em> that our data are generated by a normal distribution with some mean <span class="math inline">\(\mu\)</span> (i.e., the average height) and some standard deviation <span class="math inline">\(\sigma\)</span>. We call these <em>parameters</em> of the model.</p>
+<p>Estimating the population average height then reduces to estimating the “true” value of the parameter <span class="math inline">\(\mu\)</span> based on the data.</p>
+<p>This step of using our data to determine something about our model is called <em>inference</em>. In this case, our goal is to estimate the value of the model parameter <span class="math inline">\(\mu\)</span>, which will in turn be our estimate of the average adult human height.</p>
+</section>
+<section id="all-models-are-wrong-but-some-are-useful" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="all-models-are-wrong-but-some-are-useful"><span class="header-section-number">2.5</span> All models are wrong, but some are useful</h2>
+<p>An important point in our human height example above was our <em>assumption</em> that heights are normally distributed. In practice, modeling assumptions like these are never strictly true.</p>
+<p>Our model is just that– a model of the world; a set of simplifying assumptions that we hope are at least a good approximation to the truth.</p>
+<p>Think of your physics courses, where we assume that things happen in a frictionless void and use Newtonian mechanics instead of quantum mechanics.</p>
+<p>We make assumptions like these because they often make the math easier while still being a good approximation to reality.</p>
+<p>In our example above, the normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> says that with some (perhaps very small) probability, we might observe a negative number.</p>
+<p>If we model human heights as being normally distributed, our model predicts that we should, on occasion, meet people who have negative height.</p>
+<ul>
+<li>Why might that be a problem?</li>
+<li>Why might it be okay to still use this model anyway?</li>
+</ul>
+<p>Let’s push ahead and “fit” a normal to our data. We’ll have lots to say about this later. For now, think of this as choosing, out of all the possible normal distributions, the one that “best agrees”” with our data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The dataframe df_normal contains a column of x-values in the same range as our synthetic data.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_normal$y contains the normal pdf with mean and standard deviation fit to our synthetic data,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluated at these x-values.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">x=</span>df_normal<span class="sc">$</span>x, <span class="at">y=</span>df_normal<span class="sc">$</span>y), <span class="at">size=</span><span class="dv">1</span>, <span class="at">color=</span><span class="st">'red'</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Huh. Our data seems to be a bit “flatter” than the normal distribution would predict.</p>
+<p>Perhaps this is just due to random fluctuation, but in fact there is a very simple reason for this: We didn’t tell you about it, but this sample includes both males and females.</p>
+<p>Let’s plot the same histogram, but this time, let’s break out the heights according to sex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df_heights, <span class="fu">aes</span>(<span class="at">x=</span>heights, <span class="at">color=</span>sex, <span class="at">fill=</span>sex ) );</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_histogram</span>( <span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">position=</span><span class="st">"identity"</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">binwidth=</span><span class="dv">2</span>);</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Human heights are bimodal– female heights are approximately normal about some mean, and male heights are approximately normal about another.</p>
+<p>We can fit a normal to each of these separately and we see that our model agrees with the data much better.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df_bimodal$x contains x values that agree with the range of our height data.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_bimodal$density is the density of a normal distribution, fit to the male or female heights,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#        evaluated at these x-values.</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># df_bimodal$sex encodes male/female\n",</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">data=</span>df_bimodal, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>density, <span class="at">color=</span>sex), <span class="at">size=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.5</span>);</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This is a good (albeit simple) illustration of the kind of iterative workflow that we typically use in data science.</p>
+<ul>
+<li>We obtain our data, fit a model to it, and then we examine the shortcomings of that model.</li>
+<li>After some thought, it becomes clear how to improve our model.</li>
+<li>We implement those changes (in this case, we incorporated the variable <code>sex</code> into our model), and examine our findings again.</li>
+</ul>
+<p>Typically, we repeat this cycle several times before reaching a conclusion that we are confident in.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
