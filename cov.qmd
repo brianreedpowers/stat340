@@ -440,7 +440,7 @@ That $0.4^2$ in the off-diagonal entries is the *covariance* of the two normals.
 So this will generate two normal random variables, both having mean $0.5$, and variance $0.05^2$, but these two normals will be correlated, with covariance $0.04^2$.
 
 Let's have a look:
-```{r}
+```{r, warning=F}
 library(MASS); # This library includes a multivariate normal
 WpMp = mvrnorm(n=2000, mu=mu, Sigma=CovMx); #mvrnorm is the multivariate version of rnorm.
 plot(WpMp, xlab = "Wisconsin proportion", ylab = "Michigan proportion");
@@ -549,7 +549,7 @@ $$
 Note that if $\Pr[B] = 0$, then the ratio on the right-hand side is not defined, hence why we demanded that $\Pr[B] > 0$.
 Later in your career, you'll see that we can actually define conditional probability in a sensible way even if $\Pr[B] = 0$, but that's a matter for a later class.
 
-![Venn diagram illustrating conditional probability](./venn.png)
+![Venn diagram illustrating conditional probability](./images/venn.png)
 
 Let's try computing one of these conditional probabilities: what is the probability that the die is showing 2 *conditional on the fact* that it landed on an even number?
 

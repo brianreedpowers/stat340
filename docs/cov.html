@@ -446,14 +446,14 @@ So if $X$ and $Y$ are independent, $\operatorname{Cov}(X,Y) = 0$. -->
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.002047785</code></pre>
+<pre><code>[1] 0.0003628265</code></pre>
 </div>
 </div>
 <p>The covariance of this sample of 10,000 observations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is very close to 0 (probably a little below or a little above due to randomness). The sample correlation is</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.01185526</code></pre>
+<pre><code>[1] 0.002149034</code></pre>
 </div>
 </div>
 <p>Again - this is a number that is very close to zero.</p>
@@ -490,7 +490,7 @@ X_2 \sim \operatorname{Normal}(2,2).
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># v1 should be close to 1=Var X_1, v2 close to 2=Var X_2.</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( v1, v2 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9996044 1.9852615</code></pre>
+<pre><code>[1] 0.9964867 2.0028233</code></pre>
 </div>
 </div>
 <p>And let’s check that these two independent variables have covariance (approximately) zero.</p>
@@ -500,7 +500,7 @@ X_2 \sim \operatorname{Normal}(2,2).
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># See ?cor for details.</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>( X1, X2 );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.001097793</code></pre>
+<pre><code>[1] 0.006530369</code></pre>
 </div>
 </div>
 <p>Again, those <em>sample-based</em> quantities will never be precisely equal to 1, 2, and 0, but they will be very close!</p>
@@ -513,7 +513,7 @@ X_2 \sim \operatorname{Normal}(2,2).
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(X1 <span class="sc">+</span> X2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.981773</code></pre>
+<pre><code>[1] 3.017761</code></pre>
 </div>
 </div>
 <p>As we predicted!</p>
@@ -542,12 +542,9 @@ X_2 \sim \operatorname{Normal}(2,2).
 <p>So this will generate two normal random variables, both having mean <span class="math inline">\(0.5\)</span>, and variance <span class="math inline">\(0.05^2\)</span>, but these two normals will be correlated, with covariance <span class="math inline">\(0.04^2\)</span>.</p>
 <p>Let’s have a look:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS); <span class="co"># This library includes a multivariate normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'MASS' was built under R version 4.2.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>WpMp <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n=</span><span class="dv">2000</span>, <span class="at">mu=</span>mu, <span class="at">Sigma=</span>CovMx); <span class="co">#mvrnorm is the multivariate version of rnorm.</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(WpMp, <span class="at">xlab =</span> <span class="st">"Wisconsin proportion"</span>, <span class="at">ylab =</span> <span class="st">"Michigan proportion"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS); <span class="co"># This library includes a multivariate normal</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>WpMp <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n=</span><span class="dv">2000</span>, <span class="at">mu=</span>mu, <span class="at">Sigma=</span>CovMx); <span class="co">#mvrnorm is the multivariate version of rnorm.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(WpMp, <span class="at">xlab =</span> <span class="st">"Wisconsin proportion"</span>, <span class="at">ylab =</span> <span class="st">"Michigan proportion"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="cov_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -555,14 +552,14 @@ X_2 \sim \operatorname{Normal}(2,2).
 <p>It’s clear that the Wisconsin and Michigan voter shares are correlated– we can see it in the plot!</p>
 <p>But just to be sure:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># WpMp is an array with two columns and 500 rows.</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If we call cov on it directly, we get something shaped</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># like our covariance matrix.</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(WpMp )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># WpMp is an array with two columns and 500 rows.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If we call cov on it directly, we get something shaped</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># like our covariance matrix.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(WpMp )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            [,1]        [,2]
-[1,] 0.002535026 0.001692518
-[2,] 0.001692518 0.002614663</code></pre>
+[1,] 0.002434066 0.001654258
+[2,] 0.001654258 0.002638478</code></pre>
 </div>
 </div>
 <p>The diagonal entries are the (sample) variances computed along the columns. The off-diagonal entries (note that they are both the same) tell us the (sample) covariance. Unsurprisingly, the off-diagonal is close to the true covariance <span class="math inline">\(0.0016\)</span>.</p>
@@ -615,7 +612,7 @@ X_i \overset{\text{iid}}{\sim} \text{Uniform}(0,1), \text{ for } i=1,\ldots, n
 \]</span> Note that if <span class="math inline">\(\Pr[B] = 0\)</span>, then the ratio on the right-hand side is not defined, hence why we demanded that <span class="math inline">\(\Pr[B] &gt; 0\)</span>. Later in your career, you’ll see that we can actually define conditional probability in a sensible way even if <span class="math inline">\(\Pr[B] = 0\)</span>, but that’s a matter for a later class.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./venn.png" class="img-fluid figure-img"></p>
+<p><img src="./images/venn.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Venn diagram illustrating conditional probability</figcaption>
 </figure>
 </div>
