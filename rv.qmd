@@ -867,7 +867,7 @@ Can you think of any possible problems with the model?
 
 ### Election models
 
-Will the Democratic (D) or Republican (R) presidential candidate win Wisconsin in 2024?
+Will the Democratic (D) or Republican (R) presidential candidate win Wisconsin in 20xx?
 
 What is the distribution of this random variable $W$, where $W=−1$ if D and $W=1$ if R?
 

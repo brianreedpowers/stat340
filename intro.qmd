@@ -162,7 +162,8 @@ For example, labeling an image according to whether or not it contains a cat can
 
 __Example:__ this plot shows different people's incomes (in tens of thousands of dollars per year) as a function of their years of education.
 
-![Credit: ISLR2](./images/income_by_edu.png)
+
+![Education by income](./images/edu_income.png)
 
 It certainly looks like more years of education correlate with higher income.
 

@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./cov.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -157,6 +157,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./rv.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -362,14 +368,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The prob argument specifies the probability that one coin lands heads, i.e., p in our notation above.</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>) <span class="co"># produces a random number from {0,1,2,...,10}, with 2,3,4 being most common (because np = 3 is the expected value we'll come back to this!)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<pre><code>[1] 2</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we repeat the experiment a few times, we get different random values.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3</code></pre>
+<pre><code>[1] 4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -385,7 +391,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 4</code></pre>
 </div>
 </div>
 <p>We can also use the binomial to generate Bernoulli random variables, by setting the <code>size</code> argument to 1 (i.e., flip 1 coin):</p>
@@ -400,13 +406,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># 3 draws from a Binomial(10,0.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2 5 8</code></pre>
+<pre><code>[1] 8 7 4</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># 10 draws from a Binomial(3,0.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 0 2 1 2 1 0 2 2 1 3</code></pre>
+<pre><code> [1] 0 0 2 2 1 2 0 0 1 2</code></pre>
 </div>
 </div>
 <p>All of the R functions for generating random variables take <code>n</code> as the number of draws from the distribution. This is in keeping with the convention in most of probability and statistics that <span class="math inline">\(n\)</span> is a sample size. Unfortunately, this is just one of those places where two different notational conventions collide. It’s unfortunate that it arises in such a common and early-stage part of R!</p>
@@ -460,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rgeom</span>(<span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># Generate one geometric random variable with p=0.5. Most likely outcomes: 0,1,2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code>[1] 4</code></pre>
 </div>
 </div>
 <p>The probability that a <span class="math inline">\(\operatorname{Geom}(p)\)</span> random variable <span class="math inline">\(X\)</span> takes a particular value <span class="math inline">\(k\)</span> (<span class="math inline">\(k=0,1,2,\dots\)</span>) is given by <span class="math inline">\(\Pr[ X = k ] = (1-p)^k p.\)</span></p>
@@ -506,7 +512,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">1</span>, <span class="at">lambda =</span> <span class="fl">10.5</span>) <span class="co"># Generate Poisson RV with lambda=10.5 most likely value is 10.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 15</code></pre>
+<pre><code>[1] 9</code></pre>
 </div>
 </div>
 <p>What if I want several random Poissons, instead of just one?</p>
@@ -515,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">10</span>, <span class="at">lambda =</span> <span class="fl">10.5</span>) <span class="co"># Generate 10 Poisson RVs with the same parameter lambda=10.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  8  5  7 11 16  8  7  8  6  6</code></pre>
+<pre><code> [1] 13 16 11  9 11 15 11  8 15  9</code></pre>
 </div>
 </div>
 <p>What does the probability mass function of the Poisson look like? Once again, the Poisson distribution has infinite support, since <span class="math inline">\(\Pr[X=k] &gt; 0\)</span> for all <span class="math inline">\(k=0,1,2,\dots\)</span> (check this!), but let’s plot its first few values.</p>
@@ -549,9 +555,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">6</span>, <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>rolls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  [1] 6 3 6 5 6 1 6 3 6 2 2 1 2 3 5 5 4 5 6 6 5 6 1 5 4 4 4 2 5 4 5 1 5 1 3 4 3
- [38] 6 3 1 5 2 3 6 3 4 5 2 4 4 3 4 3 6 4 1 1 3 1 5 3 3 3 1 3 3 3 2 6 3 3 4 5 5
- [75] 3 5 3 4 5 2 6 1 4 5 4 6 4 6 1 2 1 3 3 5 4 5 3 3 5 5</code></pre>
+<pre><code>  [1] 5 3 6 1 1 6 2 3 1 6 3 2 1 1 4 6 5 6 5 1 6 5 2 1 5 5 5 3 5 6 1 5 5 4 4 4 1
+ [38] 3 3 2 6 4 2 5 5 5 1 5 4 4 2 1 6 3 5 3 5 3 5 2 3 3 5 1 3 1 1 2 3 4 4 2 2 5
+ [75] 3 1 1 3 4 3 1 1 1 4 1 3 2 6 2 2 2 6 3 2 2 2 3 2 6 4</code></pre>
 </div>
 </div>
 </section>
@@ -675,11 +681,11 @@ f(t;  \mu, \sigma^2) = \frac{1}{\sqrt{ 2\pi \sigma^2 } } \exp\left\{ \frac{ -(t-
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">2</span>) <span class="co"># Note that we pass the standard deviation (sd), not the variance sigma^2.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.68621</code></pre>
+<pre><code>[1] -0.0311147</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">1</span>) <span class="co"># If we don't specify a mean and sd, they default to 0 and 1, respectively</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.3366654</code></pre>
+<pre><code>[1] -0.9908474</code></pre>
 </div>
 </div>
 <p>Let’s generate a bunch of normal RVs and plot their (normalized) histogram:</p>
@@ -721,19 +727,19 @@ f(t;  \mu, \sigma^2) = \frac{1}{\sqrt{ 2\pi \sigma^2 } } \exp\left\{ \frac{ -(t-
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># Should be about 0.68</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.683283</code></pre>
+<pre><code>[1] 0.682999</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># should be about 0.9545</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.954472</code></pre>
+<pre><code>[1] 0.954714</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">3</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># should be about 0.997</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.997332</code></pre>
+<pre><code>[1] 0.997312</code></pre>
 </div>
 </div>
 <p>Of course, because the data is random, the proportions are not exactly equal to their predicted values, but they are quite close.</p>
@@ -873,7 +879,7 @@ f(t  \lambda ) = \begin{cases}
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="fl">1e6</span>, <span class="at">rate =</span> <span class="dv">1</span>) <span class="co"># rexp to generate random exponentials.</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># something like 99% of the generated points should be below 5.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.993309</code></pre>
+<pre><code>[1] 0.993314</code></pre>
 </div>
 </div>
 <p><br><br><br></p>
@@ -924,7 +930,7 @@ f(X)= \begin{cases} 120−X &amp;\mbox{ if } X&lt;120 \\
 </section>
 <section id="election-models" class="level3" data-number="3.5.9">
 <h3 data-number="3.5.9" class="anchored" data-anchor-id="election-models"><span class="header-section-number">3.5.9</span> Election models</h3>
-<p>Will the Democratic (D) or Republican (R) presidential candidate win Wisconsin in 2024?</p>
+<p>Will the Democratic (D) or Republican (R) presidential candidate win Wisconsin in 20xx?</p>
 <p>What is the distribution of this random variable <span class="math inline">\(W\)</span>, where <span class="math inline">\(W=−1\)</span> if D and <span class="math inline">\(W=1\)</span> if R?</p>
 <p>What about neighboring Michigan <span class="math inline">\(M \in \{-1,1\}\)</span>?</p>
 <p>Wisconsin and Michigan are not so different, so if we find out that the Republican candidate won Michigan (i.e., we learn about <span class="math inline">\(M\)</span>), then that certainly tells us something about <span class="math inline">\(W\)</span>.</p>
@@ -1236,8 +1242,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./cov.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

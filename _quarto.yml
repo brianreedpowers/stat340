@@ -11,6 +11,7 @@ book:
     - index.qmd
     - intro.qmd
     - rv.qmd
+    - cov.qmd
     - references.qmd
 bibliography: references.bib
 

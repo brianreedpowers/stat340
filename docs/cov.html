@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 4&nbsp; Independence, Conditional Probability and Bayes’ Rule</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./rv.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./cov.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes' Rule</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">4.1</span> Learning objectives</a></li>
+  <li><a href="#recap-rvs-events-and-independence." id="toc-recap-rvs-events-and-independence." class="nav-link" data-scroll-target="#recap-rvs-events-and-independence."><span class="header-section-number">4.2</span> Recap: RVs events and independence.</a>
+  <ul class="collapse">
+  <li><a href="#example-dice-and-coins" id="toc-example-dice-and-coins" class="nav-link" data-scroll-target="#example-dice-and-coins"><span class="header-section-number">4.2.1</span> Example: dice and coins</a></li>
+  <li><a href="#example-more-dice" id="toc-example-more-dice" class="nav-link" data-scroll-target="#example-more-dice"><span class="header-section-number">4.2.2</span> Example: more dice</a></li>
+  </ul></li>
+  <li><a href="#independent-random-variables" id="toc-independent-random-variables" class="nav-link" data-scroll-target="#independent-random-variables"><span class="header-section-number">4.3</span> Independent Random Variables</a></li>
+  <li><a href="#independence-expectation-and-variance" id="toc-independence-expectation-and-variance" class="nav-link" data-scroll-target="#independence-expectation-and-variance"><span class="header-section-number">4.4</span> (in)dependence, expectation and variance</a></li>
+  <li><a href="#uncorrelation-and-independence" id="toc-uncorrelation-and-independence" class="nav-link" data-scroll-target="#uncorrelation-and-independence"><span class="header-section-number">4.5</span> (Un)correlation and independence</a>
+  <ul class="collapse">
+  <li><a href="#example-uncorrelated-but-not-independent" id="toc-example-uncorrelated-but-not-independent" class="nav-link" data-scroll-target="#example-uncorrelated-but-not-independent"><span class="header-section-number">4.5.1</span> Example: Uncorrelated but not independent</a></li>
+  <li><a href="#example-sums-of-independent-normals" id="toc-example-sums-of-independent-normals" class="nav-link" data-scroll-target="#example-sums-of-independent-normals"><span class="header-section-number">4.5.2</span> Example: sums of independent normals</a></li>
+  <li><a href="#example-multivariate-normal" id="toc-example-multivariate-normal" class="nav-link" data-scroll-target="#example-multivariate-normal"><span class="header-section-number">4.5.3</span> Example: multivariate normal</a></li>
+  </ul></li>
+  <li><a href="#how-reasonable-is-independence" id="toc-how-reasonable-is-independence" class="nav-link" data-scroll-target="#how-reasonable-is-independence"><span class="header-section-number">4.6</span> How reasonable is independence?</a></li>
+  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability"><span class="header-section-number">4.7</span> Conditional probability</a>
+  <ul class="collapse">
+  <li><a href="#introducing-conditional-probability" id="toc-introducing-conditional-probability" class="nav-link" data-scroll-target="#introducing-conditional-probability"><span class="header-section-number">4.7.1</span> Introducing conditional probability</a></li>
+  <li><a href="#disease-screening" id="toc-disease-screening" class="nav-link" data-scroll-target="#disease-screening"><span class="header-section-number">4.7.2</span> Disease screening</a></li>
+  </ul></li>
+  <li><a href="#bayes-rule" id="toc-bayes-rule" class="nav-link" data-scroll-target="#bayes-rule"><span class="header-section-number">4.8</span> Bayes’ rule</a></li>
+  <li><a href="#example-testing-for-a-rare-disease" id="toc-example-testing-for-a-rare-disease" class="nav-link" data-scroll-target="#example-testing-for-a-rare-disease"><span class="header-section-number">4.9</span> Example: testing for a rare disease</a></li>
+  <li><a href="#calculating-the-denominator-in-bayes-rule" id="toc-calculating-the-denominator-in-bayes-rule" class="nav-link" data-scroll-target="#calculating-the-denominator-in-bayes-rule"><span class="header-section-number">4.10</span> Calculating the denominator in Bayes’ Rule</a></li>
+  <li><a href="#dependent-free-throw-shots" id="toc-dependent-free-throw-shots" class="nav-link" data-scroll-target="#dependent-free-throw-shots"><span class="header-section-number">4.11</span> Dependent free throw shots</a>
+  <ul class="collapse">
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">4.11.1</span> Review:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In these notes, we return to a very basic idea: independence of random variables. We will discuss in more detail what it means for variables to be independent, and we will discuss the related notion of correlation. We will also see how independence relates to “conditional probability”, and how we can use this different “kind” of probability to answer questions that frequently arise in statistics (especially in medical trials) by appealing to Bayes’ rule.</p>
+<section id="learning-objectives" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">4.1</span> Learning objectives</h2>
+<p>After this lesson, you will be able to</p>
+<ul>
+<li>Explain what it means for variables to be dependent or independent and assess how reasonable independence assumptions are in simple statistical models.</li>
+<li>Explain expectations and variances of sums of variables are influenced by the dependence or independence of those random variables.</li>
+<li>Explain correlation, compute the correlation of two random variables, and explain the difference between correlation and dependence.</li>
+<li>Define the conditional probability of an event <span class="math inline">\(A\)</span> given an event <span class="math inline">\(B\)</span> and calculate this probability given the appropriate joint distribution.</li>
+<li>Use Bayes’ rule to compute <span class="math inline">\(\Pr[B \mid A]\)</span> in terms of <span class="math inline">\(\Pr[A \mid B]\)</span>, <span class="math inline">\(\Pr[A]\)</span> and <span class="math inline">\(\Pr[B]\)</span>.</li>
+</ul>
+</section>
+<section id="recap-rvs-events-and-independence." class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="recap-rvs-events-and-independence."><span class="header-section-number">4.2</span> Recap: RVs events and independence.</h2>
+<p>When working with random variables, we start with a set of possible <em>outcomes</em>, usually denoted <span class="math inline">\(\Omega\)</span>.</p>
+<p>A subset <span class="math inline">\(E \subseteq \Omega\)</span> of the outcome space is called an <em>event</em>.</p>
+<p>A <em>probability</em> is a function that maps events to numbers, with the properties that</p>
+<ul>
+<li><span class="math inline">\(\Pr[ E ] \in [0,1]\)</span> for all events <span class="math inline">\(E\)</span></li>
+<li><span class="math inline">\(\Pr[ \Omega ] = 1\)</span></li>
+<li>For <span class="math inline">\(E_1,E_2 \in \Omega\)</span> with <span class="math inline">\(E_1 \cap E_2 = \emptyset\)</span>, <span class="math inline">\(\Pr[ E_1 \cup E_2 ] = \Pr[ E_1 ] + \Pr[ E_2 ]\)</span></li>
+</ul>
+<p>Note: If <span class="math inline">\(\Pr[E_1 \cap E_2]=\emptyset\)</span>, we say that <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span> are <em>mutually exclusive</em> (or <em>disjoint</em>)</p>
+<p>We say that two events <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span> are <em>independent</em> if <span class="math inline">\(\Pr[ E_1 \cap E_2 ] = \Pr[ E_1 ] \Pr[ E_2 ]\)</span>. Note that it is very common to write <span class="math inline">\(\Pr[ E_1, E_2]\)</span> to mean <span class="math inline">\(\Pr[ E_1 \cap E_2 ]\)</span>. We usually read that as “the probability of events <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span>” or “the probability that <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span> occur”.</p>
+<p>Two <em>random variables</em> <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if for all sets <span class="math inline">\(S_1,S_2\)</span>, we have <span class="math inline">\(\Pr[ X \in S_1,~ Y \in S_2 ] = \Pr[ X \in S_1 ] \Pr[ Y \in S_2 ]\)</span>.</p>
+<p>Roughly speaking, two random variables are independent if learning information about one of them doesn’t tell you anything about the other.</p>
+<ul>
+<li>For example, if each of us flips a coin, it is reasonable to model them as being independent.</li>
+<li>Learning whether my coin landed heads or tails doesn’t tell us anything about your coin.</li>
+</ul>
+<section id="example-dice-and-coins" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="example-dice-and-coins"><span class="header-section-number">4.2.1</span> Example: dice and coins</h3>
+<p>Suppose that you roll a die and I flip a coin. Let <span class="math inline">\(D\)</span> denote the (random) outcome of the die roll, and let <span class="math inline">\(C\)</span> denote the (random) outcome of the coin flip. So <span class="math inline">\(D \in \{1,2,3,4,5,6\}\)</span> and <span class="math inline">\(C \in \{H,T\}\)</span>. Suppose that for all <span class="math inline">\(d \in \{1,2,3,4,5,6\}\)</span> and all <span class="math inline">\(c \in \{H,T\}\)</span>, <span class="math inline">\(\Pr[ D=d, C=c ] = 1/12\)</span>.</p>
+<p><strong>Question:</strong> Verify that the random variables <span class="math inline">\(D\)</span> and <span class="math inline">\(C\)</span> are independent, or at least check that it’s true for two particular events <span class="math inline">\(E_1 \subseteq \{1,2,3,4,5,6\}\)</span> and <span class="math inline">\(E_2 \subseteq \{H,T\}\)</span>.</p>
+</section>
+<section id="example-more-dice" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="example-more-dice"><span class="header-section-number">4.2.2</span> Example: more dice</h3>
+<p>Suppose that we roll a six-sided die. Consider the following two events: <span class="math display">\[
+\begin{aligned}
+E_1 &amp;= \{ \text{The die lands on an even number} \} \\
+E_2 &amp;= \{ \text{The die lands showing 3} \}.
+\end{aligned}
+\]</span></p>
+<p>Are these two events independent? Our intuitive definition of independence is that learning about one event shouldn’t change the probability of the other event. These two events surely fail that test: if I tell you that the die landed on an even number, then it’s certainly impossible that it landed showing a 3, since 3 isn’t even.</p>
+<p>Let’s verify this intuition by checking that these two events fail the formal definition of independence. That is, let’s verify that <span class="math display">\[
+\Pr[ E_1 \cap E_2 ] \neq \Pr[ E_1 ] \Pr[ E_2 ].
+\]</span></p>
+<p>There are six sides on our die, numbered 1, 2, 3, 4, 5, 6, and three of those sides are even numbers, so <span class="math inline">\(\Pr[ E_1 ] = 1/2\)</span>.</p>
+<p>The probability that the die lands showing 3 is exactly <span class="math inline">\(\Pr[ E_2 ] = 1/6\)</span>.</p>
+<p>Putting these together, <span class="math inline">\(\Pr[E_1] \Pr[E_2] = 1/12\)</span>.</p>
+<p>On the other hand, let’s consider <span class="math inline">\(E_1 \cap E_2\)</span>. This is the event that the die lands showing an even number <em>and</em> it lands showing three. These two events cannot both happen!</p>
+<p>That means that <span class="math inline">\(E_1 \cap E_2 = \emptyset\)</span>. That is, the intersection of these two events is the empty set. The laws of probability require that <span class="math inline">\(\Pr[ \emptyset ] = 0\)</span> (<strong>Aside:</strong> why? <strong>Hint:</strong> <span class="math inline">\(\Pr[ \Omega ] = 1\)</span> and <span class="math inline">\(\emptyset \cap \Omega = \emptyset\)</span>; now use the fact that the probability of the union of disjoint events is the sum of their probabilities).</p>
+<p>So we have <span class="math display">\[
+\Pr[ E_1 \cap E_2 ] = 0 \neq \frac{1}{12} =\Pr[ E_1 ] \Pr[ E_2 ].
+\]</span></p>
+<p>Our two events are indeed not independent.</p>
+<p><strong>Important note:</strong> it’s not always so obvious that two events are independent! Any probability textbook will have a collection of good examples of less intuitive independent and dependent events.</p>
+</section>
+</section>
+<section id="independent-random-variables" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="independent-random-variables"><span class="header-section-number">4.3</span> Independent Random Variables</h2>
+<p>What do we mean by independent random variables? Well, a strict, formal definition is going to have to wait for a future math class.</p>
+<p>For this semester, we’ll say that two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if <strong>any two events</strong> concerning those random variables are independent.</p>
+<p>That is, for <em>any</em> event <span class="math inline">\(E_X\)</span> concerning <span class="math inline">\(X\)</span> (i.e., <span class="math inline">\(E_X = \{ X \in S \}\)</span> for <span class="math inline">\(S \subseteq \Omega)\)</span> and any event <span class="math inline">\(E_Y\)</span> concerning <span class="math inline">\(Y\)</span>, the events <span class="math inline">\(E_X\)</span> and <span class="math inline">\(E_Y\)</span> are independent.</p>
+<p>Said another way, if two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, then for any two sets <span class="math inline">\(S_1, S_2 \subset \Omega\)</span>, <span class="math display">\[
+\Pr[ X \in S_1, Y \in S_2 ]
+=
+\Pr[ X \in S_1] \Pr[ Y \in S_2 ].
+\]</span></p>
+<p>In particular, if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both discrete, then for any <span class="math inline">\(k\)</span> and <span class="math inline">\(\ell\)</span>, <span class="math display">\[
+\Pr[ X=k, Y=\ell ]
+=
+\Pr[ X=k ] \Pr[ Y=\ell ].
+\]</span></p>
+<p>Similarly, if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are continuous, then the <em>joint density</em> has the same property: <span class="math display">\[
+f_{X,Y}(s,t) = f_X(s) f_Y(t).
+\]</span></p>
+<p>Don’t worry about these mathematical details too much at this stage– We just want to make sure that you’ve seen a little bit of this so that it isn’t completely new to you when you go off and do your readings and, more importantly, when you see these ideas in your later classes.</p>
+</section>
+<section id="independence-expectation-and-variance" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="independence-expectation-and-variance"><span class="header-section-number">4.4</span> (in)dependence, expectation and variance</h2>
+<p>Recall the definition of the expectation of a random variable <span class="math inline">\(X\)</span> with outcome set <span class="math inline">\(\Omega\)</span>, <span class="math display">\[
+\mathbb{E} X = \int_\Omega t f_X(t) dt,
+\]</span></p>
+<p>if <span class="math inline">\(X\)</span> is continuous with density <span class="math inline">\(f_X\)</span>, and <span class="math display">\[
+\mathbb{E} X = \sum_{k \in \Omega} k \Pr[X=k]
+\]</span></p>
+<p>if <span class="math inline">\(X\)</span> is discrete with probability mass function <span class="math inline">\(\Pr[ X=k]\)</span>.</p>
+<p>With the expectation defined, we can also define the variance, <span class="math display">\[
+\operatorname{Var} X = \mathbb{E} (X - \mathbb{E} X)^2
+= \mathbb{E} X^2 - \mathbb{E}^2 X.
+\]</span></p>
+<p>That second equality isn’t necessarily obvious– we’ll see why it’s true in a moment.</p>
+<p><strong>Note:</strong> we often write <span class="math inline">\(\mathbb{E}^2 X\)</span> as short for <span class="math inline">\((\mathbb{E} X)^2\)</span>. This is standard notation, but it’s sometimes a source of confusion to beginner students, so be careful!</p>
+<p>A basic property of expectation is that it is <em>linear</em>. For any constants (i.e., non-random) <span class="math inline">\(a,b \in \mathbb{R}\)</span>, <span class="math display">\[
+\mathbb{E} (a X + b) = a \mathbb{E} X + b.
+\]</span> If <span class="math inline">\(X,Y\)</span> are random variables, then <span class="math display">\[
+\mathbb{E}( X + Y) = \mathbb{E} X + \mathbb{E} Y.
+\]</span></p>
+<p>This <em>linearity of expectation</em> property may look/sound a bit weird, but this isn’t the first time you’ve seen it– derivatives and integrals are linear, too! For example, <span class="math display">\[
+(a ~f(t) + b ~g(t))' = a ~ f'(t) + b ~g'(t)
+\]</span></p>
+<p>and <span class="math display">\[
+\int(a f(t) + b g(t)) dt = a \int f(t) dt + b \int g(t) dt
+\]</span></p>
+<p>Because expected value is simply an integral (or summation), the linearity of expectation follows directly from the definition.</p>
+<p><strong>Exercise:</strong> prove that <span class="math inline">\(\mathbb{E} (a X + b) = a \mathbb{E} X + b\)</span> for discrete r.v. <span class="math inline">\(X\)</span>.</p>
+<p><strong>Exercise:</strong> prove that <span class="math inline">\(\mathbb{E}( X + Y) = \mathbb{E} X + \mathbb{E} Y\)</span> for discrete <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<p><strong>Exercise:</strong> Use the linearity of expectation to prove that <span class="math inline">\(\mathbb{E} (X - \mathbb{E} X)^2 = \mathbb{E} X^2 - \mathbb{E}^2 X\)</span>. <strong>Hint:</strong> <span class="math inline">\(\mathbb{E}( X \mathbb{E} X) = \mathbb{E}^2 X\)</span> because <span class="math inline">\(\mathbb{E} X\)</span> is NOT random– it pops right out of the expectation just like <span class="math inline">\(a\)</span> does in the equation above.</p>
+<p>The definition of variance and the linearity of expectation are enough to give us a property of variance:</p>
+<p>For any constants (i.e., non-random) <span class="math inline">\(a,b \in \mathbb{R}\)</span>, <span class="math display">\[
+\operatorname{Var} (a X + b) = a^2 \operatorname{Var} (X).
+\]</span></p>
+<p><strong>Exercise:</strong> Use the definition <span class="math inline">\(\operatorname{Var}(X)=\mathbb{E} X^2 - \mathbb{E}^2 X\)</span> to prove the above.</p>
+<p>This linearity property implies that the expectation of a sum is the sum of the expectations: <span class="math display">\[
+\mathbb{E}[ X_1 + X_2 + \dots + X_n]
+= \mathbb{E} X_1 + \mathbb{E} X_2 + \dots + \mathbb{E} X_n.
+\]</span></p>
+<p>What about variance? Is the variance of the sum the sum of the variances?</p>
+<p>Well, sadly, not always. To see why this isn’t always true, consider RVs <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. <span class="math display">\[
+\begin{aligned}
+\operatorname{Var}(X + Y)
+&amp;= \mathbb{E}[ X + Y - \mathbb{E}(X + Y) ]^2 \\
+&amp;= \mathbb{E}[ (X - \mathbb{E} X) + (Y - \mathbb{E} Y) ]^2,
+\end{aligned}
+\]</span></p>
+<p>where the second equality follows from applying linear of expectation to write <span class="math inline">\(\mathbb{E}(X+Y) = \mathbb{E}X + \mathbb{E}Y\)</span>.</p>
+<p>Now, let’s expand the square in the expectation. <span class="math display">\[
+\begin{aligned}
+\operatorname{Var}(X + Y)
+&amp;=
+\mathbb{E}[ (X - \mathbb{E} X) + (Y - \mathbb{E} Y) ]^2 \\
+&amp;= \mathbb{E}[(X - \mathbb{E} X)^2 + 2(X - \mathbb{E} X)(Y - \mathbb{E} Y)
+              + (Y - \mathbb{E} Y)^2 ] \\
+&amp;= \mathbb{E} (X - \mathbb{E} X)^2 + 2 \mathbb{E} (X - \mathbb{E} X)(Y - \mathbb{E} Y) + \mathbb{E} (Y - \mathbb{E} Y)^2,
+\end{aligned}
+\]</span> where the last equality is just using the linearity of expectation.</p>
+<p>Now, the first and last terms there are the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>: <span class="math display">\[
+\operatorname{Var} X = \mathbb{E}(X - \mathbb{E} X)^2,~~~
+\operatorname{Var} Y = \mathbb{E}(Y - \mathbb{E} Y)^2.
+\]</span> So <span class="math display">\[
+\operatorname{Var}(X + Y)
+= \operatorname{Var} X + 2 \mathbb{E} (X - \mathbb{E} X)(Y - \mathbb{E} Y)
+  + \operatorname{Var} Y.
+\]</span></p>
+<p>So what’s up with that middle term? This term might be familiar to you– it is (two times) the <em>covariance</em> of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, often written <span class="math display">\[
+\operatorname{Cov}(X,Y)
+= \mathbb{E}( X - \mathbb{E}X)( Y - \mathbb{E} Y).
+\]</span></p>
+<p>Now, if <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span>, <em>then</em> <span class="math display">\[
+\operatorname{Var}(X + Y) = \operatorname{Var} X + \operatorname{Var} Y.
+\]</span></p>
+<p>But when does <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span>?</p>
+<p>Well, one <em>sufficient</em> condition is that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be independent. That is, if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent random variables, then <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span>.</p>
+<p><strong>Note:</strong> We will skip the proof that independence of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> implies <span class="math inline">\(Cov(X,Y)=0\)</span>, but you can find this proof in many places online.</p>
+<!--
+## Aside: Skippable proof
+
+If you're curious, here's an explanation as to why independence of $X$ and $Y$ implies that $\operatorname{Cov}(X,Y)=0$.
+As usual, you don't need to memorize this, or even necessarily understand every single line of it, but it's worth your time to understand it at a high level.
+
+Let's see this for the discrete case (the continuous case is the same, just replacing sums with integrals).
+Let $\mu_X = \mathbb{E} X$ and $\mu_Y = \mathbb{E} Y$.
+$$
+\begin{aligned}
+\operatorname{Cov}(X,Y)
+&= \mathbb{E}(X - \mu_X)(Y - \mu_Y) \\
+&= \sum_{k, \ell} (k-\mu_X)(\ell-\mu_Y) \Pr[ X=k, Y=\ell] \\
+&= \sum_{k,\ell} (k-\mu_X)(\ell-\mu_Y)
+  \Pr[ X=k ] \Pr[ Y = \ell ] \\
+&= \sum_{k} \sum_\ell (k-\mu_X)(\ell-\mu_Y) \Pr[ X=k ] \Pr[ Y = \ell ] \\
+&= \sum_{k} (k-\mu_X) \Pr[ X=k ] \sum_\ell (\ell-\mu_Y)\Pr[ Y = \ell ].
+\end{aligned}
+$$
+The first two equalities are just expanding definitions.
+The important one is the third one-- we use independence to write $\Pr[ X=k, Y=\ell] = \Pr[ X=k] \Pr[ Y=\ell]$.
+The last two equalities are then just pushing sums around.
+The important thing is that if $X$ and $Y$ are independent,
+$$
+\operatorname{Cov}(X,Y) = 
+\left( \sum_{k} (k-\mu_X) \Pr[ X=k ] \right)
+\left( \sum_\ell (\ell-\mu_Y)\Pr[ Y = \ell ] \right).
+$$
+But
+$$
+\begin{aligned}
+\sum_{k} (k-\mu_X) \Pr[ X=k ]
+&= \sum_{k} k \Pr[ X=k ] - \sum_k \mu_X \Pr[X=k] \\
+&= \mu_X - \mu_X  \sum_k \Pr[X=k] \\
+&= \mu_X - \mu_X = 0
+\end{aligned}
+$$
+and similarly,
+$$
+\sum_\ell (\ell-\mu_Y)\Pr[ Y = \ell ] = 0.
+$$
+
+So if $X$ and $Y$ are independent, $\operatorname{Cov}(X,Y) = 0$. -->
+</section>
+<section id="uncorrelation-and-independence" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="uncorrelation-and-independence"><span class="header-section-number">4.5</span> (Un)correlation and independence</h2>
+<p>Covariance might look familiar to you from a quantity that you saw in STAT240 (and a quantity that is very important in statistics!). The (Pearson) correlation between random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is defined to be <span class="math display">\[
+\rho_{X,Y} = \frac{ \operatorname{Cov}(X,Y) }{ \sqrt{ (\operatorname{Var} X)(\operatorname{Var} Y)} }.
+\]</span></p>
+<p>Note that if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, then <span class="math inline">\(\rho_{X,Y}=0\)</span> and we say that they are <em>uncorrelated</em>.</p>
+<p>But the converse isn’t true– it is possible to cook up examples of random variables that are uncorrelated (i.e., <span class="math inline">\(\rho_{X,Y} = 0\)</span>), but which are <em>not</em> independent.</p>
+<section id="example-uncorrelated-but-not-independent" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="example-uncorrelated-but-not-independent"><span class="header-section-number">4.5.1</span> Example: Uncorrelated but not independent</h3>
+<p>Suppose <span class="math inline">\(X \sim Unif(-1, 1)\)</span> and <span class="math inline">\(Y=X^2\)</span>. You can see from the definition that <span class="math inline">\(Y\)</span> is most definitely dependent on <span class="math inline">\(X\)</span>. If, for example, you know that <span class="math inline">\(x=.5\)</span>, then you know that <span class="math inline">\(y=.5^2=.25\)</span>. A proof that the covariance is zero is going to be difficult, but we can simulate some data to help us be confident that the claim is true.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.002047785</code></pre>
+</div>
+</div>
+<p>The covariance of this sample of 10,000 observations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is very close to 0 (probably a little below or a little above due to randomness). The sample correlation is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.01185526</code></pre>
+</div>
+</div>
+<p>Again - this is a number that is very close to zero.</p>
+</section>
+<section id="example-sums-of-independent-normals" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="example-sums-of-independent-normals"><span class="header-section-number">4.5.2</span> Example: sums of independent normals</h3>
+<p>Let’s consider two <em>independent</em> normals: <span class="math display">\[
+X_1 \sim \operatorname{Normal}(1,1)
+~\text{ and }~
+X_2 \sim \operatorname{Normal}(2,2).
+\]</span></p>
+<p>Since <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> are independent,</p>
+<ol type="1">
+<li>the variance of their sum should be the sum of their variances, and</li>
+<li>their correlation should be zero</li>
+</ol>
+<p>Let’s check both of those facts in simulation. We’ll generate lots of copies of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, and then we’ll compute their</p>
+<ol type="1">
+<li>(sample) variances separately,</li>
+<li>(sample) variance of their sum, and</li>
+<li>(sample) correlation</li>
+</ol>
+<p>Of course, all three of these quantities will be <em>estimated</em> from samples. The law of large numbers tells us that these quantities computed on our data will be close to the truth, but not necessarily precisely equal to the truth.</p>
+<p>Okay, let’s generate data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fl">1e5</span>; <span class="co"># Generate 100K Monte Carlo samples</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>( <span class="at">n=</span>M, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">1</span>) );</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>( <span class="at">n=</span>M, <span class="at">mean=</span><span class="dv">2</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">2</span>) );</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the (sample) variances of the copies of X1 and X2.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">var</span>(X1);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="fu">var</span>(X2);</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># v1 should be close to 1=Var X_1, v2 close to 2=Var X_2.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( v1, v2 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9996044 1.9852615</code></pre>
+</div>
+</div>
+<p>And let’s check that these two independent variables have covariance (approximately) zero.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cor( x, y) computes the (sample) covariance between</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the entries of vectors x and y.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># See ?cor for details.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>( X1, X2 );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.001097793</code></pre>
+</div>
+</div>
+<p>Again, those <em>sample-based</em> quantities will never be precisely equal to 1, 2, and 0, but they will be very close!</p>
+<p>Finally, let’s check that the variance of the <em>sum</em> <span class="math inline">\(X_1 + X_2\)</span> is the sum of variances, as it should be if the RVs are independent. So we should see <span class="math display">\[
+\operatorname{Var}(X_1 + X_2)
+= \operatorname{Var} X_1 + \operatorname{Var} X_2
+= 1 + 2 = 3.
+\]</span></p>
+<p>Okay, let’s check.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(X1 <span class="sc">+</span> X2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.981773</code></pre>
+</div>
+</div>
+<p>As we predicted!</p>
+</section>
+<section id="example-multivariate-normal" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="example-multivariate-normal"><span class="header-section-number">4.5.3</span> Example: multivariate normal</h3>
+<p>Remember that the multivariate normal is a way of generating multiple normal random variables that are correlated with one another.</p>
+<p>Here’s our code from our example modeling the voter shares in Wisconsin and Michigan.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">5</span>,.<span class="dv">5</span>); <span class="co"># Vector of means; both W_p and M_p are mean 1/2.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>CovMx <span class="ot">&lt;-</span> <span class="fu">matrix</span>( <span class="fu">c</span>(.<span class="dv">05</span><span class="sc">^</span><span class="dv">2</span>,.<span class="dv">04</span><span class="sc">^</span><span class="dv">2</span>,.<span class="dv">04</span><span class="sc">^</span><span class="dv">2</span>,.<span class="dv">05</span><span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow =</span> <span class="dv">2</span>); <span class="co"># Make a two-by-two symmetric matrix.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>CovMx;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]   [,2]
+[1,] 0.0025 0.0016
+[2,] 0.0016 0.0025</code></pre>
+</div>
+</div>
+<p>The code above generates a multivariate normal with two entries. Both will have means <span class="math inline">\(0.5\)</span>, encoded in the vector <code>mu</code>.</p>
+<p>The variances and covariance between the two normals is encoded by <code>CovMx</code>. It encodes a matrix (fancy word for an array of numbers), which looks like <span class="math display">\[
+\Sigma = \begin{bmatrix}
+0.05^2 &amp; 0.04^2 \\
+0.04^2 &amp; 0.05^2
+\end{bmatrix}.
+\]</span> That <span class="math inline">\(0.4^2\)</span> in the off-diagonal entries is the <em>covariance</em> of the two normals.</p>
+<p>So this will generate two normal random variables, both having mean <span class="math inline">\(0.5\)</span>, and variance <span class="math inline">\(0.05^2\)</span>, but these two normals will be correlated, with covariance <span class="math inline">\(0.04^2\)</span>.</p>
+<p>Let’s have a look:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS); <span class="co"># This library includes a multivariate normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'MASS' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>WpMp <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n=</span><span class="dv">2000</span>, <span class="at">mu=</span>mu, <span class="at">Sigma=</span>CovMx); <span class="co">#mvrnorm is the multivariate version of rnorm.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(WpMp, <span class="at">xlab =</span> <span class="st">"Wisconsin proportion"</span>, <span class="at">ylab =</span> <span class="st">"Michigan proportion"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cov_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It’s clear that the Wisconsin and Michigan voter shares are correlated– we can see it in the plot!</p>
+<p>But just to be sure:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># WpMp is an array with two columns and 500 rows.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If we call cov on it directly, we get something shaped</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># like our covariance matrix.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(WpMp )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            [,1]        [,2]
+[1,] 0.002535026 0.001692518
+[2,] 0.001692518 0.002614663</code></pre>
+</div>
+</div>
+<p>The diagonal entries are the (sample) variances computed along the columns. The off-diagonal entries (note that they are both the same) tell us the (sample) covariance. Unsurprisingly, the off-diagonal is close to the true covariance <span class="math inline">\(0.0016\)</span>.</p>
+<p>Also worth noting is the fact that the on-diagonal entries are (approximately) 0.025. The on-diagonal entries are computing covariances of our two columns of data <em>with themselves</em>. That is, these are computing something like <span class="math inline">\(\operatorname{Cov}(X,X)\)</span>.</p>
+<p>What is a random variable’s covariance with itself? Let’s plug in the definition: <span class="math display">\[
+\operatorname{Cov}(X,X)
+= \mathbb{E} (X - \mathbb{E} X)(X - \mathbb{E} X)
+= \mathbb{E} (X - \mathbb{E} X)^2
+\]</span></p>
+<p>Hey, that’s the variance! So <span class="math inline">\(\operatorname{Cov}(X,X) = \operatorname{Var} X\)</span>.</p>
+</section>
+</section>
+<section id="how-reasonable-is-independence" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="how-reasonable-is-independence"><span class="header-section-number">4.6</span> How reasonable is independence?</h2>
+<p>In most applications, it is pretty standard that we assume that our data are drawn <em>independently and identically distributed</em> according to some distribution. We say “i.i.d.”. For example, if <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are all continuous uniform random variables between 0 and 1, we would say <span class="math display">\[
+X_i \overset{\text{iid}}{\sim} \text{Uniform}(0,1), \text{ for } i=1,\ldots, n
+\]</span></p>
+<p>This notation is common to denote iid random variables.</p>
+<p>As another example, when we perform regression (as you did in STAT240, and which we’ll revisit in more detail later this semester), we imagine that the observations (i.e., predictor-response pairs) <span class="math inline">\((X_1,Y_1),(X_2,Y_2),\dots,(X_n,Y_n)\)</span> are independent.</p>
+<p>Most standard testing procedures (e.g., the t-test) assume that data are drawn i.i.d.</p>
+<p>How reasonable are these assumptions?</p>
+<p>Well, of course, in the end, it depends on where the data comes from! We have to draw on what we know about the data, either from our own knowledge or from that of our clients, to assess what assumptions are and aren’t reasonable.</p>
+<p>Like most modeling assumptions, we usually acknowledge that independence may not be exactly true, but it’s often a good approximation to the truth!</p>
+<p>Of course, we have to be careful.</p>
+<p><strong>Example:</strong> suppose we are modeling the value of a stock over time. We model the stock’s price on days 1, 2, 3, etc as <span class="math inline">\(X_1, X_2, X_3, \dots\)</span>. What is wrong with modeling these prices as being independent of one another? Why might it still be a reasonable modeling assumption?</p>
+<p>What if instead we look at the change in stock price from day to day? For example, let <span class="math inline">\(Y_i = X_{i+1}-X_{i}\)</span>. In other words, <span class="math inline">\(X_{i+1}=X_i+Y_i\)</span>. Would it be more reasonable to assume that the <span class="math inline">\(Y_i\)</span>’s are independent?</p>
+<p>What if instead of considering a stock’s returns on one day after another, we look at a change in stock price on one day, then at the change 10 days from that, and 10 days from that, and so on? Surely there is still dependence, but a longer time lag between observations <em>might</em> make us more willing to accept that our observations are <em>close</em> to independent (or at least have much smaller covariance!).</p>
+<p><strong>Note:</strong> Tobler’s first law of geography states ‘Everything is related to everything else, but near things are more related than distant things.’ Does that ring true in this context?</p>
+<p><strong>Example:</strong> suppose we randomly sample 1000 UW-Madison students to participate in a survey, and record their responses as <span class="math inline">\(X_1,X_2,\dots,X_{1000}\)</span>. What might be the problem with modeling these responses as being independent? Why might be still be a reasonable modeling assumption?</p>
+</section>
+<section id="conditional-probability" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="conditional-probability"><span class="header-section-number">4.7</span> Conditional probability</h2>
+<p>We can’t talk about events and independence without discussing <em>conditional probability</em>.</p>
+<p>To motivate this, consider the following: suppose I roll a six-sided die. What is the probability that the die lands showing 2?</p>
+<p>Now, suppose that I don’t tell you the number on the die, but I <em>do</em> tell you that the die landed on an even number (i.e., one of 2, 4 or 6). Now what is the probability that the die is showing 2?</p>
+<p>We can work out the probabilities by simply counting possible outcomes. Are the probabilities the same?</p>
+<p><strong>Example: disease screening</strong></p>
+<p>Here’s a more real-world (and more consequential example): suppose we are screening for a rare disease. A patient takes the screening test, and tests positive. What is the probability that the patient has the disease, <em>given</em> that they have tested positive for it?</p>
+<p>We will need to establish the rules of conditional probability before we can tackle a problem such as this.</p>
+<section id="introducing-conditional-probability" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="introducing-conditional-probability"><span class="header-section-number">4.7.1</span> Introducing conditional probability</h3>
+<p>These kinds of questions, in which we want to ask about the probability of an event <em>given</em> that something else has happened, require that we be able to define a “new kind” of probability, called <em>conditional probability</em>.</p>
+<p>Let <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> be two events.</p>
+<ul>
+<li>Example: <span class="math inline">\(A\)</span> could be the event that a die lands showing 2 and <span class="math inline">\(B\)</span> is the event that the die landed on an even number.</li>
+<li>Example: <span class="math inline">\(A\)</span> could be the event that our patient has a disease and <span class="math inline">\(B\)</span> is the event that the patient tests positive on a screening test.</li>
+</ul>
+<p>Provided that <span class="math inline">\(\Pr[ B ] &gt; 0\)</span>, we define the <em>conditional probability</em> of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span>, written <span class="math inline">\(\Pr[ A \mid B]\)</span>, according to <span class="math display">\[
+\Pr[ A \mid B ] = \frac{ \Pr[ A \cap B ] }{ \Pr[ B ] }.
+\]</span> Note that if <span class="math inline">\(\Pr[B] = 0\)</span>, then the ratio on the right-hand side is not defined, hence why we demanded that <span class="math inline">\(\Pr[B] &gt; 0\)</span>. Later in your career, you’ll see that we can actually define conditional probability in a sensible way even if <span class="math inline">\(\Pr[B] = 0\)</span>, but that’s a matter for a later class.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./venn.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Venn diagram illustrating conditional probability</figcaption>
+</figure>
+</div>
+<p>Let’s try computing one of these conditional probabilities: what is the probability that the die is showing 2 <em>conditional on the fact</em> that it landed on an even number?</p>
+<p>Well,</p>
+<ul>
+<li><span class="math inline">\(\Pr[ \text{ even } ] = 1/2\)</span>, because there are three even numbers on the die, and all six numbers are equally likely: <span class="math inline">\(3/6 = 1/2\)</span>.</li>
+<li><span class="math inline">\(\Pr[ \text{ die lands 2 } \cap \text{even} ] = \Pr[ \text{ die lands 2 }]\)</span>, since <span class="math inline">\(2\)</span> is an even number.</li>
+</ul>
+<p>So the conditional probability is <span class="math display">\[
+\begin{aligned}
+\Pr[ \text{ die lands 2 } \mid \text{ even }]
+&amp;= \frac{ \Pr[ \text{ die lands 2 } \cap \text{even} ] }{ \Pr[ \text{ even } ] } \\
+&amp;= \frac{ \Pr[ \text{ die lands 2 }]}
+    { \Pr[ \text{ even } ] } \\
+&amp;= \frac{ 1/6 }{ 1/2 } = 1/3.
+\end{aligned}
+\]</span> This makes sense– <em>given</em> that the die lands on an even number, we are choosing from among three outcomes: <span class="math inline">\(\{2,4,6\}\)</span>. The probability that we choose <span class="math inline">\(2\)</span> from among these three possible equally-likely outcomes is <span class="math inline">\(1/3\)</span>.</p>
+</section>
+<section id="disease-screening" class="level3" data-number="4.7.2">
+<h3 data-number="4.7.2" class="anchored" data-anchor-id="disease-screening"><span class="header-section-number">4.7.2</span> Disease screening</h3>
+<p>What about our disease testing example? What is the probability that our patient has the disease given that they tested positive?</p>
+<p>Well, applying the definition of conditional probability, <span class="math display">\[
+\Pr[ \text{ disease} \mid \text{ positive test }]
+= \frac{ \Pr[ \text{ disease} \cap \text{ positive test }] }{ \Pr[ \text{positive test} ] }
+\]</span></p>
+<p>Okay, but what is <span class="math inline">\(\Pr[ \text{ positive test} ]\)</span>? I guess it’s just the probability that a random person (with the disease or not) tests positive? For that matter, what is <span class="math inline">\(\Pr[ \text{ disease} \cap \text{ positive test }]\)</span>? These can be hard events to assign probabilities to! Luckily, there is a famous equation that often gives us a way forward.</p>
+</section>
+</section>
+<section id="bayes-rule" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="bayes-rule"><span class="header-section-number">4.8</span> Bayes’ rule</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Thomas_Bayes">Reverend Thomas Bayes</a> was the first to suggest an answer to this issue. Bayes’ rule, as it is now called, tells us how to relate <span class="math inline">\(\Pr[ A \mid B]\)</span> to <span class="math inline">\(\Pr[ B \mid A]\)</span>: <span class="math display">\[
+\Pr[ A \mid B ] = \frac{ \Pr[ B \mid A ] \Pr[ A ]}{ \Pr[ B ]}.
+\]</span></p>
+<p>This is useful, because it is often easier to write one or the other of these two probabilities.</p>
+<p>Applying this to our disease screening example, <span class="math display">\[
+\Pr[ \text{ disease} \mid \text{ positive test }]
+=
+\frac{ \Pr[\text{ positive test } \mid \text{ disease}]
+        \Pr[ \text{ disease}]}
+        { \Pr[ \text{ positive test } ]  }
+\]</span></p>
+<p>The advantage of using Bayes’ rule in this context is that the probabilities appearing on the right-hand side are all straight-forward to think about (and estimate!).</p>
+<ul>
+<li><span class="math inline">\(\Pr[ \text{ disease}]\)</span> is the just the probability that a randomly-selected person has the disease. This is known as the <em>prevelance</em> of the diseases in the population. We could estimate this probability by randomly selecting a random group of people and determining if they have the disease (hopefully not using the screening test we are already using…).</li>
+<li><span class="math inline">\(\Pr[\text{ positive test } \mid \text{ disease}]\)</span> is the probability that when we give our screening test to a patient who has the disease in question, the test returns positive. This is often called the <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity</a> of a test, a term you may recall hearing frequently in the early days of the COVID-19 pandemic.</li>
+<li><span class="math inline">\(\Pr[ \text{ positive test } ]\)</span> is just the probability that a test given to a (presumably randomly selected) person returns a positive result. We just said about that this is the hard thing to estimate. In your homework, you’ll explore one way to get at this quantity, but for now we’ll have to just assume that we can estimate it somehow or other.</li>
+</ul>
+</section>
+<section id="example-testing-for-a-rare-disease" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="example-testing-for-a-rare-disease"><span class="header-section-number">4.9</span> Example: testing for a rare disease</h2>
+<p>Suppose that we are testing for a rare disease, say, <span class="math display">\[
+\Pr[ \text{ disease}] = \frac{1}{10^6},
+\]</span></p>
+<p>and suppose that a positive test is also rare, in keeping with the fact that our disease is rare and our test presumably has a low false positive rate: <span class="math display">\[
+\Pr[ \text{ positive test} ] = 1.999*10^{-6}
+\]</span> Note that this probability actually depends on the <em>sensitivity</em> <span class="math inline">\(\Pr[\text{ positive test } \mid \text{ disease}]\)</span> and the <em>specificity</em> <span class="math inline">\(1-\Pr[\text{ positive test } \mid \text{ healthy}]\)</span> of our test. You’ll explore this part more on your homework, but we’re just going to take this number as given for now.</p>
+<p>Finally, let’s suppose that our test is 99.99% accurate: <span class="math display">\[
+\Pr[\text{ positive test } \mid \text{ disease}]
+= 0.9999 = 1-10^{-4}
+\]</span></p>
+<p>To recap, <span class="math display">\[
+\begin{aligned}
+\Pr[ \text{ disease}] &amp;= \frac{1}{10^6} \\
+\Pr[ \text{ positive test} ] &amp;= 1.999*10^{-6} \\
+\Pr[\text{ positive test } \mid \text{ disease}]
+&amp;= 0.9999.
+\end{aligned}
+\]</span></p>
+<p>Now, suppose that a patient is given the screening test and receives a positive result. Bayes’ rule tells us <span class="math display">\[
+\begin{aligned}
+\Pr[ \text{ disease} \mid \text{ positive test }]
+&amp;=
+\frac{ \Pr[\text{ positive test } \mid \text{ disease}]
+        \Pr[ \text{ disease}]}
+        { \Pr[ \text{ positive test } ]  }
+= \frac{ 0.9999 * 10^{-6} }{ 1.999*10^{-6} } \\
+&amp;= 0.5002001.
+\end{aligned}
+\]</span></p>
+<p>So even in light of our positive screening test result, the probability that our patient has the disease in question is still only about 50%!</p>
+<p>This is part of why, especially early on in the pandemic when COVID-19 was especially rare, testing for the disease in the absence of symptoms was not considered especially useful.</p>
+<p>More generally, this is why most screenings for rare diseases are not done routinely– doctors typically screen for rare diseases only if they have a reason to think a patient is more likely to have that disease for other reasons (e.g., family history of a genetic condition or recent exposure to an infectious disease).</p>
+</section>
+<section id="calculating-the-denominator-in-bayes-rule" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="calculating-the-denominator-in-bayes-rule"><span class="header-section-number">4.10</span> Calculating the denominator in Bayes’ Rule</h2>
+<p>The denominator can be decomposed into two parts using a property known as the Law of Total Probability.</p>
+<p><span class="math display">\[
+\Pr[ \text{ positive test} ] = \Pr[ \text{ positive test} \cap \text{disease}]+\Pr[ \text{ positive test} \cap \text{no disease}]
+\]</span></p>
+<p>In other words, all positive results are either true positives or false positives. Because these are mutually exclusive events, the total probability of a positive result is the probability of a true positive plus the probability of a false positive. We can expand each of these terms using the conditional probability rule.</p>
+<p><span class="math display">\[
+\Pr[ \text{ positive test} \cap \text{disease}] = \Pr[\text{ positive test } \mid \text{ disease}]  \Pr[ \text{ disease}]
+\]</span> <span class="math display">\[
+\Pr[ \text{ positive test} \cap \text{no disease}] = \Pr[\text{ positive test } \mid \text{ no disease}]  \Pr[ \text{ no disease}]
+\]</span></p>
+<p>For example, suppose that a genetic condition occurs in roughly 1 out of 800 individuals. A simple saliva test is available. If a person has the gene, the test is positive with 97% probability. If a person does not have the gene, a false positive occurs with 4% probability.</p>
+<p>To simplify notation, let <span class="math inline">\(G\)</span> represent “the individual has the gene” and <span class="math inline">\(G'\)</span> be the complementary event that “the individual does not have the gene.” Furthermore, let <span class="math inline">\(Pos\)</span> and <span class="math inline">\(Neg\)</span> represent the test results.</p>
+<p>If a random person from the population takes the test and gets a positive result, what is the probability they have the genetic condition?</p>
+<p>Bayes’ Rule to the rescue:</p>
+<p><span class="math display">\[
+\begin{aligned}
+P[G | Pos] &amp;= \dfrac{P[Pos | G] P[G]}{P[Pos | G] P[G] + P[Pos | G'] P[G']}\\
+&amp;= \dfrac{(.97)(1/800)}{(.97)(1/800)+(.04)(799/800)}\\
+&amp;\approx 0.0295
+\end{aligned}
+\]</span> In other words, a positive test result would raise the likelihood of the gene being present from <span class="math inline">\(1/800=0.00125\)</span> up to <span class="math inline">\(.0295\)</span>.</p>
+</section>
+<section id="dependent-free-throw-shots" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="dependent-free-throw-shots"><span class="header-section-number">4.11</span> Dependent free throw shots</h2>
+<p>Suppose a basketball player’s likelihood of making a basket when making a free throw depends on the previous attempt. On the first throw, they have a probability of <span class="math inline">\(0.67\)</span> of making the basket. On the second throw, following a basket the probability goes up to <span class="math inline">\(.75\)</span>. If the first throw is a miss, the probability of a basket on the second throw goes down to <span class="math inline">\(0.62\)</span>.</p>
+<p><strong>Exercise:</strong> If the second throw is a basket, what is the likelihood the first throw is a basket?</p>
+<p><strong>Exercise:</strong> Given that the player scores at least 1 point, what is the probability that they score 2 points total?</p>
+<section id="review" class="level3" data-number="4.11.1">
+<h3 data-number="4.11.1" class="anchored" data-anchor-id="review"><span class="header-section-number">4.11.1</span> Review:</h3>
+<p>In these notes we covered:</p>
+<ul>
+<li>The concept of independent events</li>
+<li>Independent random variables</li>
+<li>Definition of variance</li>
+<li>Expectation of a linear combination of r.v.s</li>
+<li>Variance of a linear combination of r.v.s</li>
+<li>Covariance and correlation</li>
+<li>Relationship between correlation and independence</li>
+<li>When the independence assumption is reasonable</li>
+<li>Conditional probability &amp; the general multiplication rule</li>
+<li>Bayes’ rule</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./rv.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
