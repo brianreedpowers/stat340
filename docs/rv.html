@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STAT 340: Data Science II - 2&nbsp; Random Variables</title>
+<title>STAT 340: Data Science II - 3&nbsp; Random Variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./references.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -109,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rv.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Random Variables</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rv.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -125,6 +125,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -137,25 +144,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Preface</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rv.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -174,34 +175,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">2.1</span> Learning objectives</a></li>
-  <li><a href="#what-is-a-random-variable" id="toc-what-is-a-random-variable" class="nav-link" data-scroll-target="#what-is-a-random-variable"><span class="header-section-number">2.2</span> What is a random variable?</a></li>
-  <li><a href="#aside-probability-refresher" id="toc-aside-probability-refresher" class="nav-link" data-scroll-target="#aside-probability-refresher"><span class="header-section-number">2.3</span> Aside: probability refresher</a>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">3.1</span> Learning objectives</a></li>
+  <li><a href="#what-is-a-random-variable" id="toc-what-is-a-random-variable" class="nav-link" data-scroll-target="#what-is-a-random-variable"><span class="header-section-number">3.2</span> What is a random variable?</a></li>
+  <li><a href="#aside-probability-refresher" id="toc-aside-probability-refresher" class="nav-link" data-scroll-target="#aside-probability-refresher"><span class="header-section-number">3.3</span> Aside: probability refresher</a>
   <ul class="collapse">
-  <li><a href="#a-note-on-models-assumptions-and-approximations" id="toc-a-note-on-models-assumptions-and-approximations" class="nav-link" data-scroll-target="#a-note-on-models-assumptions-and-approximations"><span class="header-section-number">2.3.1</span> A note on models, assumptions and approximations</a></li>
+  <li><a href="#a-note-on-models-assumptions-and-approximations" id="toc-a-note-on-models-assumptions-and-approximations" class="nav-link" data-scroll-target="#a-note-on-models-assumptions-and-approximations"><span class="header-section-number">3.3.1</span> A note on models, assumptions and approximations</a></li>
   </ul></li>
-  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables"><span class="header-section-number">2.4</span> Random variables</a>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables"><span class="header-section-number">3.4</span> Random variables</a>
   <ul class="collapse">
-  <li><a href="#bernoulli" id="toc-bernoulli" class="nav-link" data-scroll-target="#bernoulli"><span class="header-section-number">2.4.1</span> Bernoulli</a></li>
-  <li><a href="#binomial" id="toc-binomial" class="nav-link" data-scroll-target="#binomial"><span class="header-section-number">2.4.2</span> Binomial</a></li>
-  <li><a href="#aside-expectation-review" id="toc-aside-expectation-review" class="nav-link" data-scroll-target="#aside-expectation-review"><span class="header-section-number">2.4.3</span> Aside: expectation review</a></li>
-  <li><a href="#geometric" id="toc-geometric" class="nav-link" data-scroll-target="#geometric"><span class="header-section-number">2.4.4</span> Geometric</a></li>
-  <li><a href="#poisson" id="toc-poisson" class="nav-link" data-scroll-target="#poisson"><span class="header-section-number">2.4.5</span> Poisson</a></li>
-  <li><a href="#the-discrete-uniform" id="toc-the-discrete-uniform" class="nav-link" data-scroll-target="#the-discrete-uniform"><span class="header-section-number">2.4.6</span> The Discrete uniform</a></li>
-  <li><a href="#aside-approximating-one-random-variable-with-another" id="toc-aside-approximating-one-random-variable-with-another" class="nav-link" data-scroll-target="#aside-approximating-one-random-variable-with-another"><span class="header-section-number">2.4.7</span> Aside: approximating one random variable with another</a></li>
+  <li><a href="#bernoulli" id="toc-bernoulli" class="nav-link" data-scroll-target="#bernoulli"><span class="header-section-number">3.4.1</span> Bernoulli</a></li>
+  <li><a href="#binomial" id="toc-binomial" class="nav-link" data-scroll-target="#binomial"><span class="header-section-number">3.4.2</span> Binomial</a></li>
+  <li><a href="#aside-expectation-review" id="toc-aside-expectation-review" class="nav-link" data-scroll-target="#aside-expectation-review"><span class="header-section-number">3.4.3</span> Aside: expectation review</a></li>
+  <li><a href="#geometric" id="toc-geometric" class="nav-link" data-scroll-target="#geometric"><span class="header-section-number">3.4.4</span> Geometric</a></li>
+  <li><a href="#poisson" id="toc-poisson" class="nav-link" data-scroll-target="#poisson"><span class="header-section-number">3.4.5</span> Poisson</a></li>
+  <li><a href="#the-discrete-uniform" id="toc-the-discrete-uniform" class="nav-link" data-scroll-target="#the-discrete-uniform"><span class="header-section-number">3.4.6</span> The Discrete uniform</a></li>
+  <li><a href="#aside-approximating-one-random-variable-with-another" id="toc-aside-approximating-one-random-variable-with-another" class="nav-link" data-scroll-target="#aside-approximating-one-random-variable-with-another"><span class="header-section-number">3.4.7</span> Aside: approximating one random variable with another</a></li>
   </ul></li>
-  <li><a href="#continuous-random-variables" id="toc-continuous-random-variables" class="nav-link" data-scroll-target="#continuous-random-variables"><span class="header-section-number">2.5</span> Continuous random variables</a>
+  <li><a href="#continuous-random-variables" id="toc-continuous-random-variables" class="nav-link" data-scroll-target="#continuous-random-variables"><span class="header-section-number">3.5</span> Continuous random variables</a>
   <ul class="collapse">
-  <li><a href="#normal" id="toc-normal" class="nav-link" data-scroll-target="#normal"><span class="header-section-number">2.5.1</span> Normal</a></li>
-  <li><a href="#recap-rvs-in-r-so-far" id="toc-recap-rvs-in-r-so-far" class="nav-link" data-scroll-target="#recap-rvs-in-r-so-far"><span class="header-section-number">2.5.2</span> Recap: RVs in R (so far)</a></li>
-  <li><a href="#aside-expectation-for-continuous-random-variables" id="toc-aside-expectation-for-continuous-random-variables" class="nav-link" data-scroll-target="#aside-expectation-for-continuous-random-variables"><span class="header-section-number">2.5.3</span> Aside: Expectation for continuous random variables</a></li>
-  <li><a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">2.5.4</span> Uniform</a></li>
-  <li><a href="#exponential" id="toc-exponential" class="nav-link" data-scroll-target="#exponential"><span class="header-section-number">2.5.5</span> Exponential</a></li>
-  <li><a href="#bonus-building-bigger-models" id="toc-bonus-building-bigger-models" class="nav-link" data-scroll-target="#bonus-building-bigger-models"><span class="header-section-number">2.5.6</span> <em>Bonus: Building Bigger Models</em></a></li>
-  <li><a href="#social-network-models" id="toc-social-network-models" class="nav-link" data-scroll-target="#social-network-models"><span class="header-section-number">2.5.7</span> Social network models</a></li>
-  <li><a href="#binomial-asset-pricing-model" id="toc-binomial-asset-pricing-model" class="nav-link" data-scroll-target="#binomial-asset-pricing-model"><span class="header-section-number">2.5.8</span> Binomial asset pricing model</a></li>
-  <li><a href="#election-models" id="toc-election-models" class="nav-link" data-scroll-target="#election-models"><span class="header-section-number">2.5.9</span> Election models</a></li>
-  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">2.5.10</span> Review:</a></li>
+  <li><a href="#normal" id="toc-normal" class="nav-link" data-scroll-target="#normal"><span class="header-section-number">3.5.1</span> Normal</a></li>
+  <li><a href="#recap-rvs-in-r-so-far" id="toc-recap-rvs-in-r-so-far" class="nav-link" data-scroll-target="#recap-rvs-in-r-so-far"><span class="header-section-number">3.5.2</span> Recap: RVs in R (so far)</a></li>
+  <li><a href="#aside-expectation-for-continuous-random-variables" id="toc-aside-expectation-for-continuous-random-variables" class="nav-link" data-scroll-target="#aside-expectation-for-continuous-random-variables"><span class="header-section-number">3.5.3</span> Aside: Expectation for continuous random variables</a></li>
+  <li><a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">3.5.4</span> Uniform</a></li>
+  <li><a href="#exponential" id="toc-exponential" class="nav-link" data-scroll-target="#exponential"><span class="header-section-number">3.5.5</span> Exponential</a></li>
+  <li><a href="#bonus-building-bigger-models" id="toc-bonus-building-bigger-models" class="nav-link" data-scroll-target="#bonus-building-bigger-models"><span class="header-section-number">3.5.6</span> <em>Bonus: Building Bigger Models</em></a></li>
+  <li><a href="#social-network-models" id="toc-social-network-models" class="nav-link" data-scroll-target="#social-network-models"><span class="header-section-number">3.5.7</span> Social network models</a></li>
+  <li><a href="#binomial-asset-pricing-model" id="toc-binomial-asset-pricing-model" class="nav-link" data-scroll-target="#binomial-asset-pricing-model"><span class="header-section-number">3.5.8</span> Binomial asset pricing model</a></li>
+  <li><a href="#election-models" id="toc-election-models" class="nav-link" data-scroll-target="#election-models"><span class="header-section-number">3.5.9</span> Election models</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">3.5.10</span> Review:</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -211,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Random Variables</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></h1>
 </div>
 
 
@@ -230,8 +231,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We use random variables, within the framework of probability theory, to model how our data came to be.</p>
 <p>We will first introduce the idea of a random variable (and its associated distribution) and review probability theory.</p>
 <p>Then, we will walk through a number of different basic distributions and discuss the kinds of data for which these different models are appropriate.</p>
-<section id="learning-objectives" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">2.1</span> Learning objectives</h2>
+<section id="learning-objectives" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">3.1</span> Learning objectives</h2>
 <p>After this lesson, you will be able to</p>
 <ul>
 <li>Explain what a random variable is</li>
@@ -240,8 +241,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Compute the probabilities of simple events under different probability distributions using R.</li>
 </ul>
 </section>
-<section id="what-is-a-random-variable" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="what-is-a-random-variable"><span class="header-section-number">2.2</span> What is a random variable?</h2>
+<section id="what-is-a-random-variable" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="what-is-a-random-variable"><span class="header-section-number">3.2</span> What is a random variable?</h2>
 <p>Consider the following quantities/events:</p>
 <ul>
 <li>Whether or not a coin flip comes up heads or tails.</li>
@@ -253,8 +254,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>All of these are examples of events that we might reasonably model according to different <em>random variables</em>.</p>
 <p>Later in your studies you will learn a more formal definition of what a random variable is. For now, let’s be content with saying that a random variable is a (random) number <span class="math inline">\(X\)</span> about which we can compute quantities of the form <span class="math inline">\(\Pr[ X \in S ]\)</span>, where <span class="math inline">\(S\)</span> is a set.</p>
 </section>
-<section id="aside-probability-refresher" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="aside-probability-refresher"><span class="header-section-number">2.3</span> Aside: probability refresher</h2>
+<section id="aside-probability-refresher" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="aside-probability-refresher"><span class="header-section-number">3.3</span> Aside: probability refresher</h2>
 <p>Before moving on, let’s briefly review some basic ideas from probability theory.</p>
 <p>We have a set of possible <em>outcomes</em>, usually denoted <span class="math inline">\(\Omega\)</span>.</p>
 <ul>
@@ -297,8 +298,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Alternatively, we could assume that the outcome space is the set of all real numbers.</li>
 </ul>
 <p>This highlights the importance of specifying our assumptions and the outcome space we are working with in a particular problem. We will see these kinds of issues again and again this semester.</p>
-<section id="a-note-on-models-assumptions-and-approximations" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="a-note-on-models-assumptions-and-approximations"><span class="header-section-number">2.3.1</span> A note on models, assumptions and approximations</h3>
+<section id="a-note-on-models-assumptions-and-approximations" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="a-note-on-models-assumptions-and-approximations"><span class="header-section-number">3.3.1</span> A note on models, assumptions and approximations</h3>
 <p>Note that we are already making an approximation– our outcome sets aren’t really exhaustive, here.</p>
 <p>When you toss a coin, there are possible outcomes other than heads and tails.</p>
 <ul>
@@ -314,13 +315,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We will see below and in future lectures the kinds of approximation errors that are more concerning and warrant our attention.</p>
 </section>
 </section>
-<section id="random-variables" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">2.4</span> Random variables</h2>
+<section id="random-variables" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">3.4</span> Random variables</h2>
 <p>A random variable is specified by a probability.</p>
 <p>That is, a random variable <span class="math inline">\(X\)</span> is specified by an outcome set <span class="math inline">\(\Omega\)</span> and a function that specifies probabilities of the form <span class="math inline">\(\Pr[ X \in E ]\)</span> where <span class="math inline">\(E \subseteq \Omega\)</span> is an event.</p>
 <p>Let’s look at some commonly-used random variables. In the process, we will discuss some of the real-world phenomena to which these random variables are best-suited.</p>
-<section id="bernoulli" class="level3" data-number="2.4.1">
-<h3 data-number="2.4.1" class="anchored" data-anchor-id="bernoulli"><span class="header-section-number">2.4.1</span> Bernoulli</h3>
+<section id="bernoulli" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="bernoulli"><span class="header-section-number">3.4.1</span> Bernoulli</h3>
 <p>A Bernoulli random variable has outcome set <span class="math inline">\(\Omega = \{0,1\}\)</span>.</p>
 <p>As discussed above, to specify a probability on this set, it is enough for us to specify <span class="math inline">\(\Pr[ \{0 \} ]\)</span> and <span class="math inline">\(\Pr[ \{1\} ]\)</span>.</p>
 <p>Typically, we do this by specifying the <em>success probability</em> <span class="math inline">\(p = \Pr[ \{1\} ] \in [0,1]\)</span>. Once we have done this, it is immediate that (check!) <span class="math inline">\(\Pr[ \{0\} ] = 1-p\)</span>.</p>
@@ -335,8 +336,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If <span class="math inline">\(Z\)</span> is a Bernoulli random variable with probability of success <span class="math inline">\(p\)</span>, then we write <span class="math inline">\(Z \sim \operatorname{Bernoulli}(p)\)</span>.</p>
 <p>We read this as something like “<span class="math inline">\(Z\)</span> is distributed as Bernoulli <span class="math inline">\(p\)</span>”.</p>
 </section>
-<section id="binomial" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="binomial"><span class="header-section-number">2.4.2</span> Binomial</h3>
+<section id="binomial" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="binomial"><span class="header-section-number">3.4.2</span> Binomial</h3>
 <p>A Bernoulli random variable is like a single coin flip.</p>
 <p>What if we flip many coins, all with the same probability of coming up heads?</p>
 <p>Then the total number of heads is distributed as a <em>binomial</em> random variable.</p>
@@ -351,8 +352,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In a population of 250,000 people (approximately the population of Madison), we may imagine that each person has some probability <span class="math inline">\(p\)</span> of becoming seriously ill with COVID-19.</p>
 <p>Then, in a sense, the total number of people in Madison who become seriously ill with COVID-19 is like the total number of probability-<span class="math inline">\(p\)</span> coin flips that land heads when we flip <span class="math inline">\(250,000\)</span> coins.</p>
 <p>We might then model the number of COVID-19 patients by a binomial random variable with <span class="math inline">\(n=250,000\)</span> and <span class="math inline">\(p=0.01\)</span> (just to be clear, we are completely making up this choice of <span class="math inline">\(p\)</span> here, just for the sake of example!).</p>
-<section id="generating-random-binomial-rvs" class="level4" data-number="2.4.2.1">
-<h4 data-number="2.4.2.1" class="anchored" data-anchor-id="generating-random-binomial-rvs"><span class="header-section-number">2.4.2.1</span> Generating random binomial RVs</h4>
+<section id="generating-random-binomial-rvs" class="level4" data-number="3.4.2.1">
+<h4 data-number="3.4.2.1" class="anchored" data-anchor-id="generating-random-binomial-rvs"><span class="header-section-number">3.4.2.1</span> Generating random binomial RVs</h4>
 <p>We can generate binomial random variables using the <code>rbinom</code> function. Think “<code>r</code> for random”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rbinom takes three arguments.</span></span>
@@ -368,30 +369,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we repeat the experiment a few times, we get different random values.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5</code></pre>
+<pre><code>[1] 3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<pre><code>[1] 2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code>[1] 4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5</code></pre>
+<pre><code>[1] 4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5</code></pre>
+<pre><code>[1] 1</code></pre>
 </div>
 </div>
 <p>We can also use the binomial to generate Bernoulli random variables, by setting the <code>size</code> argument to 1 (i.e., flip 1 coin):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># 1 is "heads", 0 is "tails"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
 </div>
 <p><strong>Important note:</strong> if you read the R documentation, there is a possible notational confusion waiting for you, alluded to in the comments of the code above. The <a href="https://developer.mozilla.org/en-US/docs/Glossary/Signature/Function">signature</a> of the <code>rbinom</code> function is given as <code>rbinom(n, size, prob)</code>. Based on the <span class="math inline">\(\operatorname{Binomial}(n,p)\)</span> notation we used above, you might expect that <code>n</code> in the <code>rbinom</code> function is the number of coins and <code>prob</code> is the success probability. Unfortunately, that isn’t quite right. <code>n</code> is the number of Binomial random variables to generate. <code>size</code> specifies the size parameter (<span class="math inline">\(n\)</span> in our math notation above).</p>
@@ -399,20 +400,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># 3 draws from a Binomial(10,0.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4 5 5</code></pre>
+<pre><code>[1] 2 5 8</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">prob =</span> <span class="fl">0.5</span>) <span class="co"># 10 draws from a Binomial(3,0.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 0 2 2 3 2 0 2 2 3 1</code></pre>
+<pre><code> [1] 0 2 1 2 1 0 2 2 1 3</code></pre>
 </div>
 </div>
 <p>All of the R functions for generating random variables take <code>n</code> as the number of draws from the distribution. This is in keeping with the convention in most of probability and statistics that <span class="math inline">\(n\)</span> is a sample size. Unfortunately, this is just one of those places where two different notational conventions collide. It’s unfortunate that it arises in such a common and early-stage part of R!</p>
 </section>
 </section>
-<section id="aside-expectation-review" class="level3" data-number="2.4.3">
-<h3 data-number="2.4.3" class="anchored" data-anchor-id="aside-expectation-review"><span class="header-section-number">2.4.3</span> Aside: expectation review</h3>
+<section id="aside-expectation-review" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="aside-expectation-review"><span class="header-section-number">3.4.3</span> Aside: expectation review</h3>
 <p>Before we continue with more random variables, let’s take a pause to discuss one more important probability concept: expectation. You will hopefully recall from previous courses in probability and/or statistics the notion of expectation of a random variable.</p>
 <p><strong>Expectation: long-run averages</strong></p>
 <p>The expectation of a random variable <span class="math inline">\(X\)</span>, which we write <span class="math inline">\(\mathbb{E} X\)</span>, is the “long-run average” of the random variable.</p>
@@ -447,8 +448,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 \lim_{n\to\infty}\frac1{n-1}\sum_{i=1}^n(X_i-\bar{X})^2=\operatorname{Var}(X)
 \]</span></p>
 </section>
-<section id="geometric" class="level3" data-number="2.4.4">
-<h3 data-number="2.4.4" class="anchored" data-anchor-id="geometric"><span class="header-section-number">2.4.4</span> Geometric</h3>
+<section id="geometric" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="geometric"><span class="header-section-number">3.4.4</span> Geometric</h3>
 <p>Let’s consider a different coin-flipping experiment. We flip a coin repeatedly and we count how many flips it takes before it lands heads.</p>
 <p>So perhaps we flip the coin and it comes up heads immediately, in which case we would count zero (because there were no flips before the one where the coin landed heads). If we flipped the coin and it came up heads for the first time on the fourth toss, then we would count three, and so on.</p>
 <p>This game describes the geometric distribution.</p>
@@ -486,8 +487,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Exercise:</strong> verify that this is a bona fide probability by checking that <span class="math inline">\(\sum_{k=0}^\infty p(1-p)^k = 1\)</span>.</p>
 <p><strong>Note:</strong> some resources follow a slightly different convention, whereby a geometric random variable counts the total number of attempts (i.e., coinflips) before success, so the support is <span class="math inline">\(\{1,2,\dots\}\)</span>. Our discussion above follows the convention of most textbooks and research papers (and the convention followed by R– see <code>?rgeom</code>), but this is an important thing to be aware of!</p>
 </section>
-<section id="poisson" class="level3" data-number="2.4.5">
-<h3 data-number="2.4.5" class="anchored" data-anchor-id="poisson"><span class="header-section-number">2.4.5</span> Poisson</h3>
+<section id="poisson" class="level3" data-number="3.4.5">
+<h3 data-number="3.4.5" class="anchored" data-anchor-id="poisson"><span class="header-section-number">3.4.5</span> Poisson</h3>
 <p>Let’s look at one more discrete distribution.</p>
 <p>Suppose we are going fishing on lake Mendota, and we want to model how many fish we catch in an hour.</p>
 <p>A common choice for this situation is the <em>Poisson</em> distribution (named after a French mathematician named <a href="https://en.wikipedia.org/wiki/Sim%C3%A9on_Denis_Poisson">Poisson</a>, but “poisson” is also French for “fish”).</p>
@@ -505,7 +506,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">1</span>, <span class="at">lambda =</span> <span class="fl">10.5</span>) <span class="co"># Generate Poisson RV with lambda=10.5 most likely value is 10.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 11</code></pre>
+<pre><code>[1] 15</code></pre>
 </div>
 </div>
 <p>What if I want several random Poissons, instead of just one?</p>
@@ -514,7 +515,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">10</span>, <span class="at">lambda =</span> <span class="fl">10.5</span>) <span class="co"># Generate 10 Poisson RVs with the same parameter lambda=10.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  8  9 11 17 12  9 19 11 12  8</code></pre>
+<pre><code> [1]  8  5  7 11 16  8  7  8  6  6</code></pre>
 </div>
 </div>
 <p>What does the probability mass function of the Poisson look like? Once again, the Poisson distribution has infinite support, since <span class="math inline">\(\Pr[X=k] &gt; 0\)</span> for all <span class="math inline">\(k=0,1,2,\dots\)</span> (check this!), but let’s plot its first few values.</p>
@@ -533,8 +534,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The R documentation calls this a density, which is correct, but… well, we will return to this.</p>
 <p>For now, just remember “<code>r</code> for random”, “<code>d</code> for density”. <code>rpois</code> generates random Poisson variables, <code>dpois</code> evaluates its probability mass function.</p>
 </section>
-<section id="the-discrete-uniform" class="level3" data-number="2.4.6">
-<h3 data-number="2.4.6" class="anchored" data-anchor-id="the-discrete-uniform"><span class="header-section-number">2.4.6</span> The Discrete uniform</h3>
+<section id="the-discrete-uniform" class="level3" data-number="3.4.6">
+<h3 data-number="3.4.6" class="anchored" data-anchor-id="the-discrete-uniform"><span class="header-section-number">3.4.6</span> The Discrete uniform</h3>
 <p>The roll of a fair 6 sided die (or any <span class="math inline">\(n\)</span>-sided die) can be modeled using a discrete uniform random variable. We will more often refer to the continuous uniform random variable, (which we’ll talk about shortly), but it’s worth mentioning that the roll of a die can be modeled easily.</p>
 <p>In <code>R</code>, however, the discrete uniform is not a named distribution. Instead we would use the <code>sample</code> function. For example, suppose we wanted to simulate rolling a 6-sided die 100 times.</p>
 <div class="cell">
@@ -548,14 +549,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">6</span>, <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>rolls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  [1] 6 6 4 3 3 6 5 2 6 5 3 5 3 4 6 3 3 6 5 1 4 4 2 3 3 4 3 2 2 4 5 4 1 2 2 6 4
- [38] 3 1 3 4 6 2 4 3 1 6 1 3 3 4 6 1 6 2 2 3 5 2 3 4 2 2 5 5 3 5 3 6 1 6 2 6 6
- [75] 3 1 6 4 4 2 1 6 2 4 1 1 5 1 6 6 1 5 2 5 5 2 1 1 1 3</code></pre>
+<pre><code>  [1] 6 3 6 5 6 1 6 3 6 2 2 1 2 3 5 5 4 5 6 6 5 6 1 5 4 4 4 2 5 4 5 1 5 1 3 4 3
+ [38] 6 3 1 5 2 3 6 3 4 5 2 4 4 3 4 3 6 4 1 1 3 1 5 3 3 3 1 3 3 3 2 6 3 3 4 5 5
+ [75] 3 5 3 4 5 2 6 1 4 5 4 6 4 6 1 2 1 3 3 5 4 5 3 3 5 5</code></pre>
 </div>
 </div>
 </section>
-<section id="aside-approximating-one-random-variable-with-another" class="level3" data-number="2.4.7">
-<h3 data-number="2.4.7" class="anchored" data-anchor-id="aside-approximating-one-random-variable-with-another"><span class="header-section-number">2.4.7</span> Aside: approximating one random variable with another</h3>
+<section id="aside-approximating-one-random-variable-with-another" class="level3" data-number="3.4.7">
+<h3 data-number="3.4.7" class="anchored" data-anchor-id="aside-approximating-one-random-variable-with-another"><span class="header-section-number">3.4.7</span> Aside: approximating one random variable with another</h3>
 <p>Interestingly, we can obtain the Poisson distribution from the binomial distribution.</p>
 <p>Let’s make two assumptions about our fish population:</p>
 <ul>
@@ -599,16 +600,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We will see several examples like this during the semester, in which two distributions become (approximately) equivalent if we fiddle with the parameters in the right way.</p>
 </section>
 </section>
-<section id="continuous-random-variables" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="continuous-random-variables"><span class="header-section-number">2.5</span> Continuous random variables</h2>
+<section id="continuous-random-variables" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="continuous-random-variables"><span class="header-section-number">3.5</span> Continuous random variables</h2>
 <p>So far we’ve seen a few different discrete random variables. Their set of possible values are discrete sets like <span class="math inline">\(\{0,1\}\)</span> or <span class="math inline">\(\{0,1,2,\dots\}\)</span>.</p>
 <p>This is in contrast to <em>continuous</em> random variables, which take values in “continuous” sets like the interval <span class="math inline">\([0,1]\)</span> or the real like <span class="math inline">\(\mathbb{R}\)</span>.</p>
 <p>Discrete random variables have probability mass functions, like <span class="math inline">\(\Pr[ X=k ] = p(1-p)^k\)</span>, <span class="math inline">\(k=0,1,2,\dots\)</span>.</p>
 <p>In contrast, continuous random variables have <em>probability density functions</em>, which we will usually write as <span class="math inline">\(f(x)\)</span> or <span class="math inline">\(f(t)\)</span>.</p>
 <p>These random variables are a little trickier to think about at first, because it doesn’t make sense to ask about the probability that a continuous random variable takes a specific value. That is, <span class="math inline">\(\Pr[ X = k ]\)</span> doesn’t really make sense when <span class="math inline">\(X\)</span> is continuous (actually– in a precise sense this does make sense, but the probability is always zero you’ll see why below).</p>
 <p>Let’s see some examples.</p>
-<section id="normal" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="normal"><span class="header-section-number">2.5.1</span> Normal</h3>
+<section id="normal" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="normal"><span class="header-section-number">3.5.1</span> Normal</h3>
 <p>The normal or <em>Gaussian</em> (after <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">Carl Friedrich Gauss</a>) random variable is undoubtedly the most fundamental in all of statistics.</p>
 <p>You have likely heard of it before both in your previous courses and just… well, everywhere, in the form of the famous <em>bell curve</em>.</p>
 <p>The normal distribution really is everywhere, and there are good reasons for this, which we will return to in a few lectures (see <a href="https://en.wikipedia.org/wiki/Illustration_of_the_central_limit_theorem">here</a> for a preview).</p>
@@ -674,11 +675,11 @@ f(t;  \mu, \sigma^2) = \frac{1}{\sqrt{ 2\pi \sigma^2 } } \exp\left\{ \frac{ -(t-
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">2</span>) <span class="co"># Note that we pass the standard deviation (sd), not the variance sigma^2.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.929109</code></pre>
+<pre><code>[1] 2.68621</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">1</span>) <span class="co"># If we don't specify a mean and sd, they default to 0 and 1, respectively</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6687463</code></pre>
+<pre><code>[1] -0.3366654</code></pre>
 </div>
 </div>
 <p>Let’s generate a bunch of normal RVs and plot their (normalized) histogram:</p>
@@ -720,25 +721,25 @@ f(t;  \mu, \sigma^2) = \frac{1}{\sqrt{ 2\pi \sigma^2 } } \exp\left\{ \frac{ -(t-
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># Should be about 0.68</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.682289</code></pre>
+<pre><code>[1] 0.683283</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># should be about 0.9545</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.954519</code></pre>
+<pre><code>[1] 0.954472</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">&amp;</span> data <span class="sc">&lt;</span> <span class="dv">3</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># should be about 0.997</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.997326</code></pre>
+<pre><code>[1] 0.997332</code></pre>
 </div>
 </div>
 <p>Of course, because the data is random, the proportions are not exactly equal to their predicted values, but they are quite close.</p>
 <p>This is a nice illustration of the law of large numbers!</p>
-<section id="computing-probabilities" class="level4" data-number="2.5.1.1">
-<h4 data-number="2.5.1.1" class="anchored" data-anchor-id="computing-probabilities"><span class="header-section-number">2.5.1.1</span> Computing probabilities</h4>
+<section id="computing-probabilities" class="level4" data-number="3.5.1.1">
+<h4 data-number="3.5.1.1" class="anchored" data-anchor-id="computing-probabilities"><span class="header-section-number">3.5.1.1</span> Computing probabilities</h4>
 <p>Now, let’s check this fact by using R to compute probabilities of the form <span class="math inline">\(\Pr[ a \le X \le b ]\)</span> for a normal RV <span class="math inline">\(X\)</span>, where <span class="math inline">\(a \ge b\)</span>. How can we compute this probability?</p>
 <p>Let’s start by writing something slightly different: <span class="math display">\[
 \Pr[ X \le b ] = \Pr[ X \le a ] + \Pr[ a \le X \le b].
@@ -794,15 +795,15 @@ F_X(t) = \Pr[ X \le t]
 <p>This is a different approach to statistics that lets us avoid worrying so much about Z-tables and 1.96 and all that, but in the interest of full disclosure: really most of the basic parts of R are just fancy Z-tables. So R does the annoying work for us!</p>
 </section>
 </section>
-<section id="recap-rvs-in-r-so-far" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="recap-rvs-in-r-so-far"><span class="header-section-number">2.5.2</span> Recap: RVs in R (so far)</h3>
+<section id="recap-rvs-in-r-so-far" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="recap-rvs-in-r-so-far"><span class="header-section-number">3.5.2</span> Recap: RVs in R (so far)</h3>
 <p>So far, we have seen three functions for working with different distributions.</p>
 <p>For the normal, we have <code>rnorm</code>, <code>dnorm</code> and <code>pnorm</code>, corresponding to random variable generation, the density function and cumulative distribution function (CDF), respectively.</p>
 <p>Other RVs have similar patterns. For example, with the geometric random variable, we have <code>rgeom</code>, <code>dgeom</code> and <code>pgeom</code>, which work analogously to the normal case.</p>
 <p>There is one more of these functions yet to come, but we aren’t quite ready to introduce it.</p>
 </section>
-<section id="aside-expectation-for-continuous-random-variables" class="level3" data-number="2.5.3">
-<h3 data-number="2.5.3" class="anchored" data-anchor-id="aside-expectation-for-continuous-random-variables"><span class="header-section-number">2.5.3</span> Aside: Expectation for continuous random variables</h3>
+<section id="aside-expectation-for-continuous-random-variables" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="aside-expectation-for-continuous-random-variables"><span class="header-section-number">3.5.3</span> Aside: Expectation for continuous random variables</h3>
 <p>Previously, we defined the expectation of a discrete random variable <span class="math inline">\(X\)</span> to be <span class="math display">\[
 \mathbb{E} X = \sum_k k \Pr[ X = k ],
 \]</span> with the summand <span class="math inline">\(k\)</span> ranging over all allowable values of <span class="math inline">\(X\)</span>.</p>
@@ -821,8 +822,8 @@ F_X(t) = \Pr[ X \le t]
 <li><span class="math inline">\(g(u) = u \exp\{ -u^2/2\sigma^2 \}\)</span> is symmetric about zero (and thus integrates to zero).</li>
 </ol>
 </section>
-<section id="uniform" class="level3" data-number="2.5.4">
-<h3 data-number="2.5.4" class="anchored" data-anchor-id="uniform"><span class="header-section-number">2.5.4</span> Uniform</h3>
+<section id="uniform" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="uniform"><span class="header-section-number">3.5.4</span> Uniform</h3>
 <p>The uniform distribution is a continuous random variable whose density is constant on its outcome space.</p>
 <p>That is, for continuous set <span class="math inline">\(\Omega \subseteq \mathbb{R}\)</span>, the density is identically <span class="math inline">\(f(t) = c\)</span>.</p>
 <p>Remember that our probability has to sum to 1, but since we have a continuous support, this sum becomes an integral:</p>
@@ -841,8 +842,8 @@ f(t) = \begin{cases}
 <p>For example, suppose we didn’t have the Bernoulli distribution available to us for some reason, but we still wanted to generate random coin flips.</p>
 <p>To generate a <span class="math inline">\(\operatorname{Bernoulli}(p)\)</span> random variable, we could first draw a uniform random variable <span class="math inline">\(U \sim \operatorname{Unif}(0,1)\)</span> and then output <span class="math inline">\(1\)</span> (or “heads” or “true”) if <span class="math inline">\(U \le p\)</span> and out put <span class="math inline">\(0\)</span> (or “tails” or “false”) otherwise.</p>
 </section>
-<section id="exponential" class="level3" data-number="2.5.5">
-<h3 data-number="2.5.5" class="anchored" data-anchor-id="exponential"><span class="header-section-number">2.5.5</span> Exponential</h3>
+<section id="exponential" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="exponential"><span class="header-section-number">3.5.5</span> Exponential</h3>
 <p>Let’s look at one more continuous random variable.</p>
 <p>The exponential distribution is most commonly used to model “waiting times”, like how long until the bus arrives.</p>
 <p>In many ways, the exponential distribution is like the continuous version of the geometric distribution.</p>
@@ -872,19 +873,19 @@ f(t  \lambda ) = \begin{cases}
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="fl">1e6</span>, <span class="at">rate =</span> <span class="dv">1</span>) <span class="co"># rexp to generate random exponentials.</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(data <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">/</span> <span class="fu">length</span>(data) <span class="co"># something like 99% of the generated points should be below 5.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.993311</code></pre>
+<pre><code>[1] 0.993309</code></pre>
 </div>
 </div>
 <p><br><br><br></p>
 </section>
-<section id="bonus-building-bigger-models" class="level3" data-number="2.5.6">
-<h3 data-number="2.5.6" class="anchored" data-anchor-id="bonus-building-bigger-models"><span class="header-section-number">2.5.6</span> <em>Bonus: Building Bigger Models</em></h3>
+<section id="bonus-building-bigger-models" class="level3" data-number="3.5.6">
+<h3 data-number="3.5.6" class="anchored" data-anchor-id="bonus-building-bigger-models"><span class="header-section-number">3.5.6</span> <em>Bonus: Building Bigger Models</em></h3>
 <p>There are plenty more named distributions out there. See <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions">here</a>.</p>
 <p>Indeed, we can make all sorts of distributions– ultimately we just need to specify a support and a density or mass function, depending on whether we want a discrete or continuous variable.</p>
 <p>More often, though, the processes out in the world that we want to model require that we build more complicated models from simple ones.</p>
 </section>
-<section id="social-network-models" class="level3" data-number="2.5.7">
-<h3 data-number="2.5.7" class="anchored" data-anchor-id="social-network-models"><span class="header-section-number">2.5.7</span> Social network models</h3>
+<section id="social-network-models" class="level3" data-number="3.5.7">
+<h3 data-number="3.5.7" class="anchored" data-anchor-id="social-network-models"><span class="header-section-number">3.5.7</span> Social network models</h3>
 <p>Several professors in the statistics department study networks. A common example of these are social networks (e.g., Facebook and twitter).</p>
 <p>These data usually take the form of a list specifying who is friends with whom.</p>
 <p>In most models for social networks, each pair of people <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> become friends, independently, with some probability <span class="math inline">\(p_{ij}\)</span>.</p>
@@ -897,8 +898,8 @@ f(t  \lambda ) = \begin{cases}
 <p>It is really difficult to do the math out exactly to determine analytically how these different functions behave.</p>
 <p>Instead, we often appeal to Monte Carlo methods, which we will discuss in the next lecture.</p>
 </section>
-<section id="binomial-asset-pricing-model" class="level3" data-number="2.5.8">
-<h3 data-number="2.5.8" class="anchored" data-anchor-id="binomial-asset-pricing-model"><span class="header-section-number">2.5.8</span> Binomial asset pricing model</h3>
+<section id="binomial-asset-pricing-model" class="level3" data-number="3.5.8">
+<h3 data-number="3.5.8" class="anchored" data-anchor-id="binomial-asset-pricing-model"><span class="header-section-number">3.5.8</span> Binomial asset pricing model</h3>
 <p>Another way to create new random variables is to take a function of another random variable. This is what happens in the pricing of “options” in finance.</p>
 <p>Suppose that <span class="math inline">\(X\)</span> is the price of stock XYZ one month from today.</p>
 <p>An “option” pays you <span class="math inline">\(f(X)\)</span> on that day for some function <span class="math inline">\(f\)</span>.</p>
@@ -921,8 +922,8 @@ f(X)= \begin{cases} 120−X &amp;\mbox{ if } X&lt;120 \\
 <p>In this example, both <span class="math inline">\(X\)</span> and <span class="math inline">\(f(X)\)</span> are random variables.</p>
 <p><strong>Question:</strong> The Binomial Asset Pricing Model is a very simple model, especially given how complicated the stock market is. Can you think of any possible problems with the model?</p>
 </section>
-<section id="election-models" class="level3" data-number="2.5.9">
-<h3 data-number="2.5.9" class="anchored" data-anchor-id="election-models"><span class="header-section-number">2.5.9</span> Election models</h3>
+<section id="election-models" class="level3" data-number="3.5.9">
+<h3 data-number="3.5.9" class="anchored" data-anchor-id="election-models"><span class="header-section-number">3.5.9</span> Election models</h3>
 <p>Will the Democratic (D) or Republican (R) presidential candidate win Wisconsin in 2024?</p>
 <p>What is the distribution of this random variable <span class="math inline">\(W\)</span>, where <span class="math inline">\(W=−1\)</span> if D and <span class="math inline">\(W=1\)</span> if R?</p>
 <p>What about neighboring Michigan <span class="math inline">\(M \in \{-1,1\}\)</span>?</p>
@@ -976,8 +977,8 @@ f(X)= \begin{cases} 120−X &amp;\mbox{ if } X&lt;120 \\
 <li>Are Michigan and Wisconsin positively or negatively correlated (based on this plot, anyway)?</li>
 </ul>
 </section>
-<section id="review" class="level3" data-number="2.5.10">
-<h3 data-number="2.5.10" class="anchored" data-anchor-id="review"><span class="header-section-number">2.5.10</span> Review:</h3>
+<section id="review" class="level3" data-number="3.5.10">
+<h3 data-number="3.5.10" class="anchored" data-anchor-id="review"><span class="header-section-number">3.5.10</span> Review:</h3>
 <p>In these notes we covered:</p>
 <ul>
 <li>The basic rules of probability: outcome spaces, events</li>
@@ -1231,12 +1232,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./intro.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

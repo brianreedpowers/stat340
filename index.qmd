@@ -1,9 +1,15 @@
-# Preface {.unnumbered}
+Here are the course notes, practice problems and other course materials for STAT 340 at UW Madison.
 
-This is a Quarto book.
+Author credits to Bi Cheng Wu, Brian Powers, Keith Levin
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+<a href="onetwotail">Example shiny live app</a>
 
-```{r}
-1 + 1
-```
+<!--
+to export an app
+Put the app in shiny/appname
+app should be in a file app.R
+run the code: shinylive::export(appdir="shiny/appname", destdir="docs/appname")
+
+to test
+httpuv::runStaticServer("docs/onetwotail", port=8008)
+-->
