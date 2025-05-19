@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 8&nbsp; Monte Carlo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./R03_MonteCarloExamples.html" rel="next">
+<link href="./R02_IndepCondBayes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mc.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">STAT 340 Index</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Sampling</span></span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Testing</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Estimation</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Prediction</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Practice</span></span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">8.1</span> Learning objectives</a></li>
+  <li><a href="#origin-of-monte-carlo-and-a-nice-example" id="toc-origin-of-monte-carlo-and-a-nice-example" class="nav-link" data-scroll-target="#origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">8.2</span> Origin of Monte Carlo (and a nice example!)</a></li>
+  <li><a href="#basics-of-monte-carlo" id="toc-basics-of-monte-carlo" class="nav-link" data-scroll-target="#basics-of-monte-carlo"><span class="header-section-number">8.3</span> Basics of Monte Carlo</a>
+  <ul class="collapse">
+  <li><a href="#example-events-under-the-normal" id="toc-example-events-under-the-normal" class="nav-link" data-scroll-target="#example-events-under-the-normal"><span class="header-section-number">8.3.1</span> Example: events under the normal</a></li>
+  <li><a href="#example-the-birthday-problem" id="toc-example-the-birthday-problem" class="nav-link" data-scroll-target="#example-the-birthday-problem"><span class="header-section-number">8.3.2</span> Example: the birthday problem</a></li>
+  <li><a href="#aside-wait-what" id="toc-aside-wait-what" class="nav-link" data-scroll-target="#aside-wait-what"><span class="header-section-number">8.3.3</span> Aside: wait, what?</a></li>
+  <li><a href="#end-of-aside.-whats-the-punchline" id="toc-end-of-aside.-whats-the-punchline" class="nav-link" data-scroll-target="#end-of-aside.-whats-the-punchline"><span class="header-section-number">8.3.4</span> End of aside. what’s the punchline?</a></li>
+  <li><a href="#why-does-monte-carlo-work" id="toc-why-does-monte-carlo-work" class="nav-link" data-scroll-target="#why-does-monte-carlo-work"><span class="header-section-number">8.3.5</span> Why does Monte Carlo work?</a></li>
+  <li><a href="#example-buffons-needle" id="toc-example-buffons-needle" class="nav-link" data-scroll-target="#example-buffons-needle"><span class="header-section-number">8.3.6</span> Example: Buffon’s needle</a></li>
+  </ul></li>
+  <li><a href="#more-uses-for-monte-carlo-integration-by-darts" id="toc-more-uses-for-monte-carlo-integration-by-darts" class="nav-link" data-scroll-target="#more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">8.4</span> More uses for Monte Carlo: integration by darts</a>
+  <ul class="collapse">
+  <li><a href="#example-integrate-x1-3-from-0-to-infty" id="toc-example-integrate-x1-3-from-0-to-infty" class="nav-link" data-scroll-target="#example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">8.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></a></li>
+  </ul></li>
+  <li><a href="#mc-estimator-example-compute-pi" id="toc-mc-estimator-example-compute-pi" class="nav-link" data-scroll-target="#mc-estimator-example-compute-pi"><span class="header-section-number">8.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></a>
+  <ul class="collapse">
+  <li><a href="#expectation-and-variance-of-hatpi" id="toc-expectation-and-variance-of-hatpi" class="nav-link" data-scroll-target="#expectation-and-variance-of-hatpi"><span class="header-section-number">8.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></a></li>
+  </ul></li>
+  <li><a href="#important-notes" id="toc-important-notes" class="nav-link" data-scroll-target="#important-notes"><span class="header-section-number">8.6</span> Important notes:</a></li>
+  <li><a href="#generating-random-variables-and-the-importance-of-randomness" id="toc-generating-random-variables-and-the-importance-of-randomness" class="nav-link" data-scroll-target="#generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">8.7</span> Generating random variables and the importance of randomness</a>
+  <ul class="collapse">
+  <li><a href="#f_xx-is-uniform-0-1." id="toc-f_xx-is-uniform-0-1." class="nav-link" data-scroll-target="#f_xx-is-uniform-0-1."><span class="header-section-number">8.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</a></li>
+  <li><a href="#okay-proof-over." id="toc-okay-proof-over." class="nav-link" data-scroll-target="#okay-proof-over."><span class="header-section-number">8.7.2</span> Okay, proof over.</a></li>
+  </ul></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">8.8</span> Example:</a>
+  <ul class="collapse">
+  <li><a href="#okay-but-do-i-actually-need-this-inverse-trick" id="toc-okay-but-do-i-actually-need-this-inverse-trick" class="nav-link" data-scroll-target="#okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">8.8.1</span> Okay, but do I actually need this inverse trick?</a></li>
+  </ul></li>
+  <li><a href="#random-v.-pseudorandom" id="toc-random-v.-pseudorandom" class="nav-link" data-scroll-target="#random-v.-pseudorandom"><span class="header-section-number">8.9</span> Random v. pseudorandom</a>
+  <ul class="collapse">
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">8.9.1</span> Review:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>These notes discuss Monte Carlo methods, a class of <em>simulation-based</em> methods that seek to avoid complicated and/or intractable mathematical computations.</p>
+<p>Suppose we need to compute an expectation <span class="math inline">\(\mathbb{E} g(Z)\)</span> for some random variable <span class="math inline">\(Z\)</span> and some function <span class="math inline">\(g : \mathbb{R} \rightarrow \mathbb{R}\)</span>. Monte Carlo methods avoid doing any integration or summation and instead just generate lots of copies of <span class="math inline">\(Z\)</span>, say <span class="math inline">\(Z_1,Z_2,\dots,Z_M\)</span> and <em>estimate</em> <span class="math inline">\(\mathbb{E} f(Z)\)</span> as <span class="math inline">\(M^{-1} \sum_{i=1}^M f(Z_i)\)</span>. The law of large numbers states that this sample mean should be close to <span class="math inline">\(\mathbb{E} f(Z)\)</span>.</p>
+<p>Said another way, Monte Carlo replaces the work of computing an integral (i.e., an expectation) with the work of generating lots of random variables.</p>
+<p>We will begin by explaining Monte Carlo in a few simple illustrative situations.</p>
+<p>Then we will see how these same ideas can be applied in more complicated situations.</p>
+<p>Monte Carlo and related “simulation-based” methods will arise again and again in this course (and in the rest of your career!), so it is worth your time to make sure you understand them well!</p>
+<section id="learning-objectives" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">8.1</span> Learning objectives</h2>
+<p>After this lesson, you will be able to</p>
+<ul>
+<li>Explain the basic idea behind Monte Carlo methods</li>
+<li>Implement simple Monte Carlo methods in R to estimate probabilities of random events</li>
+<li>Implement simple Monte Carlo methods in R to estimate expectations <span class="math inline">\(\mathbb{E} g(X)\)</span> for random variables <span class="math inline">\(X\)</span> distributed according to “nice” distributions (i.e., distributions supported by R)</li>
+<li>Explain and implement the “inverse trick” to generate random variables from an arbitrary cumulative distribution function <span class="math inline">\(F\)</span>.</li>
+</ul>
+</section>
+<section id="origin-of-monte-carlo-and-a-nice-example" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">8.2</span> Origin of Monte Carlo (and a nice example!)</h2>
+<p><a href="https://en.wikipedia.org/wiki/Stanislaw_Ulam">Stanisław Ulam</a> was a famous nuclear physicist (fun fact: after fleeing Europe during WWII, Ulam was a professor at UW-Madison before he was recruited to work on the Manhattan project at Los Alamos).</p>
+<p>Supposedly, while recovering from a surgery, Ulam was playing a lot of solitaire and came to wonder what was the probability <span class="math inline">\(p\)</span> that a randomly-dealt game of <a href="https://en.wikipedia.org/wiki/Patience_(game)">solitaire</a> could be played out.</p>
+<p>He quickly found that calculating this probability precisely (e.g., by doing a bunch of the algebra and combinatorics that you may remember less than fondly from a probability course) was not very easy. The idea occurred to him that even if the probability <span class="math inline">\(p\)</span> could not be calculated directly, it could be <em>estimated</em> by dealing lots of games of solitaire and counting how many of them he won.</p>
+<p>Thus, Monte Carlo methods were born.</p>
+<p>The name “Monte Carlo” is a reference to the <a href="https://en.wikipedia.org/wiki/Monte_Carlo_Casino">Monte Carlo casino</a>, later a frequent setting of James Bond movies. The idea is that like at a casino, Monte Carlo methods involve lots of randomness.</p>
+</section>
+<section id="basics-of-monte-carlo" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="basics-of-monte-carlo"><span class="header-section-number">8.3</span> Basics of Monte Carlo</h2>
+<p>The basic idea behind Monte Carlo methods, then, is the following: suppose that we have an event <span class="math inline">\(E = \{ X \in S \}\)</span> where <span class="math inline">\(S \subset \Omega\)</span> is some set of outcomes and <span class="math inline">\(X\)</span> is a random variable with outcome set <span class="math inline">\(\Omega\)</span>. Suppose that we want to know the probability of event <span class="math inline">\(E\)</span>, <span class="math inline">\(\Pr[E]\)</span>.</p>
+<p>Of course, one option would be to draw on the ideas we saw last week. We could do an integral or sum (depending on whether <span class="math inline">\(X\)</span> is continuous or discrete) and just calculate what this probability is.</p>
+<p>Unfortunately, often this integral or sum is very hard to do, either because the integral/sum is very hard to solve (either exactly or <a href="https://en.wikipedia.org/wiki/Numerical_analysis">numerically</a>). When this happens, we need to take a different approach.</p>
+<p>That is where Monte Carlo comes in. We give up on doing an integral or sum, and instead just use the fact that we can generate lots of random variables.</p>
+<p>To (approximately) compute <span class="math inline">\(\Pr[ E ]\)</span>, we</p>
+<ol type="1">
+<li>generate lots of <em>replicates</em> of <span class="math inline">\(X\)</span>, say <span class="math inline">\(X_1,X_2,\dots,X_M\)</span> for some number <span class="math inline">\(M\)</span> of <em>Monte Carlo replicates</em>.</li>
+<li>Count how many of these replicates correspond to event <span class="math inline">\(E\)</span> occurring. That is, how many <span class="math inline">\(i\)</span> are there such that <span class="math inline">\(X_i \in S\)</span>.</li>
+<li>Estimate <span class="math inline">\(\Pr[ E]\)</span> as <span class="math inline">\(M^{-1} \sum_{i=1}^M 1_{\{X_i \in S\}}\)</span>.</li>
+</ol>
+<p><strong>Note:</strong> this <span class="math inline">\(1_{ \{ \cdots \} }\)</span> notation is called an <em>indicator function</em>. For an event <span class="math inline">\(E\)</span>, <span class="math display">\[
+1_{E} = \begin{cases}
+  1 &amp;\mbox{ if } E~\text{ occurs } \\
+  0 &amp;\mbox{ otherwise. }
+  \end{cases}
+\]</span></p>
+<p>So, in other words, to estimate <span class="math inline">\(\Pr[ E ]\)</span>, Monte Carlo says that we just run our experiment of interest a bunch of times and count what proportion of the time the event <span class="math inline">\(E\)</span> happens.</p>
+<section id="example-events-under-the-normal" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="example-events-under-the-normal"><span class="header-section-number">8.3.1</span> Example: events under the normal</h3>
+<p>Let’s start by considering a calculation similar to one that we already did in a previous lecture. Let <span class="math inline">\(X\)</span> be a normal random variable with mean <span class="math inline">\(1\)</span> and variance <span class="math inline">\(3\)</span>. What is the probability that <span class="math inline">\(0 \le X \le 3\)</span>?</p>
+<p>Well, we already know how to compute this. It’s given by the integral <span class="math display">\[
+\Pr[ 0 \le X \le 3]
+=
+\int_0^3 \frac{1}{\sqrt{2\pi * 3}} \exp\left\{ \frac{ -(t-1)^2 }{ 2* 3}  \right\} d t
+\]</span></p>
+<p>where we have taken the normal density and plugged in <span class="math inline">\(\mu = 1, \sigma^2=3\)</span>.</p>
+<p>Note that this integral actually doesn’t have a closed form– your calculus classes might have tricked you into thinking that most integrals are “nice”. Still, we can use <code>pnorm</code> to compute it <em>numerically</em> (i.e., approximately), and we find that this probability is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">3</span>)) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.594042</code></pre>
+</div>
+</div>
+<p>Note that we have specified the standard deviation to be <span class="math inline">\(\sqrt{3}\)</span>– the variance is <span class="math inline">\(\sigma^2 = 3\)</span>, so standard deviation is <span class="math inline">\(\sigma = \sqrt{3}\)</span>.</p>
+<p>Let’s suppose, however, that we didn’t know this probability and that it wasn’t so easy to compute in R. Note that Monte Carlo is most useful when we <em>don’t</em> have things like <code>pnorm</code> at our disposal, so this is a setting where in real life we wouldn’t ever use Monte Carlo. We’re starting in this nice simple familiar setting as a warm-up.</p>
+<p>Our event of interest is <span class="math inline">\(E = \{ 0 \le X \le 3 \}\)</span>. Monte Carlo says that to estimate <span class="math inline">\(\Pr[ E ]\)</span>, we repeat our experiment lots of times and count what fraction of the time the event <span class="math inline">\(E\)</span> happens.</p>
+<p>So we should generate lots of copies of <span class="math inline">\(X \sim \mathcal{N}(\mu=1,\sigma^2=3)\)</span> and count how often <span class="math inline">\(0 \le X \le 3\)</span>. Let’s do just that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a function that checks whether or not our event E happens</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The argument x is the output of our experiment.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (i.e., a draw from the normal)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>event_E_happened <span class="ot">&lt;-</span> <span class="cf">function</span>( x ) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="dv">0</span> <span class="sc">&lt;=</span> x <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> <span class="dv">3</span> ) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="cn">TRUE</span> ) <span class="co"># The event happened</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="cn">FALSE</span> ) <span class="co"># The event DIDN'T happen</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Now MC says that we should generate lots of copies of X...</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span>; <span class="co"># 1000 seems like "a lot".</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="dv">0</span>, NMC ); <span class="co"># We're going to record outcomes here.</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate a draw from the normal, and then...</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>( <span class="dv">1</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">3</span>) );</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ...record whether or not our event of interest happened.</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">event_E_happened</span>(X);</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, compute what fraction of our trials were "successes" (i.e., E happened)</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( results )<span class="sc">/</span>NMC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.602</code></pre>
+</div>
+</div>
+<p>Just as a reminder, the true number, which we just happen to know in this case, is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>( <span class="dv">3</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">3</span>) ) <span class="sc">-</span> <span class="fu">pnorm</span>( <span class="dv">0</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">3</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.594042</code></pre>
+</div>
+</div>
+<p>Now, our estimate is random, so every time we recompile this document it will be a bit different, but the estimate should be between 0.56 and 0.63.</p>
+<p>We can make the estimate still more accurate by increasing the number of MC replicates <span class="math inline">\(M\)</span>– larger <span class="math inline">\(M\)</span> will make the estimation error smaller, on average. We’ll be able to make that description more precise later.</p>
+</section>
+<section id="example-the-birthday-problem" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="example-the-birthday-problem"><span class="header-section-number">8.3.2</span> Example: the birthday problem</h3>
+<p>Here’s a classic probability question: In a group of <span class="math inline">\(n\)</span> people, what is the probability that two or more of them have the same birthday? For simplicity, we’ll assume that there are no leap days (i.e., the year has 365 days) and that all 365 days are equally likely birthdays. You’ll implement a solution to a more general version of this problem in your homework, but let’s get an intuition here.</p>
+<p>We need to simulate assigning <span class="math inline">\(n\)</span> people to birthdays. We will represent the days of the year by the numbers 1 through 365, so assigning a birthday just amounts to choosing one of these 365 numbers at random. Then we need to check whether or not there are any repeated birthdays.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>gen_birthdays <span class="ot">&lt;-</span> <span class="cf">function</span>( n ) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate n random birthdays.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generating a random birthday just corresponds to choosing a random number</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># between 1 and 365 inclusive.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pick uniformly at random from {1,2,3,...,365}.</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We sample WITH replacement,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># because it is possible for a birthday to be repeated.</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># See ?sample for details</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">sample</span>( <span class="dv">365</span>, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span> ) );</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># One run of our experiment will consist of generating n birthdays,</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># and then checking whether or not the birthdays contain a repeat.</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Return TRUE if more than one person shares a birthday,</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># FALSE otherwise.</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>run_bday_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( n ) {</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate n birthdays</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  bdays <span class="ot">&lt;-</span> <span class="fu">gen_birthdays</span>( n );</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now, check if there is a repeat.</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># There are lots of ways to do this in R.</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Let's use the table function, which takes a vector and returns a</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># vector of counts.   # See ?table for details</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The important thing for us is that:</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If every entry of bdays appears exactly once,</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># then table(bdays) will just be a vector of ones.</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If one or more entries in the vector bdays is repeated,</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># then table(bdays) will have one or more entries that are larger than 1.</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># So we can examine max( table(bdays) ).</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># max( table(bdays)) &gt; 1 if and only if there is a repeated entry in bdays.</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">max</span>(<span class="fu">table</span>(bdays)) <span class="sc">&gt;</span> <span class="dv">1</span> );</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s pick a value for the number of people <span class="math inline">\(n\)</span> and repeat our experiment a bunch of times, keeping track of how often it returns <code>TRUE</code> (i.e., there is a repeated birthday).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">22</span>;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span>;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>NTRUE <span class="ot">&lt;-</span> <span class="dv">0</span>;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="fu">run_bday_expt</span>(n) ) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    NTRUE <span class="ot">&lt;-</span> NTRUE <span class="sc">+</span> <span class="dv">1</span>;</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>pbday_estimated <span class="ot">&lt;-</span> NTRUE<span class="sc">/</span>NMC</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>pbday_estimated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.496</code></pre>
+</div>
+</div>
+<p>Once again, this is a situation where we can actually compute an answer exactly– we are using this to build intuition, not because it is a problem that strictly speaking <em>requires</em> Monte Carlo methods.</p>
+<p>The probability that one or more birthdays is repeated is one minus the probability that all <span class="math inline">\(n\)</span> birthdays are distinct. <span class="math display">\[
+p_{\text{repeated}} = 1 - p_{\text{distinct}}.
+\]</span></p>
+<p>The probability that all <span class="math inline">\(n\)</span> birthdays are distinct is</p>
+<p><span class="math display">\[
+p_{\text{distinct}}
+= \frac{365}{365}*\frac{364}{365} * \frac{ 363 }{ 365 } * \cdots * \frac{ 365-n+1}{365}
+= \frac{ 365! }{ (365-n)! 365^n }.
+\]</span></p>
+</section>
+<section id="aside-wait-what" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="aside-wait-what"><span class="header-section-number">8.3.3</span> Aside: wait, what?</h3>
+<p>If you’ve taken a probability class before, this computation will be simple and familiar. If you haven’t taken a probability class before, this warrants some unpacking.</p>
+<p>I’ll do that unpacking here in these notes, but we won’t go into detail about this in lecture, owing to time constraints.</p>
+<p>We want to compute the probability that all <span class="math inline">\(n\)</span> birthdays are distinct. Let’s label these people <span class="math inline">\(1,2,3,\dots,n\)</span>, and consider generating their birthdays in order.</p>
+<p>The way we usually compute probabilities in problems like this is to count how many different outcomes there are, and then look at how many of those outcomes match our event of interest. That is, we compute a probability as <span class="math display">\[
+N_{\text{event is true}} / N_{\text{outcomes}} ,
+\]</span></p>
+<p>where <span class="math inline">\(N_{\text{outcomes}}\)</span> is the total number of possible outcomes and <span class="math inline">\(N_{\text{event is true}}\)</span> is the number of possible outcomes where our event of interest is true.</p>
+<p>In this case, the outcomes are assignments of <span class="math inline">\(n\)</span> people to 365 birthdays. Each of those <span class="math inline">\(n\)</span> people can be assigned to one of 365 birthdays, so <span class="math display">\[
+N_{\text{outcomes}} = 365^n.
+\]</span></p>
+<p>Now, to compute the numerator in our probability, let’s count how many ways we can assign <span class="math inline">\(n\)</span> people to <span class="math inline">\(n\)</span> unique birthdays out of 365 available birthdays.</p>
+<p>The first birthday is unique no matter what: for any of the 365 birthdays we pick, there are no other birthdays for it to “duplicate”.</p>
+<p>Now, let’s consider the 2nd birthday. The first person’s birthday is off limits, so that leaves 364 remaining birthdays to choose from, so there are <span class="math inline">\(365*364\)</span> ways to choose distinct birthdays for the first two people.</p>
+<p>Now, consider the third person. If the first and second person have distinct birthdays, there are <span class="math inline">\(365-2 = 363\)</span> birthdays left to choose from. There are <span class="math inline">\(365*364\)</span> ways to pick distinct birthdays for the first two people, and so there are <span class="math inline">\(365*364*363\)</span> ways to choose distinct birthdays for the first three people.</p>
+<p>Continuing this argument up to the <span class="math inline">\(n\)</span>-th person, if the first <span class="math inline">\(n-1\)</span> people all have distinct birthdays, then there are <span class="math inline">\(365-(n-1) = 365 - n + 1\)</span> birthdays remaining for the <span class="math inline">\(n\)</span>-th person to choose from that would maintain the distinct birthdays property. So there are <span class="math inline">\(365*364*363*\cdots*(365-n+1)\)</span> ways to choose distinct birthdays for all <span class="math inline">\(n\)</span> people.</p>
+<p>Of course, this argument only makes sense if <span class="math inline">\(1 \le n \le 365\)</span>, an assumption we were making implicitly, but worth making explicit here.</p>
+<p>So, plugging this back into our numerator, we have determined that the probability that our <span class="math inline">\(n\)</span> people are assigned distinct birthdays is</p>
+<p><span class="math display">\[
+\frac{365*364*363*\cdots*(365-n+1) }{ 365^n}
+=
+\frac{ 365! }{ (365-n)! } \frac{1}{365^n },
+\]</span></p>
+<p>where we have used the fact that <span class="math inline">\(m*(m-1)*\cdots*(m-k+1) = m!/(m-k)!\)</span> for non-negative integers <span class="math inline">\(k\)</span> and <span class="math inline">\(m\)</span> with <span class="math inline">\(k \le m\)</span>.</p>
+</section>
+<section id="end-of-aside.-whats-the-punchline" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="end-of-aside.-whats-the-punchline"><span class="header-section-number">8.3.4</span> End of aside. what’s the punchline?</h3>
+<p>Thus, the probability of a repeated birthday is</p>
+<p><span class="math display">\[
+p_{\text{repeated}} = 1 - p_{\text{distinct}}
+= \frac{ (365-n)! 365^n - 365! }{ (365-n)! 365^n }.
+\]</span> Let’s implement that as a function and get the true values to verify our MC estimates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p_repeated <span class="ot">&lt;-</span> <span class="cf">function</span>( n ) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute p_distinct, first, then subtract it from 1.</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  numer <span class="ot">&lt;-</span> <span class="fu">prod</span>( <span class="fu">seq</span>(<span class="dv">365</span>,<span class="dv">365</span><span class="sc">-</span>n<span class="sc">+</span><span class="dv">1</span>) );</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  denom <span class="ot">&lt;-</span> <span class="dv">365</span><span class="sc">**</span>n;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  p_distinct <span class="ot">&lt;-</span> numer<span class="sc">/</span>denom;</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="dv">1</span> <span class="sc">-</span> p_distinct);</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">p_repeated</span>( <span class="dv">23</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5072972</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">p_repeated</span>( <span class="dv">22</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4756953</code></pre>
+</div>
+</div>
+<p>Just as a reminder, our estimate for <code>p_repeated( 22 )</code> was</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pbday_estimated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.496</code></pre>
+</div>
+</div>
+<p>Not bad!</p>
+</section>
+<section id="why-does-monte-carlo-work" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="why-does-monte-carlo-work"><span class="header-section-number">8.3.5</span> Why does Monte Carlo work?</h3>
+<p>Okay, before we start looking at more complicated or more interesting examples of Monte Carlo, we have to ask… why does this work, anyway? We’re estimating a number <span class="math inline">\(\Pr[E]\)</span> by just repeating an experiment a bunch of times and recording the fraction of the time that our event <span class="math inline">\(E\)</span> happened…</p>
+<p>Well, in one sense, the fact that this gets us a good estimate of <span class="math inline">\(\Pr[E]\)</span> should be “obvious”. Our “definition” of a probability is as a long-run average– the probability of an event is the proportion of the time we would expect that event to happen if we repeated the experiment many times. So it comes as no surprise that when we run our experiment a bunch of times and average out how often our event happens, well… we get our probability!</p>
+<p>Okay, but that explanation feels a bit circular… To answer the question more carefully, we need to use just a bit of math. I promise it’s just a bit, and we’ll go through it step by step. We won’t even have to compute any integrals– just look at them!</p>
+<p>To start with, let’s imagine that our variable of interest <span class="math inline">\(X\)</span> is continuous with density function <span class="math inline">\(f_X(t)\)</span>. The same argument will apply for discrete RVs; just change integrals to sums. Then with <span class="math inline">\(E = \{ X \in S \}\)</span> for any set <span class="math inline">\(S \subseteq \Omega\)</span>, <span class="math display">\[
+\Pr[ E ] = \int_S f_X(t) dt = \int_\Omega 1_{t \in S} ~f_X(t) dt
+\]</span></p>
+<p>The first equality there is just our definition of probability– to get the probability of an event, we integrate a density over the event set.</p>
+<p>The second equality is just rewriting the integral. Instead of only integrating over <span class="math inline">\(S\)</span>, we integrate over the whole set <span class="math inline">\(\Omega\)</span> and add in an indicator <span class="math inline">\(1_{t \in S}\)</span>. Remember, this function is <span class="math inline">\(1\)</span> when <span class="math inline">\(t \in S\)</span> and <span class="math inline">\(0\)</span> otherwise.</p>
+<p>But now, let’s recall the definition of expectation. For a function <span class="math inline">\(g(X)\)</span>, <span class="math display">\[
+\mathbb{E} g(X) = \int_\Omega g(t) f_X(t) dt
+\]</span></p>
+<p>We say that we have “integrated <span class="math inline">\(g\)</span> against the density <span class="math inline">\(f_X\)</span>”. Plugging in <span class="math inline">\(g(t) = 1_{t \in S}\)</span>, <span class="math display">\[
+\mathbb{E} 1_{X \in S} = \int_\Omega 1_{t \in S} ~f_X(t) dt.
+\]</span></p>
+<p>But we showed a few equations ago that this integral on the right-hand side is <span class="math inline">\(\Pr[ E ]\)</span>.</p>
+<p>So we have shown that <span class="math inline">\(\Pr[E] = \mathbb{E} 1_{X \in S}\)</span>.</p>
+<p>Okay, we’re almost there. We have shown that the probability we want to estimate, <span class="math inline">\(\Pr[ E ]\)</span>, is really just equal to an expectation, <span class="math inline">\(\mathbb{E} 1_{X \in S}\)</span>.</p>
+<p>Now, let’s think back to the law of large numbers. If we generate lots of independent copies of a random variable <span class="math inline">\(X\)</span>, say <span class="math inline">\(X_1,X_2,\dots,X_M\)</span>, and look at the average <span class="math inline">\(M^{-1} \sum_{i=1}^M g(X_i)\)</span>, then for large <span class="math inline">\(M\)</span>, this average is close to the expectation <span class="math inline">\(\mathbb{E} g(X)\)</span>: <span class="math display">\[
+\frac{1}{M} \sum_{i=1}^M g(X_i) \approx \mathbb{E} g(X)
+\]</span> Let’s again take <span class="math inline">\(g(t) = 1_{t \in S}\)</span>. Then <span class="math display">\[
+\frac{1}{M} \sum_{i=1}^M 1_{X_i \in S} \approx  \mathbb{E} 1_{X \in S} = \Pr[ E ].
+\]</span></p>
+<p>Monte Carlo works for estimating probabilities because probabilities are just expectations (that’s from the calculus we did above), and sample averages are close to their expectations (by the law of large numbers)!</p>
+</section>
+<section id="example-buffons-needle" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="example-buffons-needle"><span class="header-section-number">8.3.6</span> Example: Buffon’s needle</h3>
+<p>Let’s look at a slightly more interesting example, based on a <a href="https://en.wikipedia.org/wiki/Buffon%27s_needle_problem">question</a> first asked by Georges-Louis Leclerc, Comte de Buffon in the 1700s:</p>
+<blockquote class="blockquote">
+<p>Suppose we have a floor made of parallel strips of wood, each of width 1, and we drop a needle of length 1 onto the floor. What is the probability that the needle will lie across a line between two strips?</p>
+</blockquote>
+<p>Now, even beginning to answer this question requires that we specify what we have in mind when we say that we drop a needle onto the floor. That is, we need to specify our probabilistic/statistical model of the experiment of dropping a needle on the floor.</p>
+<p>Presumably we mean that the needle lands at a random point on the floor and that its orientation (i.e., angle that the needle makes with the cracks between the floor boards) is uniformly random.</p>
+<p>These are the kinds of assumptions that we always want to be aware of when we build a model of the world, and these kinds of specifications can make a big difference in terms of the answers that we get. A nice example of this is <a href="https://en.wikipedia.org/wiki/Bertrand_paradox_(probability)">Bertrand’s paradox</a>, presented beautifully in <a href="https://www.youtube.com/watch?v=mZBwsm6B280">this YouTube video</a> by the always wonderful Numberphile and 3blue1brown.</p>
+<p>So let’s specify what we mean, here.</p>
+<p>Let’s consider a 2-by-2 square with corners at <span class="math inline">\((\pm1,\pm1)\)</span> and divide it into 2 halves: the top half is one strip of wood, and the bottom half is another strip of wood.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">xmax=</span><span class="dv">1</span>,<span class="at">ymin=</span><span class="dv">0</span>,<span class="at">ymax=</span><span class="dv">1</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">fill=</span><span class="st">"grey30"</span>, <span class="at">color=</span><span class="cn">NA</span>);</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">xmax=</span><span class="dv">1</span>,<span class="at">ymin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">ymax=</span><span class="dv">0</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill=</span><span class="st">"grey80"</span>,<span class="at">color=</span><span class="cn">NA</span>);</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="384"></p>
+</div>
+</div>
+<p>To model our randomly dropped pin, we first sample a point in this square uniformly at random. We will imagine that the pin is just a line, and this sampled point will be the location that the middle of the pin lands on. Then we randomly pick an angle uniformly over <span class="math inline">\([0,\pi)\)</span> and extend the ends of the needle each 0.5 units of length, for a needle of length <span class="math inline">\(1\)</span>. Finally, we check if the needle crosses any of the lines <span class="math inline">\(y=0,\pm1\)</span>.</p>
+<p>Let’s write that function and plot a few random needles to make sure it’s doing what we want.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define needle dropping function</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>needle <span class="ot">=</span> <span class="cf">function</span>(){</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomly pick the location of the center of the needle.</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We need an x and y coordinate, hence n=2 in runif</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This means that xy is a length-two vector,</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># kind of like we wrote c( xcoord, ycoord ).</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This will come up below when we compute the endpoints of our</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># needle, p1 and p2, below.</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  xy <span class="ot">=</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">2</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># randomly pick an angle uniformly between 0 and pi.</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  angle <span class="ot">=</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">1</span>, <span class="at">min=</span><span class="dv">0</span>, <span class="at">max=</span>pi)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate delta x and delta y, the distance of the ends of</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the needle from center in the horizontal and vertical directions.</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We are defining the angle using the standard definition</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (going counterclockwise from positive x axis).</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We will use these numbers to compute the coordinates of the needle's</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># endpoints below, </span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  dx <span class="ot">=</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">cos</span>(angle);</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  dy <span class="ot">=</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">sin</span>(angle);</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate coordinates of the needle's end points</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Our dy is always positive, so p1 is always higher than p2.</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This will be useful later for checking if our needle crosses a line</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">=</span> <span class="fu">setNames</span>(xy <span class="sc">+</span> <span class="fu">c</span>(dx,dy), <span class="fu">c</span>(<span class="st">"p1x"</span>,<span class="st">"p1y"</span>))</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  p2 <span class="ot">=</span> <span class="fu">setNames</span>(xy <span class="sc">-</span> <span class="fu">c</span>(dx,dy), <span class="fu">c</span>(<span class="st">"p2x"</span>,<span class="st">"p2y"</span>))</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: setNames is explained where we use it below</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># in the function `crosses()` in the next code block.</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return endpoints</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(p1,p2))</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a few needle drops</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'plyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ndl <span class="ot">=</span> <span class="cf">function</span>(i) <span class="fu">needle</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needle() takes no arguments, but we want to call it 10 times,</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so ldply needs a dummy variable,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># which we've called (totally arbitrarily) i.</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>needles <span class="ot">=</span> <span class="fu">ldply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,ndl);</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># First plot out board again.</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">xmax=</span><span class="dv">1</span>,<span class="at">ymin=</span><span class="dv">0</span>,<span class="at">ymax=</span><span class="dv">1</span>),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fill=</span><span class="st">"grey30"</span>,<span class="at">color=</span><span class="cn">NA</span>);</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">xmax=</span><span class="dv">1</span>,<span class="at">ymin=</span><span class="sc">-</span><span class="dv">1</span>,<span class="at">ymax=</span><span class="dv">0</span>),</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill=</span><span class="st">"grey80"</span>,<span class="at">color=</span><span class="cn">NA</span>);</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, add in the needles, in red.</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">data=</span>needles,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>p1x,<span class="at">y=</span>p1y,<span class="at">xend=</span>p2x,<span class="at">yend=</span>p2y),</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>                        <span class="at">color=</span><span class="st">"red"</span>,<span class="at">size=</span><span class="fl">1.5</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now, Monte Carlo says that we need to repeat this experiment many times (i.e., many more than 10 needles) and count how many of our dropped needles cross a line. So first and foremost we need a function to check if a needle crosses a line.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>crosses <span class="ot">&lt;-</span> <span class="cf">function</span>( pts ) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remember that needle() returns a pair of (x,y) points, p1,p2.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We only need the y-coordinates to check if they cross a line.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  p1y <span class="ot">=</span> pts[<span class="st">'p1y'</span>] <span class="co"># Note: this indexing trick is why we used setNames above</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  p2y <span class="ot">=</span> pts[<span class="st">'p2y'</span>]</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># check if p1 and p2 are on opposite sides of a line</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We do this by simply checking if the y-coordinates are on different sides</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># of one of the three lines y=-1, y=0 or y=1.</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( (p1y <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">&amp;</span> p2y <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">||</span> (p1y <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> p2y <span class="sc">&lt;</span> <span class="dv">0</span>) <span class="sc">||</span> (p1y <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">&amp;</span> p2y <span class="sc">&lt;</span> <span class="dv">1</span>) ){</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="cn">TRUE</span> );</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="cn">FALSE</span> );</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Great. So let’s generate lots of random needles, and use our new function <code>crosses</code> to check which ones cross a crack in the floorboards.</p>
+<div class="cell" data-hash="mc_cache/html/unnamed-chunk-13_678e6a84a9ba11dfdd2b272ee6101425">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set size</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">=</span> <span class="fl">1e5</span>; <span class="co"># 10K MC replicates. Crank this number up for better accuracy.</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create vector to count crossings</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>crossings <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># run function</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># drop a needle</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  points <span class="ot">=</span> <span class="fu">needle</span>()</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if it crosses and update counts accordingly.</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="fu">crosses</span>( points ) ) {</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    crossings <span class="ot">&lt;-</span> crossings <span class="sc">+</span> <span class="dv">1</span>;</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, our estimate of the probability of a crossing is just the fraction of our dropped needles (i.e., Monte Carlo replicates) that crossed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>crossings<span class="sc">/</span>NMC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.63686</code></pre>
+</div>
+</div>
+<p>We can compare with the correct answer and see how close we are. The actual probability, <span class="math inline">\(2/\pi\)</span> can be obtained using calculus (see the Wikipedia page for a derivation).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>true.cross <span class="ot">=</span> <span class="dv">2</span><span class="sc">/</span>pi</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>MC.cross <span class="ot">&lt;-</span> crossings<span class="sc">/</span>NMC</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( <span class="fu">sprintf</span>(<span class="st">" true value: %.5f </span><span class="sc">\n</span><span class="st">  our value: %.5f </span><span class="sc">\n</span><span class="st"> Percent relative error: %.3f%%"</span>,  true.cross, MC.cross, <span class="dv">100</span><span class="sc">*</span><span class="fu">abs</span>(true.cross<span class="sc">-</span>MC.cross)<span class="sc">/</span>true.cross ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> true value: 0.63662 
+  our value: 0.63686 
+ Percent relative error: 0.038%</code></pre>
+</div>
+</div>
+<p><strong>Exercise:</strong> Write a function that takes 3 arguments: <code>L</code> for the length of the needle, <code>T</code> for the width of the floor boards, and <code>M</code> for the number of Monte Carlo replicates; performs the above Monte Carlo simulation; and returns the (estimated) probability of a crossing. Refer to the Wikipedia page on Buffon’s needle for the probability of crossing for a needle length <span class="math inline">\(L\)</span> and board width <span class="math inline">\(T\)</span>.</p>
+</section>
+</section>
+<section id="more-uses-for-monte-carlo-integration-by-darts" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">8.4</span> More uses for Monte Carlo: integration by darts</h2>
+<p>The power of Monte Carlo methods goes way beyond estimating the probabilities of events. Monte Carlo refers to a much broader class of methods– using simulation to answer questions that would otherwise be hard or impossible to answer just using math (i.e., problems that do not have closed-form solutions).</p>
+<p>We just saw above that we can use Monte Carlo to estimate probabilities of the form <span class="math inline">\(\Pr[ E ]\)</span> by approximating expectations of the form <span class="math inline">\(\mathbb{E} 1_E\)</span>.</p>
+<p>Well, what is to stop us from replacing that indicator with a more interesting function <span class="math inline">\(g(X)\)</span>? For example, suppose that <span class="math inline">\(X\)</span> is normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> and we want to compute <span class="math inline">\(\mathbb{E} \log |X|\)</span>. We <em>could</em> set up and solve the integral <span class="math display">\[
+\mathbb{E} \log |X|
+= \int_{-\infty}^\infty \left( \log |t| \right) f( t; \mu, \sigma) dt
+= \int_{-\infty}^\infty \frac{ \log |t| }{ \sqrt{2\pi \sigma^2} }
+                  \exp\left\{ \frac{ -(t-\mu)^2 }{ 2\sigma^2 } \right\} dt.
+\]</span></p>
+<p>Alternatively, we could just draw lots of Monte Carlo replicates <span class="math inline">\(X_1,X_2,\dots,X_M\)</span> from a normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, and look at the sample mean <span class="math inline">\(M^{-1} \sum_{i=1}^M \log |X_i|\)</span>, once again appealing to the law of large numbers to ensure that this sample mean is close to its expectation.</p>
+<p><strong>Exercise:</strong> Do that! Write code to obtain a Monte Carlo estimate of <span class="math inline">\(\mathbb{E} \log |X|\)</span> for <span class="math inline">\(X \sim \mathcal{N}(\mu, \sigma^2 )\)</span> (choose values for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> as you like).</p>
+<p>Indeed, this idea can be pushed still further. Suppose that we want to compute an integral <span class="math display">\[
+\int_D g(x) dx,
+\]</span></p>
+<p>where <span class="math inline">\(D\)</span> is some domain of integration and <span class="math inline">\(g\)</span> is a function. Let <span class="math inline">\(f(x)\)</span> be the density of some random variable with <span class="math inline">\(f(x) &gt; 0\)</span> for all <span class="math inline">\(x \in D\)</span> and <span class="math inline">\(f(x) = 0\)</span> for <span class="math inline">\(x \not \in D\)</span>. In other words, <span class="math inline">\(f\)</span> is the density of a random variable supported on <span class="math inline">\(D\)</span>. Then we can rewrite the integral as <span class="math display">\[
+\int_D g(x) dx = \int_D \frac{ g(x) }{ f(x) } f(x) dx.
+\]</span></p>
+<p>Defining <span class="math inline">\(h(x) = g(x)/f(x)\)</span>, what we have really shown is that <span class="math display">\[
+\int_D g(x) dx = \mathbb{E} h(X),
+\]</span></p>
+<p>where <span class="math inline">\(X\)</span> is a random variable with density <span class="math inline">\(f\)</span>.</p>
+<p>So if we want to (approximately) compute <span class="math inline">\(\int_D g(x) dx\)</span>, we can just generate lots of copies of <span class="math inline">\(X\)</span> with density <span class="math inline">\(f\)</span>, and compute <span class="math inline">\(M^{-1} \sum_{i=1}^M h(X_i)\)</span>. This is why you’ll sometimes see Monte Carlo methods referred to as “integration by darts”!</p>
+<p><br></p>
+<section id="example-integrate-x1-3-from-0-to-infty" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">8.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></h3>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(x) (x<span class="sc">+</span><span class="dv">1</span>)<span class="sc">^-</span><span class="dv">3</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_function</span>(<span class="at">fun=</span>f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mc_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We know from calculus <span class="math inline">\(\int_0^\infty (x+1)^{-3}\text{dx}=\left.-\frac1{2(x+1)^2}\right\vert_0^\infty=\frac12\)</span>.</p>
+<p>Suppose we want to find this approximately using an MC approach. Let <span class="math inline">\(g(x)=(x+1)^{-3}\)</span>. We need a random variable defined from 0 to <span class="math inline">\(\infty\)</span>. Let’s choose <span class="math inline">\(X=\text{Exponential}(\lambda=1)\)</span> with density <span class="math inline">\(f(x)=e^{-x}\)</span>.</p>
+<p>Then we can find <span class="math inline">\(h(x)=g(x)/f(x)=(x+1)^{-3}\,\cdot\,e^x\)</span>. Now, we just need to find <span class="math inline">\(E(h(X))\)</span>, which we can do by drawing a sample <span class="math inline">\(X_i\)</span> using <code>rexp(...)</code> and finding <span class="math inline">\(\frac1n\sum_{i=1}^n h(X_i)\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fl">1e6</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># draw a sampe of Xi</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="dv">1</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># find the sample mean of h(Xi)</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((x<span class="sc">+</span><span class="dv">1</span>)<span class="sc">^-</span><span class="dv">3</span> <span class="sc">/</span> <span class="fu">exp</span>(<span class="sc">-</span>x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4985974</code></pre>
+</div>
+</div>
+<p>Note that we can pick any <span class="math inline">\(X\)</span> that is only defined over <span class="math inline">\([0,\infty)\)</span>, as long as we know its PDF <span class="math inline">\(f(x)\)</span>.</p>
+<p>Suppose instead we had picked <span class="math inline">\(X\)</span> as <span class="math inline">\(|Z|\)</span>, i.e.&nbsp;as the absolute value of a standard normal. It’s easy to see by symmetry <span class="math inline">\(f(x) = 2\,\cdot\texttt{dnorm(x,mean=0,sd=1)}\)</span>. We can then also compute it as this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fl">1e6</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># draw a sample of Xi</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># find the sample mean of h(Xi)</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((x<span class="sc">+</span><span class="dv">1</span>)<span class="sc">^-</span><span class="dv">3</span> <span class="sc">/</span> (<span class="dv">2</span><span class="sc">*</span><span class="fu">dnorm</span>(x, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4964237</code></pre>
+</div>
+</div>
+<p>And we again get approximately the right answer 0.5 as expected.</p>
+<p><br></p>
+</section>
+</section>
+<section id="mc-estimator-example-compute-pi" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="mc-estimator-example-compute-pi"><span class="header-section-number">8.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></h2>
+<p>Here’s a fun example. Of course, we all know the value of <span class="math inline">\(\pi\)</span> (at least to a few decimal points). But let’s suppose we didn’t know <span class="math inline">\(\pi\)</span>, for the sake of argument. We <em>do</em> know that <span class="math inline">\(\pi\)</span> is the ratio of the area of a circle to radius².</p>
+<p>How can we use this fact, in conjunction with Monte Carlo methods, to estimate <span class="math inline">\(\pi\)</span>?</p>
+<p>Well, let’s have a look at the diagram below, which shows a square of side length 2, with an inscribed circle of radius 1 (hence area <span class="math inline">\(\pi\)</span>). Some random points have been chosen in the square, and colored according to whether or not they lie inside the circle.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/PiBoard.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Estimating Pi</figcaption>
+</figure>
+</div>
+<p>Suppose that we pick a point uniformly at random in this two-by-two square. What is the probability that the point lies inside of the circle? Well, the circle has area <span class="math inline">\(\pi\)</span> and the square has area <span class="math inline">\(4\)</span>, so the probability is <span class="math inline">\(p_{\text{in}} = \pi/4\)</span>.</p>
+<p>This means we can estimate <span class="math inline">\(\pi\)</span> as <span class="math inline">\(4 * p_{\text{in}}\)</span>. So one way to estimate <span class="math inline">\(\pi\)</span> would be to estimate <span class="math inline">\(p_{\text{in}}\)</span> using Monte Carlo methods and then multiply by <span class="math inline">\(4\)</span>.</p>
+<p>We can formalize this using the following setup:</p>
+<p>Drop <span class="math inline">\(N\)</span> points uniformly and independently in the square. We know each point has probability <span class="math inline">\(\frac\pi4\)</span> of being in the circle. Let <span class="math inline">\(X_i\)</span> be <span class="math inline">\(1\)</span> if the <span class="math inline">\(i\)</span>-th point is in the circle and <span class="math inline">\(0\)</span> if it is not. Note that <span class="math inline">\(X_i\sim\text{Bernoulli}(p=\frac\pi4)\)</span></p>
+<p>We know then that <span class="math inline">\(p_{\text{in}}=E[X_i]\approx\bar X=\frac1N\sum_{i=1}^NX_i\)</span>. Thus, our estimator can be represented as</p>
+<p><span class="math display">\[\hat\pi:=4*p_\text{in}\approx4*\frac1N\sum_{i=1}^NX_i\]</span></p>
+<p>Let’s try this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span>; <span class="co"># Number of Monte Carlo replicates</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>in_circ <span class="ot">&lt;-</span> <span class="dv">0</span>; <span class="co"># Count how many points landed in the circle</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For-loop over the MC replicates</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># for each point, generate 2 coordinates (x,y) randomly between -1 and 1</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    point <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">2</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>);</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># to be inside circle, our point must satisfy x^2 + y^2 &lt;= 1</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(point[<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> point[<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;=</span> <span class="dv">1</span>){</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># if inside, add to count</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>        in_circ <span class="ot">&lt;-</span> in_circ<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co"># To get proportion of square covered, take in_circ/N</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> in_circ<span class="sc">/</span>NMC</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="co"># to get our estimate of pi, multiply by 4.</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>pi.mc <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">*</span>prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s assess how good our estimate is by computing its <em>relative error</em>, i.e., the size of the error compared to the size of the thing we are trying to estimate. Note that this is a number we can compute only because we are in a situation where we know the correct answer. Of course, in more realistic settings, we don’t know the true value of the quantity we are trying to approximate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what are our estimate and percentage error?</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># See ?sprintf for more information on creating formatted strings in R.</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"estimate: %.4f</span><span class="sc">\n</span><span class="st"> %% error: %.2f%%"</span>,pi.mc,<span class="dv">100</span><span class="sc">*</span><span class="fu">abs</span>(pi.mc<span class="sc">-</span>pi)<span class="sc">/</span>pi))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>estimate: 3.1240
+ % error: 0.56%</code></pre>
+</div>
+</div>
+<p><strong>Bonus:</strong> try changing <code>NMC</code> in the code above. How does the relative error change? What happens if you increase <code>NMC</code> up to <code>10000</code>? What if you decrease <code>NMC</code> down to <code>100</code>?</p>
+<section id="expectation-and-variance-of-hatpi" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="expectation-and-variance-of-hatpi"><span class="header-section-number">8.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></h3>
+<p>We can easily derive the expectation and variance of this estimator: <span class="math display">\[\begin{align}
+E(\hat\pi)&amp;=E\left(\frac4N\sum_{i=1}^NX_i\right)\\
+&amp;=\frac4NE\left(\sum_{i=1}^NX_i\right)\\
+&amp;=\frac4N\sum_{i=1}^NE(X_i)\\
+&amp;=\frac4N\sum_{i=1}^N\left[(1)(\tfrac\pi4)+(0)(1-\tfrac\pi4)\right]\\
+&amp;=\frac4N\sum_{i=1}^N\frac\pi4\\
+&amp;=\frac4N\left(N*\frac\pi4\right)\\
+&amp;=\pi
+\end{align}\]</span></p>
+<p><span class="math display">\[\begin{align}
+Var(\hat\pi)&amp;=Var\left(\frac4N\sum_{i=1}^NX_i\right)\\
+&amp;=\left(\frac4N\right)^2Var\left(\sum_{i=1}^NX_i\right)\\
+&amp;=\frac{16}{N^2}\sum_{i=1}^NVar(X_i)\\
+&amp;=\frac{16}{N^2}\sum_{i=1}^N\left[(1-\tfrac\pi4)^2(\tfrac\pi4)+(0-\tfrac\pi4)^2(1-\tfrac\pi4)\right]\\
+&amp;=\frac{16}{N^2}\sum_{i=1}^N\frac\pi4\left(1-\frac\pi4\right)\\
+&amp;=\frac{16}{N^2}\left(N*\frac\pi4\left(1-\frac\pi4\right)\right)\\
+&amp;=\frac{\pi(4-\pi)}N
+\end{align}\]</span></p>
+<p><em><strong>bonus exercise</strong>: derive same equations for <span class="math inline">\(E\)</span> and <span class="math inline">\(Var\)</span> by treating <span class="math inline">\(\sum X_i\)</span> as a binomial variable and applying the binomial RV equations for <span class="math inline">\(E\)</span> and <span class="math inline">\(Var\)</span>.</em></p>
+<p>We can easily verify the truth of these formulae by simulating multiple “runs” of this experiment and looking at the distribution of estimates we obtain.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># choose M (number of times to repeat MC experiment)</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>M <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create vector to save results in</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>mc.est <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>,M)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># for each experiment, do all the steps done before, get an estimate, and save it</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>M){</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># these lines are copied exactly from above</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    N <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    in.circ <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N){</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>        point <span class="ot">=</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">2</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(point[<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> point[<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>){</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>            in.circ <span class="ot">=</span> in.circ<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    prop <span class="ot">=</span> in.circ<span class="sc">/</span>N</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    pi.mc <span class="ot">=</span> prop <span class="sc">*</span> <span class="dv">4</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># save result in vector</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    mc.est[j] <span class="ot">=</span> pi.mc</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what do the estimates look like? print the first 100 values</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">max.print=</span><span class="dv">100</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>mc.est</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 3.156 3.112 3.216 3.228 3.228 3.212 3.224 3.084 3.088 3.140 3.136 3.264
+ [13] 3.112 3.156 3.020 3.184 3.100 3.204 3.080 3.104 3.120 3.072 3.076 3.084
+ [25] 3.160 3.168 3.088 3.116 3.276 3.148 3.092 3.140 3.228 3.168 3.112 3.136
+ [37] 3.072 3.168 3.160 3.160 3.096 3.148 3.136 3.212 3.040 3.068 3.176 3.212
+ [49] 3.096 3.144 3.124 3.196 3.164 3.188 3.120 3.088 3.116 3.168 3.152 3.028
+ [61] 3.088 3.064 3.132 3.196 3.172 3.188 3.160 3.144 3.116 3.168 3.196 3.224
+ [73] 3.136 3.220 3.124 3.096 3.160 3.136 3.192 3.224 3.220 3.176 3.104 3.152
+ [85] 3.172 3.060 3.212 3.184 3.240 3.196 3.140 3.100 3.076 3.196 3.080 3.120
+ [97] 3.164 3.192 3.148 3.060
+ [ reached getOption("max.print") -- omitted 900 entries ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mc.est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.14024</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(mc.est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.002513464</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>var.theory <span class="ot">=</span> pi<span class="sc">*</span>(<span class="dv">4</span><span class="sc">-</span>pi)<span class="sc">/</span>N</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>var.theory</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.002696766</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deviation of our mean and variance from theory:</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%% deviation from E  : %.3f%% </span><span class="sc">\n</span><span class="st">%% deviation from Var: %.3f%%"</span>,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abs</span>(<span class="fu">mean</span>(mc.est)<span class="sc">-</span>pi)<span class="sc">/</span>pi<span class="sc">*</span><span class="dv">100</span>,<span class="fu">abs</span>(<span class="fu">var</span>(mc.est)<span class="sc">-</span>var.theory)<span class="sc">/</span>var.theory<span class="sc">*</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>% deviation from E  : 0.043% 
+% deviation from Var: 6.797%</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="important-notes" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="important-notes"><span class="header-section-number">8.6</span> Important notes:</h2>
+<ul>
+<li>the estimator is <strong>unbiased</strong>, since <span class="math inline">\(E(\hat\pi)-\pi=0\)</span>, which means there’s no systematic error</li>
+<li>the estimator variance <span class="math inline">\(\propto1/N\)</span>, so we can increase our precision by simulating more points
+<ul>
+<li>note the standard deviation <span class="math inline">\(\propto1/\sqrt N\)</span>, so if you want to lower error by factor of <span class="math inline">\(\frac12\)</span> you need to increase simulation size by factor of <span class="math inline">\(4\)</span></li>
+</ul></li>
+</ul>
+<p><br></p>
+<details>
+<summary>
+<strong>Bonus:</strong> (click to show) alternate setup: find <span class="math inline">\(E[1_\bigcirc(X,Y)]\)</span> for indep. uniform <span class="math inline">\(X,Y\)</span>
+</summary>
+<p><br></p>
+<p>We can also represent this in the following alternate setup.</p>
+<p>Consider a sample <span class="math inline">\(X_i,Y_i\)</span> where all <span class="math inline">\(X_i\)</span> and <span class="math inline">\(Y_i\)</span> are i.i.d. drawn from <span class="math inline">\(\text{Uniform}(-1,1)\)</span>. Then, <span class="math inline">\((X_i,Y_i)\)</span> can represent picking the <span class="math inline">\(i\)</span>_th point uniformly in the square. Then, define the indicator function <span class="math inline">\(1_\bigcirc(x,y)\)</span> which gives <span class="math inline">\(1\)</span> if <span class="math inline">\((x,y)\)</span> is in the circle and <span class="math inline">\(0\)</span> otherwise, i.e.</p>
+<p><span class="math display">\[1_\bigcirc(x,y)=\begin{cases}1 &amp; x^2+y^2\le1^2 \\ 0 &amp; \text{otherwise}\end{cases}\]</span></p>
+<p>Now, from calculus we know the area of a region <span class="math inline">\(D\)</span> can be represented as the integral <span class="math inline">\(\iint_D\text{dxdy}\)</span>, thus we have</p>
+<p><span class="math display">\[\pi=\text{circle area} = \iint_\bigcirc\text{dxdy}=\iint_\square1_\bigcirc(x,y)\text{ dxdy}=\iint_\square\frac{1_\bigcirc(x,y)}{f(x,y)}\cdot f(x,y)\text{ dxdy}=E[h(X,Y)]\]</span></p>
+<p>where <span class="math inline">\(h(x,y)=\frac{1_\bigcirc(x,y)}{f(x,y)}\)</span>, and <span class="math inline">\(f(x,y)\)</span> is the “joint density” of <span class="math inline">\(X,Y\)</span> over the square, which is basically the 2D version of a PDF for a coordinate <span class="math inline">\((X,Y)\)</span>. It’s easy to show for this example <span class="math inline">\(f(x,y) = \frac14\)</span>. Then,</p>
+<p><span class="math display">\[E[h(X,Y)]=E\left[\frac{1_\bigcirc(X,Y)}{1/4}\right]=4\,\cdot E[1_\bigcirc(x,y)]\approx4\,\cdot\,\frac1N\sum_{i=1}^N1_\bigcirc(X_i,Y_i)\]</span></p>
+</details>
+<p><br></p>
+</section>
+<section id="generating-random-variables-and-the-importance-of-randomness" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">8.7</span> Generating random variables and the importance of randomness</h2>
+<p>Crucial to Monte Carlo methods is that we be able to generate random variables. For example, if we want to estimate <span class="math inline">\(\mathbb{E} g(X)\)</span> for some random variable <span class="math inline">\(X\)</span>, then we need to be able to generate copies of the random variable <span class="math inline">\(X\)</span> (and we need to be able to compute <span class="math inline">\(g( \cdot )\)</span>, of course…).</p>
+<p>R has built-in functions that we’ve seen already for generating from the normal, Poisson, geometric, etc., but how does R generate those random numbers? And suppose that we had a particular random variable that we want to generate and R doesn’t have a built-in function for it? What do we do then?</p>
+<p>Well, let’s take it as a given that we know how to generate uniform random variables. Suppose that someone gives us an arbitrary density or an arbitrary CDF. How can we draw samples from it?</p>
+<p>Well, here’s an interesting property. For <em>any</em> random variable <span class="math inline">\(X\)</span> with CDF <span class="math inline">\(F\)</span>, <span class="math inline">\(F(X)\)</span> is distributed as a uniform random variable on <span class="math inline">\([0,1]\)</span>.</p>
+<p>Have a look. The code below generates a bunch of random variables from each of four different distributions, and plots the resulting histograms in the top row of an array of plots. Then, in the second row, we have histograms of <span class="math inline">\(F(X)\)</span>. That is, we generate the random variables and pass them into their cumulative distribution function. In all four cases, the second row look an awful lot like uniform 0-1 random variables!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span>;</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width=</span><span class="dv">16</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random variables.</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>Xnorm <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N);</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>Xchisq <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(N,<span class="dv">10</span>);</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>Xexp <span class="ot">&lt;-</span> <span class="fu">rexp</span>(N,<span class="dv">1</span>);</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>Xbeta <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(N,.<span class="dv">5</span>,.<span class="dv">5</span>);</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot plain old histograms.</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Xnorm); <span class="fu">hist</span>(Xchisq); <span class="fu">hist</span>(Xexp); <span class="fu">hist</span>(Xbeta);</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histograms of putting the variables into their own CDFs.</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pnorm</span>(Xnorm)); <span class="fu">hist</span>(<span class="fu">pchisq</span>(Xchisq,<span class="dv">10</span>));</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pexp</span>(Xexp,<span class="dv">1</span>)); <span class="fu">hist</span>(<span class="fu">pbeta</span>(Xbeta,.<span class="dv">5</span>,.<span class="dv">5</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can use this fact to generate observations from any arbitrary distribution!</p>
+<p>Let <span class="math inline">\(X\)</span> be a random variable with CDF <span class="math inline">\(F_X\)</span>, and suppose that <span class="math inline">\(F_X\)</span> is invertible so that we can sensibly write <span class="math inline">\(F_X^{-1}(t)\)</span>. In later probability courses you’ll see that this trick works even if the CDF doesn’t have an inverse like you’re used to, because we can define a special kind of inverse for CDFs, but that’s for another time.</p>
+<p>Remember that by definition, <span class="math display">\[
+F_X(t) = \Pr[ X \le t ].
+\]</span></p>
+<p>If <span class="math inline">\(U\)</span> is uniform <span class="math inline">\(0\)</span>-<span class="math inline">\(1\)</span>, <span class="math inline">\(U \sim \operatorname{Unif}(0,1)\)</span>, consider <span class="math inline">\(Y = F_X^{-1}(U)\)</span>. We claim that this number has the same distribution as <span class="math inline">\(X\)</span> (i.e., it has CDF <span class="math inline">\(F_X\)</span>). If you’re interested, the next subsection will give a proof of this fact. If you don’t care about seeing why this is true, you can skip it.</p>
+<section id="f_xx-is-uniform-0-1." class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="f_xx-is-uniform-0-1."><span class="header-section-number">8.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</h3>
+<p>Let’s check this fact. Remember, <span class="math inline">\(Y = F_X^{-1}(U)\)</span>, where <span class="math inline">\(U \sim \operatorname{Unif}(0,1)\)</span> and <span class="math inline">\(F_X\)</span> is the CDF of a random variable <span class="math inline">\(X\)</span>, and has an inverse <span class="math inline">\(F_X^{-1}\)</span>.</p>
+<p>We need to verify that the CDF of <span class="math inline">\(Y\)</span> is equal to <span class="math inline">\(F_X\)</span>. That is, <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> have the same distribution.</p>
+<p>So let’s look at the CDF of <span class="math inline">\(Y\)</span>. By definition, <span class="math display">\[
+F_Y(t) = \Pr[ Y \le t] = \Pr[ F_X^{-1}(U) \le t ],
+\]</span></p>
+<p>where the second equality is plugging in the definition of <span class="math inline">\(Y = F_X^{-1}(U)\)</span>. Now, <span class="math inline">\(F_X^{-1}(U) \le t\)</span> if and only if <span class="math inline">\(U \le F_X(t)\)</span> (applying <span class="math inline">\(F_X\)</span> to both sides of the inequality), so <span class="math display">\[
+\Pr[ F_X^{-1}(U) \le t ]
+=
+\Pr[ U \le F_X(t) ].
+\]</span> That is, <span class="math display">\[
+F_Y(t)
+=
+\Pr[ U \le F_X(t) ].
+\]</span></p>
+<p>That right-hand side is just the CDF of a uniform, evaluated at <span class="math inline">\(F_X(t)\)</span>. But the CDF of a uniform is just <span class="math inline">\(\Pr[U \le p] = p\)</span> for all <span class="math inline">\(0 \le p \le 1\)</span>. So we have shown that <span class="math inline">\(F_Y(t) = F_X(t)\)</span>, which is to say, <span class="math inline">\(Y = F_X^{-1}(U)\)</span> has the same distribution as our original random variable <span class="math inline">\(X\)</span>.</p>
+<p>In other words, randomly sampling from the uniform distribution and then applying the inverse of the given CDF function gives the desired target distribution!</p>
+</section>
+<section id="okay-proof-over." class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="okay-proof-over."><span class="header-section-number">8.7.2</span> Okay, proof over.</h3>
+<p>Let’s have another look at that by sampling from a normal. In the process, we’re going to see the last of R’s built-in functions for working with random variables: <code>qnorm</code>.</p>
+<p><code>qnorm</code> takes a number <code>p</code> between zero and one and returns the corresponding <em>quantile</em> of the normal distribution. That is, the number <span class="math inline">\(t\)</span> such that the probability that a normal <span class="math inline">\(X\)</span> is less then or equal to <span class="math inline">\(t\)</span> is equal to <span class="math inline">\(p\)</span>. That’s a clumsy thing to say in English– put more simply, the quantile is just the inverse CDF!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset Rmarkdown print width for readability.</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width=</span><span class="dv">7</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a bunch of Unif(0,1) RVs.</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>unifs <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fl">1e5</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the built-in inverse CDF function using qnorm</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># that is, this is computing F_X^{-1}(U).</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>x.normal.mc <span class="ot">=</span> <span class="fu">qnorm</span>(unifs,<span class="at">mean=</span><span class="dv">1</span>,<span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x.normal.mc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>And let’s compare those with RVs generated directly from a normal in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(<span class="fl">1e5</span>,<span class="at">mean=</span><span class="dv">1</span>,<span class="at">sd=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Another way of looking at this is via a Q-Q plot (no relation to QQ Express on University Ave, sadly), which might be familiar to you from previous classes.</p>
+<p>If you’ve never seen this before, that’s okay– a <a href="https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot">Q-Q plot</a> (short for quantile-quantile plot) plots points <span class="math inline">\((x,y)\)</span> where the <span class="math inline">\(x\)</span> values are the ordered observations from one sample and the <span class="math inline">\(y\)</span> values are the ordered observations of the other sample. Q-Q plots are a good way to compare two distributions of points. We’ll have more to say about them over the course of the semester and you’ll see them plenty more during your later courses.</p>
+<p>For now, it’s enough to know that if two distributions are similar, then their Q-Q plot will look like a straight line.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot our sample quantiles against theoretical quantiles for comparison</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">sort</span>(x.normal.mc),<span class="fu">qnorm</span>(<span class="fu">ppoints</span>(<span class="fl">1e5</span>,<span class="dv">1</span>),<span class="at">mean=</span><span class="dv">1</span>,<span class="at">sd=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The straight line in the Q-Q plot indicates that our two samples are very similar– as they should be!</p>
+</section>
+</section>
+<section id="example" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="example"><span class="header-section-number">8.8</span> Example:</h2>
+<p>Define a random variable <span class="math inline">\(X\)</span> with density <span class="math display">\[
+f_X(x) = \begin{cases}
+      2x &amp;\mbox{ if } 0 \le x \le 1 \\
+      0 &amp;\mbox{ otherwise. }
+      \end{cases}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># here we define a *vectorized* function to evaluate the density of X</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>pdf_x <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ifelse is like a function version of an if else control statement</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We use it here to ensure that pdf_x can operate directly on vectors</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">ifelse</span>(<span class="dv">0</span><span class="sc">&lt;=</span>x <span class="sc">&amp;</span> x<span class="sc">&lt;=</span><span class="dv">1</span> , <span class="dv">2</span><span class="sc">*</span>x , <span class="dv">0</span> ))</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="co"># showing the PDF in a plot</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf_x,<span class="at">from =</span> <span class="sc">-</span>.<span class="dv">5</span>,<span class="at">to =</span> <span class="fl">1.5</span>,<span class="at">n=</span><span class="dv">1001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This means that the cumulative distribution function is <span class="math display">\[F_X(x)=\int_0^xf_X(x)dx=\int_0^x2xdx=x^2\]</span> for <span class="math inline">\(0 \le x \le 1\)</span> (if <span class="math inline">\(x&lt;0\)</span>, <span class="math inline">\(F_X(x)=0\)</span>, and if <span class="math inline">\(x&gt;1\)</span>, <span class="math inline">\(F_X(x)=1\)</span>). Here’s a plot of the CDF</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>cdf_x <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">ifelse</span>(<span class="dv">0</span><span class="sc">&lt;=</span>x <span class="sc">&amp;</span> x<span class="sc">&lt;=</span><span class="dv">1</span> , x<span class="sc">^</span><span class="dv">2</span> , <span class="fu">ifelse</span>(x<span class="sc">&lt;</span><span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>) ))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co"># showing the CDF in a plot</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cdf_x,<span class="at">from =</span> <span class="sc">-</span>.<span class="dv">2</span>,<span class="at">to =</span> <span class="fl">1.2</span>,<span class="at">n=</span><span class="dv">1001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>How can we write a function <code>rx(n)</code> (like <code>rbinom</code>) to sample from this random variable, where <code>n</code> is the size of the sample to be drawn?</p>
+<p>First, we find the inverse CDF, which here is the opposite of <span class="math inline">\(x^2\)</span>, i.e.&nbsp;<span class="math inline">\(\sqrt x\)</span>. Next, we simply need to apply this to a sample from from Uniform(0,1) and this should give us the desired result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>rx <span class="ot">=</span> <span class="cf">function</span>(n) <span class="fu">sqrt</span>(<span class="fu">runif</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can check our work by drawing a sample and plotting it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rx</span>(<span class="fl">1e5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(<span class="fu">rx</span>(<span class="fl">1e5</span>)),<span class="at">main=</span><span class="st">"Plot of sample CDF"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="okay-but-do-i-actually-need-this-inverse-trick" class="level3" data-number="8.8.1">
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">8.8.1</span> Okay, but do I actually need this inverse trick?</h3>
+<p>Okay, full disclosure: lucky for us, it’s pretty rare that we actually need to use this inverse trick, especially in a course at this level. Almost any random variable you will ever need in your life has already been implemented in R (and most other programming languages, for that matter). Still, if you understand this trick, then you understand enough about CDFs and how they work to be dangerous. Also, it’s useful on exam questions…</p>
+</section>
+</section>
+<section id="random-v.-pseudorandom" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="random-v.-pseudorandom"><span class="header-section-number">8.9</span> Random v. pseudorandom</h2>
+<p>One last parting remark, included here because it’s interesting and important to know about, not because it will be on any exams.</p>
+<p>For Monte Carlo, it’s important to have a good source of random numbers whose distribution is precisely known. This is a <em>surprisingly difficult</em> problem. There are ways of generating (as far as modern science can tell), almost perfectly uniformly random numbers, such as measuring <a href="https://www.random.org/randomness/">atmospheric noise</a>, <a href="https://www.techrepublic.com/article/computer-scientists-derive-truly-random-numbers-using-two-source-extractors/">radioactive decay</a>, or even <a href="https://en.wikipedia.org/wiki/Lavarand">lava lamps</a> (<a href="https://www.cloudflare.com/learning/ssl/lava-lamp-encryption/">used by Cloudflare</a>). These sources are generally considered capable of producing the most <em>truly random</em> numbers.</p>
+<p>Your computer (unless it’s attached to a Geiger counter or a wall of lava lamps) is only capable of producing <em>pseudorandom</em> numbers. These are made by running a <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">pseudorandom number generator algorithm</a> which is deterministic, meaning it always produces the same output given the same input. For example, R produces pseudorandom numbers using the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> algorithm. Even though these are deterministic, they are <em>statistically random</em>– for all practical computational purposes, there are no discernible patterns in the output.</p>
+<p>You can see this in action in R by setting the <em>seed</em> of the random number generator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">340</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -0.1573733 -1.1988575 -0.8892049  1.0090607  0.6130407  1.0071506
+ [7]  0.4144321 -1.8579099 -1.3487292  0.5188585</code></pre>
+</div>
+</div>
+<p>Now, if we kept generating normals, we’d continue to see a bunch of normal RVs. But if set the random number generator’s seed back to 340…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">340</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -0.1573733 -1.1988575 -0.8892049  1.0090607  0.6130407  1.0071506
+ [7]  0.4144321 -1.8579099 -1.3487292  0.5188585</code></pre>
+</div>
+</div>
+<p>You’re not imagining it– those are the same ten “random” normals as we saw above.</p>
+<p>Once the RNG seed is set, the “random” numbers that R generates for us aren’t random at all. But someone looking at these random numbers would have a very hard time distinguishing these numbers from truly random numbers. That is what “statistical randomness” means!</p>
+<p>None of this is of tremendous importance for you in the short term. It’s just important to keep in mind that the “random” numbers that we generate on our computers aren’t <em>truly</em> random. There are situations where these patterns actually matter, most notably in security applications. Still, for our purposes, pseudorandom numbers are good enough, and <em>way</em> cheaper than truly random numbers from Geiger counters or atmospheric noise or lava lamps or…</p>
+<p>You can spend a whole career studying random numbers and how to generate them. Unfortunately, this deeply interesting subject is mostly outside the scope of our course. If you’re interested in learning more, though, here are a couple of videos you might enjoy:</p>
+<iframe width="432" height="240" src="https://www.youtube.com/embed/9rIy0xY99a0" frameborder="0" allowfullscreen="" data-external="1">
+</iframe>
+<iframe width="432" height="240" src="https://www.youtube.com/embed/89EX1NF7eHQ" frameborder="0" allowfullscreen="" data-external="1">
+</iframe>
+<p><br><br></p>
+<p>The comprehensive textbook on the topic of generating random variables is <em>Non-Uniform Random Variate Generation</em> by Luc Devroye. Unfortunately, it’s a bit advanced, unless you’ve taken a bunch of calculus already, but something to strive for!</p>
+<section id="review" class="level3" data-number="8.9.1">
+<h3 data-number="8.9.1" class="anchored" data-anchor-id="review"><span class="header-section-number">8.9.1</span> Review:</h3>
+<p>In these notes we covered:</p>
+<ul>
+<li>The basic steps of a Monte Carlo simulation</li>
+<li>Estimating the expected value of a random variable using MC</li>
+<li>Estimating a probability using MC</li>
+<li>Estimating a definite integral using MC</li>
+<li>Why <span class="math inline">\(F_x(X)\sim Uniform(0,1)\)</span> for any r.v. <span class="math inline">\(X\)</span></li>
+<li>Simulating an aribitrary random variable using MC</li>
+<li>Psuedorandom number generation &amp; the use of <code>set.seed()</code> in <code>R</code></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./R02_IndepCondBayes.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./R03_MonteCarloExamples.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

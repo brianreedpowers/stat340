@@ -1,0 +1,33 @@
+---
+title: "Random Variable Summary"
+format: html
+editor: source
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## RV summary
+
+| $X$ | Binomial | Geometric | Poisson | Discrete Uniform | Normal | (Continuous) Uniform | Exponential | 
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Type | Discrete | Discrete | Discrete | Discrete | Continuous | Continuous | Continuous |
+| Parameters | $n$, $p$ | $p$ | $\lambda$ | $a$, $b$ | $\mu$, $\sigma^2$ | $a$, $b$ | $\lambda$ |
+| Description | Number of successes in $n$ independent trials with $p$ probability of success for each trial <br> (Note: Bernoulli is just Binomial with $n\!=\!1$) | Number of failures BEFORE the first success while independently repeating trial with $p$ probability of success | Count of number of occurrences of an event with constant mean rate $\lambda$ that's independent of previous occurrences | $n$-sided fair die | Normal distributions usually arise from CLT (i.e. they're processes that are the sum of many smaller independent processes) | Generalizing $n$-sided fair die to a continuous interval | Waiting time between Poisson events |
+| Outcomes | $0,1,\ldots,n$ | $0,1,\ldots$ | $0,1,\ldots$ | $a,a\!+\!1,\ldots,b$ | $(-\infty,\infty)$ | $[a,b]$ | $[0,\infty)$ |
+| PDF/PMF at $k$ | ${n\choose k}p^k(n-p)^{n-k}$ | $p(1-p)^k$ | $\frac{\lambda^ke^{-\lambda}}{k!}$ | $\frac1{b-(a-1)}$ | $\frac1{\sigma\sqrt{2\pi}}e^{-\frac12\left(\frac{x-\mu}\sigma\right)^2}$ | $\frac1{b-a}$ | $\lambda e^{-\lambda x}$ |
+| $P(X\le k)$ | | $1-(1-p)^{\lfloor k\rfloor+1}$ | | $\frac{\lfloor k\rfloor-(a-1)}{b-(a-1)}$ | | $\frac{x-a}{b-a}$ | $1-e^{-\lambda x}$ |
+| Mean | $np$ | $\frac{1-p}p$ | $\lambda$ | $\frac{a+b}2$ | $\mu$ | $\frac{a+b}2$ | $\frac1\lambda$ |
+| Variance | $np(1-p)$ | $\frac{1-p}{p^2}$ | $\lambda$ | $\frac{(b-(a-1))^2-1}{12}$ | $\sigma^2$ | $\frac{(b-a)^2}{12}$ | $\frac1{\lambda^2}$ |
+| R functions | `dbinom`, `pbinom`, `qbinom`, `rbinom` | `dgeom`, `pgeom`, `qgeom`, `rgeom` | `dpois`, `ppois`, `qpois`, `rpois` | `sample` | `dnorm`, `pnorm`, `qnorm`, `rnorm` | `dunif`, `punif`, `qunif`, `runif` | `dexp`, `pexp`, `qexp`, `rexp` |
+
+
+
+
+
+
+
+
+

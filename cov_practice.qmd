@@ -1,0 +1,500 @@
+---
+title: 'Independence and Conditional Probability Practice'
+format: html
+editor: source
+---
+
+# Practice Problems
+
+## 1. Two Fair Coins
+
+Alex and Bob each flips a fair coin twice. Use "1" to denote heads and "0" to denote tails. Let X be the maximum of the two numbers Alex gets, and let Y be the minimum of the two numbers Bob gets.
+
+<!-- -->
+
+a.  Find and sketch the joint PMF $p_{X,Y} (x, y)$.
+
+b.  Find the marginal PMF $p_X(x)$ and $p_Y (y)$.
+
+c.  Find the conditional PMF $P_{X|Y} (x | y)$. Does $P_{X|Y} (x | y) = P_X(x)$? Why or why not?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+
+x <- 0:1
+px <- c(.25, .75) 
+
+y<- 0:1
+py <- c(.75, .25)
+
+pmf <- px %*% t(py)
+rownames(pmf) <- x
+colnames(pmf) <- y 
+addmargins(pmf)
+```
+
+```{r}
+prop.table(pmf, 2)
+
+```
+
+Each column gives P(X=x\|Y=y) for the two values of y; you can see that they are the same; the reason is because the value of X and Y are independent.
+:::
+
+## 2. Two Fair Dice
+Two fair dice are rolled. Find the joint PMF of $X$ and $Y$ when
+
+<!-- -->
+
+a.  $X$ is the larger value rolled, and $Y$ is the sum of the two values.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+
+die1 <- rep(1:6, 6)
+die2 <- rep(1:6, rep(6,6))
+outcomes <- data.frame(die1, die2)
+outcomes$x <- pmax(die1, die2)
+outcomes$y <- die1+die2
+pmf <- prop.table(table(outcomes$x, outcomes$y))
+pmf
+```
+:::
+
+b.  $X$ is the smaller, and $Y$ is the larger value rolled.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+
+die1 <- rep(1:6, 6)
+die2 <- rep(1:6, rep(6,6))
+outcomes <- data.frame(die1, die2)
+outcomes$x <- pmin(die1, die2)
+outcomes$y <- pmax(die1,die2)
+pmf <- prop.table(table(outcomes$x, outcomes$y))
+pmf
+```
+:::
+
+## 3. Two Normal RVs
+Let X and Y be zero-mean, unit-variance independent Gaussian random variables. Find the value of r for which the probability that $(X, Y )$ falls inside a circle of radius r is 1/2.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+x <- rnorm(10000)
+y <- rnorm(10000)
+
+r <- seq(1.1, 1.2, .005)
+p <- 0
+for (i in 1:length(r)){
+  p[i] <- mean(sqrt(x^2+y^2) <= r[i])
+}
+data.frame(r,p)
+
+
+#X^2 + Y^2 ~ Chisq(2)
+#so the square root of the 50th percentile from that distribution should be the answer
+sqrt(qchisq(.5,2))
+
+```
+:::
+
+## 4. Uniform Random Angle
+Let $\Theta ∼ Uniform[0, 2\pi]$.
+
+<!-- -->
+
+a.  If $X = cos \Theta$, $Y = sin \Theta$. Are $X$ and $Y$ uncorrelated?
+
+::: {.callout-note collapse="true" title="Solution"}
+**Yes, they are uncorrelated, because (x,y) can be any point on the circumference of a circle of radius 1 with uniform likelihood. However, they are not independent. If we know the value of** $Y$ for example, there are only 2 possible values of $X$.
+
+```{r}
+thetas <- runif(10000, 0, 2*pi)
+cor(cos(thetas), sin(thetas))
+```
+:::
+
+b.  If $X = cos(\Theta/4)$, $Y = sin(\Theta/4)$. Are $X$ and $Y$ uncorrelated?
+
+::: {.callout-note collapse="true" title="Solution"}
+**In this case (x,y) can only be found in the first quadrant. In this case they are going to be negatively correlated, since that portion of the unit circle in the first quadrant slopes downwards.**
+
+```{r}
+cor(cos(thetas/4), sin(thetas/4))
+```
+:::
+
+##5. Signal and Noise
+Let $Y = X+N$, where $X$ is the input, $N$ is the noise, and $Y$ is the output of a system. Assume that $X$ and $N$ are independent random variables. It is given that $E[X] = 0$, $Var[X] = \sigma^2_X$, $E[N] = 0$, and $Var[N] = \sigma^2_N$.
+
+<!-- -->
+
+a.  Find the correlation coefficient $\rho$ between the input $X$ and the output $Y$ .
+
+::: {.callout-note collapse="true" title="Solution"}
+$\rho(X,Y)= \dfrac{Cov(X,Y)}{SD(X)SD(Y)}=\dfrac{E(XY)-E(X)E(Y)}{\sigma_X \cdot \sqrt{\sigma^2_X+\sigma^2_N}}$
+
+$E(XY)=E(X^2+XN)=E(X^2)+E(X)E(N)$. Because $E(X)=E(N)=0$ this simplifies to
+
+$\rho(X,y)=\dfrac{E(X^2)}{\sigma_x\sqrt{\sigma^2_X+\sigma^2_N}}$
+
+$Var(X)=E(X^2)-E(X)^2 = E(X^2)$ so we can replace the numerator with $\sigma^2_X$. So
+
+$\rho(X,Y) = \sqrt{\dfrac{\sigma^2_X}{\sigma^2_X+\sigma^2_N}}$
+
+```{r}
+#example: sigma_X = 5, sigma_N=2
+X <- rnorm(10000, 0, 5)
+N <- rnorm(10000, 0, 2)
+cor(X, X+N)
+sqrt(5^2/(5^2+2^2))
+```
+:::
+
+b.  Suppose we estimate the input $X$ by a linear function $g(Y ) = aY$ . Find the value of a that minimizes the mean squared error $E[(X − aY )^2]$.
+
+::: {.callout-note collapse="true" title="Solution"}
+$E[(X-aY)^2]=E[X^2-2aXY+a^2Y^2]=E[X^2]-2aE[XY]+a^2E[Y^2]$
+
+Because $E(Y)=0$, $E[Y^2]=Var(Y)=\sigma_X^2+\sigma_N^2$. We already have that $E(X^2)=\sigma_X^2$ and $E(XY)=\sigma_X^2$. Thus
+
+\$E\[(X-aY)\^2\]=(\sigma\_X\^2+\sigma\_N^2)a^2- 2\sigma\_X\^2a+\sigma\_X\^2 \$
+
+This is a quadratic function in $a$, and the vertex can be found at $-\frac{B}{2A}$ or in this case $a^*=\dfrac{\sigma_X^2}{\sigma_X^2+\sigma_N^2}$
+:::
+
+c.  Express the resulting mean squared error in terms of $\eta = \sigma^2_X/\sigma^2_N$.
+
+::: {.callout-note collapse="true" title="Solution"}
+Plugging this in for $a$ we get
+
+$E[(X-aY)^2]=(\sigma_X^2+\sigma_N^2)\dfrac{\sigma_X^4}{(\sigma_X^2+\sigma_N^2)^2}-2\dfrac{\sigma_X^4}{\sigma_X^2+\sigma_N^2}+\sigma_X^2=\sigma_X^2\left(1-\dfrac{\sigma_X^2}{\sigma_X^2+\sigma_N^2}\right)$
+
+$=\sigma_X^2\left(\dfrac{\sigma_N^2}{\sigma_X^2+\sigma_N^2}\right)=\dfrac{\sigma_X^2}{\eta+1}$
+:::
+
+## 6. Cat Genetics
+The gene that controls white coat color in cats, KIT , is known to be responsible for multiple phenotypes such as deafness and blue eye color. A dominant allele W at one location in the gene has complete penetrance for white coat color; all cats with the W allele have white coats. There is incomplete penetrance for blue eyes and deafness; not all white cats will have blue eyes and not all white cats will be deaf. However, deafness and blue eye color are strongly linked, such that white cats with blue eyes are much more likely to be deaf. The variation in penetrance for eye color and deafness may be due to other genes as well as environmental factors.
+
+-   Suppose that 30% of white cats have one blue eye, while 10% of white cats have two blue eyes.
+
+-   About 73% of white cats with two blue eyes are deaf
+
+-   40% of white cats with one blue eye are deaf.
+
+-   Only 19% of white cats with other eye colors are deaf.
+
+a.  Calculate the prevalence of deafness among white cats.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+n.blue <- c(0,1,2)
+p.n.blue <- c(.60, .30, .10)
+
+p.deaf.given.b <- c(.19, .40, .73) #for 0, 1 ,2 blue eyes
+
+#P(Deafness) = P(0b)*P(deaf|0b) + P(1b)*P(deaf|1b) + P(2b)*P(deaf|2b)
+(p.deaf <- sum(p.n.blue * p.deaf.given.b))
+
+#Check
+nCats <- 10000
+nblue <- sample(n.blue, size=nCats, replace=TRUE, prob=p.n.blue)
+isdeaf <- FALSE
+for(i in 1:nCats){
+  isdeaf[i] <- runif(1) < p.deaf.given.b[nblue[i]+1]
+}
+mean(isdeaf)
+  
+```
+:::
+
+b.  Given that a white cat is deaf, what is the probability that it has two blue eyes?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+#P(2b | deaf) = P(2b)*P(deaf|2b) / p(deaf)
+p.n.blue[3] * p.deaf.given.b[3] / p.deaf
+
+#check
+mean(nblue[isdeaf]==2)
+```
+:::
+
+c.  Suppose that deaf, white cats have an increased chance of being blind, but that the prevalence of blindness differs according to eye color. While deaf, white cats with two blue eyes or two non-blue eyes have probability 0.20 of developing blindness, deaf and white cats with one blue eye have probability 0.40 of developing blindness. White cats that are not deaf have probability 0.10 of developing blindness, regardless of their eye color.
+
+d.  What is the prevalence of blindness among deaf, white cats?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+p.blind.given.nodeaf <- 0.10
+p.blind.given.deaf.and.nblue <- c(0.20, 0.4, 0.2) #for 0, 1, 2 blue eyes
+
+#P(blind & deaf) = P(0b)*P(deaf|0b)*P(blind|deaf&0b)+
+#  P(1b)*P(deaf|1b)*P(blind|deaf&1b)+
+#  P(2b)*P(deaf|2b)*P(blind|deaf&2b)+
+p.blind.and.deaf <- sum(p.n.blue * p.deaf.given.b * p.blind.given.deaf.and.nblue)
+
+#P(blind | deaf ) = P(blind & deaf) / P(deaf)
+(p.blind.given.deaf = p.blind.and.deaf / p.deaf)
+
+#check
+isBlind <- FALSE
+for(i in 1:nCats){
+  if(!isdeaf[i]){
+isBlind[i] <- runif(1) < p.blind.given.nodeaf
+  } else {
+isBlind[i] <- runif(1) < p.blind.given.deaf.and.nblue[nblue[i]+1]
+  }
+}
+#check
+mean(isBlind[isdeaf])
+
+```
+:::
+
+ii. What is the prevalence of blindness among white cats?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+#P(blind) = P(deaf & blind) + P(nondeaf & blind)
+
+#P(nondeaf & blind ) = P(nondeaf) * P(blind | nondeaf)
+p.blind.and.nondeaf <- (1-p.deaf)*p.blind.given.nodeaf
+
+(p.blind <- p.blind.and.deaf + p.blind.and.nondeaf)
+
+#check
+mean(isBlind)
+
+```
+:::
+
+iii. Given that a cat is white and blind, what is the probability that it has two blue eyes?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+#P(2b | blind) = P(2b & blind) / p(blind)
+#numerator: P(2b & blind) = P(2b) * [P(deaf|2b) * p(blind|deaf & 2b) + P(nondeaf|2b) * p(blind|nondeaf & 2b)]
+p.blind.and.2b <- p.n.blue[3] * (p.deaf.given.b[3]*p.blind.given.deaf.and.nblue[3] + 
+ (1-p.deaf.given.b[3]) * p.blind.given.nodeaf)
+
+(p.2b.given.blind = p.blind.and.2b / p.blind)
+
+#check
+mean(nblue[isBlind]==2)
+
+```
+:::
+
+## 7. GSS Survey I
+Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more probable?
+
+<!-- -->
+
+a.  Linda is a banker.
+
+b.  Linda is a banker and considers herself a liberal Democrat.
+
+To answer this question we will use data from the GSS survey found at `https://github.com/AllenDowney/ThinkBayes2/raw/master/data/gss_bayes.csv`.
+
+The code for "Banking and related activities" in the `indus10` variable is 6870. The values of the column `sex` are encoded like this:
+
+1: Male, 2: Female
+
+The values of `polviews` are on a seven-point scale:
+
+```         
+1 Extremely liberal
+2 Liberal
+3 Slightly liberal
+4 Moderate
+5 Slightly conservative
+6 Conservative
+7 Extremely conservative
+```
+
+Define "liberal" as anyone whose political views are 3 or below. The values of `partyid` are encoded:
+
+```         
+0 Strong democrat
+1 Not strong democrat
+2 Independent, near democrat
+3 Independent
+4 Independent, near republican
+5 Not strong republican
+6 Strong republican
+7 Other party
+```
+
+You need to compute:
+
+a.  The probability that Linda is a female banker,
+b.  The probability that Linda is a liberal female banker, and
+c.  The probability that Linda is a liberal female banker and a Democrat.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+gss <- read.csv("https://github.com/AllenDowney/ThinkBayes2/raw/master/data/gss_bayes.csv")
+#banker : indus10==6870
+#female : sex == 2
+#liberal: polviews <= 3
+#democrat: partyid <= 2
+
+#In my reading, I am interpreteing that 'Linda is female' is given from the context;
+
+#P(banker | female) 
+mean(gss[gss$sex==2,]$indus10==6870)
+
+#P(liberal banker | female)
+mean(gss[gss$sex==2 & gss$polviews <=3,]$indus10==6870)
+
+#P(liberal Dem banker | female)
+mean(gss[gss$sex==2 & gss$polviews <=3 & gss$partyid <= 1,]$indus10==6870)
+```
+:::
+
+##8. GSS Survey II
+Compute the following probabilities:
+
+<!-- -->
+
+a.  What is the probability that a respondent is liberal, given that they are a Democrat?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss[gss$partyid<=1,]$polviews<=3)
+```
+:::
+
+b.  What is the probability that a respondent is a Democrat, given that they are liberal?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss[gss$polviews<=3,]$partyid<=1)
+```
+:::
+
+## 9. GSS Survey III
+There's a [famous quote](https://quoteinvestigator.com/2014/02/24/heart-head/) about young people, old people, liberals, and conservatives that goes something like:
+
+> If you are not a liberal at 25, you have no heart. If you are not a conservative at 35, you have no brain.
+
+Whether you agree with this proposition or not, it suggests some probabilities we can compute as an exercise. Rather than use the specific ages 25 and 35, let's define `young` and `old` as under 30 or over 65. For these thresholds, I chose round numbers near the 20th and 80th percentiles. Depending on your age, you may or may not agree with these definitions of "young" and "old".
+
+I'll define `conservative` as someone whose political views are "Conservative", "Slightly Conservative", or "Extremely Conservative".
+
+Compute the following probabilities. For each statement, think about whether it is expressing a conjunction, a conditional probability, or both. For the conditional probabilities, be careful about the order of the arguments. If your answer to the last question is greater than 30%, you have it backwards!
+
+a.  What is the probability that a randomly chosen respondent is a young liberal?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss$age <30 & gss$polviews <=3)
+```
+:::
+
+b.  What is the probability that a young person is liberal?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss[gss$age <30,]$polviews <=3)
+```
+:::
+
+c.  What fraction of respondents are old conservatives?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss$age >65 & gss$polviews >= 5)
+```
+:::
+
+d.  What fraction of conservatives are old?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean(gss[gss$polviews >=5,]$age >65)
+```
+:::
+
+## 10. Two Child Paradox
+Suppose you meet someone and learn that they have two children. You ask if either child is a girl and they say yes. What is the probability that both children are girls? (*Hint: Start with four equally likely hypotheses.*)
+
+::: {.callout-note collapse="true" title="Solution"}
+Before we know anything about their two kids, the number of girls $X$ they have could be 0, 1 or 2. Simplifying the scenario with the 'equally likely hypothesis' means that we assume each kid has a 50% chance of being a girl, independently. Thus the probabilities are 0.25, 0.5 and 0.25 respectively.
+
+If we learn that at least one of the kids is a girl, that tells us that the first possibility, that $x=0$ is not possible. Thus $P(X=2 | X>0) = .\dfrac{25}{.5+.25}= \frac{1}{3}$\*\*
+:::
+
+## 11. Monty Hall
+There are many variations of the [Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem). For example, suppose Monty always chooses Door 2 if he can, and only chooses Door 3 if he has to (because the car is behind Door 2).
+
+<!-- -->
+
+a.  If you choose Door 1 and Monty opens Door 2, what is the probability the car is behind Door 3?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+#3 equally likely possibilities:
+#C1  -> Monty chooses Door 2
+#C2  -> Monty cannot choose Door 2, chooses Door 3
+#C3  -> Monty chooses Door 2
+
+#So if Monty chooses Door 2, either C1 or C3 must be the case, each equally likely. 
+#Thus P(C3 | Monty chooses 2) = .50
+```
+:::
+
+b.  If you choose Door 1 and Monty opens Door 3, what is the probability the car is behind Door 2?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+#If he chose Door 3, that means that it must be the case that the car is behind 
+#door 2; he would *ONLY* choose door 3 in that case.
+
+#Thus P(C2 | Monty chooses 3) = 1.0
+
+```
+:::
+
+## 12. M&Ms
+M&M's are small candy-coated chocolates that come in a variety of colors. Mars, Inc., which makes M&M's, changes the mixture of colors from time to time. In 1995, they introduced blue M&M's.
+
+-   In 1994, the color mix in a bag of plain M&M's was 30% Brown, 20% Yellow, 20% Red, 10% Green, 10% Orange, 10% Tan.
+
+-   In 1996, it was 24% Blue , 20% Green, 16% Orange, 14% Yellow, 13% Red, 13% Brown.
+
+Suppose a friend of mine has two bags of M&M's, and he tells me that one is from 1994 and one from 1996. He won't tell me which is which, but he gives me one M&M from each bag. One is yellow and one is green. What is the probability that the yellow one came from the 1994 bag?
+
+(*Hint: The trick to this question is to define the hypotheses and the data carefully.*)
+
+::: {.callout-note collapse="true" title="Solution"}
+$P(G|94) = .10, P(G|96) = .20$ $P(Y|94) = .20, P(Y|96) = .14$ $P(94)=P(96)=.50$ assuming equally likely. It's important to realize only one of two situations could have occurred:
+
+-   Situation 1: A G was chosen from the 94 bag and a Y was chosen from the 96 bag
+-   Situation 2: A Y was chosen from the 94 bag and a G was chosen from the 96 bag.
+
+The corresponding probabilities are $(.10)(.14)=.014$ and $(.20)(.20)=.04)$. The question could be stated: What is the probability that Sit.1 occurred given that either Sit1 or Sit2 occured.
+
+The likelihood is $.014 / (.014+.04) = .2592593$
+:::
+
+## 13. Two Coins
+Suppose you have two coins in a box. One is a normal coin with heads on one side and tails on the other, and one is a trick coin with heads on both sides. You choose a coin at random and see that one of the sides is heads. What is the probability that you chose the trick coin?
+
+::: {.callout-note collapse="true" title="Solution"}
+This is actually similar to the "family with two girls" problem. The equally likely coins are "HT" and "HH".
+
+$P(Heads | HH) = 1$ $P(Heads | TH) = .5$
+
+Bayes Theorem tells us that $P(HH | Heads) = \dfrac{P(HH)*P(Heads|HH)}{P(HH)P(Heads|HH)+P(TH)P(Heads|TH)}=\dfrac{.5}{.5+.25}=\frac23$
+
+Seems counter intuitive! If I pick a random coin from the two, you already know that one of the sides is a head without looking at it. Somehow then, when you look at just one side of the coin, seeing a H makes you 67% sure that it is the trick coin. The reason is that seeing the head side is like flipping it once and getting a H. That is less likely to occur with the fair coin, hence this outcome lends evidence to the "trick coin" hypothesis.
+:::
+
+
+# Beyond STAT 340
+
+These problems are excellent practice but they are beyond the material we cover in STAT 340.
+

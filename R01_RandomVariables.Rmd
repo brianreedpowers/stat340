@@ -1,0 +1,437 @@
+---
+title: "Random Variables R Examples"
+author: "Brian Powers"
+date: "2024-09-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Bernoulli
+
+Like the flip of a fair or unfair coin. X=1 if the coin comes up heads, 0 on tails.
+
+```{r}
+#Parameters
+p <- .3 # the probability of a success
+
+#Generating 10 random values
+rbinom(10, size=1, prob=p)
+```
+Expected value is $$\sum_k k\cdot Pr[X=k]$$
+```{r}
+#All possible values
+k <- 0:1
+#Associated probabilities
+Pr <- dbinom(k, size=1, prob=p)
+#expectation
+sum(k*Pr)
+```
+The expected value is $p$ and the variance is $p(1-p)$
+```{r}
+bernoulli.sim <- rbinom(100, size=1, prob=p)
+
+# Expectation
+p
+# from sample
+mean(bernoulli.sim)
+
+# Variance
+p*(1-p)
+#from sample
+var(bernoulli.sim)
+```
+
+
+## Binomial
+
+Like flipping a fair (or unfair) coin $n$ times, counting the number of heads.
+```{r}
+#Parameters
+n <- 8  #the number of flips / attempts
+p <- .4 #the probability of success
+
+#Generate 10 random values
+rbinom(10, size=n, prob=p)
+
+#Calculate P(X=3)
+dbinom(x=3, size=n, prob=p)
+
+#Calculate all probabilities
+dbinom(x=0:8, size=n, prob=p)
+
+#Calculate P(X <= 3)
+pbinom(q=3, size=n, prob=p)
+```
+Expected value is $$\sum_k k\cdot Pr[X=k]$$
+```{r}
+#All possible values
+k <- 0:n
+#Associated probabilities
+Pr <- dbinom(k, size=n, prob=p)
+#expectation
+sum(k*Pr)
+n*p
+```
+
+The probability mass function
+```{r}
+barplot(Pr, names=k, main="Probability Mass Function of Binomial(8,.4)")
+```
+
+The cumulative distribution function
+```{r}
+x <- 0:8
+cdfx <- pbinom(x, size=n,prob=.4)
+plot(x, cdfx, type="s", main="Cumulative Distribution Function of Binomial(8,.4)", ylim=c(0,1))
+```
+
+The expected value is $np$ and the variance is $np(1-p)$
+```{r}
+binomial.sim <- rbinom(10000, size=n, prob=p)
+
+# Expectation
+n*p
+# from sample
+mean(binomial.sim)
+
+# Variance
+n*p*(1-p)
+#from sample
+var(binomial.sim)
+```
+
+
+## Geometric
+
+Counting how many tails before the first head; the number of failures before the first success (independent trials, probability of success remains constant)
+```{r}
+#Parameters
+p <- .4 #The probability of success on each trial
+
+#Generate 10 random values
+rgeom(10, prob=p)
+```
+
+The probability mass function.... only going out to 20, but the support is infinite!
+```{r}
+k <- 0:20
+Pr <- dgeom(k, prob=p)
+barplot(Pr, names=k, main="Probability Mass Function of Geom(.4)")
+```
+
+The cumulative distribution function
+```{r}
+cdfx <- cumsum(Pr)
+
+# if you want it to look really proper
+n <- length(k)
+plot(x = NA, y = NA, pch = NA, 
+     xlim = c(0, max(k)), 
+     ylim = c(0, 1),
+     ylab = "Cumulative Probability",
+     main = "Cumulative Distribution Function of Geom(.4)")
+points(x = k[-n], y = cdfx[-n], pch=19)
+points(x = k[-1], y = cdfx[-n], pch=1)
+for(i in 1:(n-1)) points(x=k[i+0:1], y=cdfx[c(i,i)], type="l")
+```
+
+
+But it's probably faster to just use a step type plot. 
+The vertical lines are not technically part of the plot though.
+```{r}
+plot(k, cdfx, type="s", main="Cumulative Distribution Function of Geom(.4)", ylim=c(0,1))
+points(k, cdfx, pch = 16, col = "blue")
+```
+
+You can get the cumulative probabilities from the pgeom function
+```{r}
+plot(k, pgeom(k, prob=.4), type="s", main="Cumulative Distribution Function of Geom(.4)", ylim=c(0,1))
+points(k, cdfx, pch = 16, col = "blue")
+```
+The expected value is $\dfrac{1-p}{p}$ and the variance is $\dfrac{1-p}{p^2}$
+```{r}
+geom.sim <- rgeom(10000, prob=p)
+
+# Expectation
+(1-p)/p
+# from sample
+mean(geom.sim)
+
+# Variance
+(1-p)/(p^2)
+#from sample
+var(geom.sim)
+```
+
+
+
+## Poisson
+Like the number of times something occurs during a fixed time window
+
+```{r}
+#Parameters
+l <- 10.5 #The rate parameter, average occurrences per unit time
+     #It is lambda, but I'll call it "l"
+
+#Generate 10 random values
+rpois(10, lambda=l)
+```
+PMF and CDF
+```{r}
+par(mfrow=c(1,2))
+k <- 0:20
+Pr <- dpois(k,l)
+
+barplot(Pr, names=k, main="PMF of Pois(3)")
+plot(k, ppois(k, l), type="s", main="CDF of Pois(3)", ylim=c(0,1))
+points(k, ppois(k, l), pch = 16, col = "blue")
+```
+The expected value and variance are both is $\lambda$
+```{r}
+pois.sim <- rpois(10000, lambda=l)
+
+# Expectation & Variance
+l
+# mean from sample
+mean(pois.sim)
+#variance from sample
+var(pois.sim)
+```
+
+## Uniform (Discrete)
+
+Like rolling a fair die
+```{r}
+#Parameters
+a <- 1 #lower bound, inclusive
+b <- 6 #upper bound, inclusive
+
+#Generate 10 random values
+sample(a:b, 10, replace=TRUE) #replace=TRUE is important
+```
+
+The PMF and CDF
+```{r}
+par(mfrow=c(1,2))
+k <- a:b
+Pr <- rep(1/(b-a+1), length(k))
+
+barplot(Pr, names=k, main="PMF of Unif(1,6)")
+plot(k, cumsum(Pr), type="s", main="CDF of Unif(1,6)", ylim=c(0,1))
+points(k, cumsum(Pr), pch = 16, col = "blue")
+```
+
+## Continuous Uniform
+The backbone of random variable generation - for example a random decimal between 0 and 1
+```{r}
+# Parameters
+a <- 0 #lower bound
+b <- 1 #upper bound
+
+#generate 10 random values
+runif(10, min=a, max=b)
+
+```
+
+Probability density function and cumulative distribution function
+```{r}
+
+par(mfrow=c(1,2))
+x <- seq(a,b, length.out=100)
+
+plot(x, dunif(x, a, b), type="l", main="PDF of Unif(0,1)", ylab="density", ylim=c(0,1))
+plot(x, punif(x, a, b), type="l", main="CDF of Unif(0,1)", ylab="F(x)")
+
+```
+The expected value is $\frac{a+b}{2}$ and the variance is $\frac{(b-a)^2}{12}$
+```{r}
+unif.sim <- runif(10000, min=a, max=b)
+
+# Expectation
+(a+b)/2
+# mean from sample
+mean(unif.sim)
+
+#variance
+(b-a)^2/12
+#variance from sample
+var(unif.sim)
+```
+
+
+
+## Normal / Gaussian
+
+Many things in the world are normally distributed - useful for modeling when the distribution is symmetric and probability is densest in the middle with decreasing tails.
+
+```{r}
+#Parameters
+mu <- 5 #the mean/location of the distribution
+sigma2 <- 4 #the variance is in squared units!!
+sigma <- sqrt(sigma2) #sigma is the standard deviation, not the variance
+
+#generate 10 random values
+rnorm(10, mean=mu, sd=sigma)
+```
+
+Probability density function and cumulative distribution function
+```{r}
+
+par(mfrow=c(1,2))
+x <- seq(mu-3*sigma, mu+3*sigma, length.out=100)
+
+plot(x, dnorm(x, mu, sigma), type="l", main="PDF of Normal(5, 2^2)", ylab="density")
+plot(x, pnorm(x, mu, sigma), type="l", main="CDF of Normal(5, 2^2)", ylab="F(x)")
+
+```
+Approximate the expected value numerically
+
+$$\int_{-\infty}^\infty t f(t) dt$$
+
+
+```{r}
+mu <- 15
+sigma <- 4
+t <- seq(mu-4*sigma, mu+4*sigma, length.out=1000)
+d <- dnorm(t, mean=mu, sd=sigma)
+
+w <- t[2]-t[1]
+
+head(t)
+head(d)
+
+#Expected value
+sum( t * (d*w))
+
+```
+
+
+The expected value is $\mu$ and the variance is $\sigma^2$
+```{r}
+normal.sim <- rnorm(10000, mean=mu, sd=sigma)
+
+# Expectation
+mu
+# mean from sample
+mean(normal.sim)
+
+#variance
+sigma2
+#variance from sample
+var(normal.sim)
+```
+
+
+### Simulate a Normal probability
+```{r}
+normal.sim <- rnorm(1000000)
+
+x <- .25 <= normal.sim & normal.sim <=.75
+
+sum(x)/1000000
+
+pnorm(.75)-pnorm(.25)
+
+```
+
+
+Let's consider a geometric that counts the number of days before a electronic component malfunctions
+Suppose that every day there's a 25% chance of malfunction.
+```{r}
+p=.25
+random.geom <- rgeom(10000, prob=p)
+hist(random.geom, breaks=25)
+```
+What if more than one malfunction could happen per day? Like we replace the part immediately when it malfunctions. We could divide the day into $N$ parts and use a geometric for each part of the day.
+If $X$=k, then the proportion of the day it took to break is $k/N$
+Let's start with $N$=2 and go up from there
+```{r}
+par (mfrow=c(2,2))
+N <- 2
+geom.sim <- rgeom(10000, p/N) / N
+hist(geom.sim, breaks=100)
+mean(geom.sim)
+
+N <- 6
+geom.sim <- rgeom(10000, p/N) / N
+hist(geom.sim, breaks=100)
+mean(geom.sim)
+
+N <- 24
+geom.sim <- rgeom(10000, p/N) / N
+hist(geom.sim, breaks=100)
+mean(geom.sim)
+
+N <- 100
+geom.sim <- rgeom(10000, p/N) / N
+hist(geom.sim, breaks=100)
+mean(geom.sim)
+```
+
+
+
+## Exponential
+For modeling waiting times - the length of time until an event occurs. It's a continuous version of a geometric, if you start looking at smaller and smaller time units (e.g. days -> hours -> minutes -> seconds)
+```{r}
+#Parameters
+l <- 3 #The rate parameter, the average number of occurrences per unit time
+
+#Generate 10 random values
+rexp(10, rate=l)
+```
+
+Probability density function and cumulative distribution function
+```{r}
+par(mfrow=c(1,2))
+x <- seq(0, 6/l, length.out=100)
+
+plot(x, dexp(x, l), type="l", main="PDF of Exp(3)", ylab="density")
+plot(x, pexp(x, l), type="l", main="CDF of Exp(3)", ylab="F(x)")
+```
+The expected value is $\dfrac{1}{\lambda}$ and the variance is $\frac{1}{\lambda^2}$
+```{r}
+exp.sim <- rexp(10000, l)
+
+# Expectation
+1/l
+# mean from sample
+mean(exp.sim)
+
+#variance
+1/l^2
+#variance from sample
+var(exp.sim)
+```
+
+
+### Relationship between an exponential and a Poisson
+lambda = 10
+```{r}
+simulated.exp <- rexp(10000, rate=10)
+hist(simulated.exp)
+head(simulated.exp)
+
+
+converted.poisson <- as.vector(table(floor(cumsum(simulated.exp))))
+par(mfrow=c(1,2))
+    hist(converted.poisson)
+    hist(rpois(500, lambda=10))
+
+```
+
+
+
+
+## Simulate stock prices
+
+Here's an example of how you could combine normally distributed random variables for a model of daily stock prices. This is an example of a *random walk*.
+```{r}
+deltas <- rnorm(30)
+X <- 50 + c(0,cumsum(deltas))
+
+plot(x=1:31, y=X, type="l")
+
+```

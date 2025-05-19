@@ -1,0 +1,132 @@
+---
+title: "Independence, Conditional Probability and Bayes Theorem R Examples"
+author: "Brian Powers"
+date: "2024-09-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Example
+
+Two random variables that are Not independent, but have a 0 covariance
+
+```{r}
+X = seq(-1,1,.001)
+Y = X^2
+plot(X,Y)
+abline(h=mean(Y))
+abline(v=mean(X))
+cov(X,Y)
+cor(X,Y)
+```
+```{r}
+#A estimate of the pdf of Y
+plot(density(Y), xlim=c(0,1))
+hist(Y)
+
+```
+
+## Two normally distributed random variables
+```{r}
+# X1 ~ Normal(1,1^2)
+x1 <- rnorm(10000, mean=1, sd=1)
+
+#X2 ~ Normal(2, 2^2)
+x2 <- rnorm(10000, mean=2, sd=2)
+
+par(mfrow=c(1,2))
+hist(x1)
+hist(x2)
+
+```
+
+Let's check the variances individually
+```{r}
+var(x1)
+var(x2)
+```
+
+In theory, Var(X1+X2) = Var(X1) + Var(X2)
+We check with sample variance
+```{r}
+var(x1+x2)
+var(x1)+var(x2)
+var(x1)+var(x2)+2*cov(x1,x2)
+
+```
+
+
+Look at the plot of these two variables
+```{r}
+mean(x1+x2)
+mean(x1)+mean(x2)
+
+plot(x1,x2)
+hist(x1+x2, breaks=50)
+```
+
+## Uniform + uniform
+```{r}
+X <- runif(100000, 0, 1)
+hist(X)
+
+Y <- runif(100000, 0, 1)
+hist(Y)
+
+hist(X+Y)
+
+
+
+
+Z <- runif(100000, 0, 1)
+hist(X+Y+Z, breaks=100)
+
+
+```
+
+
+
+## Conditional Probability
+Example:
+X: roll a 6 sided die
+Y: flip a coin x times, count the number of heads
+
+We could ask the question: What is the covariance ?!?!?
+
+Suppose we were to simulate doing this thing many many times. Each outcome from the simulation is representing one equally likely outcome, right?
+
+This is the idea of Monte Carlo sampling - which we'll look at next week
+
+```{r}
+X <- sample(6, size=10000, replace=TRUE)
+Y <- rbinom(10000, size=X, prob=.5)
+cor(X,Y)
+plot(jitter(Y)~jitter(X), col=rgb(0,0,0,.01), pch=16)
+```
+
+
+## Disease Screening
+
+Say that the flu is currently infecting 3% of the population (prevelance). A person can take a flu test that has a sensitivity of 99% (i.e. if they have the virus, there is a 99% chance the test will give a positive result) and a specificity of 95% (i.e. if they don't have the virus, there's a 95% chance the test gives them a negative result). 
+
+The sensitivity is also known as the True positive rate (TPR). The complement of specificity is the False Positive Rate (FPR), and in this case it is 1-.95=.05 or 5%. 
+
+So a person takes the test and gets a positive test result, what is the probability that they actually have the flu?
+
+```{r}
+p.flu <- .03; p.noflu <- 1-p.flu
+p.pos.given.flu <- .99; p.neg.given.flu <- 1-p.pos.given.flu
+p.neg.given.noflu <- .95; p.pos.given.noflu <- 1-p.neg.given.noflu
+
+# P(flu | pos) = P(flu)*P(pos|flu)/ [P(flu)*P(pos|flu) + P(noflu)*P(pos|noflu) ]
+p.flu*p.pos.given.flu / (p.flu*p.pos.given.flu + p.noflu*p.pos.given.noflu)
+```
+Surprising? Well, if we didn't do the test we'd guess a 5% chance of flu. Now that the test results are in that estimation increases by more than 7x to about 38%. Why isn't it higher?
+There is a high chance of false positives muddying the waters.
+
+
+
+

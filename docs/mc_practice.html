@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 11&nbsp; Monte Carlo Practice</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./R_MonteCarlo_Battleship.html" rel="next">
+<link href="./R03_MonteCarloExamples.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mc_practice.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">STAT 340 Index</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">**Sampling**</span></span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc_practice.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">**Testing**</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">**Estimation**</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">**Prediction**</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">12</span> Practice Problems</a>
+  <ul class="collapse">
+  <li><a href="#integration-by-darts" id="toc-integration-by-darts" class="nav-link" data-scroll-target="#integration-by-darts"><span class="header-section-number">12.1</span> Integration by darts</a></li>
+  <li><a href="#eulers-constant" id="toc-eulers-constant" class="nav-link" data-scroll-target="#eulers-constant"><span class="header-section-number">12.2</span> Euler’s Constant</a></li>
+  <li><a href="#dice-probability" id="toc-dice-probability" class="nav-link" data-scroll-target="#dice-probability"><span class="header-section-number">12.3</span> Dice Probability</a></li>
+  <li><a href="#sales-and-price" id="toc-sales-and-price" class="nav-link" data-scroll-target="#sales-and-price"><span class="header-section-number">12.4</span> Sales and Price</a></li>
+  <li><a href="#black-scholes-option-pricing" id="toc-black-scholes-option-pricing" class="nav-link" data-scroll-target="#black-scholes-option-pricing"><span class="header-section-number">12.5</span> Black-Scholes Option Pricing</a></li>
+  <li><a href="#average-distance-in-a-sphere" id="toc-average-distance-in-a-sphere" class="nav-link" data-scroll-target="#average-distance-in-a-sphere"><span class="header-section-number">12.6</span> Average Distance in a sphere</a></li>
+  <li><a href="#average-distance-in-a-square" id="toc-average-distance-in-a-square" class="nav-link" data-scroll-target="#average-distance-in-a-square"><span class="header-section-number">12.7</span> Average distance in a square</a></li>
+  <li><a href="#average-distance-in-a-simplex" id="toc-average-distance-in-a-simplex" class="nav-link" data-scroll-target="#average-distance-in-a-simplex"><span class="header-section-number">12.8</span> Average distance in a simplex</a></li>
+  <li><a href="#completion-time" id="toc-completion-time" class="nav-link" data-scroll-target="#completion-time"><span class="header-section-number">12.9</span> Completion Time</a></li>
+  <li><a href="#fitting-blocks" id="toc-fitting-blocks" class="nav-link" data-scroll-target="#fitting-blocks"><span class="header-section-number">12.10</span> Fitting Blocks</a></li>
+  <li><a href="#roomba-zoomba" id="toc-roomba-zoomba" class="nav-link" data-scroll-target="#roomba-zoomba"><span class="header-section-number">12.11</span> Roomba Zoomba</a></li>
+  <li><a href="#chutes-and-ladders" id="toc-chutes-and-ladders" class="nav-link" data-scroll-target="#chutes-and-ladders"><span class="header-section-number">12.12</span> Chutes and Ladders</a></li>
+  <li><a href="#battleship" id="toc-battleship" class="nav-link" data-scroll-target="#battleship"><span class="header-section-number">12.13</span> Battleship</a></li>
+  <li><a href="#infection-spread-simulation-source" id="toc-infection-spread-simulation-source" class="nav-link" data-scroll-target="#infection-spread-simulation-source"><span class="header-section-number">12.14</span> Infection spread simulation source</a></li>
+  <li><a href="#stock-price" id="toc-stock-price" class="nav-link" data-scroll-target="#stock-price"><span class="header-section-number">12.15</span> Stock Price</a></li>
+  <li><a href="#patent-pending" id="toc-patent-pending" class="nav-link" data-scroll-target="#patent-pending"><span class="header-section-number">12.16</span> Patent Pending</a></li>
+  <li><a href="#social-network" id="toc-social-network" class="nav-link" data-scroll-target="#social-network"><span class="header-section-number">12.17</span> Social Network</a></li>
+  <li><a href="#other-examples" id="toc-other-examples" class="nav-link" data-scroll-target="#other-examples"><span class="header-section-number">12.18</span> Other examples</a></li>
+  </ul></li>
+  <li><a href="#monte-carlo-used-in-research" id="toc-monte-carlo-used-in-research" class="nav-link" data-scroll-target="#monte-carlo-used-in-research"><span class="header-section-number">13</span> Monte Carlo used in Research</a></li>
+  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">14</span> Beyond STAT 340</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practice-problems" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Practice Problems</h1>
+<section id="integration-by-darts" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="integration-by-darts"><span class="header-section-number">12.1</span> Integration by darts</h2>
+<p>Estimate <span class="math inline">\(\int_0^3 (x^3-3x^2+x+3)\,dx\)</span>. To do so, use the fact that <span class="math display">\[\int_a^b g(x)dx = \int_a^b \frac{g(x)}{f(x)}f(x)dx\]</span>. Let <span class="math inline">\(f(x)\)</span> be the density function for a uniform random variable over <span class="math inline">\([0,3]\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>f<span class="ot">&lt;-</span><span class="cf">function</span>(x){<span class="fu">return</span>(x<span class="sc">^</span><span class="dv">3-3</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span>x<span class="sc">+</span><span class="dv">3</span>)}</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">3</span>,.<span class="dv">1</span>), <span class="fu">f</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">3</span>,.<span class="dv">1</span>)), <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">7</span>), <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Solution</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#We can define a uniform density function between 0 and 3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#call this g(x)=dunif(x,0,3)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#The integral trick says that int_0^7 f(x)dx = E(f(x)/g(x)).</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(NMC, <span class="dv">0</span>,<span class="dv">3</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">f</span>(x)<span class="sc">/</span><span class="fu">dunif</span>(x,<span class="dv">0</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.752893</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="eulers-constant" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="eulers-constant"><span class="header-section-number">12.2</span> Euler’s Constant</h2>
+<p>Suppose <span class="math inline">\(X_1, X_2,\ldots, X_n \sim Unif(0,1)\)</span>. Let <span class="math inline">\(N\)</span> be the lowest index such that <span class="math inline">\(X_1+X_2+\cdots+X_N &gt; 1\)</span>. <span class="math inline">\(\mathbb{E}(N)=e\)</span>. Use this fact to estimate Euler’s constant <span class="math inline">\(e\)</span> using Monte Carlo simulation.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Ns <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  sum <span class="ot">&lt;-</span> <span class="dv">0</span>;   N <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(sum <span class="sc">&lt;</span> <span class="dv">1</span>){</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    sum <span class="ot">&lt;-</span> sum <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    N <span class="ot">&lt;-</span> N<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  Ns[i] <span class="ot">=</span> N</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Ns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.687</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.718282</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="dice-probability" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="dice-probability"><span class="header-section-number">12.3</span> Dice Probability</h2>
+<p>I roll 3 six sided dice. What is the probability that the sum of the dice is at least 12? Estimate the answer with Monte Carlo simulation.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">sample</span>(<span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace=</span><span class="cn">TRUE</span>))<span class="sc">&gt;=</span><span class="dv">12</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.35</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sales-and-price" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sales-and-price"><span class="header-section-number">12.4</span> Sales and Price</h2>
+<p>Based on your market research, you believe that there are <strong>equal chances</strong> that the market will be <strong>Slow</strong>, <strong>OK</strong>, or <strong>Hot</strong>.</p>
+<ul>
+<li>In the <strong>“Slow market”</strong> scenario, you expect to sell 50,000 units at an average selling price of $11.00 per unit.</li>
+<li>In the <strong>“OK market”</strong> scenario, you expect to sell 75,000 units, but you’ll likely realize a lower average selling price of $10.00 per unit.</li>
+<li>In the <strong>“Hot market”</strong> scenario, you expect to sell 100,000 units, but this will bring in competitors who will drive down the average selling price to $8.00 per unit.</li>
+</ul>
+<p>Another uncertain variable is Unit Cost.B Your firm’s production manager advises you that unit costs may be anywhere from $5.50 to $7.50. Use a Monte Carlo simulation to estimate the expected net profit (revenue - cost).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>profit <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">8</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>quantity <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50000</span>, <span class="dv">75000</span>, <span class="dv">100000</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  market <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  unitCost <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="fl">5.5</span>, <span class="fl">7.5</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  profit[i] <span class="ot">&lt;-</span> quantity[market]<span class="sc">*</span>(prices[market]<span class="sc">-</span>unitCost)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 205536.9</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="black-scholes-option-pricing" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="black-scholes-option-pricing"><span class="header-section-number">12.5</span> Black-Scholes Option Pricing</h2>
+<p>We start with the Black-Scholes-Merton formula (<span class="math inline">\(1973\)</span>) for the pricing of European call options on an underlying (e.g.&nbsp;stocks and indexes) without dividends:</p>
+<p><span class="math inline">\(\begin{eqnarray*} C(S_t, K, t, T, r, \sigma) &amp;=&amp; S_t\cdot N(d_1) - e^{-r(T-t)}\cdot K \cdot N(d_2)\newline\newline N(d) &amp;=&amp; \frac{1}{\sqrt{2\pi}}\int_{-\infty}^d e^{-\frac{1}{2}x^2}dx \newline\newline d_1 &amp;=&amp; \frac{\log\frac{S_t}{K} + (T-t)\left(r + \frac{\sigma^2}{2}\right)}{\sigma\sqrt{T-t}}\newline\newline d_2 &amp;=&amp; \frac{\log\frac{S_t}{K} + (T-t)\left(r - \frac{\sigma^2}{2}\right)}{\sigma\sqrt{T-t}}. \end{eqnarray*}\)</span></p>
+<p>In the equations above <span class="math inline">\(S_t\)</span> is the price of the underlying at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\sigma\)</span> is the constant volatility (standard deviation of returns) of the underlying, <span class="math inline">\(K\)</span> is the strike price of the option, <span class="math inline">\(T\)</span> is the maturity date of the option, <span class="math inline">\(r\)</span> is the risk-free short rate.</p>
+<p>The Black-Scholes-Merton (<span class="math inline">\(1973\)</span>) stochastic differential equation is given by <span class="math inline">\(dS_t = rS_t dt + \sigma S_t dZ_t,\)</span> where $Z(t)$ is the random component of the model (a Brownian motion). In this model, the risky underlying follows, under risk neutrality, a geometric Brownian motion with a stochastic differential equation (SDE).</p>
+<p>We will look at the discretized version of the BSM model (Euler discretization), given by <span class="math inline">\(S_t = S_{t-\Delta t} \exp\left(\left(r - \frac{\sigma^2}{2}\right)\Delta t + \sigma\sqrt{\Delta t}z_t \right).\)</span></p>
+<p>The variable <span class="math inline">\(z\)</span> is a standard normally distributed random variable, <span class="math inline">\(0 &lt; \Delta t &lt; T\)</span>, a (small enough) time interval. It also holds <span class="math inline">\(0 &lt; t \leq T\)</span> with <span class="math inline">\(T\)</span> the final time horizon.</p>
+<p>In this simulation we use the values <span class="math inline">\(S_0 = 100\)</span>, <span class="math inline">\(K = 105\)</span>, <span class="math inline">\(T = 1.0\)</span>, <span class="math inline">\(r = 0.05\)</span>, <span class="math inline">\(\sigma = 0.2\)</span>. Let’s see what is the expected option price using these parameters and assuming <span class="math inline">\(t=0\)</span>, then we will run a Monte Carlo simulation to find the option price under the same conditions.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_0 <span class="ot">&lt;-</span> <span class="dv">100</span>; K <span class="ot">&lt;-</span> <span class="dv">105</span>; endT <span class="ot">&lt;-</span> <span class="fl">1.0</span>; r <span class="ot">&lt;-</span> <span class="fl">0.05</span>; sigma <span class="ot">&lt;-</span> <span class="fl">0.2</span>;</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>ST <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#vector to hold values</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  St <span class="ot">&lt;-</span> S_0</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(t <span class="sc">&lt;</span> endT){</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    St <span class="ot">&lt;-</span> St<span class="sc">*</span><span class="fu">exp</span>((r<span class="sc">-</span>sigma<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>dt <span class="sc">+</span> sigma<span class="sc">*</span><span class="fu">sqrt</span>(dt)<span class="sc">*</span><span class="fu">rnorm</span>(<span class="dv">1</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    t <span class="ot">&lt;-</span> t<span class="sc">+</span>dt</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  ST[i] <span class="ot">&lt;-</span> St</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(ST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 105.277</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="average-distance-in-a-sphere" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="average-distance-in-a-sphere"><span class="header-section-number">12.6</span> Average Distance in a sphere</h2>
+<p>Estimate the average distance between two points in a sphere of radius 1 using Monte Carlo simulation.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#get a random point</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>coord1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">sqrt</span>(<span class="fu">sum</span>(coord1<span class="sc">^</span><span class="dv">2</span>))<span class="sc">&lt;=</span><span class="dv">1</span>){</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#get another random point</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>coord2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">sqrt</span>(<span class="fu">sum</span>(coord2<span class="sc">^</span><span class="dv">2</span>))<span class="sc">&lt;=</span><span class="dv">1</span>){</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  dist[i] <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((coord2<span class="sc">-</span>coord1)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9242228</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="average-distance-in-a-square" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="average-distance-in-a-square"><span class="header-section-number">12.7</span> Average distance in a square</h2>
+<p>Estimate the average distance between two points in a square with side lengths 1 using Monte Carlo simulation.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  coord1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  coord2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  dist[i] <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((coord2<span class="sc">-</span>coord1)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5010534</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="average-distance-in-a-simplex" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="average-distance-in-a-simplex"><span class="header-section-number">12.8</span> Average distance in a simplex</h2>
+<p>Estimate the average distance between two points on the 3-simplex (points <span class="math inline">\((x,y,z)\)</span> such that <span class="math inline">\(0\leq x,y,z \leq 1\)</span> and <span class="math inline">\(x+y+z=1\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#A good way to think of the sampling is to pick two random dividing points between 0 and 1. Add 0 and 1 to the list and then sort them, then find the differences</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  pt1 <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">sort</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fu">runif</span>(<span class="dv">2</span>))))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  pt2 <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">sort</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fu">runif</span>(<span class="dv">2</span>))))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  dist[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((pt1<span class="sc">-</span>pt2)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5190203</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="completion-time" class="level2" data-number="12.9">
+<h2 data-number="12.9" class="anchored" data-anchor-id="completion-time"><span class="header-section-number">12.9</span> Completion Time</h2>
+<p>Let’s assume we have a process constructed from 3 stages (X1, X2, X3). Each one has an average duration (5, 10 and 15 minutes) which vary following the normal distribution and we know their standard deviation (all 1 minute). We want to know what is the probability that the process will exceed 34 minutes?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>NMC<span class="ot">&lt;-</span><span class="dv">10000</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(NMC, <span class="dv">5</span>, <span class="dv">1</span>)<span class="sc">+</span><span class="fu">rnorm</span>(NMC, <span class="dv">10</span>, <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(NMC, <span class="dv">15</span>, <span class="dv">1</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(duration <span class="sc">&gt;</span> <span class="dv">34</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0129</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="fitting-blocks" class="level2" data-number="12.10">
+<h2 data-number="12.10" class="anchored" data-anchor-id="fitting-blocks"><span class="header-section-number">12.10</span> Fitting Blocks</h2>
+<p>In this example let’s assume we want to assemble three blocks inside a container of a given width. The box has a nominal width of 16.5mm, the three blocks have nominal widths of 4, 6 and 6 mm. By design there is a nominal gap of 0.5mm. However there are variations in the production of the blocks.</p>
+<ul>
+<li>The box has variation in width between -0.1mm to +0.1mm uniformly at random</li>
+<li>The other boxes have margins of error of 0.2, 0.3 and 0.25 respectively (+ or - uniformly at random)</li>
+</ul>
+<p>Estimate the probability that the 3 blocks will fit in the box.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>box.w <span class="ot">&lt;-</span> <span class="fu">runif</span>(NMC, <span class="fl">16.5-.1</span>, <span class="fl">16.5+.1</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>block1.w <span class="ot">&lt;-</span> <span class="fu">runif</span>(NMC, <span class="dv">4</span><span class="fl">-.2</span>, <span class="dv">4</span><span class="fl">+.2</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>block2.w <span class="ot">&lt;-</span> <span class="fu">runif</span>(NMC, <span class="dv">6</span><span class="fl">-.3</span>, <span class="dv">6</span><span class="fl">+.3</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>block3.w <span class="ot">&lt;-</span> <span class="fu">runif</span>(NMC, <span class="dv">6</span><span class="fl">-.25</span>, <span class="dv">6</span><span class="fl">+.25</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>fits <span class="ot">&lt;-</span> box.w <span class="sc">&gt;</span> block1.w<span class="sc">+</span>block2.w<span class="sc">+</span>block3.w</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(fits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.99</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="roomba-zoomba" class="level2" data-number="12.11">
+<h2 data-number="12.11" class="anchored" data-anchor-id="roomba-zoomba"><span class="header-section-number">12.11</span> Roomba Zoomba</h2>
+<p>A circular vacuum robot that has a radius of 20cm will roll around a room that is 10m x 10m square. It begins in the exact center of the room. The way it moves is:</p>
+<ul>
+<li>It picks a direction uniformly at random from 0 to 360 degrees (<span class="math inline">\(0\)</span> to <span class="math inline">\(2\pi\)</span>)</li>
+<li>It travels for anywhere between 0m and 1m, uniformly at random.</li>
+<li>If it hits a wall it bounces off at the angle of incidence.</li>
+<li>It repeats</li>
+</ul>
+<ol type="a">
+<li><p>If there is a speck of dirt located at coordinates (1,1), what is the average amount of time it will take for the robot to collect this dirt?</p></li>
+<li><p>If the robot travels at 1m/sec, what is the expected length of time for the robot to clean 50% of the floor?</p></li>
+</ol>
+<p><em>Solution in-progress!</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span>; y<span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>maxN <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(step <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>maxN){</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  dist <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  xy_new <span class="ot">&lt;-</span> <span class="fu">c</span>(x[step],y[step]) <span class="sc">+</span> dist<span class="sc">*</span><span class="fu">c</span>(<span class="fu">cos</span>(theta), <span class="fu">sin</span>(theta))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(xy_new[<span class="dv">1</span>]<span class="sc">&lt;</span>.<span class="dv">2</span>){xy_new[<span class="dv">1</span>]<span class="ot">=</span><span class="dv">2</span><span class="sc">*</span>.<span class="dv">2</span><span class="sc">-</span>xy_new[<span class="dv">1</span>]}</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(xy_new[<span class="dv">2</span>]<span class="sc">&lt;</span>.<span class="dv">2</span>){xy_new[<span class="dv">2</span>]<span class="ot">=</span><span class="dv">2</span><span class="sc">*</span>.<span class="dv">2</span><span class="sc">-</span>xy_new[<span class="dv">2</span>]}</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(xy_new[<span class="dv">1</span>]<span class="sc">&gt;</span><span class="fl">9.8</span>){xy_new[<span class="dv">1</span>]<span class="ot">=</span><span class="dv">2</span><span class="sc">*</span><span class="fl">9.8</span><span class="sc">-</span>xy_new[<span class="dv">1</span>]}</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(xy_new[<span class="dv">2</span>]<span class="sc">&gt;</span><span class="fl">9.8</span>){xy_new[<span class="dv">2</span>]<span class="ot">=</span><span class="dv">2</span><span class="sc">*</span><span class="fl">9.8</span><span class="sc">-</span>xy_new[<span class="dv">2</span>]}</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  x[step<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> xy_new[<span class="dv">1</span>]</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  y[step<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> xy_new[<span class="dv">2</span>]</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>))</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<!-- -->
+</section>
+<section id="chutes-and-ladders" class="level2" data-number="12.12">
+<h2 data-number="12.12" class="anchored" data-anchor-id="chutes-and-ladders"><span class="header-section-number">12.12</span> Chutes and Ladders</h2>
+<p>Consider the game Chutes and Ladders. On each turn you roll a 6 sided die and move that many spaces. If you land on a ladder you move up to a new spot, and if you land on a slide you move down. Perform a monte Carlo simulation to answer the following questions:</p>
+<p><img src="https://cbpowell.files.wordpress.com/2020/10/chutes.jpg?w=365" class="img-fluid"></p>
+<ol type="a">
+<li>What’s the average number of rolls to win?</li>
+<li>How many chutes and ladders will a user typically hit?</li>
+<li>Are the chutes and ladders balanced?</li>
+<li>Are some squares hit more often than others?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We need to create a vector of the board</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#ladders</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">1</span>]<span class="ot">&lt;-</span> <span class="dv">38</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">14</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="dv">31</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">21</span>] <span class="ot">&lt;-</span> <span class="dv">42</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">36</span>] <span class="ot">&lt;-</span> <span class="dv">44</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">28</span>] <span class="ot">&lt;-</span> <span class="dv">84</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">51</span>] <span class="ot">&lt;-</span> <span class="dv">67</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">80</span>] <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">71</span>] <span class="ot">&lt;-</span> <span class="dv">91</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co">#chutes</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">16</span>] <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">49</span>] <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">48</span>] <span class="ot">&lt;-</span> <span class="dv">26</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">62</span>] <span class="ot">&lt;-</span> <span class="dv">19</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">87</span>] <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">56</span>] <span class="ot">&lt;-</span> <span class="dv">53</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">64</span>] <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">93</span>] <span class="ot">&lt;-</span> <span class="dv">73</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">95</span>] <span class="ot">&lt;-</span> <span class="dv">75</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">98</span>] <span class="ot">&lt;-</span> <span class="dv">78</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, NMC)</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>nChutes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, NMC)</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>nLadders <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,NMC)</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>landOn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, NMC<span class="sc">*</span><span class="dv">100</span>),<span class="at">nrow=</span>NMC)</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  position <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>landOn[i,position] <span class="ot">&lt;-</span> landOn[i,position] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(position<span class="sc">==</span><span class="dv">100</span>){<span class="cf">break</span>;}</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>roll <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">6</span>,<span class="dv">1</span>)</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>rolls[i] <span class="ot">&lt;-</span> rolls[i] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>position.new <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="dv">100</span>,position<span class="sc">+</span>roll)</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(board[position.new] <span class="sc">&lt;</span> position.new){</span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>  nChutes[i] <span class="ot">&lt;-</span> nChutes[i] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(board[position.new] <span class="sc">&gt;</span> position.new){</span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>  nLadders[i] <span class="ot">&lt;-</span> nLadders[i] <span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>position <span class="ot">&lt;-</span> board[position.new]</span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(rolls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 34.66</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nChutes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nLadders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.08</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">colMeans</span>(landOn))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>landOnDF <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">space=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, proportion <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(landOn))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(landOnDF[<span class="fu">order</span>(landOnDF[,<span class="dv">2</span>]),],<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    space proportion....colMeans.landOn.
+42     42                           0.68
+31     31                           0.83
+24     24                           0.84
+6       6                           0.86
+11     11                           0.86
+26     26                           0.86
+44     44                           0.93
+1       1                           1.00
+100   100                           1.00
+84     84                           1.02</code></pre>
+</div>
+</div>
+<p>It takes an average of 36.78 turns to finish the game The average number of chutes slid down is 4 per game. The average number of ladders climbed is 3.22 per game. Chutes are more likely than ladders apparently; even though there are 10 chutes compared to 9 ladders, the expected number of chutes is much higher than ladders.</p>
+<p>The most common spots (besides 1 and 100) are 44 and 26.</p>
+<p>44 is the result of landing on one of the ladders. 26 is the result of landing on one of the chutes.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="battleship" class="level2" data-number="12.13">
+<h2 data-number="12.13" class="anchored" data-anchor-id="battleship"><span class="header-section-number">12.13</span> Battleship</h2>
+<p>Build a Battleship AI (https://github.com/mitchelljy/battleships_ai)</p>
+<p>(Rules of the game: https://www.hasbro.com/common/instruct/battleship.pdf)</p>
+<p>Battleship is a game played on 10x10 grid. There are 5 boats of lengths 2, 3, 3, 4, and 5. The Monte Carlo AI is built like this:</p>
+<ol type="i">
+<li>Take current board state</li>
+<li>Simulate <span class="math inline">\(N\)</span> samples, each is a random placement of a remaining ships (knowing where hits and misses have been observed.) . Be sure to not put boats in a space that has been guessed, and if a hit has been found, be sure that boats cover those spots.</li>
+<li>Stack all of the simulations and sum the total number of ships in each square (emphasise ships that overlap existing hits)</li>
+<li>Take the mean for each sqaure, giving us a frequency matrix or heatmap</li>
+<li>Pick the largest value corresponding to a legal move in the matrix</li>
+</ol>
+<p>This is how the AI decides which square to guess at every state of the game. As an added challenge, you can create additional logic to have the computer make the guess - taking the spot that has the highest likelihood - and determine if it is a hit, or if it sinks a boat. You will need to initialize the board with a random arrangement of the boats.</p>
+<ul>
+<li><p>You will need a function <code>generate_board &lt;- function(width=10, height=10, boats=c(TRUE,TRUE,TRUE,TRUE,TRUE))</code>. This function should randomly place boats on the board, each either vertically or horizontally, and return The layout. Number the boats 1,2,3,4,5. Be sure that numbers do not overlap each other when placed randomly. This function should return a matrix with values 0 if there is nothing placed in a spot, or the boat number. For example, when you place boat 5, it is 5 units long, so there should be 5 spots with the number 5 in them (And they should be in a straight line).</p></li>
+<li><p>You will also need a function <code>validate_board &lt;- function(board, state)</code> which will check to see if the simulated board is legal given the state. The state should have 0s in locations that have not been tested, -1 in locations where misses have been numbers 1 through 5 where hits have been observed. If the number of <span class="math inline">\(i\)</span>’s on the board equals the number of pegs in boat <span class="math inline">\(i\)</span>, then the AI will now that boat <span class="math inline">\(i\)</span> has been sunk - you can convert all of these <span class="math inline">\(i\)</span>’s into -1 so they will be ignored, and in the future we can dispance with randomly placing boat <span class="math inline">\(i\)</span>. A board is valid if there are no boats in a -1 spot, and any spot in an <span class="math inline">\(i\)</span> spot contains boat <span class="math inline">\(i\)</span>.</p></li>
+<li><p>To determine the next move you will need to generate boards until you have had at least 1 valid board (10 is better) to make a choice. If many spots have the same frequency, then you can just pick one at random, or pick the one with the lowest row and column.</p></li>
+</ul>
+<p><a href="R_MonteCarlo_Battleship.html">See an implementation here</a></p>
+</section>
+<section id="infection-spread-simulation-source" class="level2" data-number="12.14">
+<h2 data-number="12.14" class="anchored" data-anchor-id="infection-spread-simulation-source"><span class="header-section-number">12.14</span> Infection spread simulation <a href="https://www.sciencedirect.com/science/article/pii/S0378437121002867">source</a></h2>
+<p>Model a city as a 1x1 square; The population is 2.5k, randomly located throughout the city. Pick one single individual to be infected.</p>
+<p>On each time step, each individual walks in a random direction and moves .005 units (if it hits a wall, just place it at the edge of the city). After each time step, if an unaffected person is near an infected person (within .002) then the infection spreads to them, and they become infected.</p>
+<ol type="a">
+<li><p>Estimate how many time steps it takes for 99% of the population to become infected.</p></li>
+<li><p>What if each person will become resistant after <span class="math inline">\(X_i\)</span> time steps, where <span class="math inline">\(X_i \sim Geom(p)\)</span>. Suppose <span class="math inline">\(p=.5\)</span>. This gives us the standard SIR model - individuals are susceptible, infected or resistant (either cured or dead). resistant individuals cannot become infected, and they cannot infect others. How does the esimate change?</p></li>
+<li><p>What if we change the population to 1000 individuals?</p></li>
+<li><p>What if we change the infection distance to be 0.004?</p></li>
+</ol>
+<p><em>Solution in progress</em> <!-- --></p>
+</section>
+<section id="stock-price" class="level2" data-number="12.15">
+<h2 data-number="12.15" class="anchored" data-anchor-id="stock-price"><span class="header-section-number">12.15</span> Stock Price</h2>
+<p>Suppose a stock price varies from day to day through a scaled process. If the stock price is <span class="math inline">\(X_i\)</span> on day <span class="math inline">\(i\)</span>, <span class="math inline">\(X_{i+1} = (1.01+Z/25) X_i\)</span> where <span class="math inline">\(Z\)</span> is a standard normal random variable. Today the stock price is $50 per share. Use a Monte Carlo simulation to estimate the distribution of stock prices 30 days from now.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">31</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  finalPrice <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  price <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>){</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>price[day<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> price[day] <span class="sc">*</span> (<span class="fl">1.01</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)<span class="sc">/</span><span class="dv">25</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  finalPrice[i] <span class="ot">&lt;-</span> price[<span class="dv">31</span>]</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="at">x=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">31</span>, price, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">15</span>))</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(finalPrice)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 67.90084</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(finalPrice, <span class="at">prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(finalPrice))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>You can buy a 30 day put option for $10 with a strike price of $65 from Sleazy Jim, the stock broker. This terms of this contract are these:</p>
+<ul>
+<li>You pay $10 to Sleazy Jim today.</li>
+<li>If after 30 days the stock price is below $65, you will buy a share of stock at the market price and Sleazy Jim will buy it from you for $65. You pocket the difference.</li>
+<li>If after 30 days the stock price is above $65, you will do nothing.</li>
+</ul>
+<p>(In essence, Sleazy Jim is betting that the stock price will be higher than $65 after 30 days.)</p>
+<p>Even though interest rates are high now, let’s ignore the affect of interest rate. Using Monte Carlo simulation, estimate the expected value of this put option (the net profit) to determine whether it is a good idea to buy the put option.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>gain <span class="ot">&lt;-</span> <span class="dv">65</span> <span class="sc">-</span> <span class="fu">pmin</span>(finalPrice, <span class="dv">65</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>cost <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(gain <span class="sc">-</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5.383399</code></pre>
+</div>
+</div>
+<p>If you enter into this trade with Sleazy Jim, you have an expected loss of $5.53. Don’t make the trade!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="patent-pending" class="level2" data-number="12.16">
+<h2 data-number="12.16" class="anchored" data-anchor-id="patent-pending"><span class="header-section-number">12.16</span> Patent Pending</h2>
+<p><strong>You have decided to apply for a patent</strong> to protect your IP, but you also did that <strong>in order to increase sales</strong> as you are aware that businesses deem a patented product more worthy.</p>
+<p>Let’s make the following assumptions:</p>
+<ul>
+<li>There is a 50% chance that your product gets patented</li>
+<li>If it does get patented, your sales go up by 25% — 75%, with 50% being the most likely case. (uniform distribution)</li>
+<li>Without a patent you expect to sell between $1 — $9 million next year, with $3 million being the most likely case. Let the probabilities be given in the following table</li>
+</ul>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>Sales ($M)</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>probability</td>
+<td>1/33</td>
+<td>4/33</td>
+<td>7/33</td>
+<td>6/33</td>
+<td>5/33</td>
+<td>4/33</td>
+<td>3/33</td>
+<td>2/33</td>
+<td>1/33</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>We do not have to consider any costs or expenses</li>
+</ul>
+<p><strong>Problem</strong>: Suppose a wholesaler offers to buy your entire production and inventory for the year for $6 million (you won’t be able to sell anything else), would you accept the offer?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sales.p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">6</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>)<span class="sc">/</span><span class="dv">33</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>sales.v <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>revenue <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  getPatent <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">prob=</span><span class="fu">c</span>(.<span class="dv">5</span>,.<span class="dv">5</span>))</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  sales.scalar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(getPatent){</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>sales.scalar <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>, .<span class="dv">25</span>, .<span class="dv">75</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  revenue[i] <span class="ot">&lt;-</span> <span class="fu">sample</span>(sales.v, <span class="at">size=</span><span class="dv">1</span>, <span class="at">prob=</span>sales.p) <span class="sc">*</span> sales.scalar</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(revenue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mc_practice_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(revenue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.401985</code></pre>
+</div>
+</div>
+<p>The expected revenue is 5.75 million. The offer of 6 million is an attractive offer. I would go for that.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="social-network" class="level2" data-number="12.17">
+<h2 data-number="12.17" class="anchored" data-anchor-id="social-network"><span class="header-section-number">12.17</span> Social Network</h2>
+<p>Consider a social network with people <span class="math inline">\(1,2,\ldots, n\)</span>. Suppose we have a symmetric social structure, in that if person <span class="math inline">\(i\)</span> is friends with person <span class="math inline">\(j\)</span>, then person <span class="math inline">\(j\)</span> is friends with person <span class="math inline">\(i\)</span>. Thus we can define a symmetric friendship matrix with entries <span class="math inline">\(p_{ij}=p_{ji}\)</span>.</p>
+<p>Suppose that each pair of people can be friends independently with probability <span class="math inline">\(\theta\)</span>. The question we want to answer here is this: How big must <span class="math inline">\(\theta\)</span> be in order to be more than 95\% certain that the entire social network will be connected - this means that every two people will be connected either directly or through one or more intermediate friends.</p>
+<p>Your goal is to write a function <code>estimateProportionConnected(n,theta, NMC)</code>, which takes three parameters:</p>
+<ul>
+<li><code>n</code>, the number of people in the network,</li>
+<li><code>theta</code>, the probability of a connection,</li>
+<li><code>NMC</code>, the number of Monte Carlo simulations to run.</li>
+</ul>
+<p>The function should</p>
+<ol type="a">
+<li><p>Create an empty vector to store the results (whether or not each simulation resulted in a connected network)</p></li>
+<li><p>In a loop,</p></li>
+</ol>
+<ul>
+<li><p>generate a random symmetric social network of size n (a function <code>generateNetwork(n, theta)</code> will be useful)</p></li>
+<li><p>Determine whether the network is connected or not</p></li>
+<li><p>Save the result in your results vector</p></li>
+</ul>
+<ol start="3" type="a">
+<li>Return the proportion of simulations that resulted in a connected network.</li>
+</ol>
+<p>Hint: You can use the function <code>concomFromMatAdj</code> in the <code>concom</code> package. It takes a symmetric adjacency matrix and returns the connected components. In particular, you want to look at the number of connected components, in the <code>ncomponents</code> variable.</p>
+<p>Given a matrix <code>M</code>, you just call <code>concomFromMatAdj(M)$ncomponents</code></p>
+<p>If the number of components is more than 1 then the social network is not connected.</p>
+<p>Bonus: For a social network of size <span class="math inline">\(50\)</span>, come up with an estimate of the lowest value of <span class="math inline">\(\theta\)</span> that produces connected social networks 95% of the time.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("concom")</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(concom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'concom' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>generateMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(n, theta){</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  M <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data=</span><span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">*</span>n), <span class="at">nrow=</span>n)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n<span class="dv">-1</span>)){</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> theta){</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>M[i,j]<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>M[j,i]<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(M)</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>estimateProportionConnected <span class="ot">&lt;-</span> <span class="cf">function</span>(n,theta, NMC){</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">generateMatrix</span>(n, theta)</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>results[i] <span class="ot">&lt;-</span> <span class="fu">concomFromMatAdj</span>(M)<span class="sc">$</span>ncomponents<span class="sc">==</span><span class="dv">1</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(results))</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(theta <span class="cf">in</span> <span class="fu">seq</span>(.<span class="dv">08</span>,.<span class="dv">07</span>,<span class="at">by=</span><span class="sc">-</span>.<span class="dv">001</span>)){</span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">estimateProportionConnected</span>(<span class="dv">50</span>, theta, <span class="dv">500</span>)</span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"When theta ="</span>,theta,<span class="st">"connected with prob"</span>,p))</span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "When theta = 0.08 connected with prob 0.956"
+[1] "When theta = 0.079 connected with prob 0.966"
+[1] "When theta = 0.078 connected with prob 0.958"
+[1] "When theta = 0.077 connected with prob 0.968"
+[1] "When theta = 0.076 connected with prob 0.964"
+[1] "When theta = 0.075 connected with prob 0.956"
+[1] "When theta = 0.074 connected with prob 0.948"
+[1] "When theta = 0.073 connected with prob 0.934"
+[1] "When theta = 0.072 connected with prob 0.946"
+[1] "When theta = 0.071 connected with prob 0.924"
+[1] "When theta = 0.07 connected with prob 0.93"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="other-examples" class="level2" data-number="12.18">
+<h2 data-number="12.18" class="anchored" data-anchor-id="other-examples"><span class="header-section-number">12.18</span> Other examples</h2>
+<p><a href="https://towardsdatascience.com/monte-carlo-simulation-a-practical-guide-85da45597f0e">Check out some examples here</a></p>
+</section>
+</section>
+<section id="monte-carlo-used-in-research" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Monte Carlo used in Research</h1>
+<ul>
+<li><p>Monte Carlo simulation to estimate minimum critical mass of Uranium 235 (https://www.tandfonline.com/doi/epdf/10.13182/NT71-A30982?needAccess=true)</p></li>
+<li><p>Monte Carlo simulation to estimate the concentration of toxic chemicals in kimchi https://www.sciencedirect.com/science/article/pii/S0889157521002465</p></li>
+<li><p>Monte Carlo simulation to discover polypeptide folding (https://youtu.be/FNymVr6FWIs)</p></li>
+</ul>
+</section>
+<section id="beyond-stat-340" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> Beyond STAT 340</h1>
+<p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./R03_MonteCarloExamples.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./R_MonteCarlo_Battleship.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

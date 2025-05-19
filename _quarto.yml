@@ -7,22 +7,36 @@ book:
   author: "Brian Powers"
   date: "5/7/2025"
   reader-mode: true
+  sidebar:
+    collapse-level: 1
   chapters:
     - index.qmd
     - intro.qmd
     - part: "Sampling"
-    - rv.qmd
-    - cov.qmd
+      chapters:
+      - rv.qmd
+      - R01_RandomVariables.Rmd
+      - rv_practice.qmd
+      - text: "---"
+      - cov.qmd
+      - R02_IndepCondBayes.Rmd
+      - cov_practice.qmd
+      - text: "---"
+      - mc.qmd
+      - R03_MonteCarloExamples.Rmd
+      - mc_practice.qmd
+      - R_MonteCarlo_Battleship.Rmd
     - part: "Testing"
     - part: "Estimation"
     - part: "Prediction"
-    - part: "Practice"
-    - rv_practice.qmd
+  appendices:
+    - RV_summary.qmd
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme:
+      cosmo
   pdf:
     documentclass: scrreprt
 
