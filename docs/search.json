@@ -768,5 +768,12 @@
     "title": "11  Monte Carlo Practice",
     "section": "12.14 Infection spread simulation source",
     "text": "12.14 Infection spread simulation source\nModel a city as a 1x1 square; The population is 2.5k, randomly located throughout the city. Pick one single individual to be infected.\nOn each time step, each individual walks in a random direction and moves .005 units (if it hits a wall, just place it at the edge of the city). After each time step, if an unaffected person is near an infected person (within .002) then the infection spreads to them, and they become infected.\n\nEstimate how many time steps it takes for 99% of the population to become infected.\nWhat if each person will become resistant after \\(X_i\\) time steps, where \\(X_i \\sim Geom(p)\\). Suppose \\(p=.5\\). This gives us the standard SIR model - individuals are susceptible, infected or resistant (either cured or dead). resistant individuals cannot become infected, and they cannot infect others. How does the esimate change?\nWhat if we change the population to 1000 individuals?\nWhat if we change the infection distance to be 0.004?\n\nSolution in progress"
+  },
+  {
+    "objectID": "index.html#collection-of-shiny-apps",
+    "href": "index.html#collection-of-shiny-apps",
+    "title": "STAT 340: Data Science II",
+    "section": "0.1 Collection of Shiny Apps",
+    "text": "0.1 Collection of Shiny Apps\nBinomial One/Two Tail Test Power Normal PDF CDF Inverse CDF"
   }
 ]
