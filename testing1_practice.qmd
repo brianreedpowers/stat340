@@ -1,0 +1,187 @@
+---
+title: 'Monte Carlo Testing Practice'
+format: html
+editor: source
+---
+
+# Practice Problems
+
+## Controlling Flies
+The farmer selects 5 of her calves and divides them into two groups. One group contains 2, the other group has 3 animals. The first group she protects using impregnated ear tags. To the other group she applies an oil-based formulation of the same insecticide, an artificial pyrethroid. The farmer pens each calf separately, and estimates the number of stable-flies in each pen by hanging sticky flypaper above the animal. After 3 days she removes her flypapers and counts the number of stable-flies on each.
+
+|                     |     |     |      |      |      |
+|---------------------|-----|-----|------|------|------|
+| **Flypaper number** | 1   | 2   | 3    | 4    | 5    |
+| **Flies caught**    | 30  | 50  | 7    | 12   | 30   |
+| **Treatment**       | tag | tag | pour | pour | pour |
+
+Use the ratio of flies caught as a test statistic. How strong is the evidence that the pour-on treatment is more effective at repelling flies. (lower number of flies caught means flies are repelled)
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+set.seed(1)
+
+tag <- c(30, 50)
+pour <- c(7, 12, 30)
+
+permuteAB <- function(A,B){
+  combined <- sample(c(A,B))
+  A.perm <- combined[1:length(A)]
+  B.perm <- combined[-(1:length(A))]
+  return(list(A.perm, B.perm))
+}
+
+test.stat <- function(A,B){
+  return (sum(A) / sum(B))
+}
+
+NMC <- 1000
+results <- 0
+for(i in 1:NMC){
+  permuted <- permuteAB(tag,pour)
+  results[i] <- test.stat(permuted[[1]], permuted[[2]])
+}
+hist(results)
+abline(v=test.stat(tag,pour))
+mean(results >= test.stat(tag,pour))
+```
+
+The probability that we observe a test statistic as extreme as we observed is 0.201, which means that the observed data would not be unusual if the treatment did not have differing effects. In other words, if the number of flies on each of the cows was drawn from the same population (regardless of treatment) we'd observe data like we had about 20% of the time, which is not very low, so we would not reject the null hypothesis.
+:::
+
+## Babies
+We will use the following dataset to demonstrate the use of permutations:
+
+```{r, warning=F}
+library(tidyr)
+babies <- read.table(url("https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/babies.txt"), header=TRUE) 
+bwt.nonsmoke <- subset(babies, smoke==0)$bwt
+bwt.smoke <- subset(babies, smoke==1)$bwt
+```
+
+We will generate the following random variable based on a sample size of 10 and observe the following difference:
+
+```{r}
+N=10  
+set.seed(1)  
+nonsmokers <- sample(bwt.nonsmoke , N)  
+smokers <- sample(bwt.smoke , N)  
+obs <- mean(smokers) - mean(nonsmokers) 
+```
+
+The question is whether this observed difference is statistically significant. We do not want to rely on the assumptions needed for the normal or t-distribution approximations to hold, so instead we will use permutations.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+set.seed(5)
+test.stat <- function(A,B){
+  return (mean(A)-mean(B))
+}
+
+NMC <- 1000
+results <- 0
+for(i in 1:NMC){
+  permuted <- permuteAB(smokers, nonsmokers)
+  results[i] <- test.stat(permuted[[1]], permuted[[2]])
+}
+hist(results)
+abline(v=test.stat(smokers, nonsmokers))
+mean(results <= test.stat(smokers, nonsmokers))
+```
+
+The null hypothesis is that the distribution of birthweights for smokers is the same as the distribution for nonsmokers. The alternative hypothesis is that the mean birthweight for smokers is lower than for nonsmokers.
+
+The observed test statistic has a p-value of 0.042; If the distributions are the same, we would only observe a difference of sample means this (or more) extreme 4.2% of the time, and this is lower than our significance level of 0.05, so we have strong evidence against the null hypothesis. There's strong evidence that the mean birthweight is lower for smokers.
+:::
+
+## Best age?
+If you could stop time and live forever in good health at a particular age, at what age would you like to live?"
+
+Suppose we are interested in testing the claim that the average ideal age for women is *greater* than men. A random sample of 3 women and 3 men were asked this question resulting in the following responses:
+
+Women: 49, 42, 38
+
+Men: 39, 38, 50
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+Women <- c(49, 42, 38)
+Men <- c(39, 38, 50)
+set.seed(1)
+
+test.stat <- function(A,B){
+  return (mean(A)-mean(B))
+}
+
+NMC <- 1000
+results <- 0
+for(i in 1:NMC){
+  permuted <- permuteAB(Women, Men)
+  results[i] <- test.stat(permuted[[1]], permuted[[2]])
+}
+hist(results)
+abline(v=test.stat(Women, Men))
+mean(results >= test.stat(Women, Men))
+```
+
+The permutation test does not provide us evidence to support the claim; We lack evidence that the mean ideal age for women is greater than the mean ideal age for men.
+:::
+
+4.  Suppose that you work at a bicycle factory where you'd like to replace steel tubes in the company's bicycle frames with titanium (because it's lighter). You have carefully selected random samples of the steel and titanium tubes from your suppliers. You measure the stiffness of each tube in a testing rig. The data are (measured in pounds per square inch, psi):
+
+Steel: 30.7, 29.5, 29.8, 30.3, 29.2
+
+Titanium: 29.9, 31.1, 30.2, 30.8, 30.7, 31.9
+
+Perform a permutation test to see if there is evidence that the mean stiffness is different between steel and titanium. Use the difference of sample means as a test statistic and perform a two-tailed test.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+steel <- c(30.7, 29.5, 29.8, 30.3, 29.2)
+titanium <- c(29.9, 31.1, 30.2, 30.8, 30.7, 31.9)
+
+set.seed(1)
+
+test.stat <- function(A,B){
+  return (mean(A)-mean(B))
+}
+
+NMC <- 1000
+results <- 0
+for(i in 1:NMC){
+  permuted <- permuteAB(steel, titanium)
+  results[i] <- test.stat(permuted[[1]], permuted[[2]])
+}
+hist(results)
+abline(v=test.stat(steel, titanium))
+2*min(mean(results >= test.stat(steel, titanium)),
+  mean(results <= test.stat(steel, titanium)))
+```
+
+Our 2-tailed p-value is 0.046, which is lower than our significance threshold of 0.05; we have good evidence that the mean stiffness of titanium frames is different than the mean stiffness of steel frames.
+:::
+
+##  Maximum Current
+(From *Introduction to Probability and Statistics for Data Science*)
+
+An electrical engineer must design a circuit to deliver the maximum amount of current to a display tube to achieve sufficient image brightness. Within her allowable design constraints, she has developed two candidate circuits and tests prototypes of each. The resutling data (in microamperes) are
+
+Circuit 1: 251, 255, 258, 257, 250, 251, 254, 250
+
+Circuit 2: 250, 253, 249, 256, 259, 252, 260, 251
+
+(a) Develop and test an appropriate hypothesis for this problem using Monte Carlo
+
+(b) Repeat the test but this time use an appropriate parametric test. What assumptions are made?
+
+
+##  Rank-based permutation test
+
+##  Paired sample permutation test
+
+
+# Beyond STAT 340
+
+These problems are excellent practice but they are beyond the material we cover in STAT 340.
+
+

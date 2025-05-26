@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 20&nbsp; Multiple Linear Regression Practice</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./slr_practice.html">Prediction</a></li><li class="breadcrumb-item"><a href="./mlr_practice.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">STAT 340 Index</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text">Sampling</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Testing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Estimation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Prediction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">21</span> Practice Problems</a>
+  <ul class="collapse">
+  <li><a href="#predicting-salary" id="toc-predicting-salary" class="nav-link" data-scroll-target="#predicting-salary"><span class="header-section-number">21.1</span> Predicting salary</a></li>
+  <li><a href="#cubic-model" id="toc-cubic-model" class="nav-link" data-scroll-target="#cubic-model"><span class="header-section-number">21.2</span> Cubic Model</a></li>
+  <li><a href="#auto-i" id="toc-auto-i" class="nav-link" data-scroll-target="#auto-i"><span class="header-section-number">21.3</span> Auto I</a></li>
+  <li><a href="#auto-ii" id="toc-auto-ii" class="nav-link" data-scroll-target="#auto-ii"><span class="header-section-number">21.4</span> Auto II</a></li>
+  <li><a href="#carseats" id="toc-carseats" class="nav-link" data-scroll-target="#carseats"><span class="header-section-number">21.5</span> Carseats</a></li>
+  <li><a href="#simulated-data" id="toc-simulated-data" class="nav-link" data-scroll-target="#simulated-data"><span class="header-section-number">21.6</span> Simulated Data</a></li>
+  <li><a href="#collinearity" id="toc-collinearity" class="nav-link" data-scroll-target="#collinearity"><span class="header-section-number">21.7</span> Collinearity</a></li>
+  <li><a href="#boston" id="toc-boston" class="nav-link" data-scroll-target="#boston"><span class="header-section-number">21.8</span> Boston</a></li>
+  <li><a href="#rock" id="toc-rock" class="nav-link" data-scroll-target="#rock"><span class="header-section-number">21.9</span> Rock</a></li>
+  <li><a href="#fitting-and-interpreting-a-linear-regression-model" id="toc-fitting-and-interpreting-a-linear-regression-model" class="nav-link" data-scroll-target="#fitting-and-interpreting-a-linear-regression-model"><span class="header-section-number">21.10</span> Fitting and Interpreting a Linear Regression Model</a></li>
+  </ul></li>
+  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">22</span> Beyond STAT 340</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practice-problems" class="level1" data-number="21">
+<h1 data-number="21"><span class="header-section-number">21</span> Practice Problems</h1>
+<section id="predicting-salary" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="predicting-salary"><span class="header-section-number">21.1</span> Predicting salary</h2>
+<p>Suppose we have a data set with five predictors, <span class="math inline">\(X_1 =\)</span> GPA, <span class="math inline">\(X_2 =\)</span> IQ, $X_3 =$ Level ( <span class="math inline">\(1\)</span> for College and <span class="math inline">\(0\)</span> for High School), <span class="math inline">\(X_4\)</span> = Interaction between GPA and IQ, and <span class="math inline">\(X_5\)</span> = Interaction between GPA and Level. The response is starting salary after graduation (in thousands of dollars). Suppose we use least squares to fit the model, and get <span class="math inline">\(\hat{\beta}_0=50, \hat{\beta}_1=20, \hat{\beta}_2=0.07, \hat{\beta}_3=35, \hat{\beta}_4=0.01\)</span> and <span class="math inline">\(\hat{\beta}_5 = -10\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li><p>Which answer is correct, and why?</p>
+<ol type="i">
+<li><p>For a fixed value of IQ and GPA, high school graduates earn more, on average, than college graduates.</p></li>
+<li><p>For a fixed value of IQ and GPA, college graduates earn more, on average, than high school graduates.</p></li>
+<li><p>For a fixed value of IQ and GPA, high school graduates earn more, on average, than college graduates provided that the GPA is high enough.</p></li>
+<li><p>For a fixed value of IQ and GPA, college graduates earn more, on average, than high school graduates provided that the GPA is high enough.</p></li>
+</ol></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>It helps to write out the estimated model with variable names:</strong></p>
+<p><span class="math display">\[\widehat{Salary} = 50 + 20(GPA)+0.07(IQ) + 35(1_{college})+0.01(GPA \times IQ) -10 (GPA \times 1_{college})\]</span></p>
+<p><strong>If we fix IQ and GPA, the models for salaries are:</strong></p>
+<p><span class="math display">\[\widehat{Salary}_{HS} = 50 + 20(GPA)+0.07(IQ) +0.01(GPA \times IQ)\]</span></p>
+<p><span class="math display">\[\widehat{Salary}_{C} = 85 + 10(GPA)+0.07(IQ) +0.01(GPA \times IQ)\]</span></p>
+<p><strong>If we compare these two you can see that the effect of higher GPA is more substantial for high school students. What is the difference in salary?</strong></p>
+<p><span class="math display">\[ \widehat{Salary}_{C}-\widehat{Salary}_{HS} = 35-10(GPA)\]</span> <strong>If</strong> <span class="math inline">\(GPA &lt; 3.5\)</span> this difference is positive (i.e.&nbsp;college grads earn a higher salary). If <span class="math inline">\(GPA &gt; 3.5\)</span> then the difference is negative (i.e.&nbsp;high school grads earn higher salary)</p>
+<p><strong>Thus iii is the correct choice.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Predict the salary of a college graduate with IQ of 110 and a GPA of 4.0.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">85</span><span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span><span class="dv">4</span> <span class="sc">+</span> .<span class="dv">07</span><span class="sc">*</span><span class="dv">110</span> <span class="sc">+</span> <span class="fl">0.01</span><span class="sc">*</span><span class="dv">4</span><span class="sc">*</span><span class="dv">110</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 137.1</code></pre>
+</div>
+</div>
+<p><strong>The predicted salary is $137.1</strong></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect. Justify your answer.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The magnitude of the coefficient has nothing to do with the level of evidence of the interaction. It’s all relative to the standard error of this coefficient. A small magnitude coefficient with a very small standard error would have very little uncertainty. If the standard error is big that would mean the uncertainty is great. This is why we take the ratio of</strong> <span class="math inline">\(\hat{\beta}_j/se(\hat{\beta}_j)\)</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="cubic-model" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="cubic-model"><span class="header-section-number">21.2</span> Cubic Model</h2>
+<p>I collect a set of data ($n = 100$ observations) containing a single predictor and a quantitative response. I then fit a linear regression model to the data, as well as a separate cubic regression, i.e.&nbsp;<span class="math inline">\(Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \epsilon\)</span>.</p>
+<!-- -->
+<ol type="a">
+<li>Suppose that the true relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is linear, i.e.&nbsp;<span class="math inline">\(Y = \beta_0 + \beta_1X + \epsilon\)</span>. Consider the training residual sum of squares (RSS) for the linear regression, and also the training RSS for the cubic regression. Would we expect one to be lower than the other, would we expect them to be the same, or is there not enough information to tell? Justify your answer.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>In expectation (in the sense of expected value) we would expect</strong> <span class="math inline">\(\hat{\beta}_2=\hat{\beta}_3=0\)</span> and then RSS would be the same for both the linear and the cubic model. However in practice the data will not exhibit a perfect straight line relationship and thus these coefficients will be nonzero. That would mean the cubic model will fit slightly better and RSS will be lower for the cubic model.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Answer (a) using test rather than training RSS.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>A cubic model would presumably slightly overfit to the training data, and could actually perform worse on test data, data that is drawn from a truly linear model. So we would expect test RSS to be lower with the cubic model.</strong></p>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Suppose that the true relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is not linear, but we don’t know how far it is from linear. Consider the training RSS for the linear regression, and also the training RSS for the cubic regression. Would we expect one to be lower than the other, would we expect them to be the same, or is there not enough information to tell? Justify your answer.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Without knowing what the relationship is, this would be hard to answer. However if there is any curve to the true relationship a cubic model will most likely fit the training data better and will give us a lower RSS than a linear model.</strong></p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Answer (c) using test rather than training RSS.</li>
+</ol>
+<!-- -->
+</section>
+<section id="auto-i" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="auto-i"><span class="header-section-number">21.3</span> Auto I</h2>
+<p>This question involves the use of simple linear regression on the <code>Auto</code> data set.</p>
+<!-- -->
+<ol type="a">
+<li>Use the <code>lm()</code> function to perform a simple linear regression with <code>mpg</code> as the response and horsepower as the predictor. Use the <code>summary()</code> function to print the results. Comment on the output.</li>
+</ol>
+<p>For example:</p>
+<p>i. Is there a relationship between the predictor and the response?</p>
+<p>ii. How strong is the relationship between the predictor and the response?</p>
+<p>iii. Is the relationship between the predictor and the response positive or negative?</p>
+<p>iv. What is the predicted <code>mpg</code> associated with a horsepower of 98? What are the associated 95% confidence and prediction intervals?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ISLR' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>auto.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>horsepower, <span class="at">data=</span>Auto)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(auto.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ 1 + horsepower, data = Auto)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.5710  -3.2592  -0.3435   2.7630  16.9240 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 39.935861   0.717499   55.66   &lt;2e-16 ***
+horsepower  -0.157845   0.006446  -24.49   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.906 on 390 degrees of freedom
+Multiple R-squared:  0.6059,    Adjusted R-squared:  0.6049 
+F-statistic: 599.7 on 1 and 390 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong>There is a very strong relationship between the predictor and response. The p-value is close to zero meaning this data would be virtually impossible if the relationship was not real. The relationship is negative, clearly by the sign of the coefficient. Higher horsepower vehicles tend on average to have lower fuel efficiency.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(auto.fit, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">horsepower=</span><span class="dv">98</span>), <span class="at">interval=</span><span class="st">"confidence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 24.46708 23.97308 24.96108</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(auto.fit, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">horsepower=</span><span class="dv">98</span>), <span class="at">interval=</span><span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit     lwr      upr
+1 24.46708 14.8094 34.12476</code></pre>
+</div>
+</div>
+<p><strong>A vehicle with 98 horsepower has a predicted fuel efficiency of 24.47 mpg. The 95% confidence interval says that we are 95% confident that the <em>average</em> mpg of cars with 98 horsepower is within 23.97 and 24.96 mpg. The 95% prediction interval tells us that if we pick one arbitrary car with a horsepower of 98, we are 95% confident that its mpg will be within 13.81 and 34.12 mpg. You can tell that there is quite a bit of variation among cars.</strong></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li><p>Plot the response and the predictor. Use the <code>abline()</code> function to display the least squares regression line.</p></li>
+<li><p>Use the <code>plot()</code> function to produce diagnostic plots of the least squares regression fit. Comment on any problems you see with the fit.</p></li>
+</ol>
+<!-- -->
+</section>
+<section id="auto-ii" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="auto-ii"><span class="header-section-number">21.4</span> Auto II</h2>
+<p>This question involves the use of multiple linear regression on the <code>Auto</code> data set.</p>
+<!-- -->
+<ol type="a">
+<li><p>Produce a scatterplot matrix which includes all of the variables in the data set.</p></li>
+<li><p>Compute the matrix of correlations between the variables using the function <code>cor()</code>. You will need to exclude the <code>name</code> variable, <code>cor()</code> which is qualitative.</p></li>
+<li><p>Use the <code>lm()</code> function to perform a multiple linear regression with <code>mpg</code> as the response and all other variables except name as the predictors. Use the <code>summary()</code> function to print the results. Comment on the output. For instance:</p></li>
+</ol>
+<p>i. Is there a relationship between the predictors and the response?</p>
+<p>ii. Which predictors appear to have a statistically significant relationship to the response?</p>
+<p>iii. What does the coefficient for the <code>year</code> variable suggest?</p>
+<ol start="4" type="a">
+<li><p>Use the <code>plot()</code> function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?</p></li>
+<li><p>Use the <code>*</code> and <code>:</code> symbols to fit linear regression models with interaction effects. Do any interactions appear to be statistically significant?</p></li>
+<li><p>Try a few different transformations of the variables, such as <span class="math inline">\(log(X)\)</span>, <span class="math inline">\(\sqrt{X}\)</span>, <span class="math inline">\(X^2\)</span>. Comment on your findings.</p></li>
+</ol>
+<!-- -->
+</section>
+<section id="carseats" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="carseats"><span class="header-section-number">21.5</span> Carseats</h2>
+<p>This question should be answered using the <code>Carseats</code> data set.</p>
+<!-- -->
+<ol type="a">
+<li><p>Fit a multiple regression model to predict <code>Sales</code> using <code>Price</code>, <code>Urban</code>, and <code>US</code>.</p></li>
+<li><p>Provide an interpretation of each coefficient in the model. Be careful—some of the variables in the model are qualitative!</p></li>
+<li><p>Write out the model in equation form, being careful to handle the qualitative variables properly.</p></li>
+<li><p>For which of the predictors can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_j = 0\)</span>?</p></li>
+<li><p>On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.</p></li>
+<li><p>How well do the models in (a) and (e) fit the data?</p></li>
+<li><p>Using the model from (e), obtain 95% confidence intervals for the coefficient(s).</p></li>
+<li><p>Is there evidence of outliers or high leverage observations in the model from (e)?</p></li>
+</ol>
+<!-- -->
+</section>
+<section id="simulated-data" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="simulated-data"><span class="header-section-number">21.6</span> Simulated Data</h2>
+<p>In this exercise you will create some simulated data and will fit simple linear regression models to it. Make sure to use <code>set.seed(1)</code> prior to starting part (a) to ensure consistent results.</p>
+<!-- -->
+<ol type="a">
+<li><p>Using the <code>rnorm()</code> function, create a vector, <code>x</code>, containing <span class="math inline">\(100\)</span> observations drawn from a <span class="math inline">\(N(0, 1)\)</span> distribution. This represents a feature, <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Using the <code>rnorm()</code> function, create a vector, <code>eps</code>, containing <span class="math inline">\(100\)</span> observations drawn from a <span class="math inline">\(N(0, 0.5^2)\)</span> distribution—a normal distribution with mean zero and variance 0.25.</p></li>
+<li><p>Using <code>x</code> and <code>eps</code>, generate a vector <code>y</code> according to the model <span class="math inline">\(Y = −1 + 0.5X + \epsilon\)</span>. What is the length of the vector <code>y</code>? What are the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> in this linear model?</p></li>
+<li><p>Create a scatterplot displaying the relationship between <code>x</code> and <code>y</code>. Comment on what you observe.</p></li>
+<li><p>Fit a least squares linear model to predict <code>y</code> using <code>x</code>. Comment on the model obtained. How do <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> compare to <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>?</p></li>
+<li><p>Display the least squares line on the scatterplot obtained in (d). Draw the population regression line on the plot, in a different color. Use the <code>legend()</code> command to create an appropriate legend.</p></li>
+<li><p>Now fit a polynomial regression model that predicts <code>y</code> using <code>x</code> and <code>x^2</code>. Is there evidence that the quadratic term improves the model fit? Explain your answer.</p></li>
+<li><p>Repeat (a)–(f) after modifying the data generation process in such a way that there is less noise in the data. The model should remain the same. You can do this by decreasing the variance of the normal distribution used to generate the error term <span class="math inline">\(\epsilon\)</span> in (b). Describe your results.</p></li>
+<li><p>Repeat (a)–(f) after modifying the data generation process in such a way that there is more noise in the data. The model should remain the same. You can do this by increasing the variance of the normal distribution used to generate the error term in (b). Describe your results.</p></li>
+<li><p>What are the confidence intervals for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> based on the original data set, the noisier data set, and the less noisy data set? Comment on your results.</p></li>
+</ol>
+<!-- -->
+</section>
+<section id="collinearity" class="level2" data-number="21.7">
+<h2 data-number="21.7" class="anchored" data-anchor-id="collinearity"><span class="header-section-number">21.7</span> Collinearity</h2>
+<p>This problem focuses on the collinearity problem.</p>
+<!-- -->
+<ol type="a">
+<li>Perform the following commands in R:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span> (<span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>) <span class="sc">/</span> <span class="dv">10</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The last line corresponds to creating a linear model in which <code>y</code> is a function of <code>x1</code> and <code>x2</code>. Write out the form of the linear model. What are the regression coefficients?</p>
+<ol start="2" type="a">
+<li><p>What is the correlation between <code>x1</code> and <code>x2</code>? Create a scatterplot displaying the relationship between the variables.</p></li>
+<li><p>Using this data, fit a least squares regression to predict <code>y</code> using <code>x1</code> and <code>x2</code>. Describe the results obtained. What are <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span> and <span class="math inline">\(\hat{\beta}_2\)</span>? How do these relate to the true <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>? Can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_1 = 0\)</span>? How about the null hypothesis <span class="math inline">\(H_0 : \beta_2 = 0\)</span>?</p></li>
+<li><p>Now fit a least squares regression to predict y using only <code>x1</code>. Comment on your results. Can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_1 = 0\)</span>?</p></li>
+<li><p>Now fit a least squares regression to predict y using only <code>x2</code>. Comment on your results. Can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_1 = 0\)</span>?</p></li>
+<li><p>Do the results obtained in (c)–(e) contradict each other? Explain your answer.</p></li>
+<li><p>Now suppose we obtain one additional observation, which was unfortunately mismeasured.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1 , <span class="fl">0.1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2 , <span class="fl">0.8</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Re-fit the linear models from (c) to (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.</p>
+</section>
+<section id="boston" class="level2" data-number="21.8">
+<h2 data-number="21.8" class="anchored" data-anchor-id="boston"><span class="header-section-number">21.8</span> Boston</h2>
+<p>This problem involves the <code>Boston</code> data set. We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.</p>
+<!-- -->
+<ol type="a">
+<li><p>For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions.</p></li>
+<li><p>Fit a multiple regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis <span class="math inline">\(H_0 : \beta_j = 0\)</span>?</p></li>
+<li><p>How do your results from (a) compare to your results from (b)? Create a plot displaying the univariate regression coefficients from (a) on the <span class="math inline">\(x\)</span>-axis, and the multiple regression coefficients from (b) on the <span class="math inline">\(y\)</span>-axis. That is, each predictor is displayed as a single point in the plot. Its coefficient in a simple linear regression model is shown on the <span class="math inline">\(x\)</span>-axis, and its coefficient estimate in the multiple linear regression model is shown on the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p>Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form</p></li>
+</ol>
+<p><span class="math inline">\(Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \epsilon.\)</span></p>
+</section>
+<section id="rock" class="level2" data-number="21.9">
+<h2 data-number="21.9" class="anchored" data-anchor-id="rock"><span class="header-section-number">21.9</span> Rock</h2>
+<p>The <code>rock</code> data set, which comes packaged with <code>R</code>, describes 48 rock samples taken at a petroleum reservoir. Each sample has four measurements, all related to measuring permeability of the rock (the geological details are not so important, here):</p>
+<ul>
+<li><code>area</code>: the area of the pores (measured in a number of pixels out of a 256-by-256 image that were “pores”)</li>
+<li><code>peri</code>: perimeter of the “pores” part of the sample</li>
+<li><code>shape</code>: perimeter(<code>peri</code>) of the pores part divided by square root of the area (<code>area</code>)</li>
+<li><code>perm</code>: a measurement of permeability (in milli-Darcies, a unit of permeability, naturally)</li>
+</ul>
+<ol type="a">
+<li>plotting the data</li>
+</ol>
+<p>Suppose that our goal is to predict permeability (<code>perm</code>) from other characteristics of the rock.</p>
+<p>For each of the three other variables <code>area</code>, <code>peri</code> and <code>shape</code>, fit a linear regression model that predicts <code>perm</code> from this variable and an intercept term. That is, you should fit three models, each using one of <code>area</code>, <code>peri</code> and <code>shape</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>area_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(perm <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> area, <span class="at">data=</span>rock)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>peri_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(perm <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> peri, <span class="at">data=</span>rock)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>shape_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(perm <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> shape, <span class="at">data=</span>rock)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Part b: comparing fits</p>
+<p>Compute the RSS for each of the three models fitted in Part a. Which is best?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_rss <span class="ot">&lt;-</span> <span class="cf">function</span>( fitted_model ) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">sum</span>( (fitted_model<span class="sc">$</span>residuals)<span class="sc">**</span><span class="dv">2</span> ) )</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mapply</span>( my_rss, <span class="fu">list</span>(area_lm, peri_lm, shape_lm) )  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7591852 4092864 6216896</code></pre>
+</div>
+</div>
+<p>The model using <code>peri</code> to predict <code>perm</code> achieves the smallest RSS.</p>
+</div>
+</div>
+</div>
+<p>Part c: multiple regression</p>
+<p>Now, fit a model that predicts <code>perm</code> from the other three variables (you should not include any interaction terms).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: replace NA with model-fitting code</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>full_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( perm <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> area <span class="sc">+</span> peri <span class="sc">+</span> shape, <span class="at">data=</span>rock )</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = perm ~ 1 + area + peri + shape, data = rock)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-750.26  -59.57   10.66  100.25  620.91 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 485.61797  158.40826   3.066 0.003705 ** 
+area          0.09133    0.02499   3.654 0.000684 ***
+peri         -0.34402    0.05111  -6.731 2.84e-08 ***
+shape       899.06926  506.95098   1.773 0.083070 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 246 on 44 degrees of freedom
+Multiple R-squared:  0.7044,    Adjusted R-squared:  0.6843 
+F-statistic: 34.95 on 3 and 44 DF,  p-value: 1.033e-11</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Part d: interpreting model fits</p>
+<p>Consider the coefficient of <code>peri</code> in the model from Part c.</p>
+<ol type="1">
+<li>Give an interpretation of this estimated coefficient.</li>
+<li>Is this coefficient statistically significantly different from zero at the <span class="math inline">\(\alpha=0.01\)</span> level?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The estimated coefficient of <code>peri</code> is statistically significantly different from zero at the <span class="math inline">\(0.01\)</span> level (the p-value is approximately <span class="math inline">\(3*10^{-8}\)</span>).</p>
+<p>The estimate of the coefficient indicates that holding <code>area</code> and <code>shape</code> constant, a unit increase in <code>peri</code> is associated with a decrease of <span class="math inline">\(0.344\)</span> in <code>perm</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="fitting-and-interpreting-a-linear-regression-model" class="level2" data-number="21.10">
+<h2 data-number="21.10" class="anchored" data-anchor-id="fitting-and-interpreting-a-linear-regression-model"><span class="header-section-number">21.10</span> Fitting and Interpreting a Linear Regression Model</h2>
+<p>The <code>trees</code> data set in <code>R</code> contains measurements of diameter (in inches), height (in feet) and the amount of timber (volume, in cubic feet) in each of 31 trees. See <code>?trees</code> for additional information.</p>
+<p>The code below loads the data set. Note that the column of the data set encoding tree diameter is mistakenly labeled <code>Girth</code> (girth is technically a measure of circumference, not a diameter).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(trees)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Girth Height Volume
+1   8.3     70   10.3
+2   8.6     65   10.3
+3   8.8     63   10.2
+4  10.5     72   16.4
+5  10.7     81   18.8
+6  10.8     83   19.7</code></pre>
+</div>
+</div>
+<p>Part a: examining correlations</p>
+<p>It stands to reason that the volume of timber in a tree should scale with both the height of the tree and the diameter. However, it also stands to reason that height and diameter are highly correlated. Use the <code>cor</code> function to compute the pairwise correlations among the three variables.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(trees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Girth    Height    Volume
+Girth  1.0000000 0.5192801 0.9671194
+Height 0.5192801 1.0000000 0.5982497
+Volume 0.9671194 0.5982497 1.0000000</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Suppose that we had to choose either tree diameter (labeled <code>Girth</code> in the data) or tree height with which to predict volume. Based on these correlations, Which would you choose? Why?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>Girth</code> has a much higher correlation with <code>Volume</code> than does <code>Height</code>, so it is likely to be a better predictor.</p>
+</div>
+</div>
+</div>
+<p>Part b: comparing model fits</p>
+<p>Well, let’s put the above to a test. Use <code>lm</code> to fit two linear regression models from this data set (both should, of course, include intercept terms):</p>
+<ol type="1">
+<li>Predicting volume from height</li>
+<li>Predicting volume from diameter (labeled <code>Girth</code> in the data set)</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ht_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( Volume <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Height, <span class="at">data=</span>trees );</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>gr_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( Volume <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Girth, <span class="at">data=</span>trees );</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="fu">my_rss</span>(ht_lm), <span class="fu">my_rss</span>(gr_lm) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5204.8950  524.3025</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Compare the sum of squared residuals of these two models. Which is better? Does this agree with your observations in Part a?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The model predicting volume from girth is indeed a better model, achieving a factor of ten decrease in RSS compared to the model using height. This is in agreement with the prediction in part a.</p>
+</div>
+</div>
+</div>
+<p>Examining the model outputs above (or extracting information again here), what do each of your fitted models conclude about the null hypothesis that the slope is equal to zero?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>( ht_lm )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Volume ~ 1 + Height, data = trees)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-21.274  -9.894  -2.894  12.068  29.852 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -87.1236    29.2731  -2.976 0.005835 ** 
+Height        1.5433     0.3839   4.021 0.000378 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 13.4 on 29 degrees of freedom
+Multiple R-squared:  0.3579,    Adjusted R-squared:  0.3358 
+F-statistic: 16.16 on 1 and 29 DF,  p-value: 0.0003784</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>( gr_lm )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Volume ~ 1 + Girth, data = trees)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-8.065 -3.107  0.152  3.495  9.587 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -36.9435     3.3651  -10.98 7.62e-12 ***
+Girth         5.0659     0.2474   20.48  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.252 on 29 degrees of freedom
+Multiple R-squared:  0.9353,    Adjusted R-squared:  0.9331 
+F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Both models conclude that the coefficient of the single predictor is statistically significantly different from zero at level <span class="math inline">\(0.001\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Part c: volume and diameter</p>
+<p>Thinking back to fourth grade geometry with Mrs.&nbsp;Galvin, you remember that the area of a circle grows like the square of the diameter (that is, if we double the diameter, the area of the circle quadruples). It follows that timber volume, which is basically the volume of a cylinder, should scale linearly with the square of the diameter.</p>
+<p>Create a scatter plot of volume as a function of diameter. Does the “geometric” intuition sketched above agree with what you see in the plot? Why or why not?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(trees<span class="sc">$</span>Girth, trees<span class="sc">$</span>Volume)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mlr_practice_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>At least visually, this looks like a simple linear relationship. It doesn’t appear that using squared diameter should change anything in terms of prediction performance.</p>
+</div>
+</div>
+</div>
+<p>Part d: incorporating non-linearities</p>
+<p>Fit a linear regression model predicting volume from the squared diameter (and an intercept term, of course). Compute the residual sum of squares of this model.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>diam2_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( Volume <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">I</span>(Girth<span class="sc">^</span><span class="dv">2</span>), <span class="at">data=</span>trees)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">my_rss</span>( diam2_lm )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 329.3191</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Compare the RSS of this model with that obtained in Part b using the linear diameter. Which is better, the quadratic model or the linear model? Does this surprise you? Why or why not? If you are surprised, what might explain the observation?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This is indeed notably smaller than the RSS achieved by the linear model. This is surprising given that there is no clear nonlinearity in the scatterplot, but it is in keeping with our “geometric” intuition.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="beyond-stat-340" class="level1" data-number="22">
+<h1 data-number="22"><span class="header-section-number">22</span> Beyond STAT 340</h1>
+<p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

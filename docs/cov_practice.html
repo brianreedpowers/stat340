@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STAT 340: Data Science II - 6&nbsp; Independence and Conditional Probability Practice</title>
+<title>STAT 340: Data Science II - 8&nbsp; Independence and Conditional Probability Practice</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,8 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./RV_summary.html" rel="next">
-<link href="./rv_practice.html" rel="prev">
+<link href="./R02_IndepCondBayes.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -109,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./cov_practice.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rv.html">Sampling</a></li><li class="breadcrumb-item"><a href="./cov_practice.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -144,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">STAT 340 Index</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -154,58 +153,192 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Sampling</span></span>
-  </li>
-        <li class="sidebar-item">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Sampling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cov.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Testing</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Estimation</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Prediction</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Practice</span></span>
-  </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Testing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Estimation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text">Prediction</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
@@ -224,21 +357,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">7</span> Practice Problems</a>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">9</span> Practice Problems</a>
   <ul class="collapse">
-  <li><a href="#two-fair-coins" id="toc-two-fair-coins" class="nav-link" data-scroll-target="#two-fair-coins"><span class="header-section-number">7.1</span> 1. Two Fair Coins</a></li>
-  <li><a href="#two-fair-dice" id="toc-two-fair-dice" class="nav-link" data-scroll-target="#two-fair-dice"><span class="header-section-number">7.2</span> 2. Two Fair Dice</a></li>
-  <li><a href="#two-normal-rvs" id="toc-two-normal-rvs" class="nav-link" data-scroll-target="#two-normal-rvs"><span class="header-section-number">7.3</span> 3. Two Normal RVs</a></li>
-  <li><a href="#uniform-random-angle" id="toc-uniform-random-angle" class="nav-link" data-scroll-target="#uniform-random-angle"><span class="header-section-number">7.4</span> 4. Uniform Random Angle</a></li>
-  <li><a href="#cat-genetics" id="toc-cat-genetics" class="nav-link" data-scroll-target="#cat-genetics"><span class="header-section-number">7.5</span> 6. Cat Genetics</a></li>
-  <li><a href="#gss-survey-i" id="toc-gss-survey-i" class="nav-link" data-scroll-target="#gss-survey-i"><span class="header-section-number">7.6</span> 7. GSS Survey I</a></li>
-  <li><a href="#gss-survey-iii" id="toc-gss-survey-iii" class="nav-link" data-scroll-target="#gss-survey-iii"><span class="header-section-number">7.7</span> 9. GSS Survey III</a></li>
-  <li><a href="#two-child-paradox" id="toc-two-child-paradox" class="nav-link" data-scroll-target="#two-child-paradox"><span class="header-section-number">7.8</span> 10. Two Child Paradox</a></li>
-  <li><a href="#monty-hall" id="toc-monty-hall" class="nav-link" data-scroll-target="#monty-hall"><span class="header-section-number">7.9</span> 11. Monty Hall</a></li>
-  <li><a href="#mms" id="toc-mms" class="nav-link" data-scroll-target="#mms"><span class="header-section-number">7.10</span> 12. M&amp;Ms</a></li>
-  <li><a href="#two-coins" id="toc-two-coins" class="nav-link" data-scroll-target="#two-coins"><span class="header-section-number">7.11</span> 13. Two Coins</a></li>
+  <li><a href="#two-fair-coins" id="toc-two-fair-coins" class="nav-link" data-scroll-target="#two-fair-coins"><span class="header-section-number">9.1</span> Two Fair Coins</a></li>
+  <li><a href="#two-fair-dice" id="toc-two-fair-dice" class="nav-link" data-scroll-target="#two-fair-dice"><span class="header-section-number">9.2</span> Two Fair Dice</a></li>
+  <li><a href="#two-normal-rvs" id="toc-two-normal-rvs" class="nav-link" data-scroll-target="#two-normal-rvs"><span class="header-section-number">9.3</span> Two Normal RVs</a></li>
+  <li><a href="#uniform-random-angle" id="toc-uniform-random-angle" class="nav-link" data-scroll-target="#uniform-random-angle"><span class="header-section-number">9.4</span> Uniform Random Angle</a></li>
+  <li><a href="#signal-and-noise" id="toc-signal-and-noise" class="nav-link" data-scroll-target="#signal-and-noise"><span class="header-section-number">9.5</span> Signal and Noise</a></li>
+  <li><a href="#cat-genetics" id="toc-cat-genetics" class="nav-link" data-scroll-target="#cat-genetics"><span class="header-section-number">9.6</span> Cat Genetics</a></li>
+  <li><a href="#gss-survey-i" id="toc-gss-survey-i" class="nav-link" data-scroll-target="#gss-survey-i"><span class="header-section-number">9.7</span> GSS Survey I</a></li>
+  <li><a href="#gss-survey-ii" id="toc-gss-survey-ii" class="nav-link" data-scroll-target="#gss-survey-ii"><span class="header-section-number">9.8</span> GSS Survey II</a></li>
+  <li><a href="#gss-survey-iii" id="toc-gss-survey-iii" class="nav-link" data-scroll-target="#gss-survey-iii"><span class="header-section-number">9.9</span> GSS Survey III</a></li>
+  <li><a href="#two-child-paradox" id="toc-two-child-paradox" class="nav-link" data-scroll-target="#two-child-paradox"><span class="header-section-number">9.10</span> Two Child Paradox</a></li>
+  <li><a href="#monty-hall" id="toc-monty-hall" class="nav-link" data-scroll-target="#monty-hall"><span class="header-section-number">9.11</span> Monty Hall</a></li>
+  <li><a href="#mms" id="toc-mms" class="nav-link" data-scroll-target="#mms"><span class="header-section-number">9.12</span> M&amp;Ms</a></li>
+  <li><a href="#two-coins" id="toc-two-coins" class="nav-link" data-scroll-target="#two-coins"><span class="header-section-number">9.13</span> Two Coins</a></li>
+  <li><a href="#online-sales-i" id="toc-online-sales-i" class="nav-link" data-scroll-target="#online-sales-i"><span class="header-section-number">9.14</span> Online Sales I</a></li>
+  <li><a href="#online-sales-ii" id="toc-online-sales-ii" class="nav-link" data-scroll-target="#online-sales-ii"><span class="header-section-number">9.15</span> Online Sales II</a></li>
+  <li><a href="#uav" id="toc-uav" class="nav-link" data-scroll-target="#uav"><span class="header-section-number">9.16</span> UAV</a></li>
+  <li><a href="#disease-screening" id="toc-disease-screening" class="nav-link" data-scroll-target="#disease-screening"><span class="header-section-number">9.17</span> Disease Screening</a></li>
+  <li><a href="#two-random-variables" id="toc-two-random-variables" class="nav-link" data-scroll-target="#two-random-variables"><span class="header-section-number">9.18</span> Two random variables</a></li>
   </ul></li>
-  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">8</span> Beyond STAT 340</a></li>
+  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">10</span> Beyond STAT 340</a>
+  <ul class="collapse">
+  <li><a href="#variance-of-a-rv-from-the-pmf" id="toc-variance-of-a-rv-from-the-pmf" class="nav-link" data-scroll-target="#variance-of-a-rv-from-the-pmf"><span class="header-section-number">10.1</span> Variance of a RV from the pmf</a></li>
+  <li><a href="#variance-of-a-uniform-rv" id="toc-variance-of-a-uniform-rv" class="nav-link" data-scroll-target="#variance-of-a-uniform-rv"><span class="header-section-number">10.2</span> Variance of a Uniform RV</a></li>
+  <li><a href="#expectation-and-binomial" id="toc-expectation-and-binomial" class="nav-link" data-scroll-target="#expectation-and-binomial"><span class="header-section-number">10.3</span> Expectation and Binomial</a></li>
+  <li><a href="#variance-formula" id="toc-variance-formula" class="nav-link" data-scroll-target="#variance-formula"><span class="header-section-number">10.4</span> Variance Formula</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +393,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></h1>
 </div>
 
 
@@ -262,10 +408,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="practice-problems" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Practice Problems</h1>
-<section id="two-fair-coins" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="two-fair-coins"><span class="header-section-number">7.1</span> 1. Two Fair Coins</h2>
+<section id="practice-problems" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Practice Problems</h1>
+<section id="two-fair-coins" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="two-fair-coins"><span class="header-section-number">9.1</span> Two Fair Coins</h2>
 <p>Alex and Bob each flips a fair coin twice. Use “1” to denote heads and “0” to denote tails. Let X be the maximum of the two numbers Alex gets, and let Y be the minimum of the two numbers Bob gets.</p>
 <!-- -->
 <ol type="a">
@@ -316,8 +462,8 @@ Sum 0.7500 0.2500 1.00</code></pre>
 </div>
 </div>
 </section>
-<section id="two-fair-dice" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="two-fair-dice"><span class="header-section-number">7.2</span> 2. Two Fair Dice</h2>
+<section id="two-fair-dice" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="two-fair-dice"><span class="header-section-number">9.2</span> Two Fair Dice</h2>
 <p>Two fair dice are rolled. Find the joint PMF of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> when</p>
 <!-- -->
 <ol type="a">
@@ -403,8 +549,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="two-normal-rvs" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="two-normal-rvs"><span class="header-section-number">7.3</span> 3. Two Normal RVs</h2>
+<section id="two-normal-rvs" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="two-normal-rvs"><span class="header-section-number">9.3</span> Two Normal RVs</h2>
 <p>Let X and Y be zero-mean, unit-variance independent Gaussian random variables. Find the value of r for which the probability that <span class="math inline">\((X, Y )\)</span> falls inside a circle of radius r is 1/2.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -430,27 +576,27 @@ Solution
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(r,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       r      p
-1  1.100 0.4654
-2  1.105 0.4685
-3  1.110 0.4707
-4  1.115 0.4745
-5  1.120 0.4764
-6  1.125 0.4798
-7  1.130 0.4831
-8  1.135 0.4855
-9  1.140 0.4888
-10 1.145 0.4918
-11 1.150 0.4954
-12 1.155 0.4987
-13 1.160 0.5017
-14 1.165 0.5042
-15 1.170 0.5074
-16 1.175 0.5105
-17 1.180 0.5130
-18 1.185 0.5168
-19 1.190 0.5201
-20 1.195 0.5223
-21 1.200 0.5247</code></pre>
+1  1.100 0.4528
+2  1.105 0.4566
+3  1.110 0.4603
+4  1.115 0.4630
+5  1.120 0.4654
+6  1.125 0.4692
+7  1.130 0.4730
+8  1.135 0.4753
+9  1.140 0.4788
+10 1.145 0.4826
+11 1.150 0.4857
+12 1.155 0.4880
+13 1.160 0.4902
+14 1.165 0.4927
+15 1.170 0.4952
+16 1.175 0.4992
+17 1.180 0.5020
+18 1.185 0.5054
+19 1.190 0.5084
+20 1.195 0.5113
+21 1.200 0.5142</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#X^2 + Y^2 ~ Chisq(2)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#so the square root of the 50th percentile from that distribution should be the answer</span></span>
@@ -463,8 +609,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="uniform-random-angle" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="uniform-random-angle"><span class="header-section-number">7.4</span> 4. Uniform Random Angle</h2>
+<section id="uniform-random-angle" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="uniform-random-angle"><span class="header-section-number">9.4</span> Uniform Random Angle</h2>
 <p>Let <span class="math inline">\(\Theta ∼ Uniform[0, 2\pi]\)</span>.</p>
 <!-- -->
 <ol type="a">
@@ -487,7 +633,7 @@ Solution
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cos</span>(thetas), <span class="fu">sin</span>(thetas))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01024295</code></pre>
+<pre><code>[1] 0.004002113</code></pre>
 </div>
 </div>
 </div>
@@ -512,13 +658,16 @@ Solution
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cos</span>(thetas<span class="sc">/</span><span class="dv">4</span>), <span class="fu">sin</span>(thetas<span class="sc">/</span><span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.9184621</code></pre>
+<pre><code>[1] -0.9204671</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>##5. Signal and Noise Let <span class="math inline">\(Y = X+N\)</span>, where <span class="math inline">\(X\)</span> is the input, <span class="math inline">\(N\)</span> is the noise, and <span class="math inline">\(Y\)</span> is the output of a system. Assume that <span class="math inline">\(X\)</span> and <span class="math inline">\(N\)</span> are independent random variables. It is given that <span class="math inline">\(E[X] = 0\)</span>, <span class="math inline">\(Var[X] = \sigma^2_X\)</span>, <span class="math inline">\(E[N] = 0\)</span>, and <span class="math inline">\(Var[N] = \sigma^2_N\)</span>.</p>
+</section>
+<section id="signal-and-noise" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="signal-and-noise"><span class="header-section-number">9.5</span> Signal and Noise</h2>
+<p>Let <span class="math inline">\(Y = X+N\)</span>, where <span class="math inline">\(X\)</span> is the input, <span class="math inline">\(N\)</span> is the noise, and <span class="math inline">\(Y\)</span> is the output of a system. Assume that <span class="math inline">\(X\)</span> and <span class="math inline">\(N\)</span> are independent random variables. It is given that <span class="math inline">\(E[X] = 0\)</span>, <span class="math inline">\(Var[X] = \sigma^2_X\)</span>, <span class="math inline">\(E[N] = 0\)</span>, and <span class="math inline">\(Var[N] = \sigma^2_N\)</span>.</p>
 <!-- -->
 <ol type="a">
 <li>Find the correlation coefficient <span class="math inline">\(\rho\)</span> between the input <span class="math inline">\(X\)</span> and the output <span class="math inline">\(Y\)</span> .</li>
@@ -546,7 +695,7 @@ Solution
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">0</span>, <span class="dv">2</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X, X<span class="sc">+</span>N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9298284</code></pre>
+<pre><code>[1] 0.9270243</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">5</span><span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">5</span><span class="sc">^</span><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span><span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -600,8 +749,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="cat-genetics" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="cat-genetics"><span class="header-section-number">7.5</span> 6. Cat Genetics</h2>
+<section id="cat-genetics" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="cat-genetics"><span class="header-section-number">9.6</span> Cat Genetics</h2>
 <p>The gene that controls white coat color in cats, KIT , is known to be responsible for multiple phenotypes such as deafness and blue eye color. A dominant allele W at one location in the gene has complete penetrance for white coat color; all cats with the W allele have white coats. There is incomplete penetrance for blue eyes and deafness; not all white cats will have blue eyes and not all white cats will be deaf. However, deafness and blue eye color are strongly linked, such that white cats with blue eyes are much more likely to be deaf. The variation in penetrance for eye color and deafness may be due to other genes as well as environmental factors.</p>
 <ul>
 <li><p>Suppose that 30% of white cats have one blue eye, while 10% of white cats have two blue eyes.</p></li>
@@ -644,7 +793,7 @@ Solution
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(isdeaf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3057</code></pre>
+<pre><code>[1] 0.3046</code></pre>
 </div>
 </div>
 </div>
@@ -674,7 +823,7 @@ Solution
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nblue[isdeaf]<span class="sc">==</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2342166</code></pre>
+<pre><code>[1] 0.2268549</code></pre>
 </div>
 </div>
 </div>
@@ -722,7 +871,7 @@ Solution
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(isBlind[isdeaf])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2744521</code></pre>
+<pre><code>[1] 0.2728168</code></pre>
 </div>
 </div>
 </div>
@@ -756,7 +905,7 @@ Solution
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(isBlind)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1531</code></pre>
+<pre><code>[1] 0.154</code></pre>
 </div>
 </div>
 </div>
@@ -790,15 +939,15 @@ Solution
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nblue[isBlind]<span class="sc">==</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1071195</code></pre>
+<pre><code>[1] 0.1064935</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="gss-survey-i" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="gss-survey-i"><span class="header-section-number">7.6</span> 7. GSS Survey I</h2>
+<section id="gss-survey-i" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="gss-survey-i"><span class="header-section-number">9.7</span> GSS Survey I</h2>
 <p>Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more probable?</p>
 <!-- -->
 <ol type="a">
@@ -871,7 +1020,10 @@ Solution
 </div>
 </div>
 </div>
-<p>##8. GSS Survey II Compute the following probabilities:</p>
+</section>
+<section id="gss-survey-ii" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="gss-survey-ii"><span class="header-section-number">9.8</span> GSS Survey II</h2>
+<p>Compute the following probabilities:</p>
 <!-- -->
 <ol type="a">
 <li>What is the probability that a respondent is liberal, given that they are a Democrat?</li>
@@ -922,8 +1074,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="gss-survey-iii" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="gss-survey-iii"><span class="header-section-number">7.7</span> 9. GSS Survey III</h2>
+<section id="gss-survey-iii" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="gss-survey-iii"><span class="header-section-number">9.9</span> GSS Survey III</h2>
 <p>There’s a <a href="https://quoteinvestigator.com/2014/02/24/heart-head/">famous quote</a> about young people, old people, liberals, and conservatives that goes something like:</p>
 <blockquote class="blockquote">
 <p>If you are not a liberal at 25, you have no heart. If you are not a conservative at 35, you have no brain.</p>
@@ -1028,8 +1180,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="two-child-paradox" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="two-child-paradox"><span class="header-section-number">7.8</span> 10. Two Child Paradox</h2>
+<section id="two-child-paradox" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="two-child-paradox"><span class="header-section-number">9.10</span> Two Child Paradox</h2>
 <p>Suppose you meet someone and learn that they have two children. You ask if either child is a girl and they say yes. What is the probability that both children are girls? (<em>Hint: Start with four equally likely hypotheses.</em>)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
@@ -1049,8 +1201,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="monty-hall" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="monty-hall"><span class="header-section-number">7.9</span> 11. Monty Hall</h2>
+<section id="monty-hall" class="level2" data-number="9.11">
+<h2 data-number="9.11" class="anchored" data-anchor-id="monty-hall"><span class="header-section-number">9.11</span> Monty Hall</h2>
 <p>There are many variations of the <a href="https://en.wikipedia.org/wiki/Monty_Hall_problem">Monty Hall problem</a>. For example, suppose Monty always chooses Door 2 if he can, and only chooses Door 3 if he has to (because the car is behind Door 2).</p>
 <!-- -->
 <ol type="a">
@@ -1105,8 +1257,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="mms" class="level2" data-number="7.10">
-<h2 data-number="7.10" class="anchored" data-anchor-id="mms"><span class="header-section-number">7.10</span> 12. M&amp;Ms</h2>
+<section id="mms" class="level2" data-number="9.12">
+<h2 data-number="9.12" class="anchored" data-anchor-id="mms"><span class="header-section-number">9.12</span> M&amp;Ms</h2>
 <p>M&amp;M’s are small candy-coated chocolates that come in a variety of colors. Mars, Inc., which makes M&amp;M’s, changes the mixture of colors from time to time. In 1995, they introduced blue M&amp;M’s.</p>
 <ul>
 <li><p>In 1994, the color mix in a bag of plain M&amp;M’s was 30% Brown, 20% Yellow, 20% Red, 10% Green, 10% Orange, 10% Tan.</p></li>
@@ -1137,8 +1289,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="two-coins" class="level2" data-number="7.11">
-<h2 data-number="7.11" class="anchored" data-anchor-id="two-coins"><span class="header-section-number">7.11</span> 13. Two Coins</h2>
+<section id="two-coins" class="level2" data-number="9.13">
+<h2 data-number="9.13" class="anchored" data-anchor-id="two-coins"><span class="header-section-number">9.13</span> Two Coins</h2>
 <p>Suppose you have two coins in a box. One is a normal coin with heads on one side and tails on the other, and one is a trick coin with heads on both sides. You choose a coin at random and see that one of the sides is heads. What is the probability that you chose the trick coin?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
@@ -1160,12 +1312,148 @@ Solution
 </div>
 </div>
 </section>
+<section id="online-sales-i" class="level2" data-number="9.14">
+<h2 data-number="9.14" class="anchored" data-anchor-id="online-sales-i"><span class="header-section-number">9.14</span> Online Sales I</h2>
+<p>(From <em>Introduction to Probability and Statistics for Data Science</em>) Customers can buy one of four produts, each having its own web page with a ``buy’’ link. When they click on the link, they are redirected to a common page containing a registration and payment orm. Once there the customer eithe rbuys the desired product (labeled 1,2,3 or 4) or they fail to complete and a sale is lost. Let event <span class="math inline">\(A_i\)</span> be that a customer is on produt <span class="math inline">\(i\)</span>’s web page and let event <span class="math inline">\(B\)</span> be the event that the customer buys the product. For the purposes of this problem, assume that each potential customer visits at most one product page and so he or she buys at most one produt. For the probabilities shown in the table below, find the probability that a customer buys a product.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Product <span class="math inline">\((i)\)</span></th>
+<th><span class="math inline">\(Pr[B|A_i]\)</span></th>
+<th>$Pr[A_i]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(0.72\)</span></td>
+<td><span class="math inline">\(0.14\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><span class="math inline">\(0.90\)</span></td>
+<td><span class="math inline">\(0.04\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><span class="math inline">\(0.51\)</span></td>
+<td><span class="math inline">\(0.11\)</span></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><span class="math inline">\(0.97\)</span></td>
+<td><span class="math inline">\(0.02\)</span></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="beyond-stat-340" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Beyond STAT 340</h1>
+<section id="online-sales-ii" class="level2" data-number="9.15">
+<h2 data-number="9.15" class="anchored" data-anchor-id="online-sales-ii"><span class="header-section-number">9.15</span> Online Sales II</h2>
+<p>Continuing from the previous problem, if a random purchase is selected, find the probability that it was item 1 that was purchased. Do the same for items 2, 3 and 4.</p>
+</section>
+<section id="uav" class="level2" data-number="9.16">
+<h2 data-number="9.16" class="anchored" data-anchor-id="uav"><span class="header-section-number">9.16</span> UAV</h2>
+<p>Consider a new type of commercial unmanned aerial vehicle (UAV) that has been outfitted with a transponder so that if it crashes it can easily be found and reused. Other older UAVs do not have transponders. Eighty percent of al lUAVs are recovered and, of those recovered, 75% have a transponder. Further, of those not recovered, 90% do not have a transponder. Denote recovery as <span class="math inline">\(R+\)</span> and failure to recover as <span class="math inline">\(R-\)</span>. Denote having a transponder as <span class="math inline">\(T+\)</span> and not having a transponder as <span class="math inline">\(T-\)</span>. Find</p>
+<ol type="a">
+<li><span class="math inline">\(Pr[T+]\)</span></li>
+<li>The probability of not recovering a UAV given that it has a transponder.</li>
+</ol>
+</section>
+<section id="disease-screening" class="level2" data-number="9.17">
+<h2 data-number="9.17" class="anchored" data-anchor-id="disease-screening"><span class="header-section-number">9.17</span> Disease Screening</h2>
+<p>Suppose that the test for a disease has sensitivity 0.90 and specificity 0.999. The base rate for the disease is 0.002. Find</p>
+<ol type="a">
+<li><p>The probability that someone selected at random from the population tests positive.</p></li>
+<li><p>The probability that the person has the diseases given a positive test result (the positive predictive value).</p></li>
+<li><p>The probability that the person does not have the disease given a negative test result (the negative predictive value).</p></li>
+</ol>
+</section>
+<section id="two-random-variables" class="level2" data-number="9.18">
+<h2 data-number="9.18" class="anchored" data-anchor-id="two-random-variables"><span class="header-section-number">9.18</span> Two random variables</h2>
+<p>Suppose</p>
+</section>
+</section>
+<section id="beyond-stat-340" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Beyond STAT 340</h1>
 <p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
+<section id="variance-of-a-rv-from-the-pmf" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="variance-of-a-rv-from-the-pmf"><span class="header-section-number">10.1</span> Variance of a RV from the pmf</h2>
+<p>Let <span class="math inline">\(X\)</span> be a random variable with pmf <span class="math inline">\(p_k = 1/2^k\)</span> for <span class="math inline">\(k=1,2,\ldots\)</span>.</p>
+<ol type="a">
+<li>Find <span class="math inline">\(\text{Var}X\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The variance is</strong> <span class="math inline">\(E(X^2)-(EX)^2=E(X^2)-4\)</span><strong>. The expected value of</strong> <span class="math inline">\(X^2\)</span> <strong>can be derived, though it’s not so fun…</strong></p>
+<p><strong>Start by taking the equation</strong> <span class="math inline">\(\sum_k kp^k = \frac{p}{(1-p)^2}\)</span> <strong>and take a derivative again. We get</strong> <span class="math inline">\(\sum_k k^2 p^{k-1} = \frac{(1-p)^2+2p(1-p)}{(1-p)^4}\)</span><strong>. Multiply through by</strong> <span class="math inline">\(p\)</span> <strong>to get</strong> <span class="math inline">\(\sum_k k^2 p^k = \frac{p(1-p)^2+2p^2(1-p)}{(1-p)^4}\)</span><strong>. If we let</strong> <span class="math inline">\(p=\frac12\)</span> <strong>we have found</strong> <span class="math inline">\(E(X^2)=\sum_{k=1}^\infty k^2(\frac12)^k=\dfrac{\frac18-\frac{2}{8}}{\frac{1}{16}}=6\)</span><strong>. Thus</strong> <span class="math inline">\(Var(X)=E(X^2)-E(X)^2 = 6-4=2\)</span><strong>. It should be noted that this random variable is actually a geometric random variable (well, according to the “number of trials until and including the first success definition). If we define</strong> <span class="math inline">\(Y\sim Geom(.5)\)</span> <strong>using our definition of “number of failures before the first success” then We can let</strong> <span class="math inline">\(X=Y+1\)</span><strong>.</strong> <span class="math inline">\(E(X)=E(Y+1)=\frac{1-.5}{.5}+1=2\)</span> <strong>and</strong> <span class="math inline">\(Var(X)=Var(Y)=\frac{1-p}{p2}=\frac{.5}{.25^2}=2\)</span><strong>.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="variance-of-a-uniform-rv" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="variance-of-a-uniform-rv"><span class="header-section-number">10.2</span> Variance of a Uniform RV</h2>
+<p>Calculate the variance of <span class="math inline">\(X \sim \text{Unif}(a,b)\)</span>. (<em>Hint:</em> First calculate <span class="math inline">\(\mathbb{E}X^2\)</span>)</p>
+</section>
+<section id="expectation-and-binomial" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="expectation-and-binomial"><span class="header-section-number">10.3</span> Expectation and Binomial</h2>
+<p>If <span class="math inline">\(X \sim \text{Binom}(n,p)\)</span> show that <span class="math inline">\(\mathbb{E}X(X-1)=n(n-1)p^2\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>We can just expand the product</strong> <span class="math inline">\(\mathbb{E}(X^2-X)\)</span> <strong>and we can split this up into two expected values:</strong> <span class="math inline">\(\mathbb{E}X^2 - \mathbb{E}X = \mathbb{E}X^2-\mu\)</span><strong>. Recall that</strong> <span class="math inline">\(Var(X)=\mathbb{E}X^2-\mu^2\)</span> <strong>So</strong> <span class="math inline">\(\mathbb{E}X^2=Var(X)+\mu^2\)</span><strong>. For a binomial,</strong> <span class="math inline">\(Var(X)=np(1-p)\)</span> <strong>and</strong> <span class="math inline">\(\mu=np\)</span><strong>. Thus we have</strong></p>
+<p><span class="math inline">\(\mathbb{E}X^2 - \mu=[np(1-p) + n^2p^2] - np = np\left(1-p+np-1\right)\)</span></p>
+<p><strong>Tidying up a little bit we get</strong> <span class="math inline">\(np(np-p)=np^2(n-1)\)</span><strong>, and we’re done.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="variance-formula" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="variance-formula"><span class="header-section-number">10.4</span> Variance Formula</h2>
+<p>Show that <span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2-\mu^2\)</span>. <em>Hint:</em> expand the quantity <span class="math inline">\((X-\mu)^2\)</span> and distribute the expectation over the resulting terms.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The proof goes like this: We first FOIL</strong> <span class="math inline">\((X-\mu)^2\)</span><strong>:</strong></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}(X^2 - 2\mu X + \mu^2)\)</span></p>
+<p><strong>We next split the expected value into 3 expected values using the fact that</strong> <span class="math inline">\(\mathbb{E}\)</span> <strong>is a linear operator.</strong></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mathbb{E}X + \mathbb{E}\mu^2\)</span></p>
+<p><strong>We next observe that</strong> <span class="math inline">\(\mu^2\)</span> <strong>is constant and</strong> <span class="math inline">\(\mathbb{X}=\mu\)</span></p>
+<p><span class="math inline">\(\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mu + \mu^2\)</span></p>
+<p><strong>We can simplify the expression and we’re done!</strong></p>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1404,14 +1692,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./rv_practice.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span>
+      <a href="./R02_IndepCondBayes.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./RV_summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -1,0 +1,355 @@
+---
+title: "Monte Carlo Testing"
+author: "Brian Powers"
+date: "2024-02-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Example: Groundhog's Day
+
+How well has Punxsutawney Phil done in predicting the weather?
+
+Thousands gather at Gobbler’s Knob in Punxsutawney, Pennsylvania, on the second day of February to await the spring forecast from a groundhog known as Punxsutawney Phil. According to legend, if Phil sees his shadow the United States is in store for six more weeks of winter weather. But, if Phil doesn’t see his shadow, the country should expect warmer temperatures and the arrival of an early spring.
+
+Source: https://www.kaggle.com/datasets/groundhogclub/groundhog-day?resource=download
+
+```{r}
+groundhog<-read.csv("data/archive.csv")
+
+#Get rid of rows with no record or partial shadow. Let's be serious!
+
+groundhog <- subset(groundhog, groundhog$Punxsutawney.Phil %in% c("Full Shadow","No Shadow") & !is.na(groundhog$February.Average.Temperature))
+```
+
+Let's do a permutation test
+
+$H_0:$ Phil's not a true forecasting groundhog
+$H_1:$ Phil has some forecasting power.
+
+### Early Spring = February warmer than average
+
+We will compare mean temperature in February as a measure of early spring. We will take those years of "early spring" prediction and those of "regular spring" and compare the average average Feb temperature in those two groups.
+
+```{r}
+#Isolate feb avg temperature for full shadow years
+#isolate feb avg temperature for no shadow years
+feb.avg.shadow <- groundhog$February.Average.Temperature[groundhog$Punxsutawney.Phil=="Full Shadow"]
+feb.avg.noshadow <- groundhog$February.Average.Temperature[groundhog$Punxsutawney.Phil=="No Shadow"]
+#check
+feb.avg.shadow
+feb.avg.noshadow
+```
+
+
+```{r}
+
+#We will use mean feb no shadow - mean feb shadow; if this >0 that is evidence that the predictions work.
+
+mean(feb.avg.noshadow)-mean(feb.avg.shadow)
+
+permute_and_compute <- function(sampleA, sampleB){
+  #remember - sampleA is no shadow
+  #sample B is shadow
+  pooledData <- c(sampleA, sampleB)
+  shuffledData <- sample(pooledData)
+  sim.sampleA <- shuffledData[1:length(sampleA)]
+  sim.sampleB <- shuffledData[(length(sampleA)+1):length(shuffledData)]
+  #we may modify this if we want to use a different test statistic
+  return(mean(sim.sampleA)-mean(sim.sampleB)) 
+}
+t_obs <- mean(feb.avg.noshadow)-mean(feb.avg.shadow)
+
+test.stats <- 0 #lazy empty vector - R will add more to it without complaining
+NMC <- 10000
+for(i in 1:NMC){
+  test.stats[i] <- permute_and_compute(feb.avg.noshadow, feb.avg.shadow)
+}
+hist(test.stats)
+abline(v=t_obs, col="red")
+
+mean(test.stats >= t_obs)
+
+```
+
+### Early Spring = warmer than average March temperatures
+
+Maybe he's better at predicting March temperatures?
+```{r}
+mar.avg.shadow <- groundhog$March.Average.Temperature[groundhog$Punxsutawney.Phil=="Full Shadow"]
+mar.avg.noshadow <- groundhog$March.Average.Temperature[groundhog$Punxsutawney.Phil=="No Shadow"]
+
+t_obs <- mean(mar.avg.noshadow)-mean(mar.avg.shadow)
+
+test.stats <- 0 #lazy empty vector - R will add more to it without complaining
+NMC <- 10000
+for(i in 1:NMC){
+  test.stats[i] <- permute_and_compute(mar.avg.noshadow, mar.avg.shadow)
+}
+hist(test.stats, breaks=50)
+abline(v=t_obs, col="red")
+
+mean(test.stats >= t_obs)
+```
+
+
+
+### Early Spring = Mean of Feb & March temps above average
+
+What if we average Feb and March temperatures together.
+```{r}
+groundhog$FebMarAvg <- (groundhog$February.Average.Temperature+groundhog$March.Average.Temperature)/2
+avg.shadow <- groundhog$FebMarAvg[groundhog$Punxsutawney.Phil=="Full Shadow"]
+avg.noshadow <- groundhog$FebMarAvg[groundhog$Punxsutawney.Phil=="No Shadow"]
+
+t_obs <- mean(avg.noshadow)-mean(avg.shadow)
+
+test.stats <- 0 #lazy empty vector - R will add more to it without complaining
+NMC <- 10000
+for(i in 1:NMC){
+  test.stats[i] <- permute_and_compute(avg.noshadow, avg.shadow)
+}
+hist(test.stats, breaks=50)
+abline(v=t_obs, col="red")
+
+mean(test.stats >= t_obs)
+
+```
+I don't know about you, but this is staring to seem a little bit weird. 
+
+
+### Measuring Accuracy
+
+(New idea of what "early spring" means) 
+If both February temperatures and march temperature are greater than average, then we say we have an early spring.
+
+```{r}
+feb.avg <- mean(groundhog$February.Average.Temperature)
+mar.avg <- mean(groundhog$March.Average.Temperature)
+
+groundhog$EarlySpring <- groundhog$February.Average.Temperature>feb.avg & groundhog$March.Average.Temperature>mar.avg
+
+addmargins(table(groundhog$Punxsutawney.Phil, groundhog$EarlySpring))
+```
+
+when earlySpring = TRUE, and prediction was "no shadow" that would be correct
+when earlySpring = FALSE and prediction is "full shadow" that would be correct
+
+```{r}
+accuracy <- function(guesses, weather){
+  predictEarlySpring <- guesses=="No Shadow"
+  nCorrect <- sum(weather==predictEarlySpring)
+  return(nCorrect/length(weather))
+}
+
+accuracy(groundhog$Punxsutawney.Phil, groundhog$EarlySpring)
+```
+
+Let's call our simulated Groundhog "Bernoulli Phil"
+
+```{r}
+prop.table(table(groundhog$Punxsutawney.Phil))
+#A randomly guessing groundhog would see his shadow this proportion of the time
+
+p.shadow <- prop.table(table(groundhog$Punxsutawney.Phil))[1]
+```
+```{r}
+(accuracy.obs <- accuracy(groundhog$Punxsutawney.Phil, groundhog$EarlySpring))
+
+#simulate guesses by Bernoulli Phil
+randomGuesses <- function(n=115, p=0.8695652){
+  return(sample(c("Full Shadow","No Shadow"), size=n, replace=TRUE, prob=c(p,1-p)))
+}
+
+NMC <- 10000
+results <- rep(0,NMC)
+n <- nrow(groundhog)
+
+for(i in 1:NMC){
+  results[i] <- accuracy(randomGuesses(n, p.shadow), groundhog$EarlySpring)
+}
+
+hist(results, breaks=40)
+abline(v=accuracy.obs)
+
+mean(results >= accuracy.obs)
+
+```
+The actual groundhog's accuracy is statistically much better than the simulated "random guessing" groundhog - at least better at predicting if both Feb & March will be above average temperature.
+
+The scatterplot colored by shadow status makes this pattern suspiciously clear
+
+```{r}
+plot(groundhog$February.Average.Temperature, groundhog$March.Average.Temperature, col=(as.numeric(groundhog$Punxsutawney.Phil=="Full Shadow") +1), xlab="Avg. Feb Temp", ylab="Avg. Mar Temp", main="National Feb/Mar Temp vs Shadow", pch=16)
+abline(v=mean(groundhog$February.Average.Temperature))
+abline(h=mean(groundhog$March.Average.Temperature))
+legend(x=25, y=50, legend=c("early spring","6 wks winter"), pch=16, col=1:2)
+```
+
+O ye unbelievers! Witness the prognosticating powers of Phil the groundhog!
+
+### Looking at Deviation from a moving average
+
+However we have to be cautious - think about climate change and Phil's predictions.
+
+```{r, warning=FALSE}
+library(smooth)
+MA <-sma(groundhog$FebMarAvg, order=20)
+#predict(MA)
+plot(y=groundhog$FebMarAvg, x=groundhog$Year, col=as.numeric((as.factor(groundhog$Punxsutawney.Phil)))+1, pch=16)
+lines(y=predict(MA)$mean, x=groundhog$Year)
+```
+
+Notice that he has been predicting early springs more often since the 60s, and also we've been having warmer and warmer temperatures. Perhaps he's predicting early spring more often because of climate change, and thus he is correct more often. 
+
+This whole analysis really hinges on what we mean by an "early spring". One could argue that with rising global temperatures, spring is actually coming earlier more often than it used to, and THAT's why he's seeing no shadow more often. 
+
+If we repeat this analysis and look not at whether the temperature is above average, but rather whether the temperature is above the `moving average` then it changes the conclusion a bit
+
+```{r}
+groundhog$tempDev <- groundhog$FebMarAvg - as.numeric(predict(MA)$mean)
+plot(y=groundhog$tempDev,x=groundhog$Year, col=as.numeric((as.factor(groundhog$Punxsutawney.Phil)))+1, pch=16, ylab="dev from moving avg")
+
+```
+
+
+```{r}
+avg.shadow <- groundhog$tempDev[groundhog$Punxsutawney.Phil=="Full Shadow"]
+avg.noshadow <- groundhog$tempDev[groundhog$Punxsutawney.Phil=="No Shadow"]
+
+t_obs <- mean(avg.noshadow)-mean(avg.shadow)
+
+test.stats <- 0 #lazy empty vector - R will add more to it without complaining
+NMC <- 10000
+for(i in 1:NMC){
+  test.stats[i] <- permute_and_compute(avg.noshadow, avg.shadow)
+}
+hist(test.stats, breaks=50)
+abline(v=t_obs, col="red")
+
+mean(test.stats >= t_obs)
+
+```
+
+Last let's consider an "early spring" when both Feb and March average temps are above the moving average.
+```{r}
+MAfeb <-sma(groundhog$February.Average.Temperature, order=20)
+MAmar <-sma(groundhog$March.Average.Temperature, order=20)
+
+earlySpring <- groundhog$February.Average.Temperature > as.numeric(predict(MAfeb)$mean)  &
+  groundhog$March.Average.Temperature > as.numeric(predict(MAmar)$mean)
+
+accuracy(groundhog$Punxsutawney.Phil, earlySpring)
+```
+The accuracy is now not much better than a flip of a coin. But that's not statistical thinking - we need to see if he is better than a randomly guessing groundhog.
+
+```{r}
+(accuracy.obs <- accuracy(groundhog$Punxsutawney.Phil, earlySpring))
+
+#simulate guesses by Bernoulli Phil
+randomGuesses <- function(n=115, p=0.8695652){
+  return(sample(c("Full Shadow","No Shadow"), size=n, replace=TRUE, prob=c(p,1-p)))
+}
+
+NMC <- 10000
+n <- nrow(groundhog)
+results <- replicate(NMC, accuracy(randomGuesses(n, p.shadow), earlySpring))
+
+hist(results, breaks=40)
+abline(v=accuracy.obs)
+
+mean(results >= accuracy.obs)
+```
+I'm still convinced - the groundhog does significantly better than a random guesser.
+
+
+
+## Example: Autocorrelation
+
+A question of particular importance in time series analysis is whether there is any autocorrelation. If your data is recorded regularly at timesteps $1,2,\ldots$ we could look at the relationship between $X_i$ and $X_{i+1}$ to see if they exhibit correlation.
+
+consider the following time series data:
+
+```{r}
+time_series <- read.csv("data/time_series_data.csv")
+plot(time_series$x, type="l")
+```
+
+One possible model for how this data came about is that it is independent draws from a random variable.
+A quick check of the histogram can help us determine a good random variable to model the data:
+```{r}
+hist(time_series$x, breaks=20)
+```
+The distribution is somewhat symmetric, bell-shape. It could be a normal distribution. A better check for the distribution fit is a `qqnorm` plot.
+
+```{r, message=F}
+library(car)
+qqPlot(time_series$x)
+```
+Let's just pull the point estimates for the $\mu$ and $\sigma$ parameters for a normal distribution.
+```{r}
+(mu <- mean(time_series$x))
+(sigma <- sd(time_series$x))
+```
+
+If we are reasonably comfortable with the assumption that the data came from a normal distribution (seems supported by the QQ plot) we could model $X$ as independent draws from $N(100.17, 4.17^2)$.
+
+A natural test statistic to look at which measures autocorrelation is the correlation of $X_i$ with $X_{i+1}$. 
+```{r}
+test.stat <- function(X){
+  return(cor(X[-1], X[-length(X)] ) )
+}
+(obs.t <- test.stat(time_series$x))
+```
+### A Parametric Test of Autocorrelation
+To perform a Monte Carlo test we can simulate datasets from our null hypothesis model and record the simulated test statistic.
+```{r}
+t.sim <- replicate(10000, test.stat(rnorm(100, mu, sigma)))
+hist(t.sim)
+```
+
+We will consider what proportion of the simulated test statistics are more extreme than we observed. Because this is a two-tailed distribution - and evidence against the null would be found in either the upper or the lower tail, we should make our p-value calculation by doubling the smaller of the two tails
+```{r}
+2 * min(mean(t.sim >= obs.t),
+        mean(t.sim <= obs.t))
+hist(t.sim)
+abline(v=obs.t, col="red")
+```
+
+We have a very low p-value, indicating that if the data were in fact independent draws, we'd have a very very small chance of seeing data like this.
+
+### A Permutation Test of Autocorrelation
+We could also take a different approach for our null model. We could use a permutation test. Under the null hypothesis, every permutation of the data is equally likely. So we could produce a simulated test statistic distribution by shuffling the data around each time. This is consistent with our null hypothesis because there's no trend in this model.
+
+```{r}
+t.sim <- replicate(10000, test.stat(sample(time_series$x)))
+2 * min(mean(t.sim >= obs.t),
+        mean(t.sim <= obs.t))
+hist(t.sim)
+abline(v=obs.t, col="red")
+```
+The p-value is pretty much the same, and so is our conclusion.
+
+### A Permutation test of constant variance
+Another violation of the null model would be if the variance of the simulated values is not consistent. We could simply split the data in half and calculate the variance of the first half of the data, comparing it with the variance of the second half of the data. We can look at the absolute value of the difference. 
+```{r}
+test.stat <- function(x){
+  n1 <- round(length(x)/2)
+  abs(var(x[1:n1]) - var(x[-(1:n1)]))
+}
+(obs.t <- test.stat(time_series$x))
+```
+
+This test statistic is designed to be a one-sided test statistic, only large values of $T$ represent evidence against the null hypothesis that $\sigma^2$ is constant.
+
+```{r}
+t.sim <- replicate(10000, test.stat(sample(time_series$x)))
+mean(t.sim >= obs.t) #right-tailed p-value
+hist(t.sim)
+abline(v=obs.t, col="red")
+
+```
+The $p$-value is small once again. We have strong evidence that the the variance of the model generating these values is not constant.

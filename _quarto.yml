@@ -27,8 +27,32 @@ book:
       - mc_practice.qmd
       - R_MonteCarlo_Battleship.Rmd
     - part: "Testing"
+      chapters:
+      - testing1.qmd
+      - R04_Monte_Carlo_Testing.Rmd
+      - testing1_practice.qmd
+      - text: "---"
+      - R05_testing_Additional_Examples.Rmd
+      - testing2_practice.qmd
     - part: "Estimation"
+      chapters:
+      - estimation1_practice.qmd
+      - R06_More_Estimation_Examples.Rmd
+      - text: "---"
+      - estimation2_practice.qmd
+      - R07_More_Estimation_and_CI_Examples.Rmd
     - part: "Prediction"
+      chapters:
+      - slr_practice.qmd
+      - R08_prediction_examples.Rmd
+      - text: "---"
+      - mlr_practice.qmd
+      - text: "---"
+      - logistic_practice.qmd
+      - text: "---"
+      - cv_practice.qmd
+      - text: "---"
+      - bootstrap_practice.qmd
   appendices:
     - RV_summary.qmd
 bibliography: references.bib

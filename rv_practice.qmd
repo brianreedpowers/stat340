@@ -6,7 +6,26 @@ editor: source
 
 # Practice Problems
 
-## 1. Using Wikipedia in college
+## Phone Repair
+(*From Introduction to Probability and Statistics for Data Science*)
+The repair of a broken cell phone is either completed on time or it is late and the repair is either done satisfactoily or unsatisfactorily. What is the sample space for a cell phone repair?
+
+## Dice Probabilities I
+What is the probability that at least one of the following events occurs on a single throw of two fair six-sided dice?
+
+A. The dice total 5.
+B. The dice total 6.
+C. The dice total 7.
+
+## Dice Probabilities II
+What is the probability that at least one of the following events occurs on a single throw of two fair four-sided dice?
+
+A. The dice total 5.
+B. The dice total 6.
+C. The dice total 7.
+
+
+## Using Wikipedia in college
 A recent national study showed that approximately 44.7% of college students have used Wikipedia as a source in at least one of their term papers. Let $X$ equal the number of students in a random sample of size $n = 31$ who have used Wikipedia as a source.
 
 a.  How is $X$ distributed?
@@ -117,7 +136,7 @@ l.  Find $\mathbb{E}(4X+51.324)$.
 ```
 :::
 
-## 2. Choose the distribution
+## Choose the distribution
 2.  For the following situations, decide what the distribution of $X$ should be. In nearly every case, there are additional assumptions that should be made for the distribution to apply; identify those assumptions (which may or may not hold in practice.)
 
 a.  We shoot basketballs at a basketball hoop, and count the number of shots until we make a basket. Let X denote the number of missed shots. On a normal day we would typically make about 37% of the shots.
@@ -180,40 +199,25 @@ j.  We count the number of pats on a baby's back until (s)he burps.
 **As we define a geometric random variable, we let** $X$ **be the number of failures before the first success. The last pat (that causes the burp) is the success in this context. So we could use a geometric random variable, but we would have to add 1 to it in order to count all burps (the failures + 1 success).**
 :::
 
-## 3. Variance Formula
-**move to chapter on covariance**
+## Valid PMF
+(*From Introduction to Probability and Statistics for Data Science*)
+Let $X$ have pmf $$p(x)=\begin{cases}0.2,&x=1\\0.3,&x=2\\0.5,&x=4\\0,&\text{otherwise}\end{cases}$$
+Show that this is a valid pmf.
 
-Show that $\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2-\mu^2$. *Hint:* expand the quantity $(X-\mu)^2$ and distribute the expectation over the resulting terms.
+## Two Dice PMF
+Let $X$ denote the sum of two fair, six-sided dice. Specify the domain that $X$ can take on and then write out the equation for the PMF and show that it is valid.
 
-::: {.callout-note collapse="true" title="Solution"}
-**The proof goes like this: We first FOIL** $(X-\mu)^2$**:**
+## A Uniform PMF
+Let $X$ have discrete uniform PMF on the values $x\in\left\{-1,0,1\right\}$. 
 
-$\mathbb{E}(X-\mu)^2 = \mathbb{E}(X^2 - 2\mu X + \mu^2)$
+(a) Write the equation for its PMF.
 
-**We next split the expected value into 3 expected values using the fact that** $\mathbb{E}$ **is a linear operator.**
+(b) Find $Pr[X<-1]$ and $Pr[X\leq -1]$
 
-$\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mathbb{E}X + \mathbb{E}\mu^2$
+(c) Find $Pr[X>0]$ and $Pr[X \geq 0]$
 
-**We next observe that** $\mu^2$ **is constant and** $\mathbb{X}=\mu$
-
-$\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mu + \mu^2$
-
-**We can simplify the expression and we're done!**
-:::
-
-## 4. Expectation and Binomial
-**extra**
-If $X \sim \text{Binom}(n,p)$ show that $\mathbb{E}X(X-1)=n(n-1)p^2$.
-
-::: {.callout-note collapse="true" title="Solution"}
-**We can just expand the product** $\mathbb{E}(X^2-X)$ **and we can split this up into two expected values:** $\mathbb{E}X^2 - \mathbb{E}X = \mathbb{E}X^2-\mu$**. Recall that** $Var(X)=\mathbb{E}X^2-\mu^2$ **So** $\mathbb{E}X^2=Var(X)+\mu^2$**. For a binomial,** $Var(X)=np(1-p)$ **and** $\mu=np$**. Thus we have**
-
-$\mathbb{E}X^2 - \mu=[np(1-p) + n^2p^2] - np = np\left(1-p+np-1\right)$
-
-**Tidying up a little bit we get** $np(np-p)=np^2(n-1)$**, and we're done.**
-:::
-
-## 5. PMF practice  
+(d) Calculate the CDF from the PDF. Write out an expression for $F(x)$ and plot the PMF and CDF.
+## PMF practice  
 Consider an information source that produces numbers $k$ in the set $S_X=\{1,2,3,4\}$. Find and plot the pmf in the following cases:
 
 a.  $p_k = p_1/k$ for $k=1,2,3,4$. Hint: find $p_1$
@@ -256,7 +260,7 @@ d.  Can the random variables in parts a. through c. be extended to take on value
 **For part c, because** $p_k/2^k \leq p_k/2$**, we at least know that** $\sum_k p_k$ **is finite, so such a random variable with infinite support is certainly feasible. The exact value of** $p_1$ **is not as simple to calculate, but we were not asked to do that.**
 :::
 
-## 6. Dice Difference
+## Dice Difference
 Two dice are tossed. Let $X$ be the absolute difference in the number of dots facing up.
 
 <!-- -->
@@ -305,86 +309,8 @@ mean((x-mean(x))^2)
 ```
 :::
 
-##7. PMF Formula
-**extra, move to next chapter**
 
-Let $X$ be a random variable with pmf $p_k = c/2^k$ for $k=1,2,\ldots$.
-
-<!-- -->
-
-a.  Determine the value of $c$.
-
-::: {.callout-note collapse="true" title="Solution"}
-**This was done above; because** $\sum_{i=1}^\infty 1/2^k = 1$**, the value of** $c$ **must be** $1$**.**
-:::
-
-b.  Find $\mathbb{P}(X>4)$ and $\mathbb{P}(6\leq X \leq 8)$.
-
-::: {.callout-note collapse="true" title="Solution"}
-$P(X>4) = 1-P(X \leq 3)=1-(\frac12 + \frac14 + \frac18)$
-
-```{r}
-1-(1/2+1/4+1/8)
-```
-:::
-
-c.  Find $\mathbb{E}X$ and $\text{Var}X$.
-
-::: {.callout-note collapse="true" title="Solution"}
-**The expected value can be calculated by taking the sum** $\sum k p_k = \sum_{k=1}^\infty \frac{k}{2^k}$ **which we can show using facts from calculus equals 2. Why? Well, as long as** $|p|<1, \sum_{k=1}^{\infty}p^k=\frac{p}{1-p}$ **(this is a geometric series). If we take a derivative of both sides we get** $\sum_{k=1}^\infty kp^{k-1}=\frac{1}{(1-p)^2}$**. Multiply both sides by** $p$ **to get** $\sum_{k=1}^\infty kp^{k}=\frac{p}{(1-p)^2}$**. In our case,** $p=\frac12$**. Plugging this in we get** $\frac{.5}{.5^2}=2$**.**
-
-**The variance is** $E(X^2)-(EX)^2=E(X^2)-4$**. The expected value of** $X^2$ **can be derived, though it's not so fun...**
-
-**Start by taking the equation** $\sum_k kp^k = \frac{p}{(1-p)^2}$ **and take a derivative again. We get** $\sum_k k^2 p^{k-1} = \frac{(1-p)^2+2p(1-p)}{(1-p)^4}$**. Multiply through by** $p$ **to get** $\sum_k k^2 p^k = \frac{p(1-p)^2+2p^2(1-p)}{(1-p)^4}$**. If we let** $p=\frac12$ **we have found** $E(X^2)=\sum_{k=1}^\infty k^2(\frac12)^k=\dfrac{\frac18-\frac{2}{8}}{\frac{1}{16}}=6$**. Thus** $Var(X)=E(X^2)-E(X)^2 = 6-4=2$**. It should be noted that this random variable is actually a geometric random variable (well, according to the "number of trials until and including the first success definition). If we define** $Y\sim Geom(.5)$ **using our definition of "number of failures before the first success" then We can let** $X=Y+1$**.** $E(X)=E(Y+1)=\frac{1-.5}{.5}+1=2$ **and** $Var(X)=Var(Y)=\frac{1-p}{p2}=\frac{.5}{.25^2}=2$**.**
-:::
-
-## 8. PMF Formula II
-**extra**
-
-Let $X$ be a random variable with pmf $p_k = c/2^k$ for $k=-1,0,1,2,3,4,5$.
-
-<!-- -->
-
-a.  Determine the value of $c$.
-
-::: {.callout-note collapse="true" title="Solution"}
-**The sum of the probabilities are** $c(2 + 1 + \frac{1}{2}+\frac{1}{4}+\frac{1}8+\frac{1}{16}+\frac{1}{32})=c\frac{127}{32}$ **so** $c=\frac{32}{127}$**.**
-:::
-
-b.  Find $\mathbb{P}(1\leq X < 3)$ and $\mathbb{P}(1 < X \leq 5)$.
-
-::: {.callout-note collapse="true" title="Solution"}
-```{r}
-c=32/127
-k = seq(-1,5)
-pk=c/2^k
-names(pk) <- k
-sum(pk[as.character(2)])
-sum(pk[as.character(2:5)])
-```
-:::
-
-c.  Find $\mathbb{P}(X^3 < 5)$.
-
-::: {.callout-note collapse="true" title="Solution"}
-**If** $X^3 < 5$ **that means** $X^3 \leq 4$ **and thus** $X \leq 4^{1/3}\approx 1.587$
-
-```{r}
-sum(pk[k<=4^(1/3)])
-sum(pk[k^3<5])
-```
-:::
-
-d.  Find the pmf and the cdf of $X$.
-
-::: {.callout-note collapse="true" title="Solution"}
-```{r}
-barplot(height=pk, names=k, main='pmf of X')
-barplot(height=cumsum(pk), names=k, main='cdf of X')
-```
-:::
-
-## 9. Voltage random variable
+## Voltage random variable
 
 A modem transmits a +2 voltage signal into a channel. The channel adds to this signal a noise term that is drawn from the set $\{0,-1,-2,-3\}$ with respective probabilities $\{4/10, 3/10, 2/10, 1/10\}$.
 
@@ -430,7 +356,7 @@ d.  Find the expected value and variance of $Y$.
 ```
 :::
 
-## 10. Golf Score
+## Golf Score
 
 On a given day, your golf score takes values from the numbers 1 through 10 with equal probability of getting each one. Assume that you play golf for three days, and assume that your three performances are independent. Let $X_1, X_2$ and $X_3$ be the scores that you get, and let $X$ be the minimum of these three scores.
 
@@ -473,7 +399,7 @@ sum(px)
 **The average (expected) point improvement when going from a 1 day point to a minimum of 3 days is 2.475.**
 :::
 
-## 11. Functions of a random variable
+## Functions of a random variable
 Let $g(X) = \begin{cases}1 & \text{if }X>10\\0 & \text{otherwise}\end{cases}$ and $h(X) = \begin{cases}X-10 & \text{if }X-10>0\\0 & \text{otherwise}\end{cases}$
 
 <!-- -->
@@ -510,7 +436,7 @@ sum(h(k)*pk)
 ```
 :::
 
-## 12. Voltage II
+## Voltage II
 A voltage $X$ is uniformly distributed on the set $\{-3,\ldots,3,4\}$.
 
 <!-- -->
@@ -560,7 +486,7 @@ z <- w^2
 ```
 :::
 
-## 13. Discrete Random Variable Problems
+## Discrete Random Variable Problems
 
 <!-- -->
 
@@ -630,7 +556,7 @@ h.  **(not for 340)** Consider the uniform random variable $X$ over values $1,2,
 
 <!-- -->
 
-## 14. Hard Drive Failures
+## Hard Drive Failures
 An audio player uses a low-quality hard drive. The probability that the hard drive fails after being used for one month is 1/12. If it fails, the manufacturer offers a free-of-charge repair for the customer. For the cost of each repair, however, the manufacturer has to pay \$20. The initial cost of building the player is \$50, and the manufacturer offers a 1-year warranty. Within one year, the customer can ask for a free repair up to 12 times.
 
 <!-- -->
@@ -647,7 +573,7 @@ b.  What is the average cost per player?
 **The cost is** $50+20X$ **So** $E(50+20X)=50+20E(X)=50+20\cdot 12(\frac{1}{12})=70$
 :::
 
-## 15. Bit Errors
+## Bit Errors
 15. A binary communication channel has a probability of bit error of $p = 10^{-6}$. Suppose that transmission occurs in blocks of 10,000 bits. Let $N$ be the number of errors introduced by the channel in a transmission block.
 
 <!-- -->
@@ -677,7 +603,7 @@ c.  For what value of $p$ will the probability of 1 or more errors in a block be
 ```
 :::
 
-## 16. Processing Orders
+## Processing Orders
 The number of orders waiting to be processed is given by a Poisson random variable with parameter $\alpha = \frac{\lambda}{n\mu}$, where $\lambda$ is the average number of orders that arrive in a day, $\mu$ is the number of orders that an employee can process per day, and n is the number of employees. Let $N; = 5$ and $N< = 1$. Find the number of employees required so the probability that more than four orders are waiting is less than 10%.
 
 Hint: You need to use trial and error for a few $n$'s.
@@ -691,7 +617,7 @@ ppois(4, lambda/(1:10 * mu), lower.tail=FALSE)
 ```
 :::
 
-## 17. Normal Random Variable
+## Normal Random Variable
 If $Z\sim \text{Normal}(\mu=0, \sigma^2=1^2)$ find
 
 <!-- -->
@@ -720,7 +646,7 @@ pnorm(1.39, lower.tail=FALSE)*2
 ```
 :::
 
-## 18. Identify the Distribution
+## Identify the Distribution
 For the following random experiments, decide what the distribution of X should be. In nearly every case, there are additional assumptions that should be made for the distribution to apply; identify those assumptions (which may or may not strictly hold in practice).
 
 <!-- -->
@@ -749,7 +675,8 @@ d.  We randomly sample strangers at the grocery store and ask them how long it w
 **The time it takes to go home could be modeled by a gamma distribution since it is a continuous distribution capped below at 0 and it is a useful way to model the length of time a random process takes to complete.**
 :::
 
-21. Let $X$ be a Gaussian random variable with $\mu=5$ and $\sigma^2=16$.
+## Normal Random Variable II
+Let $X$ be a Gaussian random variable with $\mu=5$ and $\sigma^2=16$.
 
 <!-- -->
 
@@ -795,7 +722,8 @@ pnorm(13.08321,5,4)-pnorm(13,5,4)
 ```
 :::
 
-22. Consider a cdf
+## A Continuous CDF
+Consider a cdf
 
 $F_X(x)-\begin{cases}0,&\text{if }x < -1\\ 0.5 & \text{if }-1 \leq x < 0\\(1+x)/2 & \text{if }0 \leq x < 1\\1&\text{otherwise}\end{cases}$
 
@@ -813,13 +741,113 @@ Find $\mathbb{P}(X < -1)$, $\mathbb{P}(-0.5 < X < 0.5)$, and $\mathbb{P}(X>0.5)$
 ```
 :::
 
+## A Continuous CDF II
+Let $X$ have PDF
+$$f(x) = \begin{cases} 1-x/2,&0\leq x \leq 2\\0,&\text{otherwise}\end{cases}$$
+
+(a) Sketch the PDF and show geometrically that this is a valid PDF.
+
+(b) Find $Pr[X>0]$ and $Pr[X\geq 0]$
+
+(c) Find $Pr[X>1]$ and $Pr[X\geq 1]$
+
+(d) Use calculus or software to calculate the CDF from the PDF. Write the expression for $F(x)$ and plot the PDF and CDF.
+
+(e) Use calculus or software to calculate the expected value of $X$.
+
+## Two Random Variables
+Suppose that $X$ and $Y$ are random variables with $\mathbb{E}(X)=12$ and $\mathbb{E}(Y)=8.
+
+(a) Find $\mathbb{E}(X-Y)$
+(b) Find $\mathbb{E}(5X-6Y)$
+(c) Is it possible to determine $\mathbb{E}(X^2)$ with the given information? Explain.
+
 
 # Beyond STAT 340
 
 These problems are excellent practice but they are beyond the material we cover in STAT 340.
 
-17. Let $X$ be the number of photons counted by a receiver in an optical communication system. It is known that $X$ is a Poisson random variable with a rate $N;_1$ when a signal is present and a Poisson random variable with the rate $\lambda_0< \lambda_1$ when a signal is absent. The probability that the signal is present is p. Suppose that we observe $X = k$ photons. We want to determine a threshold $T$ such that if $k b % T$ we claim that the signal is present, and if $k<T$ we claim that the signal is absent. What is the value of $T$?
 
 
-20. Calculate the variance of $X \sim \text{Unif}(a,b)$. (*Hint:* First calculate $\mathbb{E}X^2$)
+## PMF Formula
+
+Let $X$ be a random variable with pmf $p_k = c/2^k$ for $k=1,2,\ldots$.
+
+<!-- -->
+
+a.  Determine the value of $c$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**This was done above; because** $\sum_{i=1}^\infty 1/2^k = 1$**, the value of** $c$ **must be** $1$**.**
+:::
+
+b.  Find $\mathbb{P}(X>4)$ and $\mathbb{P}(6\leq X \leq 8)$.
+
+::: {.callout-note collapse="true" title="Solution"}
+$P(X>4) = 1-P(X \leq 3)=1-(\frac12 + \frac14 + \frac18)$
+
+```{r}
+1-(1/2+1/4+1/8)
+```
+:::
+
+c.  Find $\mathbb{E}X$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**The expected value can be calculated by taking the sum** $\sum k p_k = \sum_{k=1}^\infty \frac{k}{2^k}$ **which we can show using facts from calculus equals 2. Why? Well, as long as** $|p|<1, \sum_{k=1}^{\infty}p^k=\frac{p}{1-p}$ **(this is a geometric series). If we take a derivative of both sides we get** $\sum_{k=1}^\infty kp^{k-1}=\frac{1}{(1-p)^2}$**. Multiply both sides by** $p$ **to get** $\sum_{k=1}^\infty kp^{k}=\frac{p}{(1-p)^2}$**. In our case,** $p=\frac12$**. Plugging this in we get** $\frac{.5}{.5^2}=2$**.**
+
+:::
+
+## PMF Formula II
+
+Let $X$ be a random variable with pmf $p_k = c/2^k$ for $k=-1,0,1,2,3,4,5$.
+
+<!-- -->
+
+a.  Determine the value of $c$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**The sum of the probabilities are** $c(2 + 1 + \frac{1}{2}+\frac{1}{4}+\frac{1}8+\frac{1}{16}+\frac{1}{32})=c\frac{127}{32}$ **so** $c=\frac{32}{127}$**.**
+:::
+
+b.  Find $\mathbb{P}(1\leq X < 3)$ and $\mathbb{P}(1 < X \leq 5)$.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+c=32/127
+k = seq(-1,5)
+pk=c/2^k
+names(pk) <- k
+sum(pk[as.character(2)])
+sum(pk[as.character(2:5)])
+```
+:::
+
+c.  Find $\mathbb{P}(X^3 < 5)$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**If** $X^3 < 5$ **that means** $X^3 \leq 4$ **and thus** $X \leq 4^{1/3}\approx 1.587$
+
+```{r}
+sum(pk[k<=4^(1/3)])
+sum(pk[k^3<5])
+```
+:::
+
+d.  Find the pmf and the cdf of $X$.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+barplot(height=pk, names=k, main='pmf of X')
+barplot(height=cumsum(pk), names=k, main='cdf of X')
+```
+:::
+
+## Properties of Expectation I
+For a *continuous* random variable $X$ and constant $c$, prove that $\mathbb{E}(cX)=c\mathbb{E}(X)$
+
+## Properties of Expectation II
+For a *continuous* random variable $X$ and constants $a,b$, prove that $\mathbb{E}(aX+b)=a\mathbb{E}(X)+b$
+
+
 

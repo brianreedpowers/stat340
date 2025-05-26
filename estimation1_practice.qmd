@@ -1,0 +1,15 @@
+---
+title: 'Point Estimation Practice'
+format: html
+editor: source
+---
+
+# Practice Problems
+
+
+
+# Beyond STAT 340
+
+These problems are excellent practice but they are beyond the material we cover in STAT 340.
+
+

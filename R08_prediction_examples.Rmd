@@ -1,0 +1,376 @@
+---
+title: "Simple Linear Regression - Examples"
+author: "Brian Powers"
+date: "2024-03-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Creating Linear Data
+
+We can simulate data from a linear model $$Y_i = 5 + 5X+\epsilon$$ where $\epsilon \overset{iid}{\sim}N(\mu,\sigma^2)$.
+
+```{r}
+#There is no assumption that X follows any particular distribution
+X <- rpois(30, lambda=3)
+e <- rnorm(30, mean=0, sd=4)
+
+Y <- 5 + 5*X + e
+
+plot(X, Y)
+```
+
+
+## Atlanta Lead Example
+
+```{r}
+lead_data <- read.csv("data/lead.csv")
+atlanta_lead <- subset(lead_data, city=="Atlanta")
+summary(atlanta_lead)
+
+# if we call lm without storing it to a object
+lm(aggr.assault.per.million ~ 1 + air.pb.metric.tons, data=atlanta_lead)
+```
+
+
+```{r}
+atlanta_lead_lm <- lm(aggr.assault.per.million ~ 1 + air.pb.metric.tons, data=atlanta_lead)
+summary(atlanta_lead_lm)
+```
+
+
+Scatter Plot using Base R
+```{r}
+plot(aggr.assault.per.million ~ air.pb.metric.tons, data=atlanta_lead)
+abline(atlanta_lead_lm, col="red")
+
+points(y=fitted(atlanta_lead_lm), x=atlanta_lead$air.pb.metric.tons, pch=16 )
+```
+```{r}
+atlanta_lead_lm$residuals
+# or resid(atlanta_lead_lm)
+# or residuals(atlanta_lead_lm)
+```
+
+A proper residual plot
+```{r}
+plot(y=atlanta_lead_lm$residuals,
+     x=fitted(atlanta_lead_lm))
+```
+
+The wrong way to make a residual plot
+```{r}
+plot(y=atlanta_lead_lm$residuals,
+     x=atlanta_lead$aggr.assault.per.million)
+
+```
+
+Checking for auto-correlation among residuals
+
+This is when the residual values tend to be associated with the 'next' residual. 
+```{r}
+#we look at the correlation between residuals and the 
+# next residual
+plot(x=resid(atlanta_lead_lm)[-length(resid(atlanta_lead_lm))], y= resid(atlanta_lead_lm)[-1])
+#we're looking for independence between the residual values - no shape 
+```
+
+
+QQ plot
+```{r}
+n <- nrow(atlanta_lead)
+
+# Let's look at what 36 equally spaced quantiles would be
+(1:36)/(37)
+
+qs <- qnorm((1:36)/(37))
+stripchart(qs)
+```
+The 4 pre-fab plots of the linear model object
+```{r}
+plot(atlanta_lead_lm)
+#You can run this to get just the first two plots
+plot(atlanta_lead_lm, which=1:2)
+```
+
+### looking at qqplots
+Let's just explore the type of variation we see with normal QQ plots for this sample size so we know what tolerable deviation from the diagonal looks like
+```{r}
+par(mar=c(0,0,0,0))
+par(mfrow=c(3,3))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+qqnorm(rnorm(n))
+par(mfrow=c(1,1))
+
+#also the qqPlot function in the car library adds a 95% tolerance band
+library(car)
+qqPlot(residuals(atlanta_lead_lm))
+```
+
+## Inference on the coefficients
+
+```{r}
+summary(atlanta_lead_lm)
+
+```
+If for example I want to test $H_0: \beta_1 = 1.3$ vs $H_A: \beta_1 > 1.3$
+The t statistic would be $$t = \dfrac{1.40375 - 1.3}{.08112}=1.278969$$
+
+```{r}
+t <- (1.40375-1.3)/.08112
+
+```
+The $p$-value is going to be the right -tail probability from a T distribtuion with 34 degrees of freedom
+```{r}
+pt(t, df=34, lower.tail=FALSE)
+```
+
+## Prediction
+
+Point estimate
+```{r}
+predict(atlanta_lead_lm, newdata=data.frame(air.pb.metric.tons=1300))
+```
+
+A confidence interval for $E(Y|X=1300)$
+This estimates the location of the regression line with 95% confidence.
+```{r}
+predict(atlanta_lead_lm, newdata=data.frame(air.pb.metric.tons=1300), interval="confidence", level=.95)
+```
+A 'prediction' interval for $\hat{Y}|X=1300)$
+This estimates the range of values for a individual data point line with 95% confidence.
+```{r}
+predict(atlanta_lead_lm, newdata=data.frame(air.pb.metric.tons=1300), interval="prediction")
+```
+
+Demonstration of the difference between the two types of intervals.
+
+```{r}
+NMC <- 1000
+b0 <- 0
+b1 <- 1
+plot(x=NA, y=NA, xlim=c(400,1400), ylim=c(0, 2000))
+for(i in 1:NMC){
+  #Generate data from a linear model
+  X <- runif(30, 400, 1400)
+  err <- rnorm(30, 0, sd=100)
+  Y <- 100 + 1.4 * X + err
+
+  myFit <- lm(Y ~ X)
+  b0[i] <- unname(coefficients(myFit)[1])
+  b1[i] <- unname(coefficients(myFit)[2])
+  abline(myFit, col=rgb(0,0,0,.25))
+}
+y.est <- b0 + 1300*b1
+quantile(y.est, c(.025, .975))
+```
+For the second type of confidence interval
+```{r}
+X <- rep(1300, 1000)
+y.pred <- 100 + 1.4 * X + rnorm(1000, 0, sd=100)
+quantile(y.pred, c(.025, .975))
+```
+
+## Uncertainty in Prediction
+
+Consider a linear relationship  $$y = 10 + 2x + \epsilon$$
+
+Consider if X ranges from .1 to 3, 1 to 30 or 10 to 300, and $\sigma = .5, 5, 50$
+
+```{r}
+par(mfrow=c(3,3))
+par(mar=c(2,2,1,0))
+scalar <- c(.1,1,10)
+for(i in 1:3){
+  for(j in 1:3){
+    X <- seq(scalar[i]*1, scalar[i]*30, length.out=30)
+    Y <- 10 + 2 * X + rnorm(length(X), 0, sd=5*scalar[j])
+    plot(X, Y, main=ifelse(i==1, paste0("sigma=",5*scalar[j]),""))
+    abline(lm(Y~X))    
+  }
+}
+
+
+```
+
+So you can see that the fit of the linear model is related to the range of the $X$ data as well as the variance of the error term.
+
+### Uncertainty of the linear model estimate
+
+Let's look at the uncertainty of the line of best fit. We'll sample 30 points from this population and fit a line and repeat.
+
+$Y = 10 + 2X + \epsilon$
+```{r}
+slopes <- 0; intercepts <- 0; #empty vectors
+set.seed(1)
+for(i in 1:500){
+  X <- runif(30, min=10, max=20)
+  Y <- 10 + 2 * X + rnorm(30, mean=0, sd=5)
+  
+  if(i==1){
+    plot(X,Y)
+  }
+  linearFit <- lm(Y~X)
+  abline(linearFit, col=rgb(0,0,0,.1))
+  slopes[i] <- coef(linearFit)[2]
+  intercepts[i] <- coef(linearFit)[1]
+}
+abline(a=10, b=2, col="red")
+```
+What is the standard deviation of the intercept and slope estimates?
+```{r}
+sd(intercepts)
+sd(slopes)
+```
+Look at the summary output from the linear model (this is the very last model that was fit):
+```{r}
+summary(linearFit)$coefficients
+```
+These are not the exact same as the standard errors, but they are in the ballpark. These standard errors are related to this particular model fit with one set of $(X,Y)$ data. If we averaged the standard error over many model fits we'd probably see the values match much better.
+
+### Two types of interval estimates for our linear model: Confidence intervals and prediction intervals. 
+
+The standard error (i.e. uncertainty) of the slope and intercept estimates is captured by the idea of a "confidence interval" in prediction. Using the last sampled $(X,Y)$ data we fit
+```{r}
+Ylm <- lm(Y~X)
+xrng <- seq(10,20,.5)
+```
+
+Using the predict function we can estimate $E(Y|X=x)$ for some particular value of $X$. For example, if $X=16$ a point estimate is given by
+```{r}
+predict(Ylm, newdata=data.frame(X=16))
+```
+A confidence interval for $E(Y|X=16)$ is given by adding the `interval="confidence"` option
+
+```{r}
+predict(Ylm, newdata=data.frame(X=16), interval="confidence")
+```
+We would say "I am 95% confident that the expected value of $Y$ when $x=16$ is between 39.97 and 44.13".
+
+We can actually plot the confidence interval band over the data range to see it visualized.
+```{r}
+CIconf <- predict(Ylm, newdata=data.frame(X=xrng), interval="confidence")
+plot(X,Y)
+abline(Ylm)
+abline(10,2, col="red")
+lines(x=xrng, y=CIconf[,2], col="black", lty=2)
+lines(x=xrng, y=CIconf[,3], col="black", lty=2)
+```
+
+In a sense, we are 95% certain that the true line is within this interval, at least within the range of data that we have observed. But the better way to interpret it is that for any particular $X$ value, we are 95% certain that the the expected value of $Y$ (true line value in red) is within the interval. 
+
+For example, take $x=16$. What is the 95% confidence interval for $E(\hat Y|X=16)$?
+```{r}
+predict(Ylm, newdata=data.frame(X=16), interval="confidence")
+```
+
+And what is the **true** $E(Y|X=16)$?
+```{r}
+10+2*16
+```
+
+The 95% confidence manifests itself if we were to repeat this many times, sampling a different sample each time and checking whether our interval covers the true expected value of 42.
+
+```{r}
+contains42 <- 0
+NMC <- 1000
+for(i in 1:NMC){
+  X <- runif(30, min=10, max=20)
+  Y <- 10 + 2 * X + rnorm(30, mean=0, sd=5)
+  Ylm <- lm(Y~X)
+  CI <- predict(Ylm, newdata=data.frame(X=16), interval="confidence")[,2:3]
+  contains42[i] <- CI[1]<=42 & CI[2]>=42
+}
+mean(contains42) #proportion of TRUEs in the results
+```
+
+On the other hand, a **prediction interval** is wider. Let's just plot it and then talk about what it actually means.
+```{r}
+Ylm <- lm(Y~X)
+xrng <- seq(10,20,.5)
+CIconf <- predict(Ylm, newdata=data.frame(X=xrng), interval="confidence")
+CIpred <- predict(Ylm, newdata=data.frame(X=xrng), interval="prediction")
+plot(X,Y)
+abline(Ylm)
+abline(10,2, col="red")
+lines(x=xrng, y=CIconf[,2], col="black", lty=2)
+lines(x=xrng, y=CIconf[,3], col="black", lty=2)
+lines(x=xrng, y=CIpred[,2], col="blue", lty=2)
+lines(x=xrng, y=CIpred[,3], col="blue", lty=2)
+```
+
+This interval predicts the next observed point from the population. For example, suppose we observe 1000 more points with $X=16$
+```{r}
+newX <- rep(16,1000)
+newY <- 10 + 2 * newX + rnorm(1000, mean=0, sd=5)
+
+Ylm <- lm(Y~X)
+xrng <- seq(10,20,.5)
+CIpred <- predict(Ylm, newdata=data.frame(X=xrng), interval="prediction")
+plot(X,Y, ylim=range(newY))
+abline(Ylm)
+abline(10,2, col="red")
+lines(x=xrng, y=CIpred[,2], col="blue", lty=2)
+lines(x=xrng, y=CIpred[,3], col="blue", lty=2)
+points(newX, newY, col=rgb(0,0,1,.1))
+
+```
+
+Most of these new observations are within the prediction interval, but not all of them. What proportion of them?
+```{r}
+CI <- predict(Ylm, newdata=data.frame(X=16), interval="prediction")
+mean(newY >= CI[2] & newY <= CI[3])
+```
+
+Not a huge surprise - It's a 95% prediction interval. How high or low this proportion is is dependent on the particular 30 data points that we used to fit the data - if our slope and intercept estimates are better, we'll get closer to 95%, and if our standard error of residuals is higher this will increase the percentage because each prediction interval will be wider.
+
+A better way to measure the predictive power of the interval is to repeat with **new data** on every model fit:
+
+```{r}
+containsY <- 0
+NMC <- 1000
+for(i in 1:NMC){
+  X <- runif(30, min=10, max=20)
+  Y <- 10 + 2 * X + rnorm(30, mean=0, sd=5)
+  Ylm <- lm(Y~X)
+  newY <- 10 + 2 * 16 + rnorm(1, mean=0, sd=5)
+  CI <- predict(Ylm, newdata=data.frame(X=16), interval="prediction")[,2:3]
+  containsY[i] <- CI[1]<=newY & CI[2]>=newY
+}
+mean(containsY) #proportion of TRUEs in the results
+```
+
+### Contrasting the interpretations
+
+Our interpretation of a prediction interval is like this: "I am 95% confident (certain) that for a new observation with $X=16$, $Y$ will be within the interval"
+
+Our interpretation of a confidence interval is : "I am 95% confident that the mean $Y$ value for all observations with $X=16$ is within the interval"
+
+
+### Why the difference in size?
+
+The standard error of a confidence interval for $E(Y|x)$ is 
+$$
+SE(\overline{Y}|x) = s_e \sqrt{\frac1n + \frac{(x-\bar{x})^2}{SS_{xx}}}
+$$
+The standard error of a prediction interval for $\hat{Y}|x$ is 
+$$
+SE(\hat{Y}|x) = s_e \sqrt{1+\frac1n + \frac{(x-\bar{x})^2}{SS_{xx}}}
+$$
+Thus the prediction interval will be wider (notice the "1+" in the formula).
+
+
+Why is the prediction interval wider than the confidence interval? There are two sources of uncertainty. The first is that we only estimated the placement of the model line - the slope and intercept are both estimates. As you saw before, new data would give us new estimates and there is some natural uncertainty.
+
+The second source of uncertainty is that there are factors not in the model which give variation captured in the $\sigma^2_\epsilon$ term in the model. 

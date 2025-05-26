@@ -831,6 +831,12 @@ hist(pnorm(Xnorm)); hist(pchisq(Xchisq,10));
 hist(pexp(Xexp,1)); hist(pbeta(Xbeta,.5,.5));
 ```
 
+Here's an animation showing 100 random samples from a standard normal distribution. As you sample from the distribution a histogram in the shape of the normal curve emergers. But the CDF value for each sampled number, i.e. $F(X)$ is also calculated and these values are plotted in a histogram. You see that the distribution of these values is uniform from 0 to 1.
+
+![Random Sampling and the Uniform Distribution](./images/sampling_uniform.gif)
+
+
+
 We can use this fact to generate observations from any arbitrary distribution!
 
 Let $X$ be a random variable with CDF $F_X$, and suppose that $F_X$ is invertible so that we can sensibly write $F_X^{-1}(t)$.

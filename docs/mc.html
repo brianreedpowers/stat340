@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STAT 340: Data Science II - 8&nbsp; Monte Carlo</title>
+<title>STAT 340: Data Science II - 9&nbsp; Monte Carlo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./R03_MonteCarloExamples.html" rel="next">
-<link href="./R02_IndepCondBayes.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -109,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mc.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./rv.html">Sampling</a></li><li class="breadcrumb-item"><a href="./mc.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -154,88 +153,192 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Sampling</span></span>
-  </li>
-        <li class="sidebar-item">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Sampling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cov.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./mc.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Testing</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Estimation</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Prediction</span></span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Practice</span></span>
-  </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cov_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
   </div>
 </li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Testing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Estimation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text">Prediction</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
@@ -254,38 +357,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">8.1</span> Learning objectives</a></li>
-  <li><a href="#origin-of-monte-carlo-and-a-nice-example" id="toc-origin-of-monte-carlo-and-a-nice-example" class="nav-link" data-scroll-target="#origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">8.2</span> Origin of Monte Carlo (and a nice example!)</a></li>
-  <li><a href="#basics-of-monte-carlo" id="toc-basics-of-monte-carlo" class="nav-link" data-scroll-target="#basics-of-monte-carlo"><span class="header-section-number">8.3</span> Basics of Monte Carlo</a>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">9.1</span> Learning objectives</a></li>
+  <li><a href="#origin-of-monte-carlo-and-a-nice-example" id="toc-origin-of-monte-carlo-and-a-nice-example" class="nav-link" data-scroll-target="#origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">9.2</span> Origin of Monte Carlo (and a nice example!)</a></li>
+  <li><a href="#basics-of-monte-carlo" id="toc-basics-of-monte-carlo" class="nav-link" data-scroll-target="#basics-of-monte-carlo"><span class="header-section-number">9.3</span> Basics of Monte Carlo</a>
   <ul class="collapse">
-  <li><a href="#example-events-under-the-normal" id="toc-example-events-under-the-normal" class="nav-link" data-scroll-target="#example-events-under-the-normal"><span class="header-section-number">8.3.1</span> Example: events under the normal</a></li>
-  <li><a href="#example-the-birthday-problem" id="toc-example-the-birthday-problem" class="nav-link" data-scroll-target="#example-the-birthday-problem"><span class="header-section-number">8.3.2</span> Example: the birthday problem</a></li>
-  <li><a href="#aside-wait-what" id="toc-aside-wait-what" class="nav-link" data-scroll-target="#aside-wait-what"><span class="header-section-number">8.3.3</span> Aside: wait, what?</a></li>
-  <li><a href="#end-of-aside.-whats-the-punchline" id="toc-end-of-aside.-whats-the-punchline" class="nav-link" data-scroll-target="#end-of-aside.-whats-the-punchline"><span class="header-section-number">8.3.4</span> End of aside. what’s the punchline?</a></li>
-  <li><a href="#why-does-monte-carlo-work" id="toc-why-does-monte-carlo-work" class="nav-link" data-scroll-target="#why-does-monte-carlo-work"><span class="header-section-number">8.3.5</span> Why does Monte Carlo work?</a></li>
-  <li><a href="#example-buffons-needle" id="toc-example-buffons-needle" class="nav-link" data-scroll-target="#example-buffons-needle"><span class="header-section-number">8.3.6</span> Example: Buffon’s needle</a></li>
+  <li><a href="#example-events-under-the-normal" id="toc-example-events-under-the-normal" class="nav-link" data-scroll-target="#example-events-under-the-normal"><span class="header-section-number">9.3.1</span> Example: events under the normal</a></li>
+  <li><a href="#example-the-birthday-problem" id="toc-example-the-birthday-problem" class="nav-link" data-scroll-target="#example-the-birthday-problem"><span class="header-section-number">9.3.2</span> Example: the birthday problem</a></li>
+  <li><a href="#aside-wait-what" id="toc-aside-wait-what" class="nav-link" data-scroll-target="#aside-wait-what"><span class="header-section-number">9.3.3</span> Aside: wait, what?</a></li>
+  <li><a href="#end-of-aside.-whats-the-punchline" id="toc-end-of-aside.-whats-the-punchline" class="nav-link" data-scroll-target="#end-of-aside.-whats-the-punchline"><span class="header-section-number">9.3.4</span> End of aside. what’s the punchline?</a></li>
+  <li><a href="#why-does-monte-carlo-work" id="toc-why-does-monte-carlo-work" class="nav-link" data-scroll-target="#why-does-monte-carlo-work"><span class="header-section-number">9.3.5</span> Why does Monte Carlo work?</a></li>
+  <li><a href="#example-buffons-needle" id="toc-example-buffons-needle" class="nav-link" data-scroll-target="#example-buffons-needle"><span class="header-section-number">9.3.6</span> Example: Buffon’s needle</a></li>
   </ul></li>
-  <li><a href="#more-uses-for-monte-carlo-integration-by-darts" id="toc-more-uses-for-monte-carlo-integration-by-darts" class="nav-link" data-scroll-target="#more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">8.4</span> More uses for Monte Carlo: integration by darts</a>
+  <li><a href="#more-uses-for-monte-carlo-integration-by-darts" id="toc-more-uses-for-monte-carlo-integration-by-darts" class="nav-link" data-scroll-target="#more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">9.4</span> More uses for Monte Carlo: integration by darts</a>
   <ul class="collapse">
-  <li><a href="#example-integrate-x1-3-from-0-to-infty" id="toc-example-integrate-x1-3-from-0-to-infty" class="nav-link" data-scroll-target="#example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">8.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></a></li>
+  <li><a href="#example-integrate-x1-3-from-0-to-infty" id="toc-example-integrate-x1-3-from-0-to-infty" class="nav-link" data-scroll-target="#example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">9.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></a></li>
   </ul></li>
-  <li><a href="#mc-estimator-example-compute-pi" id="toc-mc-estimator-example-compute-pi" class="nav-link" data-scroll-target="#mc-estimator-example-compute-pi"><span class="header-section-number">8.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></a>
+  <li><a href="#mc-estimator-example-compute-pi" id="toc-mc-estimator-example-compute-pi" class="nav-link" data-scroll-target="#mc-estimator-example-compute-pi"><span class="header-section-number">9.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></a>
   <ul class="collapse">
-  <li><a href="#expectation-and-variance-of-hatpi" id="toc-expectation-and-variance-of-hatpi" class="nav-link" data-scroll-target="#expectation-and-variance-of-hatpi"><span class="header-section-number">8.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></a></li>
+  <li><a href="#expectation-and-variance-of-hatpi" id="toc-expectation-and-variance-of-hatpi" class="nav-link" data-scroll-target="#expectation-and-variance-of-hatpi"><span class="header-section-number">9.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></a></li>
   </ul></li>
-  <li><a href="#important-notes" id="toc-important-notes" class="nav-link" data-scroll-target="#important-notes"><span class="header-section-number">8.6</span> Important notes:</a></li>
-  <li><a href="#generating-random-variables-and-the-importance-of-randomness" id="toc-generating-random-variables-and-the-importance-of-randomness" class="nav-link" data-scroll-target="#generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">8.7</span> Generating random variables and the importance of randomness</a>
+  <li><a href="#important-notes" id="toc-important-notes" class="nav-link" data-scroll-target="#important-notes"><span class="header-section-number">9.6</span> Important notes:</a></li>
+  <li><a href="#generating-random-variables-and-the-importance-of-randomness" id="toc-generating-random-variables-and-the-importance-of-randomness" class="nav-link" data-scroll-target="#generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">9.7</span> Generating random variables and the importance of randomness</a>
   <ul class="collapse">
-  <li><a href="#f_xx-is-uniform-0-1." id="toc-f_xx-is-uniform-0-1." class="nav-link" data-scroll-target="#f_xx-is-uniform-0-1."><span class="header-section-number">8.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</a></li>
-  <li><a href="#okay-proof-over." id="toc-okay-proof-over." class="nav-link" data-scroll-target="#okay-proof-over."><span class="header-section-number">8.7.2</span> Okay, proof over.</a></li>
+  <li><a href="#f_xx-is-uniform-0-1." id="toc-f_xx-is-uniform-0-1." class="nav-link" data-scroll-target="#f_xx-is-uniform-0-1."><span class="header-section-number">9.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</a></li>
+  <li><a href="#okay-proof-over." id="toc-okay-proof-over." class="nav-link" data-scroll-target="#okay-proof-over."><span class="header-section-number">9.7.2</span> Okay, proof over.</a></li>
   </ul></li>
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">8.8</span> Example:</a>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">9.8</span> Example:</a>
   <ul class="collapse">
-  <li><a href="#okay-but-do-i-actually-need-this-inverse-trick" id="toc-okay-but-do-i-actually-need-this-inverse-trick" class="nav-link" data-scroll-target="#okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">8.8.1</span> Okay, but do I actually need this inverse trick?</a></li>
+  <li><a href="#okay-but-do-i-actually-need-this-inverse-trick" id="toc-okay-but-do-i-actually-need-this-inverse-trick" class="nav-link" data-scroll-target="#okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">9.8.1</span> Okay, but do I actually need this inverse trick?</a></li>
   </ul></li>
-  <li><a href="#random-v.-pseudorandom" id="toc-random-v.-pseudorandom" class="nav-link" data-scroll-target="#random-v.-pseudorandom"><span class="header-section-number">8.9</span> Random v. pseudorandom</a>
+  <li><a href="#random-v.-pseudorandom" id="toc-random-v.-pseudorandom" class="nav-link" data-scroll-target="#random-v.-pseudorandom"><span class="header-section-number">9.9</span> Random v. pseudorandom</a>
   <ul class="collapse">
-  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">8.9.1</span> Review:</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">9.9.1</span> Review:</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -295,7 +398,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Monte Carlo</span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></h1>
 </div>
 
 
@@ -316,8 +419,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We will begin by explaining Monte Carlo in a few simple illustrative situations.</p>
 <p>Then we will see how these same ideas can be applied in more complicated situations.</p>
 <p>Monte Carlo and related “simulation-based” methods will arise again and again in this course (and in the rest of your career!), so it is worth your time to make sure you understand them well!</p>
-<section id="learning-objectives" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">8.1</span> Learning objectives</h2>
+<section id="learning-objectives" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">9.1</span> Learning objectives</h2>
 <p>After this lesson, you will be able to</p>
 <ul>
 <li>Explain the basic idea behind Monte Carlo methods</li>
@@ -326,16 +429,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Explain and implement the “inverse trick” to generate random variables from an arbitrary cumulative distribution function <span class="math inline">\(F\)</span>.</li>
 </ul>
 </section>
-<section id="origin-of-monte-carlo-and-a-nice-example" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">8.2</span> Origin of Monte Carlo (and a nice example!)</h2>
+<section id="origin-of-monte-carlo-and-a-nice-example" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="origin-of-monte-carlo-and-a-nice-example"><span class="header-section-number">9.2</span> Origin of Monte Carlo (and a nice example!)</h2>
 <p><a href="https://en.wikipedia.org/wiki/Stanislaw_Ulam">Stanisław Ulam</a> was a famous nuclear physicist (fun fact: after fleeing Europe during WWII, Ulam was a professor at UW-Madison before he was recruited to work on the Manhattan project at Los Alamos).</p>
 <p>Supposedly, while recovering from a surgery, Ulam was playing a lot of solitaire and came to wonder what was the probability <span class="math inline">\(p\)</span> that a randomly-dealt game of <a href="https://en.wikipedia.org/wiki/Patience_(game)">solitaire</a> could be played out.</p>
 <p>He quickly found that calculating this probability precisely (e.g., by doing a bunch of the algebra and combinatorics that you may remember less than fondly from a probability course) was not very easy. The idea occurred to him that even if the probability <span class="math inline">\(p\)</span> could not be calculated directly, it could be <em>estimated</em> by dealing lots of games of solitaire and counting how many of them he won.</p>
 <p>Thus, Monte Carlo methods were born.</p>
 <p>The name “Monte Carlo” is a reference to the <a href="https://en.wikipedia.org/wiki/Monte_Carlo_Casino">Monte Carlo casino</a>, later a frequent setting of James Bond movies. The idea is that like at a casino, Monte Carlo methods involve lots of randomness.</p>
 </section>
-<section id="basics-of-monte-carlo" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="basics-of-monte-carlo"><span class="header-section-number">8.3</span> Basics of Monte Carlo</h2>
+<section id="basics-of-monte-carlo" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="basics-of-monte-carlo"><span class="header-section-number">9.3</span> Basics of Monte Carlo</h2>
 <p>The basic idea behind Monte Carlo methods, then, is the following: suppose that we have an event <span class="math inline">\(E = \{ X \in S \}\)</span> where <span class="math inline">\(S \subset \Omega\)</span> is some set of outcomes and <span class="math inline">\(X\)</span> is a random variable with outcome set <span class="math inline">\(\Omega\)</span>. Suppose that we want to know the probability of event <span class="math inline">\(E\)</span>, <span class="math inline">\(\Pr[E]\)</span>.</p>
 <p>Of course, one option would be to draw on the ideas we saw last week. We could do an integral or sum (depending on whether <span class="math inline">\(X\)</span> is continuous or discrete) and just calculate what this probability is.</p>
 <p>Unfortunately, often this integral or sum is very hard to do, either because the integral/sum is very hard to solve (either exactly or <a href="https://en.wikipedia.org/wiki/Numerical_analysis">numerically</a>). When this happens, we need to take a different approach.</p>
@@ -353,8 +456,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   \end{cases}
 \]</span></p>
 <p>So, in other words, to estimate <span class="math inline">\(\Pr[ E ]\)</span>, Monte Carlo says that we just run our experiment of interest a bunch of times and count what proportion of the time the event <span class="math inline">\(E\)</span> happens.</p>
-<section id="example-events-under-the-normal" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="example-events-under-the-normal"><span class="header-section-number">8.3.1</span> Example: events under the normal</h3>
+<section id="example-events-under-the-normal" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="example-events-under-the-normal"><span class="header-section-number">9.3.1</span> Example: events under the normal</h3>
 <p>Let’s start by considering a calculation similar to one that we already did in a previous lecture. Let <span class="math inline">\(X\)</span> be a normal random variable with mean <span class="math inline">\(1\)</span> and variance <span class="math inline">\(3\)</span>. What is the probability that <span class="math inline">\(0 \le X \le 3\)</span>?</p>
 <p>Well, we already know how to compute this. It’s given by the integral <span class="math display">\[
 \Pr[ 0 \le X \le 3]
@@ -397,7 +500,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, compute what fraction of our trials were "successes" (i.e., E happened)</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( results )<span class="sc">/</span>NMC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.602</code></pre>
+<pre><code>[1] 0.598</code></pre>
 </div>
 </div>
 <p>Just as a reminder, the true number, which we just happen to know in this case, is</p>
@@ -410,8 +513,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now, our estimate is random, so every time we recompile this document it will be a bit different, but the estimate should be between 0.56 and 0.63.</p>
 <p>We can make the estimate still more accurate by increasing the number of MC replicates <span class="math inline">\(M\)</span>– larger <span class="math inline">\(M\)</span> will make the estimation error smaller, on average. We’ll be able to make that description more precise later.</p>
 </section>
-<section id="example-the-birthday-problem" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="example-the-birthday-problem"><span class="header-section-number">8.3.2</span> Example: the birthday problem</h3>
+<section id="example-the-birthday-problem" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="example-the-birthday-problem"><span class="header-section-number">9.3.2</span> Example: the birthday problem</h3>
 <p>Here’s a classic probability question: In a group of <span class="math inline">\(n\)</span> people, what is the probability that two or more of them have the same birthday? For simplicity, we’ll assume that there are no leap days (i.e., the year has 365 days) and that all 365 days are equally likely birthdays. You’ll implement a solution to a more general version of this problem in your homework, but let’s get an intuition here.</p>
 <p>We need to simulate assigning <span class="math inline">\(n\)</span> people to birthdays. We will represent the days of the year by the numbers 1 through 365, so assigning a birthday just amounts to choosing one of these 365 numbers at random. Then we need to check whether or not there are any repeated birthdays.</p>
 <div class="cell">
@@ -465,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>pbday_estimated <span class="ot">&lt;-</span> NTRUE<span class="sc">/</span>NMC</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>pbday_estimated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.496</code></pre>
+<pre><code>[1] 0.464</code></pre>
 </div>
 </div>
 <p>Once again, this is a situation where we can actually compute an answer exactly– we are using this to build intuition, not because it is a problem that strictly speaking <em>requires</em> Monte Carlo methods.</p>
@@ -479,8 +582,8 @@ p_{\text{distinct}}
 = \frac{ 365! }{ (365-n)! 365^n }.
 \]</span></p>
 </section>
-<section id="aside-wait-what" class="level3" data-number="8.3.3">
-<h3 data-number="8.3.3" class="anchored" data-anchor-id="aside-wait-what"><span class="header-section-number">8.3.3</span> Aside: wait, what?</h3>
+<section id="aside-wait-what" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="aside-wait-what"><span class="header-section-number">9.3.3</span> Aside: wait, what?</h3>
 <p>If you’ve taken a probability class before, this computation will be simple and familiar. If you haven’t taken a probability class before, this warrants some unpacking.</p>
 <p>I’ll do that unpacking here in these notes, but we won’t go into detail about this in lecture, owing to time constraints.</p>
 <p>We want to compute the probability that all <span class="math inline">\(n\)</span> birthdays are distinct. Let’s label these people <span class="math inline">\(1,2,3,\dots,n\)</span>, and consider generating their birthdays in order.</p>
@@ -505,8 +608,8 @@ N_{\text{outcomes}} = 365^n.
 \]</span></p>
 <p>where we have used the fact that <span class="math inline">\(m*(m-1)*\cdots*(m-k+1) = m!/(m-k)!\)</span> for non-negative integers <span class="math inline">\(k\)</span> and <span class="math inline">\(m\)</span> with <span class="math inline">\(k \le m\)</span>.</p>
 </section>
-<section id="end-of-aside.-whats-the-punchline" class="level3" data-number="8.3.4">
-<h3 data-number="8.3.4" class="anchored" data-anchor-id="end-of-aside.-whats-the-punchline"><span class="header-section-number">8.3.4</span> End of aside. what’s the punchline?</h3>
+<section id="end-of-aside.-whats-the-punchline" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="end-of-aside.-whats-the-punchline"><span class="header-section-number">9.3.4</span> End of aside. what’s the punchline?</h3>
 <p>Thus, the probability of a repeated birthday is</p>
 <p><span class="math display">\[
 p_{\text{repeated}} = 1 - p_{\text{distinct}}
@@ -536,13 +639,13 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pbday_estimated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.496</code></pre>
+<pre><code>[1] 0.464</code></pre>
 </div>
 </div>
 <p>Not bad!</p>
 </section>
-<section id="why-does-monte-carlo-work" class="level3" data-number="8.3.5">
-<h3 data-number="8.3.5" class="anchored" data-anchor-id="why-does-monte-carlo-work"><span class="header-section-number">8.3.5</span> Why does Monte Carlo work?</h3>
+<section id="why-does-monte-carlo-work" class="level3" data-number="9.3.5">
+<h3 data-number="9.3.5" class="anchored" data-anchor-id="why-does-monte-carlo-work"><span class="header-section-number">9.3.5</span> Why does Monte Carlo work?</h3>
 <p>Okay, before we start looking at more complicated or more interesting examples of Monte Carlo, we have to ask… why does this work, anyway? We’re estimating a number <span class="math inline">\(\Pr[E]\)</span> by just repeating an experiment a bunch of times and recording the fraction of the time that our event <span class="math inline">\(E\)</span> happened…</p>
 <p>Well, in one sense, the fact that this gets us a good estimate of <span class="math inline">\(\Pr[E]\)</span> should be “obvious”. Our “definition” of a probability is as a long-run average– the probability of an event is the proportion of the time we would expect that event to happen if we repeated the experiment many times. So it comes as no surprise that when we run our experiment a bunch of times and average out how often our event happens, well… we get our probability!</p>
 <p>Okay, but that explanation feels a bit circular… To answer the question more carefully, we need to use just a bit of math. I promise it’s just a bit, and we’ll go through it step by step. We won’t even have to compute any integrals– just look at them!</p>
@@ -567,8 +670,8 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 \]</span></p>
 <p>Monte Carlo works for estimating probabilities because probabilities are just expectations (that’s from the calculus we did above), and sample averages are close to their expectations (by the law of large numbers)!</p>
 </section>
-<section id="example-buffons-needle" class="level3" data-number="8.3.6">
-<h3 data-number="8.3.6" class="anchored" data-anchor-id="example-buffons-needle"><span class="header-section-number">8.3.6</span> Example: Buffon’s needle</h3>
+<section id="example-buffons-needle" class="level3" data-number="9.3.6">
+<h3 data-number="9.3.6" class="anchored" data-anchor-id="example-buffons-needle"><span class="header-section-number">9.3.6</span> Example: Buffon’s needle</h3>
 <p>Let’s look at a slightly more interesting example, based on a <a href="https://en.wikipedia.org/wiki/Buffon%27s_needle_problem">question</a> first asked by Georges-Louis Leclerc, Comte de Buffon in the 1700s:</p>
 <blockquote class="blockquote">
 <p>Suppose we have a floor made of parallel strips of wood, each of width 1, and we drop a needle of length 1 onto the floor. What is the probability that the needle will lie across a line between two strips?</p>
@@ -714,8 +817,8 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 <p><strong>Exercise:</strong> Write a function that takes 3 arguments: <code>L</code> for the length of the needle, <code>T</code> for the width of the floor boards, and <code>M</code> for the number of Monte Carlo replicates; performs the above Monte Carlo simulation; and returns the (estimated) probability of a crossing. Refer to the Wikipedia page on Buffon’s needle for the probability of crossing for a needle length <span class="math inline">\(L\)</span> and board width <span class="math inline">\(T\)</span>.</p>
 </section>
 </section>
-<section id="more-uses-for-monte-carlo-integration-by-darts" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">8.4</span> More uses for Monte Carlo: integration by darts</h2>
+<section id="more-uses-for-monte-carlo-integration-by-darts" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="more-uses-for-monte-carlo-integration-by-darts"><span class="header-section-number">9.4</span> More uses for Monte Carlo: integration by darts</h2>
 <p>The power of Monte Carlo methods goes way beyond estimating the probabilities of events. Monte Carlo refers to a much broader class of methods– using simulation to answer questions that would otherwise be hard or impossible to answer just using math (i.e., problems that do not have closed-form solutions).</p>
 <p>We just saw above that we can use Monte Carlo to estimate probabilities of the form <span class="math inline">\(\Pr[ E ]\)</span> by approximating expectations of the form <span class="math inline">\(\mathbb{E} 1_E\)</span>.</p>
 <p>Well, what is to stop us from replacing that indicator with a more interesting function <span class="math inline">\(g(X)\)</span>? For example, suppose that <span class="math inline">\(X\)</span> is normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> and we want to compute <span class="math inline">\(\mathbb{E} \log |X|\)</span>. We <em>could</em> set up and solve the integral <span class="math display">\[
@@ -738,8 +841,8 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 <p>where <span class="math inline">\(X\)</span> is a random variable with density <span class="math inline">\(f\)</span>.</p>
 <p>So if we want to (approximately) compute <span class="math inline">\(\int_D g(x) dx\)</span>, we can just generate lots of copies of <span class="math inline">\(X\)</span> with density <span class="math inline">\(f\)</span>, and compute <span class="math inline">\(M^{-1} \sum_{i=1}^M h(X_i)\)</span>. This is why you’ll sometimes see Monte Carlo methods referred to as “integration by darts”!</p>
 <p><br></p>
-<section id="example-integrate-x1-3-from-0-to-infty" class="level3" data-number="8.4.1">
-<h3 data-number="8.4.1" class="anchored" data-anchor-id="example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">8.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></h3>
+<section id="example-integrate-x1-3-from-0-to-infty" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="example-integrate-x1-3-from-0-to-infty"><span class="header-section-number">9.4.1</span> Example: integrate <span class="math inline">\((x+1)^{-3}\)</span> from 0 to <span class="math inline">\(\infty\)</span></h3>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(x) (x<span class="sc">+</span><span class="dv">1</span>)<span class="sc">^-</span><span class="dv">3</span></span>
@@ -785,8 +888,8 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 <p><br></p>
 </section>
 </section>
-<section id="mc-estimator-example-compute-pi" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="mc-estimator-example-compute-pi"><span class="header-section-number">8.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></h2>
+<section id="mc-estimator-example-compute-pi" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="mc-estimator-example-compute-pi"><span class="header-section-number">9.5</span> MC estimator example: compute <span class="math inline">\(\pi\)</span></h2>
 <p>Here’s a fun example. Of course, we all know the value of <span class="math inline">\(\pi\)</span> (at least to a few decimal points). But let’s suppose we didn’t know <span class="math inline">\(\pi\)</span>, for the sake of argument. We <em>do</em> know that <span class="math inline">\(\pi\)</span> is the ratio of the area of a circle to radius².</p>
 <p>How can we use this fact, in conjunction with Monte Carlo methods, to estimate <span class="math inline">\(\pi\)</span>?</p>
 <p>Well, let’s have a look at the diagram below, which shows a square of side length 2, with an inscribed circle of radius 1 (hence area <span class="math inline">\(\pi\)</span>). Some random points have been chosen in the square, and colored according to whether or not they lie inside the circle.</p>
@@ -835,8 +938,8 @@ p_{\text{repeated}} = 1 - p_{\text{distinct}}
 </div>
 </div>
 <p><strong>Bonus:</strong> try changing <code>NMC</code> in the code above. How does the relative error change? What happens if you increase <code>NMC</code> up to <code>10000</code>? What if you decrease <code>NMC</code> down to <code>100</code>?</p>
-<section id="expectation-and-variance-of-hatpi" class="level3" data-number="8.5.1">
-<h3 data-number="8.5.1" class="anchored" data-anchor-id="expectation-and-variance-of-hatpi"><span class="header-section-number">8.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></h3>
+<section id="expectation-and-variance-of-hatpi" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="expectation-and-variance-of-hatpi"><span class="header-section-number">9.5.1</span> Expectation and Variance of <span class="math inline">\(\hat\pi\)</span></h3>
 <p>We can easily derive the expectation and variance of this estimator: <span class="math display">\[\begin{align}
 E(\hat\pi)&amp;=E\left(\frac4N\sum_{i=1}^NX_i\right)\\
 &amp;=\frac4NE\left(\sum_{i=1}^NX_i\right)\\
@@ -930,8 +1033,8 @@ Var(\hat\pi)&amp;=Var\left(\frac4N\sum_{i=1}^NX_i\right)\\
 </div>
 </section>
 </section>
-<section id="important-notes" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="important-notes"><span class="header-section-number">8.6</span> Important notes:</h2>
+<section id="important-notes" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="important-notes"><span class="header-section-number">9.6</span> Important notes:</h2>
 <ul>
 <li>the estimator is <strong>unbiased</strong>, since <span class="math inline">\(E(\hat\pi)-\pi=0\)</span>, which means there’s no systematic error</li>
 <li>the estimator variance <span class="math inline">\(\propto1/N\)</span>, so we can increase our precision by simulating more points
@@ -955,8 +1058,8 @@ Var(\hat\pi)&amp;=Var\left(\frac4N\sum_{i=1}^NX_i\right)\\
 </details>
 <p><br></p>
 </section>
-<section id="generating-random-variables-and-the-importance-of-randomness" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">8.7</span> Generating random variables and the importance of randomness</h2>
+<section id="generating-random-variables-and-the-importance-of-randomness" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="generating-random-variables-and-the-importance-of-randomness"><span class="header-section-number">9.7</span> Generating random variables and the importance of randomness</h2>
 <p>Crucial to Monte Carlo methods is that we be able to generate random variables. For example, if we want to estimate <span class="math inline">\(\mathbb{E} g(X)\)</span> for some random variable <span class="math inline">\(X\)</span>, then we need to be able to generate copies of the random variable <span class="math inline">\(X\)</span> (and we need to be able to compute <span class="math inline">\(g( \cdot )\)</span>, of course…).</p>
 <p>R has built-in functions that we’ve seen already for generating from the normal, Poisson, geometric, etc., but how does R generate those random numbers? And suppose that we had a particular random variable that we want to generate and R doesn’t have a built-in function for it? What do we do then?</p>
 <p>Well, let’s take it as a given that we know how to generate uniform random variables. Suppose that someone gives us an arbitrary density or an arbitrary CDF. How can we draw samples from it?</p>
@@ -980,14 +1083,21 @@ Var(\hat\pi)&amp;=Var\left(\frac4N\sum_{i=1}^NX_i\right)\\
 <p><img src="mc_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Here’s an animation showing 100 random samples from a standard normal distribution. As you sample from the distribution a histogram in the shape of the normal curve emergers. But the CDF value for each sampled number, i.e.&nbsp;<span class="math inline">\(F(X)\)</span> is also calculated and these values are plotted in a histogram. You see that the distribution of these values is uniform from 0 to 1.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/sampling_uniform.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Random Sampling and the Uniform Distribution</figcaption>
+</figure>
+</div>
 <p>We can use this fact to generate observations from any arbitrary distribution!</p>
 <p>Let <span class="math inline">\(X\)</span> be a random variable with CDF <span class="math inline">\(F_X\)</span>, and suppose that <span class="math inline">\(F_X\)</span> is invertible so that we can sensibly write <span class="math inline">\(F_X^{-1}(t)\)</span>. In later probability courses you’ll see that this trick works even if the CDF doesn’t have an inverse like you’re used to, because we can define a special kind of inverse for CDFs, but that’s for another time.</p>
 <p>Remember that by definition, <span class="math display">\[
 F_X(t) = \Pr[ X \le t ].
 \]</span></p>
 <p>If <span class="math inline">\(U\)</span> is uniform <span class="math inline">\(0\)</span>-<span class="math inline">\(1\)</span>, <span class="math inline">\(U \sim \operatorname{Unif}(0,1)\)</span>, consider <span class="math inline">\(Y = F_X^{-1}(U)\)</span>. We claim that this number has the same distribution as <span class="math inline">\(X\)</span> (i.e., it has CDF <span class="math inline">\(F_X\)</span>). If you’re interested, the next subsection will give a proof of this fact. If you don’t care about seeing why this is true, you can skip it.</p>
-<section id="f_xx-is-uniform-0-1." class="level3" data-number="8.7.1">
-<h3 data-number="8.7.1" class="anchored" data-anchor-id="f_xx-is-uniform-0-1."><span class="header-section-number">8.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</h3>
+<section id="f_xx-is-uniform-0-1." class="level3" data-number="9.7.1">
+<h3 data-number="9.7.1" class="anchored" data-anchor-id="f_xx-is-uniform-0-1."><span class="header-section-number">9.7.1</span> <span class="math inline">\(F_X(X)\)</span> is uniform 0-1.</h3>
 <p>Let’s check this fact. Remember, <span class="math inline">\(Y = F_X^{-1}(U)\)</span>, where <span class="math inline">\(U \sim \operatorname{Unif}(0,1)\)</span> and <span class="math inline">\(F_X\)</span> is the CDF of a random variable <span class="math inline">\(X\)</span>, and has an inverse <span class="math inline">\(F_X^{-1}\)</span>.</p>
 <p>We need to verify that the CDF of <span class="math inline">\(Y\)</span> is equal to <span class="math inline">\(F_X\)</span>. That is, <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> have the same distribution.</p>
 <p>So let’s look at the CDF of <span class="math inline">\(Y\)</span>. By definition, <span class="math display">\[
@@ -1005,8 +1115,8 @@ F_Y(t)
 <p>That right-hand side is just the CDF of a uniform, evaluated at <span class="math inline">\(F_X(t)\)</span>. But the CDF of a uniform is just <span class="math inline">\(\Pr[U \le p] = p\)</span> for all <span class="math inline">\(0 \le p \le 1\)</span>. So we have shown that <span class="math inline">\(F_Y(t) = F_X(t)\)</span>, which is to say, <span class="math inline">\(Y = F_X^{-1}(U)\)</span> has the same distribution as our original random variable <span class="math inline">\(X\)</span>.</p>
 <p>In other words, randomly sampling from the uniform distribution and then applying the inverse of the given CDF function gives the desired target distribution!</p>
 </section>
-<section id="okay-proof-over." class="level3" data-number="8.7.2">
-<h3 data-number="8.7.2" class="anchored" data-anchor-id="okay-proof-over."><span class="header-section-number">8.7.2</span> Okay, proof over.</h3>
+<section id="okay-proof-over." class="level3" data-number="9.7.2">
+<h3 data-number="9.7.2" class="anchored" data-anchor-id="okay-proof-over."><span class="header-section-number">9.7.2</span> Okay, proof over.</h3>
 <p>Let’s have another look at that by sampling from a normal. In the process, we’re going to see the last of R’s built-in functions for working with random variables: <code>qnorm</code>.</p>
 <p><code>qnorm</code> takes a number <code>p</code> between zero and one and returns the corresponding <em>quantile</em> of the normal distribution. That is, the number <span class="math inline">\(t\)</span> such that the probability that a normal <span class="math inline">\(X\)</span> is less then or equal to <span class="math inline">\(t\)</span> is equal to <span class="math inline">\(p\)</span>. That’s a clumsy thing to say in English– put more simply, the quantile is just the inverse CDF!</p>
 <div class="cell">
@@ -1046,8 +1156,8 @@ F_Y(t)
 <p>The straight line in the Q-Q plot indicates that our two samples are very similar– as they should be!</p>
 </section>
 </section>
-<section id="example" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="example"><span class="header-section-number">8.8</span> Example:</h2>
+<section id="example" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="example"><span class="header-section-number">9.8</span> Example:</h2>
 <p>Define a random variable <span class="math inline">\(X\)</span> with density <span class="math display">\[
 f_X(x) = \begin{cases}
       2x &amp;\mbox{ if } 0 \le x \le 1 \\
@@ -1098,13 +1208,13 @@ f_X(x) = \begin{cases}
 <p><img src="mc_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<section id="okay-but-do-i-actually-need-this-inverse-trick" class="level3" data-number="8.8.1">
-<h3 data-number="8.8.1" class="anchored" data-anchor-id="okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">8.8.1</span> Okay, but do I actually need this inverse trick?</h3>
+<section id="okay-but-do-i-actually-need-this-inverse-trick" class="level3" data-number="9.8.1">
+<h3 data-number="9.8.1" class="anchored" data-anchor-id="okay-but-do-i-actually-need-this-inverse-trick"><span class="header-section-number">9.8.1</span> Okay, but do I actually need this inverse trick?</h3>
 <p>Okay, full disclosure: lucky for us, it’s pretty rare that we actually need to use this inverse trick, especially in a course at this level. Almost any random variable you will ever need in your life has already been implemented in R (and most other programming languages, for that matter). Still, if you understand this trick, then you understand enough about CDFs and how they work to be dangerous. Also, it’s useful on exam questions…</p>
 </section>
 </section>
-<section id="random-v.-pseudorandom" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="random-v.-pseudorandom"><span class="header-section-number">8.9</span> Random v. pseudorandom</h2>
+<section id="random-v.-pseudorandom" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="random-v.-pseudorandom"><span class="header-section-number">9.9</span> Random v. pseudorandom</h2>
 <p>One last parting remark, included here because it’s interesting and important to know about, not because it will be on any exams.</p>
 <p>For Monte Carlo, it’s important to have a good source of random numbers whose distribution is precisely known. This is a <em>surprisingly difficult</em> problem. There are ways of generating (as far as modern science can tell), almost perfectly uniformly random numbers, such as measuring <a href="https://www.random.org/randomness/">atmospheric noise</a>, <a href="https://www.techrepublic.com/article/computer-scientists-derive-truly-random-numbers-using-two-source-extractors/">radioactive decay</a>, or even <a href="https://en.wikipedia.org/wiki/Lavarand">lava lamps</a> (<a href="https://www.cloudflare.com/learning/ssl/lava-lamp-encryption/">used by Cloudflare</a>). These sources are generally considered capable of producing the most <em>truly random</em> numbers.</p>
 <p>Your computer (unless it’s attached to a Geiger counter or a wall of lava lamps) is only capable of producing <em>pseudorandom</em> numbers. These are made by running a <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">pseudorandom number generator algorithm</a> which is deterministic, meaning it always produces the same output given the same input. For example, R produces pseudorandom numbers using the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> algorithm. Even though these are deterministic, they are <em>statistically random</em>– for all practical computational purposes, there are no discernible patterns in the output.</p>
@@ -1138,8 +1248,8 @@ f_X(x) = \begin{cases}
 </iframe>
 <p><br><br></p>
 <p>The comprehensive textbook on the topic of generating random variables is <em>Non-Uniform Random Variate Generation</em> by Luc Devroye. Unfortunately, it’s a bit advanced, unless you’ve taken a bunch of calculus already, but something to strive for!</p>
-<section id="review" class="level3" data-number="8.9.1">
-<h3 data-number="8.9.1" class="anchored" data-anchor-id="review"><span class="header-section-number">8.9.1</span> Review:</h3>
+<section id="review" class="level3" data-number="9.9.1">
+<h3 data-number="9.9.1" class="anchored" data-anchor-id="review"><span class="header-section-number">9.9.1</span> Review:</h3>
 <p>In these notes we covered:</p>
 <ul>
 <li>The basic steps of a Monte Carlo simulation</li>
@@ -1391,13 +1501,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./R02_IndepCondBayes.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./R03_MonteCarloExamples.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

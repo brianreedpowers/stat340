@@ -1,0 +1,88 @@
+---
+title: 'Bootstrap Practice'
+format: html
+editor: source
+---
+
+# Practice Problems
+
+1.  A researcher is studying salamanders in western Massachusetts, and wishes to estimate the average length, measured in centimeters, of adult female salamanders living in wetlands there. She and her team collect an independent sample of 36 salamanders, measuring each one (in centimeters) from head to tail and recording the measurement. The data is reproduced below.
+
+```{r}
+salamander_lengths <- c( 14.5, 13.9, 14.1, 14.2, 14.7, 13.8, 14.6, 16.0, 14.7,
+                         14.8, 15.1, 14.6, 14.4, 13.7, 12.1, 14.8, 11.0, 12.0,
+                         13.8, 14.3, 13.9, 13.4, 14.6, 14.5, 15.6, 15.2, 16.1,
+                         15.2, 13.8, 16.6, 13.6, 15.4, 12.5, 12.8, 14.1, 15.2);
+```
+
+Use the bootstrap to construct a 95% confidence interval for the population mean height. You should use at least 200 bootstrap replicates.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+n <- length(salamander_lengths)
+B <- 200;
+bootreps <- rep( NA, B );
+for(bb in 1:B ) {
+  bootsamp <- sample(salamander_lengths, size=n, replace=TRUE)
+  bootreps[bb] <- mean(bootsamp)
+}
+
+SEboot <- sd(bootreps)
+
+muhat <- mean(salamander_lengths)
+c( muhat - 1.96*SEboot, muhat+1.96*SEboot )
+```
+:::
+
+2.  We will now derive the probability that a given observation is part of a bootstrap sample. Suppose that we obtain a bootstrap sample from a set of $n$ observations.
+
+<!-- -->
+
+a.  What is the probability that the first bootstrap observation is not the $j$th observation from the original sample? Justify your answer.
+
+b.  What is the probability that the second bootstrap observation is not the $j$th observation from the original sample?
+
+c.  Argue that the probability that the $j$th observation is not in the bootstrap sample is $(1 − 1/n)^n$.
+
+d.  When $n = 5$, what is the probability that the $j$th observation is in the bootstrap sample?
+
+e.  When $n = 100$, what is the probability that the $j$th observation is in the bootstrap sample?
+
+f.  When $n = 10,000$, what is the probability that the $j$th observation is in the bootstrap sample?
+
+g.  Create a plot that displays, for each integer value of $n$ from 1 to 100,000, the probability that the $j$th observation is in the bootstrap sample. Comment on what you observe.
+
+h.  We will now investigate numerically the probability that a bootstrap sample of size $n = 100$ contains the $j$th observation. Here $j = 4$. We repeatedly create bootstrap samples, and each time we record whether or not the fourth observation is contained in the bootstrap sample.
+
+```{r}
+store <- rep(NA, 10000)
+for(i in 1:10000){
+store[i] <- sum(sample (1:100 , rep=TRUE) == 4) > 0
+}
+mean(store)
+```
+
+Comment on the results obtained.
+
+3.  We will now consider the Boston housing data set, from the ISLR2 library.
+
+<!-- -->
+
+(a) Based on this data set, provide an estimate for the population mean of medv. Call this estimate ˆμ.
+(b) Provide an estimate of the standard error of ˆμ. Interpret this result. Hint: We can compute the standard error of the sample mean by dividing the sample standard deviation by the square root of the number of observations.
+(c) Now estimate the standard error of ˆμ using the bootstrap. How does this compare to your answer from (b)?
+(d) Based on your bootstrap estimate from (c), provide a 95% confidence interval for the mean of medv. Compare it to the results obtained using t.test(Boston\$medv). Hint: You can approximate a 95% confidence interval using the formula \[ˆμ − 2SE(ˆμ), ˆμ + 2SE(ˆμ)\].
+(e) Based on this data set, provide an estimate, ˆμmed, for the median value of medv in the population.
+(f) We now would like to estimate the standard error of ˆμmed. Unfortunately, there is no simple formula for computing the standard error of the median. Instead, estimate the standard error of the median using the bootstrap. Comment on your findings.
+(g) Based on this data set, provide an estimate for the tenth percentile of medv in Boston census tracts. Call this quantity ˆμ0.1. (You can use the quantile() function.)
+(h) Use the bootstrap to estimate the standard error of ˆμ0.1. Comment on your findings.https://ritsokiguess.site/pasias/the-bootstrap.html
+
+https://ritsokiguess.site/pasias/the-bootstrap.html
+
+
+# Beyond STAT 340
+
+These problems are excellent practice but they are beyond the material we cover in STAT 340.
+
+
+

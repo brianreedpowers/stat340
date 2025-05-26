@@ -6,7 +6,7 @@ editor: source
 
 # Practice Problems
 
-## 1. Two Fair Coins
+## Two Fair Coins
 
 Alex and Bob each flips a fair coin twice. Use "1" to denote heads and "0" to denote tails. Let X be the maximum of the two numbers Alex gets, and let Y be the minimum of the two numbers Bob gets.
 
@@ -41,7 +41,7 @@ prop.table(pmf, 2)
 Each column gives P(X=x\|Y=y) for the two values of y; you can see that they are the same; the reason is because the value of X and Y are independent.
 :::
 
-## 2. Two Fair Dice
+## Two Fair Dice
 Two fair dice are rolled. Find the joint PMF of $X$ and $Y$ when
 
 <!-- -->
@@ -76,7 +76,7 @@ pmf
 ```
 :::
 
-## 3. Two Normal RVs
+## Two Normal RVs
 Let X and Y be zero-mean, unit-variance independent Gaussian random variables. Find the value of r for which the probability that $(X, Y )$ falls inside a circle of radius r is 1/2.
 
 ::: {.callout-note collapse="true" title="Solution"}
@@ -99,7 +99,7 @@ sqrt(qchisq(.5,2))
 ```
 :::
 
-## 4. Uniform Random Angle
+## Uniform Random Angle
 Let $\Theta ∼ Uniform[0, 2\pi]$.
 
 <!-- -->
@@ -125,7 +125,7 @@ cor(cos(thetas/4), sin(thetas/4))
 ```
 :::
 
-##5. Signal and Noise
+## Signal and Noise
 Let $Y = X+N$, where $X$ is the input, $N$ is the noise, and $Y$ is the output of a system. Assume that $X$ and $N$ are independent random variables. It is given that $E[X] = 0$, $Var[X] = \sigma^2_X$, $E[N] = 0$, and $Var[N] = \sigma^2_N$.
 
 <!-- -->
@@ -174,7 +174,7 @@ $E[(X-aY)^2]=(\sigma_X^2+\sigma_N^2)\dfrac{\sigma_X^4}{(\sigma_X^2+\sigma_N^2)^2
 $=\sigma_X^2\left(\dfrac{\sigma_N^2}{\sigma_X^2+\sigma_N^2}\right)=\dfrac{\sigma_X^2}{\eta+1}$
 :::
 
-## 6. Cat Genetics
+## Cat Genetics
 The gene that controls white coat color in cats, KIT , is known to be responsible for multiple phenotypes such as deafness and blue eye color. A dominant allele W at one location in the gene has complete penetrance for white coat color; all cats with the W allele have white coats. There is incomplete penetrance for blue eyes and deafness; not all white cats will have blue eyes and not all white cats will be deaf. However, deafness and blue eye color are strongly linked, such that white cats with blue eyes are much more likely to be deaf. The variation in penetrance for eye color and deafness may be due to other genes as well as environmental factors.
 
 -   Suppose that 30% of white cats have one blue eye, while 10% of white cats have two blue eyes.
@@ -287,7 +287,7 @@ mean(nblue[isBlind]==2)
 ```
 :::
 
-## 7. GSS Survey I
+## GSS Survey I
 Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more probable?
 
 <!-- -->
@@ -354,7 +354,7 @@ mean(gss[gss$sex==2 & gss$polviews <=3 & gss$partyid <= 1,]$indus10==6870)
 ```
 :::
 
-##8. GSS Survey II
+## GSS Survey II
 Compute the following probabilities:
 
 <!-- -->
@@ -375,7 +375,7 @@ mean(gss[gss$polviews<=3,]$partyid<=1)
 ```
 :::
 
-## 9. GSS Survey III
+## GSS Survey III
 There's a [famous quote](https://quoteinvestigator.com/2014/02/24/heart-head/) about young people, old people, liberals, and conservatives that goes something like:
 
 > If you are not a liberal at 25, you have no heart. If you are not a conservative at 35, you have no brain.
@@ -418,7 +418,7 @@ mean(gss[gss$polviews >=5,]$age >65)
 ```
 :::
 
-## 10. Two Child Paradox
+## Two Child Paradox
 Suppose you meet someone and learn that they have two children. You ask if either child is a girl and they say yes. What is the probability that both children are girls? (*Hint: Start with four equally likely hypotheses.*)
 
 ::: {.callout-note collapse="true" title="Solution"}
@@ -427,7 +427,7 @@ Before we know anything about their two kids, the number of girls $X$ they have 
 If we learn that at least one of the kids is a girl, that tells us that the first possibility, that $x=0$ is not possible. Thus $P(X=2 | X>0) = .\dfrac{25}{.5+.25}= \frac{1}{3}$\*\*
 :::
 
-## 11. Monty Hall
+## Monty Hall
 There are many variations of the [Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem). For example, suppose Monty always chooses Door 2 if he can, and only chooses Door 3 if he has to (because the car is behind Door 2).
 
 <!-- -->
@@ -458,7 +458,7 @@ b.  If you choose Door 1 and Monty opens Door 3, what is the probability the car
 ```
 :::
 
-## 12. M&Ms
+## M&Ms
 M&M's are small candy-coated chocolates that come in a variety of colors. Mars, Inc., which makes M&M's, changes the mixture of colors from time to time. In 1995, they introduced blue M&M's.
 
 -   In 1994, the color mix in a bag of plain M&M's was 30% Brown, 20% Yellow, 20% Red, 10% Green, 10% Orange, 10% Tan.
@@ -480,7 +480,7 @@ The corresponding probabilities are $(.10)(.14)=.014$ and $(.20)(.20)=.04)$. The
 The likelihood is $.014 / (.014+.04) = .2592593$
 :::
 
-## 13. Two Coins
+## Two Coins
 Suppose you have two coins in a box. One is a normal coin with heads on one side and tails on the other, and one is a trick coin with heads on both sides. You choose a coin at random and see that one of the sides is heads. What is the probability that you chose the trick coin?
 
 ::: {.callout-note collapse="true" title="Solution"}
@@ -493,8 +493,89 @@ Bayes Theorem tells us that $P(HH | Heads) = \dfrac{P(HH)*P(Heads|HH)}{P(HH)P(He
 Seems counter intuitive! If I pick a random coin from the two, you already know that one of the sides is a head without looking at it. Somehow then, when you look at just one side of the coin, seeing a H makes you 67% sure that it is the trick coin. The reason is that seeing the head side is like flipping it once and getting a H. That is less likely to occur with the fair coin, hence this outcome lends evidence to the "trick coin" hypothesis.
 :::
 
+## Online Sales I
+(From *Introduction to Probability and Statistics for Data Science*)
+Customers can buy one of four produts, each having its own web page with a ``buy'' link. When they click on the link, they are redirected to a common page containing a registration and payment orm. Once there the customer eithe rbuys the desired product (labeled 1,2,3 or 4) or they fail to complete and a sale is lost. Let event $A_i$ be that a customer is on produt $i$'s web page and let event $B$ be the event that the customer buys the product. For the purposes of this problem, assume that each potential customer visits at most one product page and so he or she buys at most one produt. For the probabilities shown in the table below, find the probability that a customer buys a product.
+
+| Product $(i)$ | $Pr[B|A_i]$ | $Pr[A_i]|
+|---|----|----|
+|1 | $0.72$ | $0.14$|
+|2 | $0.90$ | $0.04$|
+|3 | $0.51$ | $0.11$|
+|4 | $0.97$ | $0.02$|
+
+## Online Sales II
+Continuing from the previous problem, if a random purchase is selected, find the probability that it was item 1 that was purchased. Do the same for items 2, 3 and 4.
+
+## UAV
+Consider a new type of commercial unmanned aerial vehicle (UAV) that has been outfitted with a transponder so that if it crashes it can easily be found and reused. Other older UAVs do not have transponders. Eighty percent of al lUAVs are recovered and, of those recovered, 75% have a transponder. Further, of those not recovered, 90% do not have a transponder. Denote recovery as $R+$ and failure to recover as $R-$. Denote having a transponder as $T+$ and not having a transponder as $T-$. Find
+
+(a) $Pr[T+]$
+(b) The probability of not recovering a UAV given that it has a transponder.
+
+## Disease Screening
+Suppose that the test for a disease has sensitivity 0.90 and specificity 0.999. The base rate for the disease is 0.002. Find
+
+(a) The probability that someone selected at random from the population tests positive.
+
+(b) The probability that the person has the diseases given a positive test result (the positive predictive value).
+
+(c) The probability that the person does not have the disease given a negative test result (the negative predictive value).
+
+## Two random variables
+Suppose 
+
 
 # Beyond STAT 340
 
 These problems are excellent practice but they are beyond the material we cover in STAT 340.
+
+## Variance of a RV from the pmf
+
+Let $X$ be a random variable with pmf $p_k = 1/2^k$ for $k=1,2,\ldots$.
+
+a.  Find $\text{Var}X$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**The variance is** $E(X^2)-(EX)^2=E(X^2)-4$**. The expected value of** $X^2$ **can be derived, though it's not so fun...**
+
+**Start by taking the equation** $\sum_k kp^k = \frac{p}{(1-p)^2}$ **and take a derivative again. We get** $\sum_k k^2 p^{k-1} = \frac{(1-p)^2+2p(1-p)}{(1-p)^4}$**. Multiply through by** $p$ **to get** $\sum_k k^2 p^k = \frac{p(1-p)^2+2p^2(1-p)}{(1-p)^4}$**. If we let** $p=\frac12$ **we have found** $E(X^2)=\sum_{k=1}^\infty k^2(\frac12)^k=\dfrac{\frac18-\frac{2}{8}}{\frac{1}{16}}=6$**. Thus** $Var(X)=E(X^2)-E(X)^2 = 6-4=2$**. It should be noted that this random variable is actually a geometric random variable (well, according to the "number of trials until and including the first success definition). If we define** $Y\sim Geom(.5)$ **using our definition of "number of failures before the first success" then We can let** $X=Y+1$**.** $E(X)=E(Y+1)=\frac{1-.5}{.5}+1=2$ **and** $Var(X)=Var(Y)=\frac{1-p}{p2}=\frac{.5}{.25^2}=2$**.**
+:::
+
+
+## Variance of a Uniform RV
+Calculate the variance of $X \sim \text{Unif}(a,b)$. (*Hint:* First calculate $\mathbb{E}X^2$)
+
+## Expectation and Binomial
+
+If $X \sim \text{Binom}(n,p)$ show that $\mathbb{E}X(X-1)=n(n-1)p^2$.
+
+::: {.callout-note collapse="true" title="Solution"}
+**We can just expand the product** $\mathbb{E}(X^2-X)$ **and we can split this up into two expected values:** $\mathbb{E}X^2 - \mathbb{E}X = \mathbb{E}X^2-\mu$**. Recall that** $Var(X)=\mathbb{E}X^2-\mu^2$ **So** $\mathbb{E}X^2=Var(X)+\mu^2$**. For a binomial,** $Var(X)=np(1-p)$ **and** $\mu=np$**. Thus we have**
+
+$\mathbb{E}X^2 - \mu=[np(1-p) + n^2p^2] - np = np\left(1-p+np-1\right)$
+
+**Tidying up a little bit we get** $np(np-p)=np^2(n-1)$**, and we're done.**
+:::
+
+## Variance Formula
+
+Show that $\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2-\mu^2$. *Hint:* expand the quantity $(X-\mu)^2$ and distribute the expectation over the resulting terms.
+
+::: {.callout-note collapse="true" title="Solution"}
+**The proof goes like this: We first FOIL** $(X-\mu)^2$**:**
+
+$\mathbb{E}(X-\mu)^2 = \mathbb{E}(X^2 - 2\mu X + \mu^2)$
+
+**We next split the expected value into 3 expected values using the fact that** $\mathbb{E}$ **is a linear operator.**
+
+$\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mathbb{E}X + \mathbb{E}\mu^2$
+
+**We next observe that** $\mu^2$ **is constant and** $\mathbb{X}=\mu$
+
+$\mathbb{E}(X-\mu)^2 = \mathbb{E}X^2 -2\mu \mu + \mu^2$
+
+**We can simplify the expression and we're done!**
+:::
+
 

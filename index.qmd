@@ -9,9 +9,9 @@ Here are the course notes, practice problems and other course materials for STAT
 Author credits to Bi Cheng Wu, Brian Powers, Keith Levin
 
 ## Collection of Shiny Apps
-<a href="onetwotail">Binomial One/Two Tail Test Power</a>
 
-<a href="normal_pdf_cdf">Normal PDF CDF Inverse CDF </a>
+- <a href="onetwotail">Binomial One/Two Tail Test Power</a>
+- <a href="normal_pdf_cdf">Normal PDF CDF Inverse CDF </a>
 
 <!--
 to export an app

@@ -1,0 +1,202 @@
+---
+title: 'Cross Validation Practice'
+format: html
+editor: source
+---
+
+# Practice Problems
+
+## Boston Polynomial Regression
+Use 5-fold validation to fit polynomials of order 1-5 on the Boston dataset, predicting MDEV from LSTAT
+
+## Logistic CV on mtcars
+Let's revisit our dear old friend the `mtcars` data set once more. The `am` column of this data frame indicates whether a particular model of car has an automatic (`0`) or manual (`1`) transmission. This problem will consider how to go about predicting this trait based on the other available variables.
+
+Part a: fitting logistic regression
+
+Fit a logistic regression model to predict `am` based on the read axle ratio (`drat`) and an intercept term.
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+drat_lr <- glm( am ~ 1 + drat, data=mtcars, family='binomial')
+
+summary(drat_lr)
+```
+:::
+
+Part b: interpreting logistic regression
+
+Looking at your fitted model from Part a, is the estimated coefficient for `drat` statistically significantly different from zero?
+
+Give a 95% confidence interval for the fitted coefficient.
+
+Give an interpretation of what this coefficient means.
+
+Does an increase in `drat` tend to result in a higher or lower probability of a car having a manual transmission?
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+confint( drat_lr )
+```
+
+A unit increase in `drat` is associated with an increase of 5.577 in the log-odds of a car having a manual transmission.
+
+Thus, an increase in `drat` is associated with a higher probability of a car having a manual transmission.
+:::
+
+Part c: model comparison with LOOCV
+
+Now, suppose we are considering adding another variable to our model from Part a. As discussed in lecture and your readings, adding additional variables to a model will always increase our performance when measured on the training data, so to make a fair comparison between this new model and the model from Part a, we need to compare their performances on data *not* seen in the training procedure.
+
+Use leave-one-out cross validation (LOOCV) to compare the performance of your model from Part a against a model that predicts `am` from `drat` and `mpg` (and an intercept term).
+
+**Note:** in our discussion of LOOCV, we mostly discussed linear regression, where the natural way to assess a model's performance was its squared error in predicting the held-out observations. In logistic regression, squared error is not such a natural choice. For this problem, you should *fit* the model using the standard maximum likelihood approach as implemented in `glm`, but you should *assess* the model's performance on held-out data by making a prediction with the model (i.e., predicting `0` or `1`), and then checking whether or not this prediction matches the true value of `am` in the held-out observation. Recall that our trained logistic regression model outputs a probability based on the given predictor(s). You should turn this probability into a prediction by rounding the probability to 0 or 1 (you may break a tie at probability $0.5$ as you see fit).
+
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+n <- nrow(mtcars);
+singlevar_performances <- rep(NA, n);
+twovar_performances <- rep(NA, n);
+for( i in 1:n ) {
+  heldout <- mtcars[i,];
+  heldout_correct_answer <- heldout$am
+  trainset <- mtcars[-c(i),]
+  singlevar_model <- glm( am ~ 1 + drat, data=trainset, family='binomial')
+  twovar_model <- glm( am ~ 1 + drat + mpg, data=trainset, family='binomial')
+  # Make predictions on the held-out point.
+  # Need to turn a probability into a 0 or 1, which we do with round().
+  singlevar_pred <- round( predict( singlevar_model,
+                                        type='response', newdata=heldout ) )
+  twovar_pred <- round( predict( twovar_model,                            
+                                 type='response', newdata=heldout ) )
+  # Record whether we predicted correctly.
+  singlevar_performances[i] <- singlevar_pred==heldout_correct_answer;
+  twovar_performances[i] <- twovar_pred==heldout_correct_answer;
+}
+
+# Now, average over the n different held-out data points.
+c( mean(singlevar_performances), mean(twovar_performances) )
+```
+:::
+
+Which model is better according to your implementation of leave-one-out cross validation?
+
+::: {.callout-note collapse="true" title="Solution"}
+Both models perform identically, according to LOOCV. In light of this, we should prefer the model that uses only `drat`, since we prefer simpler models (i.e., those with fewer variables), all else being equal.
+:::
+
+## Defaulting on loans
+we used logistic regression to predict the probability of default using income and balance on the Default data set. We will now estimate the test error of this logistic regression model using the validation set approach. Do not forget to set a random seed before beginning your analysis.
+
+<!-- -->
+
+(a) Fit a logistic regression model that uses income and balance to predict default.
+(b) Using the validation set approach, estimate the test error of this model. In order to do this, you must perform the following steps:
+
+<!-- -->
+
+i.  Split the sample set into a training set and a validation set.
+ii. Fit a multiple logistic regression model using only the training observations.
+iii. Obtain a prediction of default status for each individual in the validation set by computing the posterior probability of default for that individual, and classifying the individual to the default category if the posterior probability is greater than 0.5.
+iv. Compute the validation set error, which is the fraction of the observations in the validation set that are misclassified.
+
+<!-- -->
+
+(c) Repeat the process in (b) three times, using three different splits of the observations into a training set and a validation set. Comment on the results obtained.
+(d) Now consider a logistic regression model that predicts the probability of default using income, balance, and a dummy variable for student. Estimate the test error for this model using the validation set approach. Comment on whether or not including a dummy variable for student leads to a reduction in the test error rate.
+
+<!-- -->
+
+## Defaulting on loans II
+We continue to consider the use of a logistic regression model to predict the probability of default using income and balance on the Default data set. In particular, we will now compute estimates for the standard errors of the income and balance logistic regression coefficients in two different ways: (1) using the bootstrap, and (2) using the standard formula for computing the standard errors in the glm() function. Do not forget to set a random seed before beginning your analysis.
+
+<!-- -->
+
+(a) Using the summary() and glm() functions, determine the estimated standard errors for the coefficients associated with income and balance in a multiple logistic regression model that uses both predictors.
+(b) Write a function, boot.fn(), that takes as input the Default data set as well as an index of the observations, and that outputs the coefficient estimates for income and balance in the multiple logistic regression model.
+(c) Use the boot() function together with your boot.fn() function to estimate the standard errors of the logistic regression coefficients for income and balance.
+(d) Comment on the estimated standard errors obtained using the glm() function and using your bootstrap function.
+
+<!-- -->
+
+## Looping LOOCV Logistic
+We saw that the cv.glm() function can be used in order to compute the LOOCV test error estimate. Alternatively, one could compute those quantities using just the glm() and predict.glm() functions, and a for loop. You will now take this approach in order to compute the LOOCV error for a simple logistic regression model on the Weekly data set. Recall that in the context of classification problems, the LOOCV error is given in (5.4).
+
+<!-- -->
+
+(a) Fit a logistic regression model that predicts Direction using Lag1 and Lag2.
+(b) Fit a logistic regression model that predicts Direction using Lag1 and Lag2 using all but the first observation.
+(c) Use the model from (b) to predict the direction of the first observation. You can do this by predicting that the first observation will go up if P(Direction = "Up"\|Lag1, Lag2) \> 0.5. Was this observation correctly classified?
+(d) Write a for loop from i = 1 to i = n, where n is the number of observations in the data set, that performs each of the following steps:
+
+<!-- -->
+
+i.  Fit a logistic regression model using all but the ith observation to predict Direction using Lag1 and Lag2.
+ii. Compute the posterior probability of the market moving up for the ith observation.
+iii. Use the posterior probability for the ith observation in order to predict whether or not the market moves up.
+iv. Determine whether or not an error was made in predicting the direction for the ith observation. If an error was made, then indicate this as a 1, and otherwise indicate it as a 0.
+
+<!-- -->
+
+(e) Take the average of the n numbers obtained in (d)iv in order to obtain the LOOCV estimate for the test error. Comment on the results.
+
+<!-- -->
+
+## Simulated Data CV
+
+(a) Generate a simulated data set as follows:
+
+```{r}
+set.seed (1)
+x <- rnorm (100)
+y <- x - 2 * x^2 + rnorm (100)
+```
+
+In this data set, what is n and what is p? Write out the model used to generate the data in equation form. (b) Create a scatterplot of X against Y . Comment on what you find. (c) Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares: i. Y = β0 + β1X + ϵ ii. Y = β0 + β1X + β2X2 + ϵ iii. Y = β0 + β1X + β2X2 + β3X3 + ϵ iv. Y = β0 + β1X + β2X2 + β3X3 + β4X4 + ϵ. Note you may find it helpful to use the data.frame() function to create a single data set containing both X and Y . (d) Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why? (e) Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer. (f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
+
+## Simulated Data Best Subset
+In this exercise, we will generate simulated data, and will then use this data to perform best subset selection.
+
+<!-- -->
+
+(a) Use the rnorm() function to generate a predictor X of length n = 100, as well as a noise vector ϵ of length n = 100.
+(b) Generate a response vector Y of length n = 100 according to the model Y = β0 + β1X + β2X2 + β3X3 + ϵ, where β0, β1, β2, and β3 are constants of your choice.
+(c) Use the regsubsets() function to perform best subset selection in order to choose the best model containing the predictors X,X2, . . . ,X10. What is the best model obtained according to Cp, BIC, and adjusted R2? Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained. Note you will need to use the data.frame() function to create a single data set containing both X and Y .
+(d) Repeat (c), using forward stepwise selection and also using backwards stepwise selection. How does your answer compare to the results in (c)?
+(e) Now fit a lasso model to the simulated data, again using X,X2, . . . , X10 as predictors. Use cross-validation to select the optimal value of λ. Create plots of the cross-validation error as a function of λ. Report the resulting coefficient estimates, and discuss the results obtained.
+(f) Now generate a response vector Y according to the model Y = β0 + β7X7 + ϵ, and perform best subset selection and the lasso. Discuss the results obtained.
+
+<!-- -->
+
+## College Applications
+In this exercise, we will predict the number of applications received using the other variables in the College data set.
+
+<!-- -->
+
+(a) Split the data set into a training set and a test set.
+(b) Fit a linear model using least squares on the training set, and report the test error obtained.
+(c) Fit a ridge regression model on the training set, with λ chosen by cross-validation. Report the test error obtained.
+(d) Fit a lasso model on the training set, with λ chosen by crossvalidation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+(e) Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these three approaches?
+
+<!-- -->
+
+## Features and Error
+We have seen that as the number of features used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
+
+<!-- -->
+
+(a) Generate a data set with p = 20 features, n = 1,000 observations, and an associated quantitative response vector generated according to the model Y = Xβ + ϵ, where β has some elements that are exactly equal to zero.
+(b) Split your data set into a training set containing 100 observations and a test set containing 900 observations.
+(c) Perform best subset selection on the training set, and plot the training set MSE associated with the best model of each size.
+(d) Plot the test set MSE associated with the best model of each size.
+(e) For which model size does the test set MSE take on its minimum value? Comment on your results. If it takes on its minimum value for a model containing only an intercept or a model containing all of the features, then play around with the way that you are generating the data in (a) until you come up with a scenario in which the test set MSE is minimized for an intermediate model size.
+(f) How does the model at which the test set MSE is minimized compare to the true model used to generate the data? Comment on the coefficient values.
+(g) Create a plot displaying $\sqrt{\sum_{j=1}^p(\beta_j − \hat{\beta}_j^r)^2}$ for a range of values of $r$, where $\hat{\beta}_j^r$ $j$ is the $j$th coefficient estimate for the best model containing r coefficients. Comment on what you observe. How does this compare to the test MSE plot from (d)?
+
+# Beyond STAT 340
+
+These problems are excellent practice but they are beyond the material we cover in STAT 340.
+
+
+
