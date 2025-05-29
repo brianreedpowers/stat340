@@ -334,7 +334,7 @@ Variable transformations can often be effective means to remedy violated regress
 
 The real estate data is in the `realestate.txt` file. 
 ```{r}
-real.estate <- read.table("realestate.txt", header=T)
+real.estate <- read.table("data/realestate.txt", header=T)
 real.estate$Air <- factor(real.estate$Air)
 ```
 
@@ -527,7 +527,7 @@ In particular, we are seeking for the following model:
 $wage = \beta_0 + \beta_1 south + \beta_2 sex + \beta_3 exp + \beta_4 union + \beta_5 age + \beta_6 race_2 + \beta_7 race_3 + \cdots$
 
 ```{r}
-wages <- read.table("wages85.txt", header=TRUE)
+wages <- read.table("data/wages85.txt", header=TRUE)
 ```
 But we should understand how the data is encoded. In particular some of the variables are categorical variables: SOUTH, SEX, RACE, SECTOR, MARR, OCCUPATION, UNION. We should convert these to categorical `factor` type variables rather than numeric.
 

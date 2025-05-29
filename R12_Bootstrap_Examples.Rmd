@@ -542,7 +542,7 @@ quantile(resid.se, c(0.025, 0.975))
 ## Draft Data
 
 ```{r}
-draft <- read.csv("Celtics_Heat_Game_6_Actual.csv")
+draft <- read.csv("data/Celtics_Heat_Game_6_Actual.csv")
 ```
 This dataset is the last post-season game between two NBA teams -- Celtics and Heat -- at DraftKings. The dataset contains four variables: Player, Roster Position, %Drafted, and FPTS.
 

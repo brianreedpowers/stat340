@@ -69,8 +69,11 @@ ui <- fluidPage(
             "Model Selection Method",
             c("best subset","forward stepwise","backward stepwise"),
             selected = "best subset"),
-          textOutput("text")
-        ),
+          p("In the mtcars dataset we consider linear models predicting ", strong("mpg"), " from the 10 other predictors."),
+          p("The available predictors are ", strong("cyl, disp, hp, drat, wt, qsec, vs, am, gear,"),"and ",strong("carb"),"."),
+          p("Model size can range from 1 (a model with only an intercept) to 11 (the full model).")
+          
+          ),
 
         # Show a plot of the generated distribution
         mainPanel(
@@ -83,11 +86,6 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-  output$text <- renderText({ "In the mtcars dataset we consider linear models predicting `mpg` from the 10 other predictors.
-    
-    The available predictors are cyl, disp, hp, drat, wt, qsec, vs, am, gear, and carb.
-    
-    Model size can range from 1 (a model with only an intercept) to 11 (the full model)."})
     output$mainPlot <- renderPlot({
       criterion <<- input$criterion
       allModels$compare <- allModels[,criterion]

@@ -12,13 +12,15 @@ Author credits to Bi Cheng Wu, Brian Powers, Keith Levin
 
 - <a href="onetwotail">Binomial One/Two Tail Test Power</a>
 - <a href="normal_pdf_cdf">Normal PDF CDF Inverse CDF </a>
+- <a href="model_selection">Model Selection Visualization</a>
 
 <!--
 to export an app
 Put the app in shiny/appname
 app should be in a file app.R
-run the code: shinylive::export(appdir="shiny/appname", destdir="docs/appname")
+run the code: 
+shinylive::export(appdir="shiny/appname", destdir="docs/appname")
 
 to test
-httpuv::runStaticServer("docs/appname", port=8008)
+
 -->
