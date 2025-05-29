@@ -1,0 +1,176 @@
+---
+title: "cv-extra"
+output: html_document
+---
+
+```{r setup,include=F}
+library(tidyverse)
+knitr::opts_chunk$set(echo=T,message=F,warning=F)
+set.seed(1)
+```
+
+Simulate a data set with second order predictor with specified slope1, slope2, and sigma.
+
+```{r}
+sim_data = function(n,slope1,slope2,sigma){
+  data.frame(x=(x<-runif(n)),y=x*slope1+x^2*slope2+rnorm(n,0,sigma))
+}
+```
+
+
+## Set parameters
+```{r}
+# set parameters
+formulas = c(y~x, 
+             y~x+I(x^2), 
+             y~x+I(x^2)+I(x^3),
+             y~x+I(x^2)+I(x^3)+I(x^4))
+M  = 500
+N  = 40
+B1 = 4
+B2 = 3
+S  = 1
+```
+
+## Estimate true model error
+
+This is to say what is the actual root mean square error on out of sample data for models of order 1, 2, 3 and 4. We're going to estimate these using monte carlo - 500 replicates, each time we generate sample data of size N, fit the model of the specified order, and then predict on 1000 out of sample data, averaging the rmse for each of the 500 estimates. These are the targets that the cross validation methods will attempt to estimate.
+```{r}
+estimate_error = function(n,b1,b2,s,M){
+  function(O){
+    df = sim_data(n,b1,b2,s)
+    outData = sim_data(M,b1,b2,s)
+    lm.fit = lm(formulas[[O]],data=df)
+    sqrt(mean((predict(lm.fit,newdata=outData)-outData$y)^2))
+  }
+}
+
+results <- sapply(1:M,function(i){sapply(1:4, estimate_error(N,B1,B2,S,1000))})
+results <- setNames(as.data.frame(t(results)),1:4)
+modelErrors <- unlist(lapply(results,"mean"))
+modelErrors
+```
+
+Model error are all a little bit higher than 1. 1 is the standard deviation of the error term, but the model error is going to be higher than 1 because a polynomial regression based on a sample size of 40 will have some added uncertainty due to sample size. 
+
+From this (with the magic ability to generate an unlimited amount of out-of-sample data) we can see that the order 2 model has the lowest model error - and of course it does because that is the population model. The next question is how well do the different cross validation methods estimate the model error of the different order models.
+
+
+## Train on half, test on half
+
+In order to compare apples to apples, we will double the sample size $N$. This way the training data will have size $N$.
+
+```{r}
+run_m1 = function(n,b1,b2,s){
+  function(O){
+    df = sim_data(n,b1,b2,s)
+    
+    train = sample(1:n)[1:floor(n/2)]
+    lm.fit = lm(formulas[[O]],data=df[train,])
+    sqrt(mean((predict(lm.fit,newdata=df[-train,])-df[-train,]$y)^2))
+  }
+}
+
+m1 = sapply(1:M,function(i){sapply(1:4, run_m1(N*2,B1,B2,S))})
+```
+
+
+## Leave one out CV
+
+Parallelized computation to get more iterations.
+
+This time we'll just add 1 to the sample size, this will ensure that the training set has size $N$.
+
+```{r}
+library(caret)
+library(parallel)
+
+run_m2 = function(n,b1,b2,s){
+  function(O){
+    df = sim_data(n,b1,b2,s)
+    
+    train = sample(1:n)[1:floor(n/2)]
+    lm.fit = train(formulas[[O]],data=df,method="lm",
+                   trControl=trainControl(method="LOOCV"))
+    
+    lm.fit$results$RMSE
+  }
+}
+
+cl = makeCluster(detectCores()-1)
+invisible(clusterEvalQ(cl,"library(caret)"))
+clusterExport(cl,c("N","B1","B2","S","formulas","sim_data","run_m2","train","trainControl"))
+clusterSetRNGStream(cl,1)
+
+m2 = parSapply(cl,1:M,function(i){sapply(1:4, run_m2(N+1,B1,B2,S))})
+```
+
+
+## K-fold CV
+
+We'll use $K=5$ and thus we'll scale up $N$ by 5/4. This will ensure that training size will be approximately $N$.
+
+```{r}
+run_m3 = function(n,b1,b2,s){
+  function(O){
+    df = sim_data(n,b1,b2,s)
+    
+    train = sample(1:n)[1:floor(n/2)]
+    lm.fit = train(formulas[[O]],data=df,method="lm",
+                   trControl=trainControl(method="CV",number=5))
+    
+    lm.fit$results$RMSE
+  }
+}
+
+clusterExport(cl,c("run_m3"))
+m3 = parSapply(cl,1:M,function(i){sapply(1:4, run_m3(N*5/4,B1,B2,S))})
+
+stopCluster(cl)
+```
+
+
+## Putting it all together
+
+Combine all runs together
+
+```{r}
+df.rmse = bind_rows(
+  setNames(as.data.frame(t(m1)),1:4) %>% mutate(method="split half"),
+  setNames(as.data.frame(t(m2)),1:4) %>% mutate(method="LOOCV"),
+  setNames(as.data.frame(t(m3)),1:4) %>% mutate(method="5-fold CV")) %>% 
+  pivot_longer(1:4,names_to="order",values_to="rmse") %>% 
+  arrange(desc(method),order)
+```
+
+Plotting the resultant RMSE computations
+
+```{r}
+df.rmse %>% group_by(method,order) %>% summarise(rmse=mean(rmse)) %>% 
+  ggplot(aes(x=order,y=rmse,color=method,group=method))+geom_line() + 
+  ggtitle("RMSE for different orders/methods (order 2 is correct)")
+```
+
+Table showing the final estimations of RMSE
+
+```{r}
+df.rmse %>% group_by(method,order) %>% summarise(mean_rmse = mean(rmse)) %>% pivot_wider(names_from=order,values_from=mean_rmse)
+```
+
+Variance of Error Estimates
+```{r}
+df.rmse %>% group_by(method,order) %>% summarise(var_rmse = var(rmse)) %>% pivot_wider(names_from=order,values_from=var_rmse)
+```
+
+Squared Bias of Error Estimates
+```{r}
+options(scipen=999)
+df.rmse$me <- modelErrors[df.rmse$order]
+df.rmse %>% group_by(method,order) %>% summarise(bias2_rmse = mean(rmse-me)^2) %>% pivot_wider(names_from=order,values_from=bias2_rmse)
+```
+
+## A few key observations:
+
+1. Order 2 correctly found by both CV methods to be best order for fit (though k-fold tends to be more reliable on reruns)
+2. split half and LOOCV have higher variance in error estimates, 5-fold has lower variance.
+3. 5-fold tends to under-estimate model error, split in half over-estimates model error. The squared bias of split half is lower than either of the other two. 

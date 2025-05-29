@@ -1,0 +1,208 @@
+---
+title: "R11: Ridge and Lasso"
+author: "Brian Powers"
+date: "2023-11-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## K Fold Validation for Ridge Regression
+
+```{r, warning=F}
+kfoldCV.ridge <- function(K, lambdas, dataset, responseVar){
+  m <- length(lambdas)
+  
+  #idx is a shuffled vector of row numbers
+  idx <- sample(1:nrow(dataset))
+  #folds partitions the row indices
+  folds <- split(idx, as.factor(1:K))
+
+  #an empty data frame to store the results of each validation
+  results <- data.frame(fold = rep(1:K, rep(m,K)),
+                        model = rep(1:m, K),
+                        error = 0)    
+  for(k in 1:K){
+    #split the data into training and testing sets
+    training <- dataset[-folds[[k]],]
+    testing <- dataset[folds[[k]],]
+    #go through each model and estimate MSE
+    ridge_models <- lm.ridge(reformulate(".",responseVar), training, lambda=lambdas);
+
+    for(f in 1:m){
+      coeff <- coef(ridge_models)[f,]
+      
+      Y <- testing[,c(responseVar)] 
+      X <- cbind( 1, testing[,names(dataset) != responseVar])
+
+      Y.hat <- as.numeric(coeff) %*% as.matrix(t(X))
+            
+      #calculate the average squared error on the testing data
+      results[results$fold == k & results$model == f, "error"] <- mean((Y-Y.hat)^2)
+    }
+  }
+  #aggregate over each model, averaging the error
+  aggregated <- aggregate(error~model, data=results, FUN="mean")
+  #produces a simple line & dot plot
+  plot(error ~ sqrt(lambdas), type="b", data=aggregated, ylab="MSE")
+#  lines(error ~ model, data=aggregated)
+  print(which(aggregated$error == min(aggregated$error)))
+  print(lambdas[[which(aggregated$error == min(aggregated$error))]])
+  return(aggregated)
+}
+
+```
+
+
+## Ridge Regression
+
+```{r}
+library(MASS);
+
+lambda_vals <- seq(0,10,1)^2; # Choose lambdas to try.
+# lm.ridge needs:
+# 1) a model (mpg~. says to model mpg as an intercept
+#         plus a coefficient for every other variable in the data frame)
+# 2) a data set (mtcars, of course)
+# 3) a value for lambda. lambda=0 is the default,
+#         and recovers classic linear regression.
+#         But we can also pass a whole vector of lambdas, like we are about to do,
+#         and lm.ridge will fit a separate model for each.
+# See ?lm.ridge for details.
+ridge_models <- lm.ridge(mpg~., mtcars, lambda=lambda_vals);
+
+# Naively plotting this object shows us how the different coefficients
+# change as lambda changes.
+plot( ridge_models );
+
+kfoldCV.ridge(32, lambda_vals, mtcars, "mpg")
+ridge_models$coef
+
+```
+
+## Ridge Regression With Standardized Data
+
+One problem that we will encounter with Ridge regression (and LASSO) is that it assumes large betas are large because the predictor is important. This is not necessarily true - it could be due to the units of the variable.
+
+Consider a model of mpg based on weight in pounds.
+```{r}
+lm(mpg~ I(1000*wt), data=mtcars)
+```
+When we convert weight to pounds (multiply by 1000) then the coefficient is -.005. But if we have wt in 1000s of pounds
+```{r}
+lm(mpg~ wt, data=mtcars)
+```
+The coefficient is 1000x as large! For this reason it is a good idea to standardize your data before you apply a shrinkage method. Standardized data requires subtracting the mean and dividing by standard deviation (of that column):
+$$ Z_{i,j} = \frac{X_{i,j} - \bar{X}_j}{S_{j}}$$
+No need to standardize the response variable.
+
+```{r}
+mtcars.std <- mtcars
+#let's standardize the quantitative predictors
+stdcols <- c("cyl","disp","hp","drat","wt","qsec","gear","carb")
+for(col in stdcols){
+  xbar <- mean(mtcars.std[,col])
+  sd <- sd(mtcars.std[,col])
+  mtcars.std[,col] <- (mtcars.std[,col]-xbar)/sd
+}
+
+lambda_vals <- seq(0,10,1)^2; # Choose lambdas to try.
+ridge_models <- lm.ridge(mpg~., mtcars.std, lambda=lambda_vals);
+plot( ridge_models );
+kfoldCV.ridge(32, lambda_vals, mtcars.std, "mpg")
+```
+
+
+
+## LASSO Regression
+
+
+```{r, warning=F}
+library(glmnet)
+
+kfoldCV.LASSO <- function(K, lambdas, dataset, responseVar){
+  m <- length(lambdas)
+  
+  #idx is a shuffled vector of row numbers
+  idx <- sample(1:nrow(dataset))
+  #folds partitions the row indices
+  folds <- split(idx, as.factor(1:K))
+
+  #an empty data frame to store the results of each validation
+  results <- data.frame(fold = rep(1:K, rep(m,K)),
+                        model = rep(1:m, K),
+                        error = 0)    
+  for(k in 1:K){
+    #split the data into training and testing sets
+    training <- dataset[-folds[[k]],]
+    testing <- dataset[folds[[k]],]
+    #go through each model and estimate MSE
+
+      for(f in 1:m){
+      mtc_lasso_lambda <- glmnet(training[,names(dataset) != responseVar], training[,c(responseVar)], alpha = 1, lambda=lambdas[f]);
+      coeffs <- as.vector(coef(mtc_lasso_lambda))
+      y.mtc.predict <- coeffs %*% t(cbind(1,testing[,names(dataset) != responseVar]))
+
+      results[results$fold == k & results$model == f, "error"] <- mean((y.mtc.predict-testing[,c(responseVar)])^2)
+    }
+  }
+  #aggregate over each model, averaging the error
+  aggregated <- aggregate(error~model, data=results, FUN="mean")
+  #produces a simple line & dot plot
+  plot(error ~ lambdas, type="b", data=aggregated, ylab="MSE")
+#  print(which(aggregated$error == min(aggregated$error)))
+  print(paste("best lambdas:", paste(lambdas[which(aggregated$error == min(aggregated$error))], collapse=",")))
+  return(aggregated)
+}
+```
+
+#LASSO mpg on mtcars
+```{r}
+lambda_vals <- c(0,.1,.2,.3,.5,.7, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5)
+kfoldCV.LASSO(32, lambda_vals, mtcars.std, "mpg")
+LASSO.fits <- glmnet(mtcars[,-1], mtcars[,1], alpha=1, lambda=lambda_vals)
+plot(LASSO.fits, label=TRUE, xvar="lambda")
+
+LASSO_coeff<- t(coef(LASSO.fits))
+#colnames(LASSO_coeff) <- c("intercept",names(mtcars)[-1])
+LASSO_coeff
+```
+
+
+## Boston Dataset Example
+
+```{r, warning=F}
+data("Boston")
+library(glmnet)
+
+#Standardize Variables
+Boston.std <- Boston
+for(i in 1:(ncol(Boston.std)-1)){
+  Boston.std[,i] <- (Boston.std[,i]-mean(Boston.std[,i]))/sd(Boston.std[,i])
+}
+
+lambda_vals <- seq(0,5,length.out=10)^2; # Choose lambdas to try.
+
+ridge_models <- lm.ridge(medv ~ . , Boston.std, lambda=lambda_vals);
+plot( ridge_models );
+kfoldCV.ridge(4, lambda_vals, Boston.std, "medv")
+```
+
+```{r}
+#LASSO 
+lambda_vals <- seq(0,.05,length.out=10)
+
+LASSO.fits <- glmnet(Boston.std[,names(Boston.std)!="medv"], Boston[,"medv"], alpha=1, lambda=lambda_vals)
+plot(LASSO.fits, label=TRUE, xvar="lambda")
+
+kfoldCV.LASSO(10, lambda_vals, Boston.std, "medv")
+
+resultsTable <- t(as.matrix(coef(LASSO.fits)))
+row.names(resultsTable) <- sort(lambda_vals,decreasing=TRUE)
+round(resultsTable,3)
+```
+
+
+

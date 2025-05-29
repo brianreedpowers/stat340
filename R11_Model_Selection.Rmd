@@ -1,0 +1,334 @@
+---
+title: "R11 Model Selection"
+author: "Brian Powers"
+date: "2023-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Polynomial Models predicting mpg
+
+```{r}
+models <- list()
+models[[1]] <- lm(mpg ~ hp, data=mtcars)
+models[[2]] <- lm(mpg ~ hp + I(hp^2), data=mtcars)
+models[[3]] <- lm(mpg ~ hp + I(hp^2)+ I(hp^3), data=mtcars)
+models[[4]] <- lm(mpg ~ hp + I(hp^2)+ I(hp^3)+ I(hp^4), data=mtcars)
+models[[5]] <- lm(mpg ~ hp + I(hp^2)+ I(hp^3)+ I(hp^4)+ I(hp^5), data=mtcars)
+
+xrng <- c(10, 400)
+xpred <- seq(xrng[1], xrng[2], length.out=50)
+plot(mpg~hp, data=mtcars, xlim=xrng, ylim=c(0, 60))
+for(i in 1:5){
+  lines(x=xpred, y=predict(models[[i]], newdata=data.frame(hp=xpred)), col=i, lwd=2)
+}
+legend(300,60, legend=1:5, col=1:5, lty=1, title="Order", lwd=2)
+```
+
+## Model Selection in mtcars
+
+
+
+### Look at AIC as we add predictors
+
+```{r}
+names(mtcars)
+```
+
+```{r}
+# I'll consider models to predict mpg based on all other predictors. I'll look at AIC for each model
+model <- lm(mpg ~ 1 + cyl, data=mtcars)
+L <- logLik(model, data=mtcars)[1]
+-2*L + 2*(length(coef(model)))
+
+model <- lm(mpg ~ 1 + cyl+disp, data=mtcars)
+L <- logLik(model, data=mtcars)[1]
+-2*L + 2*(length(coef(model)))
+
+model <- lm(mpg ~ 1 + cyl+disp+wt, data=mtcars)
+L <- logLik(model, data=mtcars)[1]
+-2*L + 2*(length(coef(model)))
+
+model <- lm(mpg ~ 1 + cyl+disp+wt+qsec, data=mtcars)
+L <- logLik(model, data=mtcars)[1]
+-2*L + 2*(length(coef(model)))
+
+# Continue until no decrease in AIC is observed
+```
+
+In this code we will compare different multiple regression models to predict miles per gallon from the various predictor variables in the mtcars dataset.
+
+We implement a forward stepwise selection algorithm, and a backwards stepwise selection algorithm. We also have a  function that automates K fold validation and gives the formula resulting in the lowest MSE
+
+
+### K fold validation on the models produced
+
+```{r, warning=FALSE}
+kfoldCV <- function(K, formulas, dataset, responseVar, reps=1){
+  m <- length(formulas)
+
+  #an empty data frame to store the results of each validation
+  results <- data.frame(fold = rep(rep(1:K, each=m),times=reps),
+                        model = rep(1:m, K*reps),
+                        error = 0,
+                        repl = rep(1:reps, each=m*K))    
+  for(r in 1:reps){
+    #idx is a shuffled vector of row numbers
+    idx <- sample(1:nrow(dataset))
+    #folds partitions the row indices
+    folds <- split(idx, as.factor(1:K))
+    for(k in 1:K){
+      #split the data into training and testing sets
+      training <- dataset[-folds[[k]],]
+      testing <- dataset[folds[[k]],]
+      #go through each model and estimate MSE
+      for(f in 1:m){
+        #fit the model to the training data
+        fit <- lm(formula = formulas[[f]], data=training)
+        #calculate the average squared error on the testing data
+        results[results$fold == k & results$model == f & results$repl==r, "error"] <- mean((predict(fit, newdata=testing) - testing[,responseVar])^2)
+      }
+    }
+  }
+  #aggregate over each model & replicate, averaging the error
+  aggregated <- aggregate(error~model, data=results, FUN="mean")
+  #produces a simple line & dot plot
+  plot(sqrt(error) ~ model, type="b", data=aggregated, ylab="RMSE")
+#  lines(error ~ model, data=aggregated)
+  print(which(aggregated$error == min(aggregated$error)))
+  print(formulas[[which(aggregated$error == min(aggregated$error))]])
+  return(aggregated)
+}
+```
+
+
+### Model Statistics
+
+A function to take in one or more models and return a data frame giving some comparitive model statistics.
+```{r}
+createModelStats <- function(formulas, dataset){
+  n <- nrow(dataset)
+  model.stats <- data.frame('model' = gsub(" ", "", as.character(formulas), fixed = TRUE))
+  for(m in 1:length(formulas)){
+    modelsum <- summary(lm(formulas[[m]], data=dataset))
+    #I am using k = p+1, the number of predictors + the intercept
+    model.stats$k[m] <- nrow(modelsum$coefficients)
+    model.stats$Rsq[m] <- modelsum$r.squared
+    model.stats$Rsq.adj[m] <- modelsum$adj.r.squared
+    L <- logLik(lm(formulas[[m]], data=mtcars))[1]
+    model.stats$AIC[m] <- -2*L + 2*model.stats$k[m]
+    model.stats$BIC[m] <- -2*L + model.stats$k[m] * log(n)
+  }
+  return(model.stats)  
+}
+```
+
+### Best Subset Selection
+```{r}
+get_model_formula <- function(id, object, outcome){
+  # get models data
+  models <- summary(object)$which[id,-1]
+  # Get model predictors
+  predictors <- names(which(models == TRUE))
+  predictors <- paste(predictors, collapse = "+")
+  # Build model formula
+  as.formula(paste0(outcome, "~", predictors))
+}  
+
+bestSubsetSelection <- function(dataset, responseVar, maxModelSize){
+  library(leaps)
+  models <- regsubsets(reformulate(".",responseVar), data = dataset, nvmax = maxModelSize);
+  modelList <- list("formula")
+  nModels <- models$last-models$first+1
+  for(i in 1:nModels){
+    modelList[[i]] <- get_model_formula(i, models, responseVar)
+  }
+  return(modelList)  
+}
+
+modelList <- bestSubsetSelection(mtcars, "mpg", 10)
+kfoldCV(32, modelList, mtcars, "mpg",1)
+createModelStats(modelList, mtcars)
+```
+
+
+### Forward Stepwise Selection
+
+```{r}
+
+forwardStepwiseSelection <- function(dataset, responseVar){
+  predictors = c("1",names(dataset[,-which(names(dataset)==responseVar)]))
+  used = 1
+  M <- list() #empty list to hold all of the models, except M0
+  
+  #the null model and its RSS
+  M0 <- lm(reformulate(predictors[used], responseVar), data=dataset)
+  RSS <- sum(M0$residuals^2)
+  
+  #the list of formulas to return
+  formulas <- list()
+  
+  for(model in 1:(length(predictors)-1)){
+    RSS.best <- RSS
+    for(try in predictors[-used]){
+      fitModel <- lm(reformulate(c(predictors[used],try), responseVar), data=dataset)
+      RSS.new <- sum(fitModel$residuals^2)
+      if(RSS.new <= RSS.best){
+        new.pred <- try
+        RSS.best <- RSS.new
+      }
+    }
+    formulas[[model]] <- reformulate(c(predictors[used],new.pred), responseVar)
+    M[[model]] <- lm(formulas[[model]], data=dataset) 
+    RSS <- sum(M[[model]]$residuals^2)
+    print(paste("adding", new.pred, "; RSS = ", RSS))
+    used <- c(used, which(predictors==new.pred))
+  }
+  return(formulas)  
+}
+
+formulas <- forwardStepwiseSelection(mtcars, "mpg")
+kfoldCV(32, formulas, mtcars, "mpg")
+createModelStats(formulas, mtcars)
+```
+
+### Backwards Stepwise
+
+```{r}
+backwardsStepwiseSelection <- function(dataset, responseVar){
+  predictors = c("1",names(dataset[,-which(names(dataset)==responseVar)]))
+  used = (1:ncol(dataset))[-which(names(dataset)==responseVar)]
+  M <- list()
+  Mfull <- lm(reformulate(predictors[c(1,used)], responseVar), data=dataset)
+  RSS <- sum(Mfull$residuals^2)
+  formulas <- list()
+  formulas[[length(used)]] <- reformulate(predictors[used], responseVar)
+  
+  RSS.best <- RSS
+  RSS.worst <- sum(lm(reformulate("1",response=responseVar), data=dataset)$residuals^2)
+  print(paste("Full Model RSS: ", RSS))
+  for(model in (length(used)-1):1){
+    RSS.best <- RSS.worst
+    for(try in used){
+      modelFit <- lm(reformulate(predictors[used[-which(used==try)]], responseVar), data=dataset)
+      RSS.new <- sum(modelFit$residuals^2)
+      if(RSS.new <= RSS.best){
+        new.pred <- try
+        RSS.best <- RSS.new
+      }
+    }
+    formulas[[model]] <- reformulate(predictors[used[-which(used==try)]], responseVar)
+    M[[model]] <- lm(formulas[[model]], data=dataset) 
+    RSS <- sum(M[[model]]$residuals^2)
+    print(paste("removing", predictors[new.pred], "; RSS = ", RSS))
+    used <- used[-which(used==new.pred)]
+  }
+  return(formulas)  
+}
+
+formulas <- backwardsStepwiseSelection(mtcars, "mpg")
+kfoldCV(32, formulas, mtcars, "mpg")
+createModelStats(formulas, mtcars)
+
+```
+
+### Visualization of Models Selection Methods
+```{r}
+responseVar <- "mpg"
+predictors <- names(mtcars)[-which(names(mtcars)==responseVar)]
+nFormulas <- 2^length(predictors)
+
+number2binary = function(number, noBits) {
+       binary_vector = rev(as.numeric(intToBits(number)))
+       if(missing(noBits)) {
+          return(binary_vector)
+       } else {
+          binary_vector[-(1:(length(binary_vector) - noBits))]
+       }
+}
+
+allModels <- data.frame(i=0:(nFormulas-1))
+for(predictor in predictors){
+  newdf <- data.frame(x=numeric(nFormulas)); names(newdf) <- predictor
+  allModels <- cbind(allModels, newdf)
+}
+allModels$size <- 0
+allModels$aic <- 0
+allModels$bic <- 0
+allModels$adjr2 <- 0
+for(i in allModels$i){
+  allModels[i+1, 2:11] <- number2binary(i, length(predictors))
+  if(i==0){
+    f <- reformulate("1", responseVar)
+  } else {
+    f <- reformulate(predictors[allModels[i+1,2:11]==1], responseVar)
+  }
+  allModels[i+1, "size"] <- sum(allModels[i+1, 2:11])+1
+  fit <- lm(f, data=mtcars)
+  allModels[i+1, "adjr2"] <- summary(fit)$adj.r.squared
+  allModels[i+1, "aic"] <- AIC(fit)
+  allModels[i+1, "bic"] <- -2*as.numeric(logLik(fit)) + log(nrow(mtcars))*(allModels[i+1, "size"]+1) 
+}
+
+edges <- data.frame(from=numeric(), to=numeric())
+for(i in allModels[-nrow(allModels),"i"]){
+  to <- i + 2^(which(rev(allModels[i,2:11]==0))-1)
+  from <- rep(i, length(to))
+  edges <- rbind(edges, data.frame(from,to))
+}
+```
+
+```{r}
+criterion <- "bic" #or "bic" or "adjr2"
+
+which.best <- function(x){
+  if(criterion=="adjr2") return (which.max(x)) else return (which.min(x))
+}
+
+bestSubset <- numeric()
+for(size in unique(allModels$size)){
+    bestSubset[size] <- allModels[allModels$size==size, "i"][which.best(allModels[allModels$size==size, criterion])]+1
+}
+
+bestForward <- numeric()
+for(size in unique(allModels$size)){
+  if(size==1) bestForward[size] <- 1
+  else {
+    bestForward[size] <- allModels[edges[edges$from==bestForward[size-1],"to"] , "i"][which.best(allModels[edges[edges$from==bestForward[size-1],"to"], criterion])]+1
+  }
+}
+
+bestBackward <- numeric(max(allModels$size))
+for(size in rev(unique(allModels$size))){
+  if(size==11) {bestBackward[size] <- 1024}
+  else {
+      bestBackward[size] <- allModels[edges[edges$to==bestBackward[size+1],"from"] , "i"][which.best(allModels[edges[edges$to==bestBackward[size+1],"from"], criterion])]+1
+  }
+}
+
+allModels$compare <- allModels[,criterion]
+
+plot(compare~size, data=allModels, main=paste("Best Subset by",criterion), ylab=criterion)
+points(compare~size, data=allModels[bestSubset,], col="magenta", pch=16)
+points(compare~size, data=allModels[bestSubset[which.best(allModels[bestSubset,criterion])],], col="magenta", cex=2, lwd=2)
+
+plot(compare~size, data=allModels, main=paste("Forward Stepwise by",criterion), ylab=criterion)
+segments(allModels[edges$from,"size"],allModels[edges$from,criterion],allModels[edges$to,"size"],allModels[edges$to,criterion], col="gray")
+points(compare~size, data=allModels)
+edgesForward <- subset(edges, from %in% bestForward)
+segments(allModels[edgesForward$from,"size"],allModels[edgesForward$from,criterion],allModels[edgesForward$to,"size"],allModels[edgesForward$to,criterion], col="red")
+points(compare~size, data=allModels[bestForward,], col="red", pch=16)
+points(compare~size, data=allModels[bestForward[which.best(allModels[bestForward,criterion])],], col="red", cex=2, lwd=2)
+
+plot(compare~size, data=allModels, main=paste("Backward Stepwise by",criterion), ylab=criterion)
+segments(allModels[edges$from,"size"],allModels[edges$from,criterion],allModels[edges$to,"size"],allModels[edges$to,criterion], col="gray")
+points(compare~size, data=allModels)
+edgesBackward <- subset(edges, to %in% bestBackward)
+segments(allModels[edgesBackward$from,"size"],allModels[edgesBackward$from,criterion],allModels[edgesBackward$to,"size"],allModels[edgesBackward$to,criterion], col="blue")
+points(compare~size, data=allModels[bestBackward,], col="blue", pch=16)
+points(compare~size, data=allModels[bestBackward[which.best(allModels[bestBackward,criterion])],], col="blue", cex=2, lwd=2)
+```
+

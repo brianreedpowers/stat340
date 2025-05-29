@@ -1,0 +1,460 @@
+---
+title: "Logistic Regression - Extended Examples"
+author: "Brian Powers"
+date: "2023-04-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Pima dataset - predicting diabetes
+
+```{r, warning=F}
+library(MASS)
+head(Pima.te)
+Pima.te$glu_bin <- (round(Pima.te$glu/10))*10
+Pima.te$typeTF <- as.numeric(Pima.te$type=="Yes")
+Pima.glm <- glm(typeTF ~ glu, data=Pima.te, family="binomial")
+
+aggr.props <- aggregate(typeTF ~ glu_bin, data=Pima.te, FUN=mean)
+
+xs <- seq(60,200,10)
+zs <- predict(Pima.glm, newdata=data.frame(glu=xs))
+ps <- exp(zs)/(1+exp(zs))
+
+plot(x=Pima.te$glu, y=Pima.te$typeTF, pch=16, col=rgb(0,0,1,.2), xlim=c(50,200))
+#points(aggr.props, ylim=c(0,1))
+lines(x=xs,y=ps, col="red")
+text(x=xs-2, y=as.vector(aggr.props$typeTF*.8+.5*.2), label=round(aggr.props$typeTF,2))
+segments(x0=xs-5, aggr.props$typeTF, xs+5,aggr.props$typeTF)
+abline(v=seq(55,195,10), col="gray")
+```
+
+Model summary
+```{r}
+summary(Pima.glm)
+
+```
+## Odds Ratios
+Odds Ratio = Odds(Event | Case A) / Odds(Event | Case B)
+We look at odds ratio when the cases differe by an increase of 1 unit in the predictor $x$. $\beta_1$ is the log of the odds ratio associated with a 1 unit increase in $x$.
+
+The log(odds ratio)=0.042421
+
+The odds ratio = exp(0.042421)
+```{r}
+exp(0.042421)
+```
+
+### Interpret the slope
+```{r}
+Pima.glm$coefficients[2]
+exp(Pima.glm$coefficients[2])
+```
+Odd ratio for a 1 unit increase in blood glucose is 1.0433
+so if we hold all other variables constant and increase blood glucose by 1 unit, we expect an increase in the Odds by 4.33%
+
+
+### odds ratio vs risk ratio
+
+Risk  is Prob(Event | case A) / Pr(Event | Case B) which is not the same as odds ratio. Consider this example:
+
+Predict probability for glu 200 vs 201
+```{r}
+predict(Pima.glm, type="response", newdata=data.frame(glu=c(200,201)))
+
+#The risk ratio is
+0.9295508 / 0.9267217
+
+#The Odds ratio is
+(0.9295508/(1-0.9295508)) / (0.9267217/(1-0.9267217))
+```
+
+Compare glu 100 to 101
+```{r}
+predict(Pima.glm, type="response", newdata=data.frame(glu=c(100,101)))
+
+#The risk ratio is
+0.1594550 / 0.1538511 
+
+#The Odds ratio is
+(0.1594550/(1-0.1594550)) / (0.1538511 /(1-0.1538511 ))
+```
+The risk ratios are different but the odds ratio is a constant 1.04333
+
+
+
+
+## Log Likelihood
+log likelihood calculation
+Let's compare the true Y values and the predicted Y values
+
+```{r}
+y <- Pima.te$typeTF
+
+y.hat <- predict(Pima.glm, type="response")
+pY <- y * y.hat + (1-y)*(1-y.hat)
+data.frame(y,y.hat,pY)
+```
+
+
+The likelihood is the product of predicted probabilities (of the actual label)
+For actual 1s, we use y.hat
+For actual 0s we use 1-y.hat
+```{r}
+L <- prod(y * y.hat + (1-y)*(1-y.hat))
+L
+```
+
+Maximizing likelihood is equivalent to maximising the log of likelihood, and because logarithms turn products into sums, the log likelihood is easier to work with mathematically. Because likelihood < 1, log likelihood is going to be negative.
+```{r}
+log(L)
+
+l <- sum(log(y * y.hat + (1-y)*(1-y.hat)))
+l
+```
+The closer to zero the log likelihood is, the better; The closer to -infinity, the "worse". 
+The residual deviance is defined as -2 times the log likelihood. It turns a big negative log likelihood into a large positive number (easier to interpret)
+
+```{r}
+#residual deviance
+-2*l
+```
+For each observation, we can translate $P(Y=y | model)$ into a log-likelihood by just taking the log of that decimal. Furthermore, we could multiply each of these by -2 to see which data points contribute more (or less) to the total "residual deviance"
+
+```{r}
+ll <- log(pY)
+data.frame(y,y.hat,pY, ll, -2*ll)
+```
+
+## Prediction
+Suppose someone has glucose level 150; what is the estimated probability of diabetes?
+$$\hat{logodds}(Y+i=1) = \hat{\beta_0}+\hat{\beta_1}X_i$$ 
+```{r}
+#Predict log odds
+predict(Pima.glm, newdata=data.frame(glu=150))
+```
+
+```{r}
+#Predicts probability
+predict(Pima.glm, newdata=data.frame(glu=150), type="response")
+```
+
+```{r}
+#calculation
+log.odds.150 <- sum(Pima.glm$coefficients * c(1, 150))
+
+#Estimated probability = e^log-odds / (1+e^log-odds)
+#or
+#                      = 1/ (1 + e^ -logodds)
+exp(log.odds.150) / (1+ exp(log.odds.150))
+#or
+1 / (1+ exp(-log.odds.150))
+
+```
+
+## The null model
+
+The null model would be what we compare our "better" model to - it is a logistic model that does not have any predictors. Just like the null model for linear regression predicts $\hat{y}=\bar{y}$ the null model predicts $\hat{y}=$ the proportion of 1s in the data set.
+
+
+```{r}
+pima.glm.null <- glm(typeTF ~ 1, data=Pima.te, family="binomial")
+summary(pima.glm.null)
+
+log.odds <- pima.glm.null$coefficients[1]
+exp(log.odds) / (1+ exp(log.odds))
+
+
+mean(Pima.te$typeTF)
+```
+Let's just double check that. We can calculate the coefficient manually
+```{r}
+#What is the proportion of 1s in the data?
+(prop1 <- mean(Pima.te$typeTF))
+
+#convert this to a log-odds
+log(prop1/(1-prop1))
+```
+This is the same as the constant in the null model.
+
+```{r}
+#null deviance calculation
+
+#log likelihood = sum [y * y.hat + (1-y)*(1-yhat)]
+
+#deviance = -2*log likelihood
+
+n <- nrow(Pima.te)
+m <- sum(Pima.te$typeTF)
+-2*(m*log(m/n) + (n-m)*log((n-m)/n))
+```
+
+
+## Results of logistic regression: confusion matrix
+
+See https://en.wikipedia.org/wiki/Confusion_matrix
+
+```{r}
+pima_logit <- glm(typeTF ~ glu, data=Pima.te, family="binomial")
+
+confusion.table <- table(Pima.te$typeTF, factor(predict(pima_logit, type="response") >= .5, levels=c(FALSE, TRUE)))
+
+colnames(confusion.table) <- c("Predict 0","Predict 1")
+rownames(confusion.table) <- c("No diabetes","Yes diabetes")
+
+#confusion.table
+TP <- confusion.table[2,2]
+TN <- confusion.table[1,1]
+FP <- confusion.table[1,2]
+FN <- confusion.table[2,1]
+
+t(addmargins(confusion.table))
+
+```
+Statistics for a predictor:
+
+Accuracy of a classifier - the total # correct predictions / total predictions
+
+```{r}
+(accuracy <- (TP+TN)/(TP+TN+FP+FN))  
+  
+```
+Sensitivity (aka recall, hit rate, true positive rate, aka POWER) - what proportion of actual positive cases are classified as positive
+```{r}
+(sensitivity <- TP / (TP+FN))
+```
+Specificity (selectivity, true negative rate, $1-\alpha$) - what proportion of actual negative cases are classified as negative 
+```{r}
+(specificity <- TN / (TN+FP))
+```
+Precision (positive predictive value) - what proportion of positive predictions are correct
+```{r}
+(ppv <- TP/(TP+FP))
+```
+
+Negative Predictive Value (NPV) - what proportion of negative predictions are correct
+```{r}
+(npv <- TN/(TN+FN))
+```
+What was the Type 1 error rate? The False positive rate
+```{r}
+FP / (FP + TN)
+```
+
+Let's just change the theshold from $p=.5$ to some other number to see what happens to this matrix.
+```{r}
+confusion.table <- table(Pima.te$typeTF, factor(predict(pima_logit, type="response") >= .6, levels=c(FALSE, TRUE)))
+colnames(confusion.table) <- c("Predict 0","Predict 1")
+rownames(confusion.table) <- c("No diabetes","Yes diabetes")
+#confusion.table
+t(addmargins(confusion.table))
+#column proportions
+prop.table(t(confusion.table), 2)
+```
+If I look at column proportions, the first column (bottom row) is the alpha, type 1 error rate i.e. FPR.
+Column 2, in row 2 gives power.
+
+The accuracy is (210 + 48  ) / 332
+```{r}
+(210 + 48  ) / 332
+```
+
+
+
+By adjusting the positive prediction threshold we can improve/worsen statistics such as accuracy, specificity, sensitivity, etc.
+
+```{r}
+pima_logit <- glm(typeTF ~ glu, data=Pima.te, family="binomial")
+acc <- 0
+thresh <- seq(0.01, 0.99, .01)
+for(i in 1:length(thresh)){
+  confusion.table <- table(Pima.te$typeTF, factor(predict(pima_logit, type="response")>= thresh[i], levels=c(FALSE, TRUE)))
+  colnames(confusion.table) <- c("Predict 0","Predict 1")
+  rownames(confusion.table) <- c("No diabetes","Yes diabetes")
+  #confusion.table
+  TP <- confusion.table[2,2]
+  TN <- confusion.table[1,1]
+  FP <- confusion.table[1,2]
+  FN <- confusion.table[2,1]
+  acc[i] = (TP+TN)/(TP+FP+TN+FN)
+}
+plot(thresh, acc, type="l", main="Accuracy by threshold", ylim=c(0,1))
+```
+
+In particular, we can look at the relationship between True positive rate and False Positive Rate (what proportion of actual negatives are incorrectly predicted to be positive) (FP / (FP+TN))
+```{r}
+TPR <- 0; FPR <- 0; 
+thresh <- seq(0, 1, .001)
+for(i in 1:length(thresh)){
+  confusion.table <- table(Pima.te$typeTF, factor(predict(pima_logit, type="response")>= thresh[i], levels=c(FALSE, TRUE)))
+  colnames(confusion.table) <- c("Predict 0","Predict 1")
+  rownames(confusion.table) <- c("No diabetes","Yes diabetes")
+  #confusion.table
+  TP <- confusion.table[2,2]
+  TN <- confusion.table[1,1]
+  FP <- confusion.table[1,2]
+  FN <- confusion.table[2,1]
+  
+  TPR[i] <- TP/(TP+FN) #power
+  FPR[i] <- FP/(FP+TN) #alpha / significance / type 1 error
+}
+plot(thresh, TPR, type="n", main="TPR and FPR by threshold", xlim=c(0,1), ylim=c(0,1))
+lines(thresh, TPR, lty=1)
+lines(thresh, FPR, lty=2)
+abline(h=0.05, col="red", lty=3)
+legend(x=.8, y=1, legend = c("TPR", "FPR"), lty=c(1,2))
+```
+
+To put things into the language of hypothesis testing we could ask this: What threshold would we use to achieve a 5% significance level (false positive rate) and what would the power of the classifier be?
+```{r}
+optimalThresh <- min(which(FPR<=0.05))
+thresh[optimalThresh]
+as.numeric(FPR[optimalThresh])
+as.numeric(TPR[optimalThresh])
+```
+
+```{r}
+data.frame(TPR, FPR)
+
+```
+
+A scatterplot of these rates is called the ROC curve. We start at (0,0) and go to (1,1)
+```{r}
+plot(c(1,FPR,0),c(1, TPR,0), type="s", xlab="False Positive Rate", ylab="True Positive Rate")
+```
+
+The PRROC package produces pretty ROC curves. 
+
+```{r, warning=FALSE}
+#install.packages("PRROC")
+library(PRROC)
+
+PRROC_obj <- roc.curve(scores.class0 = predict(pima_logit, type="response"), 
+                       weights.class0=Pima.te$typeTF,
+                       curve=TRUE)
+plot(PRROC_obj)
+```
+
+The area under the curve (AUC) is a common metric measuring how good your classifier is. An AUC = 0.5 (where the ROC curve is a diagonal line) is a "dumb" predictor. AUC closer to 1 represents a discerning "good" predictor.
+
+## Comparing using AIC and BIC
+
+As we'll see next week, the AIC is a useful statistic to compare logistic models. 
+$$AIC = \text{residual deviance} + 2k\text{ (k is the number of coefficients fit)}$$
+$$BIC = \text{residual deviance} + ln(n)*k$$
+When sample size is large then BIC will give a larger penalty per predictor. $ln(8) > 2$ so when $n \geq 8$ BIC gives a heftier penalty per coefficient in the model than AIC does and thus will favor simpler models.
+
+When using either of these comparative statistics, the *lower* the value the better.
+
+```{r}
+pima.logit1 <- glm(typeTF ~ 1 + glu,data=Pima.te, family="binomial")
+pima.logit2 <- glm(typeTF ~ 1 + glu + bmi, data=Pima.te, family="binomial")
+summary(pima.logit1)
+summary(pima.logit2)
+```
+
+
+## Example 2: A Logistic model with a categorical predictor
+
+```{r}
+#Let's use age as a predictor
+#Only for age > 50
+Pima.te$age50 <- as.numeric(Pima.te$age > 50)
+
+diabetes.aggr <- aggregate(typeTF ~ age50, data=Pima.te, FUN=mean)
+diabetes.aggr
+```
+Among those 50 or younger, proportion with diabetes is .3129032
+among those 51+ it is .545454
+```{r}
+#Log-odds for the two groups
+odds <- diabetes.aggr$typeTF / (1-diabetes.aggr$typeTF)
+odds
+logodds <- log(odds)
+logodds
+diff(logodds)
+```
+Notice the log-odds are -.7865 and .1823 respectively. If we were to build a model we would say that
+$$ \hat{LO} = -.7865812 + .9689 \times age_{>50}$$
+
+
+```{r}
+Pima50 <- glm(typeTF ~ age50, data=Pima.te, family="binomial")
+summary(Pima50)
+```
+
+
+## Example 3: Iris dataset
+
+Another classic example is the `iris` dataset. This famous dataset gives measurements in centimeters of the sepal and petal width and length for 3 species of iris: setosa, versicolor and virginica. The dataset has 150 rows, with 50 samples of each.
+
+Because the logistic model handles binary response variables, what we will do is create a logistic model to predict whether an iris is virginica Let's build a full model with all 4 predictors.
+
+```{r}
+virginica.model <- glm(Species=="virginica" ~ 1 + Sepal.Length + Sepal.Width+Petal.Length+Petal.Width, data=iris, family="binomial")
+summary(virginica.model)
+```
+
+```{r}
+plot(predict(virginica.model), iris$Species=="virginica", col=iris$Species)
+rng <- range(predict(virginica.model))
+xs <- seq(rng[1],rng[2], length.out=100)
+ys <- 1/(1+exp(-xs))
+lines(xs,ys)
+```
+
+Let's just contrast this plot with a model that only uses sepal length.
+```{r}
+virginica.model.simple <- glm(Species=="virginica" ~ 1 + Sepal.Length, data=iris, family="binomial")
+summary(virginica.model.simple)
+plot(jitter(predict(virginica.model.simple)), iris$Species=="virginica", col=iris$Species)
+rng <- range(predict(virginica.model.simple))
+xs <- seq(rng[1],rng[2], length.out=100)
+ys <- 1/(1+exp(-xs))
+lines(xs,ys)
+
+```
+
+
+How well we did? TRUE represents virginica
+
+```{r}
+table(predict = predict(virginica.model, type="response")>.5, actual = iris$Species=="virginica")
+```
+column prop table will show us type 1&2 error rates and power:
+
+```{r}
+prop.table(table(predict = predict(virginica.model, type="response")>.5, actual = iris$Species=="virginica"), margin=2)
+```
+Can we achieve a 5% Type 1 error rate? Adjust the threshold. We can find the 5th percentile for the predictions for the "other"
+```{r}
+quantile(predict(virginica.model, type="response")[iris$Species!="virginica"], .95)
+```
+
+```{r}
+prop.table(table(predict = predict(virginica.model, type="response")>0.00504067 , actual = iris$Species=="virginica"), margin=2)
+```
+
+We require very little evidence to claim the flower is virginica, a probability of 0.00504 is enough. In this case we have a 5% type 1 error rate. But note that the power has increased to 100%.
+
+### When a logistic model cannot converge
+
+If your model is so good that it correctly labels everyhing as 1 or zero this is what the output looks like
+```{r}
+setosa.model <- glm(Species=="setosa" ~ 1 + Sepal.Length + Sepal.Width+Petal.Length+Petal.Width, data=iris, family="binomial")
+summary(setosa.model)
+```
+
+It means that the coefficients are able to separate the predicted log odds so far that you have no misclassifications. Note above that after 25 fisher iterations it stopped. You can set the max iterations to be a lot lower, like 3, and then the model summary will be far more interpretable. But the standard errors of the coefficients will still be high so you can't say much about the significance of individual predictors.
+
+```{r}
+setosa.model.maxit <- glm(Species=="setosa" ~ 1 + Sepal.Length + Sepal.Width+Petal.Length+Petal.Width, data=iris, family="binomial", control = list(maxit = 2))
+summary(setosa.model.maxit)
+```
+How correlated are flower measurements?
+```{r}
+cor(iris[,1:4])
+```

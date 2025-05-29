@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 340: Data Science II - 32&nbsp; Model Selection and Cross Validation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./cv_practice.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prediction1.html">Prediction</a></li><li class="breadcrumb-item"><a href="./cv.html"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 340: Data Science II</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">STAT 340 Index</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text">Sampling</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R01_RandomVariables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Random Variables R Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probability and Random Variables Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes’ Rule</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R02_IndepCondBayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Conditional Probability and Bayes Theorem R Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cov_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Independence and Conditional Probability Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Testing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R05_testing_Additional_Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Estimation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R06_More_Estimation_Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R07_More_Estimation_and_CI_Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Prediction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prediction1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R08_prediction_examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prediction2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+  </div>
+</li>
+          <li class="px-0"><hr class="sidebar-divider hi "></li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text">Bootstrapping</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">32.1</span> Learning objectives</a></li>
+  <li><a href="#model-selection-overview" id="toc-model-selection-overview" class="nav-link" data-scroll-target="#model-selection-overview"><span class="header-section-number">32.2</span> Model selection: overview</a></li>
+  <li><a href="#variable-selection" id="toc-variable-selection" class="nav-link" data-scroll-target="#variable-selection"><span class="header-section-number">32.3</span> Variable selection</a>
+  <ul class="collapse">
+  <li><a href="#example-mtcars" id="toc-example-mtcars" class="nav-link" data-scroll-target="#example-mtcars"><span class="header-section-number">32.3.1</span> Example: <code>mtcars</code></a></li>
+  <li><a href="#overfitting-and-unseen-data" id="toc-overfitting-and-unseen-data" class="nav-link" data-scroll-target="#overfitting-and-unseen-data"><span class="header-section-number">32.3.2</span> Overfitting and Unseen Data</a></li>
+  </ul></li>
+  <li><a href="#validation-sets" id="toc-validation-sets" class="nav-link" data-scroll-target="#validation-sets"><span class="header-section-number">32.4</span> Validation Sets</a>
+  <ul class="collapse">
+  <li><a href="#example-mtcars-revisited" id="toc-example-mtcars-revisited" class="nav-link" data-scroll-target="#example-mtcars-revisited"><span class="header-section-number">32.4.1</span> Example: <code>mtcars</code> revisited</a></li>
+  <li><a href="#variance-in-the-residuals" id="toc-variance-in-the-residuals" class="nav-link" data-scroll-target="#variance-in-the-residuals"><span class="header-section-number">32.4.2</span> Variance in the residuals</a></li>
+  </ul></li>
+  <li><a href="#reducing-the-variance-leave-one-out-cross-validation" id="toc-reducing-the-variance-leave-one-out-cross-validation" class="nav-link" data-scroll-target="#reducing-the-variance-leave-one-out-cross-validation"><span class="header-section-number">32.5</span> Reducing the variance: Leave-one-out cross-validation</a>
+  <ul class="collapse">
+  <li><a href="#recap-single-split-versus-loo-cv" id="toc-recap-single-split-versus-loo-cv" class="nav-link" data-scroll-target="#recap-single-split-versus-loo-cv"><span class="header-section-number">32.5.1</span> Recap: single split versus LOO-CV</a></li>
+  <li><a href="#the-happy-medium-k-fold-cross-validation" id="toc-the-happy-medium-k-fold-cross-validation" class="nav-link" data-scroll-target="#the-happy-medium-k-fold-cross-validation"><span class="header-section-number">32.5.2</span> The happy medium: <span class="math inline">\(K\)</span>-fold cross validation</a></li>
+  </ul></li>
+  <li><a href="#aside-the-bias-variance-decomposition" id="toc-aside-the-bias-variance-decomposition" class="nav-link" data-scroll-target="#aside-the-bias-variance-decomposition"><span class="header-section-number">32.6</span> Aside: the bias-variance decomposition</a></li>
+  <li><a href="#cv-and-the-bias-variance-tradeoff" id="toc-cv-and-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#cv-and-the-bias-variance-tradeoff"><span class="header-section-number">32.7</span> CV and the bias-variance tradeoff</a>
+  <ul class="collapse">
+  <li><a href="#bias-in-cv" id="toc-bias-in-cv" class="nav-link" data-scroll-target="#bias-in-cv"><span class="header-section-number">32.7.1</span> Bias in CV</a></li>
+  <li><a href="#variance-in-cv" id="toc-variance-in-cv" class="nav-link" data-scroll-target="#variance-in-cv"><span class="header-section-number">32.7.2</span> Variance in CV</a></li>
+  <li><a href="#k-fold-cv-the-happy-medium" id="toc-k-fold-cv-the-happy-medium" class="nav-link" data-scroll-target="#k-fold-cv-the-happy-medium"><span class="header-section-number">32.7.3</span> <span class="math inline">\(K\)</span>-fold CV: the happy medium</a></li>
+  </ul></li>
+  <li><a href="#variable-selection-for-real-this-time" id="toc-variable-selection-for-real-this-time" class="nav-link" data-scroll-target="#variable-selection-for-real-this-time"><span class="header-section-number">32.8</span> Variable selection, for real this time</a></li>
+  <li><a href="#setup-linear-regression-and-fitting" id="toc-setup-linear-regression-and-fitting" class="nav-link" data-scroll-target="#setup-linear-regression-and-fitting"><span class="header-section-number">32.9</span> Setup: linear regression and fitting</a>
+  <ul class="collapse">
+  <li><a href="#recap-variable-selection" id="toc-recap-variable-selection" class="nav-link" data-scroll-target="#recap-variable-selection"><span class="header-section-number">32.9.1</span> Recap: variable selection</a></li>
+  </ul></li>
+  <li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link" data-scroll-target="#best-subset-selection"><span class="header-section-number">32.10</span> Best subset selection</a></li>
+  <li><a href="#stepwise-selection" id="toc-stepwise-selection" class="nav-link" data-scroll-target="#stepwise-selection"><span class="header-section-number">32.11</span> Stepwise selection</a>
+  <ul class="collapse">
+  <li><a href="#forward-stepwise-selection" id="toc-forward-stepwise-selection" class="nav-link" data-scroll-target="#forward-stepwise-selection"><span class="header-section-number">32.11.1</span> Forward stepwise selection</a></li>
+  <li><a href="#backward-stepwise-selection" id="toc-backward-stepwise-selection" class="nav-link" data-scroll-target="#backward-stepwise-selection"><span class="header-section-number">32.11.2</span> Backward stepwise selection</a></li>
+  <li><a href="#hybrid-approaches-the-best-of-both-worlds" id="toc-hybrid-approaches-the-best-of-both-worlds" class="nav-link" data-scroll-target="#hybrid-approaches-the-best-of-both-worlds"><span class="header-section-number">32.11.3</span> Hybrid approaches: the best of both worlds?</a></li>
+  </ul></li>
+  <li><a href="#model-comparison-statistics-adjusted-r2-aic-and-bic" id="toc-model-comparison-statistics-adjusted-r2-aic-and-bic" class="nav-link" data-scroll-target="#model-comparison-statistics-adjusted-r2-aic-and-bic"><span class="header-section-number">32.12</span> Model Comparison Statistics: Adjusted <span class="math inline">\(R^2\)</span>, AIC and BIC</a>
+  <ul class="collapse">
+  <li><a href="#adjusted-r2" id="toc-adjusted-r2" class="nav-link" data-scroll-target="#adjusted-r2"><span class="header-section-number">32.12.1</span> Adjusted <span class="math inline">\(R^2\)</span></a></li>
+  <li><a href="#akaike-information-criterion-aic" id="toc-akaike-information-criterion-aic" class="nav-link" data-scroll-target="#akaike-information-criterion-aic"><span class="header-section-number">32.12.2</span> Akaike information criterion (AIC)</a></li>
+  <li><a href="#bayesian-information-criterion-bic" id="toc-bayesian-information-criterion-bic" class="nav-link" data-scroll-target="#bayesian-information-criterion-bic"><span class="header-section-number">32.12.3</span> Bayesian information criterion (BIC)</a></li>
+  </ul></li>
+  <li><a href="#shrinkage-and-regularization" id="toc-shrinkage-and-regularization" class="nav-link" data-scroll-target="#shrinkage-and-regularization"><span class="header-section-number">32.13</span> Shrinkage and Regularization</a>
+  <ul class="collapse">
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">32.13.1</span> Ridge regression</a></li>
+  <li><a href="#the-lasso" id="toc-the-lasso" class="nav-link" data-scroll-target="#the-lasso"><span class="header-section-number">32.13.2</span> The LASSO</a></li>
+  <li><a href="#how-to-choose-lambda-cv-to-the-rescue" id="toc-how-to-choose-lambda-cv-to-the-rescue" class="nav-link" data-scroll-target="#how-to-choose-lambda-cv-to-the-rescue"><span class="header-section-number">32.13.3</span> How to choose <span class="math inline">\(\lambda\)</span>? CV to the rescue!</a></li>
+  </ul></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">32.14</span> Review</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In our discussions of regression the past few weeks, we have encountered many situations in which we needed to make a choice about the model that we fit to data. For example, suppose we have a data set with hundreds or even thousands of predictor variables. This is frequently the case in applications to genetics, where we have thousands of genes, and we want to predict some outcome (e.g., disease status). How do we decide which variables to include in linear regression (or any other prediction model)?</p>
+<p>This is an example of <em>model selection</em>, our subject for this week.</p>
+<section id="learning-objectives" class="level2" data-number="32.1">
+<h2 data-number="32.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">32.1</span> Learning objectives</h2>
+<p>After this lecture, you will be able to</p>
+<ul>
+<li>Explain the problem of variable selection in the context of linear regression</li>
+<li>Explain and apply cross-validation methods, including leave-one-out cross-validation and <span class="math inline">\(K\)</span>-fold cross-validation.</li>
+<li>Explain subset selection methods, including forward and backward stepwise selection.</li>
+<li>Explain and apply regularization and shrinkage methods, including ridge regression and the LASSO.</li>
+</ul>
+</section>
+<section id="model-selection-overview" class="level2" data-number="32.2">
+<h2 data-number="32.2" class="anchored" data-anchor-id="model-selection-overview"><span class="header-section-number">32.2</span> Model selection: overview</h2>
+<p>Our focus this week will be on model selection for regression problems. Still, we should note that similar ideas apply in many other situations. For example, when <em>clustering</em> data, we use model selection to choose how many clusters to group the data into.</p>
+<p>The unifying idea is that we have to choose among many different <em>similar</em> ways of describing the data. That’s what model selection helps us do.</p>
+</section>
+<section id="variable-selection" class="level2" data-number="32.3">
+<h2 data-number="32.3" class="anchored" data-anchor-id="variable-selection"><span class="header-section-number">32.3</span> Variable selection</h2>
+<p>Suppose that we have a collection of <span class="math inline">\(p\)</span> predictors, and that <span class="math inline">\(p\)</span> is very large (say, <span class="math inline">\(p \approx n\)</span>). If we try to fit a model using all of these predictors, we will end up over-fitting to the data, a point that we have discussed briefly a few times this semester.</p>
+<p><strong>If you’ve taken linear algebra (skip this paragraph if not!):</strong> in linear regression (a similar story holds for other prediction models), we have <span class="math inline">\(n\)</span> equations in <span class="math inline">\(p\)</span> unknowns. When <span class="math inline">\(p\)</span> is of a similar size to the number of observations <span class="math inline">\(n\)</span>, the system is over-determined (or close to it)..</p>
+<p>In situations like this, we would like to choose just a few of these predictors for inclusion in a statistical model (e.g., linear regression). This is an example of model selection: we have a bunch of different models under consideration (i.e., a different possible model for each set of variables we might choose), and we want to pick the best one.</p>
+<p>The natural question, then, is: how do we compare models?</p>
+<section id="example-mtcars" class="level3" data-number="32.3.1">
+<h3 data-number="32.3.1" class="anchored" data-anchor-id="example-mtcars"><span class="header-section-number">32.3.1</span> Example: <code>mtcars</code></h3>
+<p>Let’s consider a very simple example, adapted from Section 3.3.2 and Section 5.1 in ISLR, revisiting our old friend the <code>mtcars</code> data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">'mtcars'</span>);</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+</div>
+</div>
+<p>Let’s confine our attention to the <code>mpg</code> (miles per gallon) and <code>hp</code> (horsepower) variables. Can we predict gas mileage from the horsepower?</p>
+<p>Let’s try fitting linear regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp, mtcars);</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>intercept1 <span class="ot">&lt;-</span> model1<span class="sc">$</span>coefficients[<span class="dv">1</span>];</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>slope1 <span class="ot">&lt;-</span> model1<span class="sc">$</span>coefficients[<span class="dv">2</span>];</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data itself</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( mtcars, <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>mpg)) <span class="sc">+</span> <span class="fu">geom_point</span>();</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_abline</span>(<span class="at">intercept=</span>intercept1, <span class="at">slope=</span>slope1, <span class="at">colour=</span><span class="st">'blue'</span> );</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Okay, it looks reasonable, but you might notice that the residuals have a bit of a weird behavior. Let’s plot them to see what I mean.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( mtcars, <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>mpg<span class="sc">-</span>(slope1<span class="sc">*</span>hp<span class="sc">+</span>intercept1))) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The residuals have a kind of U-shape. This suggests that there is a non-linearity in the data that we are failing to capture. Let’s try adding another predictor: the squared horsepower.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>), mtcars);</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>intercept2 <span class="ot">&lt;-</span> model2<span class="sc">$</span>coefficients[<span class="dv">1</span>];</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>slope2_1 <span class="ot">&lt;-</span> model2<span class="sc">$</span>coefficients[<span class="dv">2</span>];</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>slope2_2 <span class="ot">&lt;-</span> model2<span class="sc">$</span>coefficients[<span class="dv">3</span>];</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data itself</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( mtcars, <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>mpg)) <span class="sc">+</span> <span class="fu">geom_point</span>();</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># As usual, there are cleaner ways to do this plot, but this is the quick and easy way to make itt.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># If we were doing this more carefully, we would evaluate the cureve in the plot at more x-values than just the ones in the data to smooth things out.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>intercept2 <span class="sc">+</span> slope2_1<span class="sc">*</span>hp <span class="sc">+</span> slope2_2<span class="sc">*</span><span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>) ), <span class="at">colour=</span><span class="st">'red'</span> );</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>That looks like quite an improvement! Just for comparison:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( mtcars, <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>mpg)) <span class="sc">+</span> <span class="fu">geom_point</span>();</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_abline</span>(<span class="at">intercept=</span>intercept1, <span class="at">slope=</span>slope1, <span class="at">colour=</span><span class="st">'blue'</span> );</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">x=</span>hp, <span class="at">y=</span>intercept2 <span class="sc">+</span> slope2_1<span class="sc">*</span>hp <span class="sc">+</span> slope2_2<span class="sc">*</span><span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>) ), <span class="at">colour=</span><span class="st">'red'</span> );</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also compare the squared residuals to confirm that adding the feature <code>hp^2</code> actually decreased our error:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="fu">sum</span>( model1<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> ), <span class="fu">sum</span>( model2<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> ) );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 447.6743 274.6317</code></pre>
+</div>
+</div>
+<p>Why stop there? Why not add <code>hp^3</code> as well, or even <code>hp^4</code>? Well, funny enough, that is precisely the idea behind <em>polynomial regression</em>, which you can learn more about in ISLR (Section 3.3.2; more substantial discussion in Chapter 7) or in a regression course.</p>
+<p>But that raises the question: how do we know when to stop?</p>
+<p>-You’ll find that if you add <code>hp^3</code> to the model above, that the sum of squared residuals does indeed improve.</p>
+<p>-But how do we know if that improvement is worth it?</p>
+<p>One approach to this problem would be to examine the <span class="math inline">\(p\)</span>-values associated to the coefficients (see ISLR Chapter 3 for a discussion of that approach). In these notes, we will see a different, arguably more principled approach.</p>
+</section>
+<section id="overfitting-and-unseen-data" class="level3" data-number="32.3.2">
+<h3 data-number="32.3.2" class="anchored" data-anchor-id="overfitting-and-unseen-data"><span class="header-section-number">32.3.2</span> Overfitting and Unseen Data</h3>
+<p>If we keep adding more predictors to our model, the residuals will continue to decrease, but this will not actually mean that our model is better. Instead, what we will be doing is <em>over-fitting</em> to the data. That is, our model will really just be “memorizing” the data itself rather than learning a model.</p>
+<p>The true test of model quality is how well it does at predicting for data that we <em>didn’t</em> see.</p>
+<p>That is, if we fit our model on data <span class="math inline">\((X_i,Y_i)\)</span> for <span class="math inline">\(i=1,2,\dots,n\)</span>, how well does our model do on a previously unseen data point <span class="math inline">\((X_{n+1},Y_{n+1})\)</span>?</p>
+<p>Specifically, in the case of regression, we want our model to minimize <span class="math display">\[
+\mathbb{E} \left( \hat{Y}_{n+1} - Y_{n+1} \right)^2,
+\]</span></p>
+<p>where <span class="math inline">\(\hat{Y}_{n+1}\)</span> is our model’s prediction based on coefficients estimated from our <span class="math inline">\(n\)</span> training observations.</p>
+</section>
+</section>
+<section id="validation-sets" class="level2" data-number="32.4">
+<h2 data-number="32.4" class="anchored" data-anchor-id="validation-sets"><span class="header-section-number">32.4</span> Validation Sets</h2>
+<p>So rather than focusing on how well our model fits our training data, we should be trying to determine how well our model does when it gets applied to data that we haven’t seen before.</p>
+<p>Specifically, we would like to know the mean squared error (MSE), <span class="math display">\[
+\mathbb{E} \left( \hat{Y}_{n+1} - Y_{n+1} \right)^2.
+\]</span></p>
+<p><strong>Note:</strong> The name is hopefully clear– it is the expectation (mean) of the squared error between our prediction and the truth.</p>
+<p>If you’ve taken an ML course, this idea should already be quite familiar. We always train (“fit” in the language of statistics) our model on a <em>training set</em>, and then assess how well the model performs on a <em>test set</em> that our model hasn’t seen before.</p>
+<p>The trouble is that in most statistical problems, we have at most a few hundred data points to work with. As a result, we can’t really afford to set aside some of our data just to use as a test set.</p>
+<p>Note that this is in contrast to many machine learning settings (e.g., training a neural net), where we often have tens or hundreds of thousands of data points to work with.</p>
+<p>Following the logic of the train/test split idea in ML, though, a natural approach is to do the following:</p>
+<ol type="1">
+<li><p>Split our data into two parts, say <span class="math inline">\(S_1,S_2\)</span>, such that <span class="math inline">\(S_1 \cup S_2 = \{1,2,\dots,n\}\)</span> and <span class="math inline">\(S_1 \cap S_2 = \emptyset\)</span>.</p></li>
+<li><p>Obtain estimate <span class="math inline">\(\hat{\beta}_1\)</span> by fitting a model on the observations in <span class="math inline">\(S_1\)</span></p></li>
+<li><p>Evaluate the error of our fitted model on <span class="math inline">\(S_2\)</span>, <span class="math display">\[
+\hat{E}_1
+=
+\frac{1}{|S_2|} \sum_{i \in S_2} \left( Y_i - \hat{\beta}_1 X_i \right)^2.
+\]</span></p></li>
+</ol>
+<p>Typically, we call <span class="math inline">\(S_2\)</span>, the set that we make predictions for, the <em>validation set</em>, because it is validating our model’s performance.</p>
+<section id="example-mtcars-revisited" class="level3" data-number="32.4.1">
+<h3 data-number="32.4.1" class="anchored" data-anchor-id="example-mtcars-revisited"><span class="header-section-number">32.4.1</span> Example: <code>mtcars</code> revisited</h3>
+<p>Let’s see this in action on the <code>mtcars</code> data set.</p>
+<p>We randomly split the data set into two groups. For each model order 1, 2, 3, 4 and 5, we fit the model to the training set and then measure the sum of squared residuals of that model when applied to the validation set.</p>
+<p>One run of this experiment is summarized in <code>resids_onerun</code>. For details, refer to <code>mtcars_poly.R</code>, which is included among the supplementary files for this lecture.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'r_scripts/mtcars_poly.R'</span>);</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(resids_onerun);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Order       Error
+1     1   20.105302
+2     2    9.170243
+3     3   26.532305
+4     4  292.739805
+5     5 3210.927214</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot these results</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resids_onerun, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span><span class="fu">log</span>(Error) ) );</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Let’s pause to make sure that we understand what this plot actually shows. We split the <code>mtcars</code> dataset randomly into two sets, a “training” set and a “validation” set. For each order (1, 2, 3, 4, 5), we fit a model of that order to the training set. Then we use that model to try and predict the outcomes (<code>mpg</code>) on the validation set. So this is the performance of five different models, each trained on the same data <span class="math inline">\(S_1\)</span> and evaluated on the same data <span class="math inline">\(S_2\)</span>, <em>different from the training data</em>.</p>
+<p>Looking at the plot, we see that as we add higher-order powers of <code>hp</code>, we don’t really gain much in terms of the error (i.e., sum of squared residuals) beyond order 2. Indeed, past the order-3 model, the error gets worse again!</p>
+<p><strong>Aside:</strong> this deteriorating performance is due largely to the fact that the <code>mtcars</code> data set is so small. Once we split it in half, we are fitting our model to just 16 observations. Estimating four or five coefficients from only about 15 observations is asking for trouble! This is a tell-tale sign of over-fitting of a model. This would be a good occasion for some kind of <em>regularization</em>, but we’ll come back to that.</p>
+</section>
+<section id="variance-in-the-residuals" class="level3" data-number="32.4.2">
+<h3 data-number="32.4.2" class="anchored" data-anchor-id="variance-in-the-residuals"><span class="header-section-number">32.4.2</span> Variance in the residuals</h3>
+<p>There’s one problem, though, beyond matters of sample size. That plot shows the residuals as a function of model order for one particular random set <span class="math inline">\(S_1\)</span>. Let’s plot the same residuals for a few different random sets.</p>
+<p><strong>Note:</strong> the data frame <code>resids</code> contains multiple replicates of the above experiment. Once again, refer to the code in <code>mtcars_poly.R</code> for details.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(resids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Rep Order    Error
+1   1     1 20.10530
+2   2     1 12.67520
+3   3     1 25.22882
+4   4     1 19.04291
+5   5     1 30.66274
+6   6     1 21.86813</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resids, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span><span class="fu">log</span>(Error), <span class="at">color=</span><span class="fu">as.factor</span>(Rep) ) );</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Hmm. There’s quite a lot of variance among our different estimates of the prediction error. Note that the y-axis is on a log scale, so an increase from, say, 2 to 3 is an <em>order of magnitude</em> increase in error.</p>
+<p>Each of these is supposed to be estimating the error <span class="math display">\[
+\mathbb{E} \left( \hat{Y}_{n+1} - Y_{n+1} \right)^2,
+\]</span></p>
+<p>but there’s so much variation among our estimates that it’s hard to know if we can trust any one of them in particular!</p>
+<p>Indeed, the variance is so high that we needed to plot the error on a log scale! Once in a while, we get unlucky and pick an especially bad train/validate split, and the error is truly awful!</p>
+<p><strong>Question:</strong> what explains the variance among the different lines in that plot?</p>
+<p><strong>Question:</strong> How might we reduce that variance?</p>
+</section>
+</section>
+<section id="reducing-the-variance-leave-one-out-cross-validation" class="level2" data-number="32.5">
+<h2 data-number="32.5" class="anchored" data-anchor-id="reducing-the-variance-leave-one-out-cross-validation"><span class="header-section-number">32.5</span> Reducing the variance: Leave-one-out cross-validation</h2>
+<p>One source of variance in our cross-validation plots above was the fact that each replicate involved splitting the data in half and training on only one of the two halves.</p>
+<p>That means that on average, from one replicate to another, the data used to train the model changes quite a lot, and hence our estimated model changes a lot. That’s where the variance comes from in the plot we just looked at!</p>
+<p>There is also the related problem that we are training on only half of the available data. As statisticians and/or machine learners, we don’t like not using all of our data!</p>
+<p>So, here’s one possible solution: instead of training on half the data and validating (i.e., evaluating the model) on the other half, let’s train on all of our data except for one observation, then evaluate our learned model on that one held-out data point.</p>
+<p>That is, instead of splitting our data into two halves, we</p>
+<ol type="1">
+<li>Take one observation and set it aside (i.e., hold it out)</li>
+<li>Train our model on the other <span class="math inline">\(n-1\)</span> observations</li>
+<li>Evaluate our model on the held-out observation.</li>
+</ol>
+<p>This is called <em>leave-one-out cross-validation</em> (LOO-CV).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This R file implements the same experiment as we saw above,</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but this time doing LOO-CV instead of a naive two-set split.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'r_scripts/mtcars_poly_loocv.R'</span>);</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resids_onerun, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span>Error ) );</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>But once again, that’s just one run. Let’s display several of them in one plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resids, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span><span class="fu">log</span>(Error), <span class="at">color=</span><span class="fu">as.factor</span>(Rep) ) );</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For each of our replicates, we are estimating our model based on <span class="math inline">\(n-1\)</span> of the observations, and then evaluating our prediction on the one held-out observation.</p>
+<p>But now we have a different kind of variance: our estimate of the error is at the mercy of the one observation that we chose to hold out. If we chose an especially “bad” or “challenging” observation to hold out, then our error might be especially high.</p>
+<p>Leave-one-out cross-validation (LOO-CV) tries to bridge this gap (i.e., balancing the better stability of leaving one observation out with the variability induced by evaluating on a single point) by:</p>
+<p>For each <span class="math inline">\(i=1,2,\dots,n\)</span>:</p>
+<ol type="1">
+<li>Train the model on <span class="math inline">\(\{ (X_j, Y_j) : i \neq i \}\)</span>.</li>
+<li>Evaluate on <span class="math inline">\((X_i, Y_i)\)</span>.</li>
+<li>Average the model error over all <span class="math inline">\(i =1,2,\dots,n\)</span>.</li>
+</ol>
+<p>This illustration from ISLR should give you the general idea.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/islr_loocv.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Schematic of LOO-CV (Credit: ISLR2e fig.&nbsp;5.3)</figcaption>
+</figure>
+</div>
+<p>Let’s see that in action. As we have done many times this semester, this code is optimized for clarity and readability, not for concision or “cleverness”. There are much more “graceful” ways of doing this, and shortly we’ll see R’s built-in CV tools, which are what we would normally use for this. But here the goal is to illustrate the core ideas in a really obvious way, hence the “clumsy” code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">'mtcars'</span>); <span class="co"># Still using mtcars data; reloading it just to remind us.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>nrows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mtcars); <span class="co"># Number of observations in the data</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>norder <span class="ot">&lt;-</span> <span class="dv">5</span>;</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># For each choice of observation to hold out, we need to record the score</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (i.e., squared erro) for each of the five model orders.</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>errors <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="st">'Row'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>nrows, <span class="at">each=</span>norder),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'Order'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>norder, <span class="at">times=</span>nrows),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Error'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>, nrows<span class="sc">*</span>norder));</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(mtcars) ) {</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  train_data <span class="ot">&lt;-</span> mtcars[<span class="sc">-</span><span class="fu">c</span>(i),]; <span class="co"># Leave out the i-th observation</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  leftout <span class="ot">&lt;-</span> mtcars[<span class="fu">c</span>(i),]; <span class="co"># the row containing the left-out sample.</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remember, we are fitting five different models</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># So that we can compare them.</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the linear model, then evaluate.</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp, train_data );</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  m1.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>( m1, leftout );</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (errors<span class="sc">$</span>Row<span class="sc">==</span>i <span class="sc">&amp;</span> errors<span class="sc">$</span>Order<span class="sc">==</span><span class="dv">1</span>); <span class="co"># Pick out row of the errors df.</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record squared error btwn predict and truth</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  errors[idx,]<span class="sc">$</span>Error <span class="ot">&lt;-</span> (m1.pred <span class="sc">-</span> leftout<span class="sc">$</span>mpg)<span class="sc">^</span><span class="dv">2</span> ; </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the quadratic model, then evaluate.</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>), train_data );</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  m2.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>( m2, leftout );</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (errors<span class="sc">$</span>Row<span class="sc">==</span>i <span class="sc">&amp;</span> errors<span class="sc">$</span>Order<span class="sc">==</span><span class="dv">2</span>); <span class="co"># Pick out row of the errors df.</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record squared error btwn predict and truth</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  errors[idx,]<span class="sc">$</span>Error <span class="ot">&lt;-</span> (m2.pred <span class="sc">-</span> leftout<span class="sc">$</span>mpg)<span class="sc">^</span><span class="dv">2</span>; </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the cubic model, then evaluate.</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">3</span>), train_data );</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  m3.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>( m3, leftout );</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (errors<span class="sc">$</span>Row<span class="sc">==</span>i <span class="sc">&amp;</span> errors<span class="sc">$</span>Order<span class="sc">==</span><span class="dv">3</span>); <span class="co"># Pick out row of the errors df.</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record squared error btwn predict and truth</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>  errors[idx,]<span class="sc">$</span>Error <span class="ot">&lt;-</span> (m3.pred <span class="sc">-</span> leftout<span class="sc">$</span>mpg)<span class="sc">^</span><span class="dv">2</span>; </span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the 4-th order model, then evaluate.</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  m4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">4</span>), train_data );</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  m4.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>( m4, leftout );</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (errors<span class="sc">$</span>Row<span class="sc">==</span>i <span class="sc">&amp;</span> errors<span class="sc">$</span>Order<span class="sc">==</span><span class="dv">4</span>); <span class="co"># Pick out row of the errors df.</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record squared error btwn predict and truth</span></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  errors[idx,]<span class="sc">$</span>Error <span class="ot">&lt;-</span> (m4.pred <span class="sc">-</span> leftout<span class="sc">$</span>mpg)<span class="sc">^</span><span class="dv">2</span>; </span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the 5-th order model, then evaluate.</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>  m5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hp <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span> <span class="fu">I</span>(hp<span class="sc">^</span><span class="dv">5</span>), train_data );</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>  m5.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>( m5, leftout );</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (errors<span class="sc">$</span>Row<span class="sc">==</span>i <span class="sc">&amp;</span> errors<span class="sc">$</span>Order<span class="sc">==</span><span class="dv">5</span>); <span class="co"># Pick out row of the errors df.</span></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record squared error btwn predict and truth</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>  errors[idx,]<span class="sc">$</span>Error <span class="ot">&lt;-</span> (m5.pred <span class="sc">-</span> leftout<span class="sc">$</span>mpg)<span class="sc">^</span><span class="dv">2</span>;</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Okay, so let’s make sure that we understand what is going on, here.</p>
+<p>The data frame <code>errors</code> now has <code>nrows*norders</code> rows. So for each observation in the cars data set, there are five entries in the table <code>errors</code>, recording the squared error for the models of order 1, 2, 3, 4 and 5 when that data point was held out.</p>
+<p>We said that when we do CV, we want to average across the <span class="math inline">\(n\)</span> observations, so let’s do that. We’re going to use the <code>aggregate</code> function, which is one of the ways to perform “group-by” operations in R.</p>
+<p>Group-by operations are where we pool our observations into subsets according to some criterion, and then compute a summary statistic over all of the observations in the same subset (i.e., the same “group”).</p>
+<p>Using that language, we want to group the rows of <code>errors</code> according to model order, and take the average squared error within each order.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Error ~ Order tells R to group the data according to the Order column</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and that we want to summarize the Error column within observations</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># of the same Order.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Passing the FUN=mean argument tells R that the summary statistic we want to use</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># is the function mean().</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We could pass other summary statistic functions in this argument.</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># For example, we could use median, sd, var, max, etc.,</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># though those would be a bit silly here.</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>err_agg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(Error <span class="sc">~</span> Order, <span class="at">data=</span>errors, <span class="at">FUN=</span>mean);</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(err_agg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Order     Error
+1     1  17.25330
+2     2  10.56143
+3     3  10.57458
+4     4  61.21760
+5     5 641.19551</code></pre>
+</div>
+</div>
+<p>And we can plot that just to drive the point home.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(err_agg, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span><span class="fu">log</span>(Error) ) );</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="recap-single-split-versus-loo-cv" class="level3" data-number="32.5.1">
+<h3 data-number="32.5.1" class="anchored" data-anchor-id="recap-single-split-versus-loo-cv"><span class="header-section-number">32.5.1</span> Recap: single split versus LOO-CV</h3>
+<p>So far we have seen two different ways of estimating a model’s performance on unseen data.</p>
+<p>The first was to randomly split the data into two sets, train on one and evaluate on the other.</p>
+<p><strong>Pro:</strong> Only have to fit a model once (or just a few times, if we are going to repeat the operation and average)</p>
+<p><strong>Con:</strong> Only have half of the data available to fit the model, which leads to less accurate prediction (and thus high variance in estimated model).</p>
+<p>The second is <strong>leave-one-out cross-validation</strong>.</p>
+<p><strong>Pro:</strong> Use all but one observation to fit the model, so model fit is almost as good as if we had used all of the data</p>
+<p><strong>Con:</strong> Have to fit the model anew for each held-out data point, results in fitting the model <span class="math inline">\(n\)</span> different times, which can be expensive.</p>
+<p><strong>Con:</strong> Because any two training sets overlap in all but one of their elements, our fitted models are very highly correlated with one another, so we’re doing a lot of work (<span class="math inline">\(n\)</span> model fits) to get a bunch of highly correlated measurements.</p>
+<p>So, the natural question is: can we bridge the gap between these two extremes.</p>
+</section>
+<section id="the-happy-medium-k-fold-cross-validation" class="level3" data-number="32.5.2">
+<h3 data-number="32.5.2" class="anchored" data-anchor-id="the-happy-medium-k-fold-cross-validation"><span class="header-section-number">32.5.2</span> The happy medium: <span class="math inline">\(K\)</span>-fold cross validation</h3>
+<p>Well, there are a few different ways to bridge this gap, for example using Monte Carlo methods. Let’s discuss the most popular one here.</p>
+<p>We’ll borrow a bit from the LOO-CV idea, while lessening the correlatedness of the models fits.</p>
+<p><span class="math inline">\(K\)</span>-fold CV randomly divides the data into <span class="math inline">\(K\)</span> subsets, called <em>folds</em>. Then, one at a time, we hold out one of the folds, train our model on the <span class="math inline">\(K-1\)</span> remaining folds, and evaluate our model’s prediction error on the held-out fold. Then, we can average the errors across the <span class="math inline">\(K\)</span> folds.</p>
+<p>That is, the “recipe” for <span class="math inline">\(K\)</span>-fold cross-validation is</p>
+<ol type="1">
+<li><p>Randomly partition the data into <span class="math inline">\(K\)</span> (approximately) same-sized subsets, <span class="math inline">\(S_1,S_2,\dots,S_K\)</span> such that <span class="math inline">\(\cup_k S_k = \{1,2,\dots,n\}\)</span> and <span class="math inline">\(S_k \cap S_\ell = \emptyset\)</span> for all <span class="math inline">\(k \neq \ell\)</span></p></li>
+<li><p>For each <span class="math inline">\(k=1,2,\dots,K\)</span>, train a model on the observations indexed by <span class="math inline">\(i \in \cup_{\ell \neq k} S_\ell\)</span> and compute the prediction error <span class="math display">\[
+\hat{E}_k =  \frac{1}{|S_k|} \sum_{i \in S_k} (\hat{y}_i - y_i)^2
+\]</span></p></li>
+<li><p>Estimate the true error <span class="math inline">\(\mathbb{E} (\hat{y}_{n+1} - y_{n+1})^2\)</span> as <span class="math display">\[
+\frac{1}{K} \sum_{k=1}^K \hat{E}_k,
+\]</span> Schematically, this looks something like this (with <span class="math inline">\(K=5\)</span>):</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/islr_kfold.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Schematic of <span class="math inline">\(K\)</span>-fold CV (Credit: ISLR2e fig.&nbsp;5.5)</figcaption>
+</figure>
+</div>
+<p>Let’s implement this in R, just for the practice. Once again, R has built-in tools for making this easier, which we will discuss later, but this is a good opportunity to practice our R a bit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">'mtcars'</span>); <span class="co"># We'll continue to use the mtcars data set</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="dv">5</span>; <span class="co"># 5-fold regularization. K between 5 and 10 is a fairly standard choice</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The first thing we need to do is partition the data into K folds.</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># There are many different ways to do this,</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># including using functions from other packages</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># (e.g., https://www.rdocumentation.org/packages/caret/versions/6.0-90/topics/trainControl)</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># But here's an approach using the R function split() that I like</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mtcars);</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># sample(n,n,replace=FALSE) really just randomly permutes the data.</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, passing that into the split function assigns these to the K different</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># factors defined by as.factor(1:K).</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># See ?split for more information.</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>Kfolds <span class="ot">&lt;-</span> <span class="fu">split</span>( <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n,<span class="at">replace=</span><span class="cn">FALSE</span>), <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span>K));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in split.default(sample(1:n, n, replace = FALSE), as.factor(1:K)): data
+length is not a multiple of split variable</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that this will throw a warning in the event that K does not divide n</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># evenly. That's totally fine!</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>Kfolds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`1`
+[1] 22 14 28  8 31  4 25
+
+$`2`
+[1] 13 19 15  9 17 27 10
+
+$`3`
+[1]  2 11 16 18 23  7
+
+$`4`
+[1] 30 32 12  1  3 20
+
+$`5`
+[1]  5 26  6 21 24 29</code></pre>
+</div>
+</div>
+<p>Now, for each of these <span class="math inline">\(K=5\)</span> folds, we’ll set it aside, train on the remaining data, and evaluate on the fold.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The file mtcars_Kfold.R defines a function that trains the five different-order</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># models and evaluates each one according to the given holdout set.</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># It largely repeats the structure of the LOO-CV code implemented above,</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># hence why it is relegated to a file for your later perusal.</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'r_scripts/mtcars_Kfold.R'</span>);</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up a data frame to hold our residuals.</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>norder <span class="ot">&lt;-</span> <span class="dv">5</span>;</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>Kfold_resids <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="st">'Order'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>norder, <span class="at">each=</span>K),</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Fold'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>K, norder ),</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Error'</span><span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>, K<span class="sc">*</span>norder) );</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K ) {</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  heldout_idxs <span class="ot">&lt;-</span> Kfolds[[k]]; <span class="co"># The indices of the k-th hold-out set.</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now train the 5 different models and store their residuals.</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> (Kfold_resids<span class="sc">$</span>Fold<span class="sc">==</span>k);</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  Kfold_resids[idx, ]<span class="sc">$</span>Error <span class="ot">&lt;-</span> <span class="fu">mtcars_fit_models</span>( heldout_idxs );</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Kfold_resids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Order Fold     Error
+1     1    1 29.190348
+2     1    2  9.894237
+3     1    3 20.834760
+4     1    4 14.021542
+5     1    5  8.658949
+6     2    1 29.452228</code></pre>
+</div>
+</div>
+<p>Now, we need to aggregate over the <span class="math inline">\(K=5\)</span> folds, and then we can plot the errors. Once again, we need to use a log scale for the errors, because the higher-order models cause some really bad prediction errors on a handful of “bad” examples.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>KF_agg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(Error <span class="sc">~</span> Order, <span class="at">data=</span>Kfold_resids, <span class="at">FUN=</span>mean);</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(KF_agg, <span class="fu">aes</span>(<span class="at">x=</span>Order, <span class="at">y=</span><span class="fu">log</span>(Error) ) );</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_line</span>( <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Once again, the order-2 model, <code>mpg ~ 1 + hp + hp^2</code>, does best (usually, anyway– occasionally the order-3 model is slightly better due to randomness on this small data set).</p>
+</section>
+</section>
+<section id="aside-the-bias-variance-decomposition" class="level2" data-number="32.6">
+<h2 data-number="32.6" class="anchored" data-anchor-id="aside-the-bias-variance-decomposition"><span class="header-section-number">32.6</span> Aside: the bias-variance decomposition</h2>
+<p><strong>Note:</strong> This subsection includes a lot of math, including a lot of expectation and variance terms and taking expectations with respect to some variables but not others. You <strong>are not</strong> responsible for these details on an exam. The important thing to take away from this subsection is the <em>concept</em> of the bias-variance decomposition of the means squared error (MSE), in which we can write the MSE as a variance term plus a squared bias.</p>
+<p>Suppose that we have a quantity <span class="math inline">\(\theta\)</span> that we want to estimate, and we have an estimator <span class="math inline">\(\hat{\theta}\)</span>, the <em>mean squared error</em> is defined as <span class="math display">\[
+\operatorname{MSE}(\hat{\theta}, \theta)
+= \mathbb{E} \left( \hat{\theta} - \theta \right)^2.
+\]</span></p>
+<p>For example, in our CV examples above, we wanted to estimate the squared error on a previously unseen data point, <span class="math inline">\(\mathbb{E}( \hat{Y}_{n+1} - Y_{n+1} )^2\)</span>. Note that even though this looks kind of like MSE, it is <em>not</em>. This quantity is <span class="math inline">\(\theta\)</span> in our MSE expression above. It is a thing we want to estimate. Our love of squared errors has caused us to have a whole mess of colliding notation. Such is life.</p>
+<p><strong>Important point:</strong> we are taking expectation here with respect to the random variable <span class="math inline">\(\hat{theta}\)</span>. Its randomness comes from the data itself (which we usually assume to depend on the true parameter <span class="math inline">\(\theta\)</span> in some way).</p>
+<p>Now, let’s expand the MSE by adding and subtracting <span class="math inline">\(\mathbb{E} \hat{\theta}\)</span> inside the square: <span class="math display">\[
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\thetahat}{\hat{\theta}}
+\begin{aligned}
+\operatorname{MSE}
+&amp;= \E \left( \thetahat - \theta \right)^2 \\
+&amp;= \E \left( \thetahat - \E \thetahat + \E \thetahat - \theta \right)^2 \\
+&amp;= \E\left[  \left( \thetahat - \E \thetahat \right)^2
+           + 2\left( \thetahat - \E \thetahat \right)\left( \E \thetahat - \theta \right)
+           + \left( \E \thetahat - \theta \right)^2 \right] \\
+&amp;= \E \left( \thetahat - \E \thetahat \right)^2
+  +  \E 2\left( \thetahat - \E \thetahat \right)
+                \left( \E \thetahat - \theta \right)
+  + \E \left( \E \thetahat - \theta \right)^2.
+\end{aligned}
+\]</span> Now, let’s notice that <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\mathbb{E} \hat{\theta}\)</span> are not random, so they can get pulled out of the expectation (along with the factor of <span class="math inline">\(2\)</span>, which is also not random!). we can write (again, remember that the expectation is over <span class="math inline">\(\hat{\theta}\)</span>, while <span class="math inline">\(\theta\)</span> is non-random) <span class="math display">\[
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\thetahat}{\hat{\theta}}
+\E 2\left( \thetahat - \E \thetahat \right) \left( \E \thetahat - \theta \right)
+= 2 \left( \E \thetahat - \theta \right) \E \left( \thetahat - \E \thetahat \right)
+    = 0,
+\]</span> because <span class="math display">\[
+\mathbb{E}\left(\hat{\theta} - \mathbb{E} \hat{\theta} \right)
+= \mathbb{E} \hat{\theta} - \mathbb{E} \hat{\theta}
+= 0.
+\]</span></p>
+<p>Plugging this into our equation above, we conclude that <span class="math display">\[
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\thetahat}{\hat{\theta}}
+\operatorname{MSE}
+= \E \left( \thetahat - \E \thetahat \right)^2
++ \E \left( \E \thetahat - \theta \right)^2.
+\]</span></p>
+<p>The first term on the right is just a variance– like <span class="math inline">\(\mathbb{E}(X - \mathbb{E}X)^2\)</span>.</p>
+<p>The second term on the right is the expectation of <span class="math inline">\((\mathbb{E} \hat{\theta} - \theta)^2\)</span>. But this term isn’t random at all– <span class="math inline">\(\theta\)</span> is a fixed parameter, and <span class="math inline">\(\mathbb{E} \hat{\theta}\)</span> is just an expected value (i.e., not random!), so <span class="math display">\[
+\E \left( \E \thetahat - \theta \right)^2
+= \left( \E \thetahat - \theta \right)^2,
+\]</span> and notice that this is just the squared bias– the square of the difference between the expectation of our estimator and the thing it is supposed to estimate.</p>
+<p>So, to recap, we have shown that we can decompose the MSE as <span class="math display">\[
+\operatorname{MSE}(\hat{\theta}, \theta)
+= \operatorname{Var} \hat{\theta} + \operatorname{Bias}^2(\hat{\theta}, \theta).
+\]</span></p>
+<p>In general, there will be many different estimators (i.e., many different choices of <span class="math inline">\(\hat{\theta}\)</span>) that all obtain (approximately) the same MSE. The above equation means that once we are choosing among these different “similar” estimators (i.e., estimators that have similar MSE), we are really just trading off between bias and variance. That is, an estimator with smaller bias will have to “pay” for it with more variance. This is often referred to as the <em>bias-variance tradeoff</em>.</p>
+</section>
+<section id="cv-and-the-bias-variance-tradeoff" class="level2" data-number="32.7">
+<h2 data-number="32.7" class="anchored" data-anchor-id="cv-and-the-bias-variance-tradeoff"><span class="header-section-number">32.7</span> CV and the bias-variance tradeoff</h2>
+<p>Now, the purpose of cross-validation is to estimate the model error <span class="math inline">\(\E(\hat{Y}_{n+1}-Y_{n+1})^2\)</span>. The bias-variance tradeoff says that, roughly speaking, different “reasonable” ways of estimating this quantity will all have about the same MSE, but will involve balancing bias against variance.</p>
+<section id="bias-in-cv" class="level3" data-number="32.7.1">
+<h3 data-number="32.7.1" class="anchored" data-anchor-id="bias-in-cv"><span class="header-section-number">32.7.1</span> Bias in CV</h3>
+<p>Let’s think back to the “naive” cross-validation approach, in which we split the data into two sets of similar sizes, train on one and evaluate on the other. When we do that, we train our model on a much smaller data set than if we used the full data. The result is that we (accidentally) over-estimate the error of our model, because models trained on less data simply tend to be less accurate.</p>
+<p>That is to say, the “naive” cross-validation approach tends to yield a biased estimate of the true error of the model. Specifically, our estimate is biased upward.</p>
+<p>On the other hand, LOOCV should be approximately unbiased as an estimate of the model error, because the difference between training on <span class="math inline">\(n\)</span> and <span class="math inline">\(n-1\)</span> data points should not be especially large (at least once <span class="math inline">\(n\)</span> is reasonably large).</p>
+<p>It stands to reason that <span class="math inline">\(K\)</span>-fold CV should sit at a kind of “happy medium” level of bias between LOOCV and “naive” CV.</p>
+</section>
+<section id="variance-in-cv" class="level3" data-number="32.7.2">
+<h3 data-number="32.7.2" class="anchored" data-anchor-id="variance-in-cv"><span class="header-section-number">32.7.2</span> Variance in CV</h3>
+<p>So LOOCV is the least biased estimate of model error, but the bias-variance trade-off predicts that we must “pay” for this in variance. It turns out that LOOCV has the most variance out of the three methods LOOCV, <span class="math inline">\(K\)</span>-fold CV (for <span class="math inline">\(K &lt; n\)</span>) and “naive” CV.</p>
+<p>Intuitively, the variance in LOOCV comes from the following fact: recall that for each <span class="math inline">\(i=1,2,\dots,n\)</span>, we hold out the <span class="math inline">\(i\)</span>-th data point and train a model on the rest.</p>
+<p>This means that we have <span class="math inline">\(n\)</span> different trained models, each trained on <span class="math inline">\(n-1\)</span> data points, but each pair of training sets overlap in <span class="math inline">\(n-2\)</span> of their data points. The result is that the trained models are highly correlated with one another. Changing just one data point in our data set doesn’t change the fitted model much!</p>
+<p>The result is that these estimated model errors are highly correlated with one another, with the result that our overall estimate of the model error has high variance.</p>
+<p>The <span class="math inline">\(K\)</span> models trained in <span class="math inline">\(K\)</span>-fold CV are less correlated with one another, and hence we have (comparatively) less variance. It turns out in this case that <span class="math inline">\(K\)</span> less-correlated error estimates have smaller correlation than <span class="math inline">\(n\)</span> highly-correlated ones.</p>
+</section>
+<section id="k-fold-cv-the-happy-medium" class="level3" data-number="32.7.3">
+<h3 data-number="32.7.3" class="anchored" data-anchor-id="k-fold-cv-the-happy-medium"><span class="header-section-number">32.7.3</span> <span class="math inline">\(K\)</span>-fold CV: the happy medium</h3>
+<p>Thus, <span class="math inline">\(K\)</span>-fold CV is a popular choice both because it is computationally cheaper than LOOCV (<span class="math inline">\(K\)</span> model fits compared to <span class="math inline">\(n\)</span> of them) and because it strikes a good balance between bias and variance.</p>
+</section>
+</section>
+<section id="variable-selection-for-real-this-time" class="level2" data-number="32.8">
+<h2 data-number="32.8" class="anchored" data-anchor-id="variable-selection-for-real-this-time"><span class="header-section-number">32.8</span> Variable selection, for real this time</h2>
+<p>In our examples above, we concentrated on choosing among a family of linear regression models that varied in their orders, in the sense that they included as predictors all powers of the horsepower variable <code>hp</code>, up to some maximum power, to predict gas mileage. Hopefully it is clear how we could modify our approach to, say, choose which variables we do and don’t include in a model (e.g., as in the Pima diabetes data set that we’ve seen a few times this semester).</p>
+<p>Ultimately, our goal was to choose, from among a set of predictors that we <em>could</em> include in our model (e.g., powers of <code>hp</code>, in the case of the <code>mtcars</code> example), which predictors to actually include in the model. Again, this task is <em>variable selection</em>.</p>
+<p>One thing that might be bugging us so far is that any way we slice it, cross-validation doesn’t use all of the available data: we are always holding <em>something</em> out of our fitted model for the sake of estimating our error on unseen data.</p>
+<p>Let’s look at a few different approaches to variable selection that do not rely on cross-validation. These alternative methods have the advantage of not trying to estimate the unknown model error on unseen data. On the other hand, these methods can be more computationally intensive and tend to come with fewer theoretical guarantees.</p>
+<p>This is not to suggest, however, that these methods are at odds with cross-validation. In actual research papers and in industry applications, you’ll often see both CV and some of the methods presented below used in tandem to select the best model for the job.</p>
+</section>
+<section id="setup-linear-regression-and-fitting" class="level2" data-number="32.9">
+<h2 data-number="32.9" class="anchored" data-anchor-id="setup-linear-regression-and-fitting"><span class="header-section-number">32.9</span> Setup: linear regression and fitting</h2>
+<p>Let’s continue to focus on linear regression, bearing in mind that the ideas introduced here apply equally well to other regression and prediction methods (e.g., logistic regression). Let’s recall that multiple linear regression models a response <span class="math inline">\(Y \in \mathbb{R}\)</span> as a linear (again, technically affine– linear plus an intercept!) function of a set of <span class="math inline">\(p\)</span> predictors plus normal noise: <span class="math display">\[
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon.
+\]</span></p>
+<p>Here, <span class="math inline">\(\epsilon\)</span> is mean-zero normal with unknown variance <span class="math inline">\(\sigma^2 &gt; 0\)</span>, and the variables <span class="math inline">\(X_1,X_2,\dots,X_p\)</span> are the <em>predictors</em>. We often refer to <span class="math inline">\(p\)</span>, the number of predictors, as the <em>dimension</em> of the problem, because the data (well, the vector of predictors, anyway), lies in <span class="math inline">\(p\)</span>-dimensional space. Collecting the coefficients into a vector <span class="math inline">\((\beta_0,\beta_1,\dots,\beta_p) \in \mathbb{R}^{p+1}\)</span> and creating a vector <span class="math inline">\(X=(1,X_1,X_2,\dots,X_p) \in \mathbb{R}^p\)</span>, we can write this more succinctly as (if you have not taken linear algebra, you can safely ignore this, we’re just including it because it’s a common notation) <span class="math display">\[
+Y = \beta^T X + \epsilon.
+\]</span></p>
+<p>In multiple linear regression, we observe a collection of predictor-response pairs <span class="math inline">\((X_i,Y_i)\)</span> for <span class="math inline">\(i=1,2,\dots,n\)</span>, with <span class="math display">\[
+X_i = (1,X_{i,1},X_{i,2},\dots,X_{i,p}) \in \mathbb{R}^{p+1}.
+\]</span></p>
+<p>Note that here we are including the intercept term <span class="math inline">\(1\)</span> in the vector of predictors for ease of notation. This is a common notational choice, so we’re including it here to get you used to seeing this. Of course, this is not universal– it’s one of those conventions that you have to be careful of and check what you are reading.</p>
+<section id="recap-variable-selection" class="level3" data-number="32.9.1">
+<h3 data-number="32.9.1" class="anchored" data-anchor-id="recap-variable-selection"><span class="header-section-number">32.9.1</span> Recap: variable selection</h3>
+<p>So we have <span class="math inline">\(p\)</span> variables (plus an intercept term), and we want to select which ones to include in our model. There are many reasons to want to do this, but let’s just highlight three of them:</p>
+<ul>
+<li><p>If there are many “useless” variables (i.e., ones that are not good predictors of the response), then including them in the model can make our predictions less accurate. Thus, we would like to proactively identify which variables are not useful, and avoid including them in the model in the first place.</p></li>
+<li><p>A model with fewer variables is simpler, and we like simple models! Explaining, say, heart attack risk as a function of two or three factors is a lot easier to use than a model that uses ten or twenty factors.</p></li>
+<li><p>If the number of predictors <span class="math inline">\(p\)</span> is too large (say, larger than <span class="math inline">\(n\)</span>– a common occurrence in genomic studies, for example), our estimates of the coefficients are very unstable. Variable selection and related tools give us a way to introduce stability in the form of <em>regularization</em>, which we will talk about below.</p></li>
+</ul>
+</section>
+</section>
+<section id="best-subset-selection" class="level2" data-number="32.10">
+<h2 data-number="32.10" class="anchored" data-anchor-id="best-subset-selection"><span class="header-section-number">32.10</span> Best subset selection</h2>
+<p>So, we have <span class="math inline">\(p\)</span> predictor variables available to us, and we want to choose which of them to actually include in our model.</p>
+<p>Well, the most obvious solution is to just try all possible combinations of features, train a model using each combination, and keep the best one (measured by, say, residual sum of squares).</p>
+<p>This would have an obvious drawback: we have already seen that we can trivially improve the RSS of our model by adding variables. So the models that include more variables would do better, even if those variables did not actually lead to better model error on unseen data.</p>
+<p>The solution to this is to do the following:</p>
+<ol type="1">
+<li>For each <span class="math inline">\(k=1,2,\dots,p\)</span>, for every set of <span class="math inline">\(k\)</span> different variables, fit a model and keep the model that best fits the data (measured by RSS). Call this model <span class="math inline">\(M_k\)</span>.</li>
+<li>Use CV (or some other tool like AIC or adjusted <span class="math inline">\(R^2\)</span>, which we’ll discuss below) to select among the models <span class="math inline">\(M_1,M_2,\dots,M_p\)</span>.</li>
+</ol>
+<p>This is called <em>best subset selection</em>. It is implemented in R in, for example, the <code>leaps</code> library the function <code>regsubsets</code>, which gets called in more or less the same way as <code>lm</code>. See (here)[https://cran.r-project.org/web/packages/leaps/index.html] for documentation if you’re interested.</p>
+<p>There is one rather glaring problem with best subset selection, though:</p>
+<p><strong>Question:</strong> if there are <span class="math inline">\(p\)</span> predictors, how many models does best subset selection fit before it makes a decision?</p>
+<p>So once <span class="math inline">\(p\)</span> is even moderately large, best subset selection is computationally expensive, and we need to do something a little more clever.</p>
+</section>
+<section id="stepwise-selection" class="level2" data-number="32.11">
+<h2 data-number="32.11" class="anchored" data-anchor-id="stepwise-selection"><span class="header-section-number">32.11</span> Stepwise selection</h2>
+<p>So best subset selection is expensive because we have to try every possible model, and then choose among the best “size-<span class="math inline">\(k\)</span>” model for each <span class="math inline">\(k=1,2,\dots,p\)</span>. How might we cut down on the computational expense?</p>
+<p>Stepwise selection methods avoid exhaustively checking all <span class="math inline">\(2^p\)</span> possible models by starting with a particular model and adding or removing one variable at a time (i.e., in “steps”).</p>
+<p>The important part is in how we decide which predictor to add or remove from the model at a particular time.</p>
+<section id="forward-stepwise-selection" class="level3" data-number="32.11.1">
+<h3 data-number="32.11.1" class="anchored" data-anchor-id="forward-stepwise-selection"><span class="header-section-number">32.11.1</span> Forward stepwise selection</h3>
+<p>The most obvious (to me, anyway) way to avoid checking every possible model is to start with a “null” model (i.e., no predictors, just an intercept term), then repeatedly add the “best” predictor not already in the model. That is,</p>
+<ol type="1">
+<li>Start by fitting the “null” model, with just an intercept term. Call it <span class="math inline">\(M_0\)</span>.</li>
+<li>For each <span class="math inline">\(k=1,2,\dots,p\)</span>, among the <span class="math inline">\(p-k\)</span> predictors not already in the model, add the one that yields the biggest improvement in RSS. Call this model, which includes <span class="math inline">\(k\)</span> predictors and the intercept term, <span class="math inline">\(M_k\)</span>.</li>
+<li>Use CV or some other method (e.g., an information criterion; see ISLR Section 6.1) to choose among <span class="math inline">\(M_0,M_1,M_2,\dots,M_p\)</span>.</li>
+</ol>
+<p>The important thing is that in Step 2 above, for each <span class="math inline">\(k=1,2,\dots,p\)</span>, we need to fit <span class="math inline">\(p-k\)</span> different models. Thus, in total (i.e., summing over <span class="math inline">\(k=0,1,2,\dots,p\)</span>), we end up fitting <span class="math display">\[
+1+ \sum_{k=0}^{p-1} (p-k)
+= 1+p^2 - \frac{(p-1)p}{2} = 1+\frac{ 2p^2 - p^2 + p }{2}
+= 1+ \frac{ p(p+1)}{2}
+\]</span> different models.</p>
+<p>To get a sense of what a big improvement this is, when <span class="math inline">\(p\)</span> is large, this right-hand side is approximately <span class="math inline">\(p^2/2\)</span>. Compare that with <span class="math inline">\(2^p\)</span>, which is a MUCH larger number. For example, when <span class="math inline">\(p=10\)</span>, <span class="math inline">\(2^{10} \approx 1000\)</span>, while <span class="math inline">\(10^2/2 \approx 50\)</span>. When <span class="math inline">\(p=20\)</span>, <span class="math inline">\(2^{20} \approx 1,000,000\)</span> while <span class="math inline">\(20^2/2 \approx 200\)</span>.</p>
+<p>Of course, the drawback is that forward stepwise selection might “miss” the optimal model, since it does not exhaustively fit every possible model the way that best subset selection does.</p>
+</section>
+<section id="backward-stepwise-selection" class="level3" data-number="32.11.2">
+<h3 data-number="32.11.2" class="anchored" data-anchor-id="backward-stepwise-selection"><span class="header-section-number">32.11.2</span> Backward stepwise selection</h3>
+<p>Well, if we can do forward stepwise selection, why not go backwards?</p>
+<p>In <em>backward stepwise selection</em>, we start with the full model (i.e., a model with all <span class="math inline">\(p\)</span> predictors), and iteratively remove one predictor at a time, always removing the predictor that decreases RSS the least.</p>
+<p>Just like forward stepwise regression, this decreases the number of models we have to fit from <span class="math inline">\(2^p\)</span> to something more like (approximately) <span class="math inline">\(p^2/2\)</span>.</p>
+<p><strong>Cautionary note:</strong> backward selection will only work if the number of observations <span class="math inline">\(n\)</span> is larger than <span class="math inline">\(p\)</span>. If <span class="math inline">\(n &lt; p\)</span>, the “full” model cannot be fit, because we have an <em>overdetermined system of linear equations</em>– <span class="math inline">\(n\)</span> equations in <span class="math inline">\(p\)</span> unknowns, and <span class="math inline">\(p &gt; n\)</span>. This is a setting where <em>regularization</em> can help a lot (see below), but the details are best left to your regression course(s).</p>
+</section>
+<section id="hybrid-approaches-the-best-of-both-worlds" class="level3" data-number="32.11.3">
+<h3 data-number="32.11.3" class="anchored" data-anchor-id="hybrid-approaches-the-best-of-both-worlds"><span class="header-section-number">32.11.3</span> Hybrid approaches: the best of both worlds?</h3>
+<p>It is outside the scope of this course, but there do exist stepwise selection methods that try to combine forward and backward stepwise selection. For example, we can alternately add and remove variables as needed. This can be helpful when, for example, a predictor is useful “early” in the selection process, but becomes a less useful predictor once other predictors have been included.</p>
+</section>
+</section>
+<section id="model-comparison-statistics-adjusted-r2-aic-and-bic" class="level2" data-number="32.12">
+<h2 data-number="32.12" class="anchored" data-anchor-id="model-comparison-statistics-adjusted-r2-aic-and-bic"><span class="header-section-number">32.12</span> Model Comparison Statistics: Adjusted <span class="math inline">\(R^2\)</span>, AIC and BIC</h2>
+<p>Rather than comparing the RSS of two models, which only compares the reduction to residuals with no regards to the number of predictors (the complexity) in the model, there are some statistics that are often used. Note that these statistics are relevant when comparing models of <em>different</em> complexity - two models with the same number of predictors would just as well be compared using <span class="math inline">\(RSS\)</span>. These statistics are useful to balance the benefit of reduced <span class="math inline">\(RSS\)</span> with the cost of additional model complexity.</p>
+<p>In each case, <span class="math inline">\(k\)</span> is the number of parameters being estimated - including the intercept.</p>
+<section id="adjusted-r2" class="level3" data-number="32.12.1">
+<h3 data-number="32.12.1" class="anchored" data-anchor-id="adjusted-r2"><span class="header-section-number">32.12.1</span> Adjusted <span class="math inline">\(R^2\)</span></h3>
+<p><span class="math display">\[R^2_{adj} = 1 − \frac{RSS/(n-k)}{TSS/(n-1)}=1-\frac{RSS}{TSS}\left(\frac{n-1}{n-k}\right)\]</span> The fraction multiplied will be <span class="math inline">\(&gt;1\)</span>, and grows with model complexity. In an extreme case, this penalty can result in a negative <span class="math inline">\(R^2_{adj}\)</span>, so it’s important to remember that this statistic is not meaningful by itself, only when used to compare models. Thus <span class="math inline">\(R^2_{adj} &lt; R^2\)</span>, and applies a penalty that grows with the number of predictors. When comparing two models using <span class="math inline">\(R^2_{adj}\)</span> we prefer the model that has the higher value.</p>
+</section>
+<section id="akaike-information-criterion-aic" class="level3" data-number="32.12.2">
+<h3 data-number="32.12.2" class="anchored" data-anchor-id="akaike-information-criterion-aic"><span class="header-section-number">32.12.2</span> Akaike information criterion (AIC)</h3>
+<p><span class="math display">\[AIC = −2 \ln(L) + 2k\]</span> If you work out the math (we won’t here) for a linear model this can be expressed in terms of <span class="math inline">\(RSS\)</span> <span class="math display">\[AIC = n\ln(RSS/n) + 2k\]</span></p>
+</section>
+<section id="bayesian-information-criterion-bic" class="level3" data-number="32.12.3">
+<h3 data-number="32.12.3" class="anchored" data-anchor-id="bayesian-information-criterion-bic"><span class="header-section-number">32.12.3</span> Bayesian information criterion (BIC)</h3>
+<p><span class="math display">\[BIC = -2 \ln(L)+\ln(n)k =  n\ln(RSS/n) + \ln(n)k\]</span> The first term in AIC and BIC is the residual deviance, which we want to be as low as possible. While a more complex model will reduce residual deviance, both AIC and BIC add a penalty. BIC adds a more severe penalty per predictor (if <span class="math inline">\(n &gt; e^2\approx7.4\)</span>).</p>
+<p>The bottom line: between these three model comparison statistics, BIC more heavily favors simpler models, <span class="math inline">\(R^2_{adj}\)</span> allows for more complex models and AIC is somewhere in the middle.</p>
+</section>
+</section>
+<section id="shrinkage-and-regularization" class="level2" data-number="32.13">
+<h2 data-number="32.13" class="anchored" data-anchor-id="shrinkage-and-regularization"><span class="header-section-number">32.13</span> Shrinkage and Regularization</h2>
+<p>The variable selection methods we just discussed involved trying out different subsets of the predictors and seeing how the model performance changed as a result.</p>
+<p>Let’s consider an alternative approach. What if instead of trying lots of different models with different numbers of predictors, we went ahead and fit a model with all <span class="math inline">\(p\)</span> available predictors, but we modify our loss function in such a way that we will set the coefficients of “unhelpful” predictors to zero? This is usually called “shrinkage”, because we shrink the coefficients toward zero. You will also often hear the term <em>regularization</em>, which is popular in machine learning, and means more or less the same thing.</p>
+<p>Let’s briefly discuss two such methods, undoubtedly two of the most important tools in the statistical toolbox: ridge regression and the LASSO.</p>
+<section id="ridge-regression" class="level3" data-number="32.13.1">
+<h3 data-number="32.13.1" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">32.13.1</span> Ridge regression</h3>
+<p>By now you are bored to death of seeing the linear regression least squares objective, but here it is again: <span class="math display">\[
+\sum_{i=1}^n \left( Y_i - \beta_0 - \sum_{j=1}^p \beta_j X_{i,j} \right)^2
+\]</span></p>
+<p>Here we are assuming that we have <span class="math inline">\(p\)</span> predictors, so each <span class="math inline">\((X_i,Y_i)\)</span> pair has a vector of predictors <span class="math inline">\(X_i = (X_{i,1},X_{i,2},\dots,X_{i,p}) \in \mathbb{R}^p\)</span> and response <span class="math inline">\(Y_i \in \mathbb{R}\)</span>.</p>
+<p>Remember, we’re trying to minimize this RSS by choosing the coefficients <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j=0,1,2,\dots,p\)</span> in a clever way.</p>
+<p><em>Ridge regression</em> shrinks these estimated coefficients toward zero by changing the loss slightly. Instead of minimizing the RSS alone, we add a penalty term: <span class="math display">\[
+\sum_{i=1}^n \left( Y_i - \beta_0 - \sum_{j=1}^p \beta_j X_{i,j} \right)^2
++ \lambda \sum_{j=1}^p \beta_j^2
+= \operatorname{RSS} + \lambda \sum_{j=1}^p \beta_j^2
+\]</span> where <span class="math inline">\(\lambda \ge 0\)</span> is a <em>tuning parameter</em> (which we have to choose– more on that soon).</p>
+<p>Our cost function now has two different terms:</p>
+<ol type="1">
+<li>Our old friend RSS, which encourages us to choose coefficients that reproduce the observed responses accurately</li>
+<li>The <em>shrinkage penalty</em> <span class="math inline">\(\lambda \sum_{j=1}^p \beta_j^2\)</span>, which encourages us to choose all our coefficients (other than <span class="math inline">\(\beta_0\)</span>) equal to zero. That is, it <em>shrinks</em> our solution toward the origin.</li>
+</ol>
+<p>The tuning parameter <span class="math inline">\(\lambda\)</span> controls how much we care about this shrinkage penalty compared to the RSS term. When <span class="math inline">\(\lambda\)</span> is big, we “pay” more for large coefficients, so we will prefer coefficients closer to zero. When <span class="math inline">\(\lambda=0\)</span>, we recover plain old least squares regression.</p>
+<p>For each value of <span class="math inline">\(\lambda\)</span> that we choose, we get a different solution to our (regularized) regression, say, <span class="math inline">\(\hat{\beta}^{(\lambda)}\)</span>. In this sense, whereas least squares linear regression gives us just one solution <span class="math inline">\(\hat{\beta}\)</span>, shrinkage methods give us a whole family of solutions, corresponding to different choices of <span class="math inline">\(\lambda\)</span>.</p>
+<p>For this reason, choosing the tuning parameter <span class="math inline">\(\lambda\)</span> is crucial, but we will have only a little to say about this matter, owing to time constraints. Luckily, you already know a family of methods for choosing <span class="math inline">\(\lambda\)</span>– cross validation is a very common appraoch!</p>
+<section id="ridge-regression-on-the-mtcars-data-set" class="level4" data-number="32.13.1.1">
+<h4 data-number="32.13.1.1" class="anchored" data-anchor-id="ridge-regression-on-the-mtcars-data-set"><span class="header-section-number">32.13.1.1</span> Ridge regression on the <code>mtcars</code> data set</h4>
+<p>Let’s try this out on the <code>mtcars</code> data set, trying to predict <code>mpg</code> from all the of the available predictors, this time. One thing to bear in mind: the data set is only 32 observations, so our fits are going to be a little unstable (but this is precisely why we use regularization!).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mtcars);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+[11] "carb"</code></pre>
+</div>
+</div>
+<p>Ridge regression is available in the <code>MASS</code> library in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'MASS' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>lambda_vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">50</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">500</span>); <span class="co"># Choose lambdas to try.</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lm.ridge needs:</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) a model (mpg~. says to model mpg as an intercept</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#         plus a coefficient for every other variable in the data frame)</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) a data set (mtcars, of course)</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) a value for lambda. lambda=0 is the default,</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         and recovers classic linear regression.</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         But we can also pass a whole vector of lambdas, like we are about to do,</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         and lm.ridge will fit a separate model for each.</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># See ?lm.ridge for details.</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>ridge_models <span class="ot">&lt;-</span> <span class="fu">lm.ridge</span>(mpg<span class="sc">~</span>., mtcars, <span class="at">lambda=</span>lambda_vals);</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Naively plotting this object shows us how the different coefficients</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># change as lambda changes.</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( ridge_models );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Each line in the above plot represents the coefficient of one of our predictors. The x-axis is our choice of <span class="math inline">\(\lambda\)</span> (<code>lambda</code> in the code) and the y-axis is the actual value of the coefficients.</p>
+<p>Actually extracting those predictor labels to make a legend for this plot is annoying, and beside the point– refer to the documentation in <code>?lm.ridge</code>). The important point is that as we change <span class="math inline">\(\lambda\)</span>, the coefficients change. Generally speaking, as <span class="math inline">\(\lambda\)</span> gets bigger, more coefficients are closer to zero.</p>
+<p>Indeed, if we make <span class="math inline">\(\lambda\)</span> big enough, all of the coefficients will be zero (except the intercept, because it isn’t multiplied by <span class="math inline">\(\lambda\)</span> in the loss). That’s shrinkage!</p>
+<p>Just as a sanity check, let’s fit plain old linear regression and verify that the coefficients with <span class="math inline">\(\lambda=0\)</span> match.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>lm_sanity_check <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>., mtcars);</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>lm_sanity_check<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)         cyl        disp          hp        drat          wt 
+12.30337416 -0.11144048  0.01333524 -0.02148212  0.78711097 -3.71530393 
+       qsec          vs          am        gear        carb 
+ 0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925 </code></pre>
+</div>
+</div>
+<p>And compare that with</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( <span class="fu">coef</span>( ridge_models), <span class="dv">1</span> ); <span class="co"># the first row is the lambda=0.0 setting.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    cyl       disp          hp     drat        wt      qsec
+  0 12.30337 -0.1114405 0.01333524 -0.02148212 0.787111 -3.715304 0.8210407
+           vs       am     gear       carb
+  0 0.3177628 2.520227 0.655413 -0.1994193</code></pre>
+</div>
+</div>
+<p>They’re the same, up to several digits of precision, anyway. Good!</p>
+</section>
+<section id="shrinkage-and-rss" class="level4" data-number="32.13.1.2">
+<h4 data-number="32.13.1.2" class="anchored" data-anchor-id="shrinkage-and-rss"><span class="header-section-number">32.13.1.2</span> Shrinkage and RSS</h4>
+<p>Now, for each value of <span class="math inline">\(\lambda\)</span>, we get a different fitted model. How do these different models do in terms of their fit (as measured by RSS)?</p>
+<p>Well, annoyingly, the object returned by <code>lm.ridge</code> does not include a <code>residuals</code> attribute the same way that the <code>lm</code> object does:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( lm_sanity_check<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.609201</code></pre>
+</div>
+</div>
+<p>More annoyingly still, the object returned by <code>lm.ridge</code> also does not include a <code>predict</code> method, so we can just call something like <code>predict( model, data)</code> the way we would with the output of <code>lm</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( (<span class="fu">predict</span>( lm_sanity_check, mtcars) <span class="sc">-</span> mtcars<span class="sc">$</span>mpg )<span class="sc">^</span><span class="dv">2</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.609201</code></pre>
+</div>
+</div>
+<p>So, we have to roll our own predict/residuals computation. This is going to be a bit complicated, but it’s worth the detour to get some programming practice.</p>
+<p>Our ridge regression model has coefficients: one set of coefficients for each valu of lambda that we passed in.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>( lambda_vals )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>Those estimated coefficients are stored in a matrix. Each column of this matrix corresponds to a coefficient (including the intercept, the first column. Each row corresponds to one <span class="math inline">\(\lambda\)</span> value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>( ridge_models )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    cyl          disp           hp      drat         wt
+  0 12.30337 -0.1114405  0.0133352399 -0.021482119 0.7871110 -3.7153039
+  1 16.53766 -0.1624028  0.0023330776 -0.014934856 0.9246313 -2.4611460
+  2 18.55460 -0.2212878 -0.0007347273 -0.013481440 0.9597173 -2.0619305
+  5 20.72198 -0.3079969 -0.0036206803 -0.012460649 1.0060841 -1.6219933
+ 10 21.27391 -0.3563891 -0.0048700433 -0.011966312 1.0409643 -1.3618221
+ 20 20.88322 -0.3792044 -0.0054324669 -0.011248991 1.0545238 -1.1389693
+ 50 19.85752 -0.3614183 -0.0052401829 -0.009609992 0.9828882 -0.8673112
+100 19.37410 -0.3092845 -0.0044742424 -0.007814946 0.8353896 -0.6656981
+200 19.29829 -0.2337711 -0.0033702943 -0.005732613 0.6286426 -0.4706006
+500 19.54099 -0.1331434 -0.0019134597 -0.003201881 0.3567082 -0.2559721
+          qsec        vs        am      gear        carb
+  0 0.82104075 0.3177628 2.5202269 0.6554130 -0.19941925
+  1 0.49258752 0.3746517 2.3083758 0.6857159 -0.57579125
+  2 0.36772540 0.4389536 2.1835666 0.6545252 -0.64772938
+  5 0.23220486 0.5749017 1.9622086 0.5933014 -0.65548632
+ 10 0.17615173 0.7007040 1.7537869 0.5573491 -0.59737336
+ 20 0.15680180 0.8158626 1.5168704 0.5362044 -0.50497523
+ 50 0.15120048 0.8706103 1.1764833 0.4942313 -0.36858373
+100 0.13669747 0.7898063 0.9064651 0.4225302 -0.27224119
+200 0.10798351 0.6187171 0.6407444 0.3195920 -0.18719020
+500 0.06363418 0.3611011 0.3479026 0.1819390 -0.09983672</code></pre>
+</div>
+</div>
+<p>So we can pick out the coefficients associated to a particular <code>lambda</code> value by taking the corresponding row of this matrix. For example, <span class="math inline">\(\lambda = 5\)</span> is in the 4-th row of the matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste0</span>(<span class="st">"The 4-th lambda value is: "</span>, lambda_vals[<span class="dv">4</span>]) );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 4-th lambda value is: 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>( ridge_models )[<span class="dv">4</span>,]; <span class="co"># Pick out the 4-th row. these are coefs when lambda=5.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    cyl        disp          hp        drat          wt 
+20.72198423 -0.30799694 -0.00362068 -0.01246065  1.00608409 -1.62199325 
+       qsec          vs          am        gear        carb 
+ 0.23220486  0.57490168  1.96220860  0.59330141 -0.65548632 </code></pre>
+</div>
+</div>
+<p>Now, to get our prediction from these coefficients, we have to multiply each predictor by its coefficient and add the intercept term. Equivalently, we can think of adding an extra predictor that is just <span class="math inline">\(1\)</span> for every observation. Something like <span class="math display">\[
+\beta_0 + \sum_{j=1}^p \beta_j X_{i,j}
+= \sum_{j=0}^p \beta_j X_{i,j},
+\]</span></p>
+<p>As an aside, for those that have taken linear algebra, you should be looking at that and thinking “that’s just an inner product!” <span class="math display">\[
+\beta^T X_i = \sum_{j=0}^p \beta_j X_{i,j}.
+\]</span></p>
+<p>So let’s modify the <code>mtcars</code> data to make that all easy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The mpg column of mtcars needs to get removed (it is the outcome,</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># not a predictor), so we drop it-- it's the column numbered 1.</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># And we're using cbind to add a column of 1s with column name const.</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>mtc_predictors <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">const=</span><span class="dv">1</span>,mtcars[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]);</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtc_predictors);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  const cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4             1   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag         1   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710            1   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive        1   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout     1   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant               1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+</div>
+</div>
+<p>Now, to make a prediction on, say, the <code>Datsun 710</code> observation, we need to multiply each predictor (including the <code>const</code> column) by its coefficient, and sum up the total. Again, something like <span class="math display">\[
+\sum_{j=0}^p \beta_j X_{i,j},
+\]</span> where <span class="math inline">\(X_{i,0}=1\)</span> is the extra constant term that we tacked on.</p>
+<p>So to get the prediction for a particular observation (again, say, the <code>Datsun 710</code> row in <code>mtcars</code>), we need to make this sum (i.e., inner product) between that row of the predictors matrix and the vector of coefficients.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>beta5 <span class="ot">&lt;-</span> <span class="fu">coef</span>( ridge_models )[<span class="dv">4</span>,]; <span class="co"># 4th row was for lambda=5.</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>datsun <span class="ot">&lt;-</span> mtc_predictors[<span class="st">'Datsun 710'</span>,]</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( beta5<span class="sc">*</span>datsun )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26.62668</code></pre>
+</div>
+</div>
+<p>As a sanity check, let’s verify that the 1-th row, which is <span class="math inline">\(\lambda=0\)</span>, agrees with our linear model’s prediction.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="fu">coef</span>( ridge_models )[<span class="dv">1</span>,]; <span class="co"># 1st row was for lambda=0, i.e., plain old LR.</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>datsun <span class="ot">&lt;-</span> mtc_predictors[<span class="st">'Datsun 710'</span>,]</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( beta0<span class="sc">*</span>datsun );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26.25064</code></pre>
+</div>
+</div>
+<p>and compare with</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>( lm_sanity_check, datsun )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Datsun 710 
+  26.25064 </code></pre>
+</div>
+</div>
+<p>Okay, but to compute the RSS of our model we want to compute predictions for <em>all 32</em> of our observations in the <code>mtcars</code> data set. <strong>And</strong> we want to compute those predictions for each of our different choices of <span class="math inline">\(\lambda\)</span>.</p>
+<p>We’re going to get those predictions in a matrix. If you haven’t taken linear algebra, don’t let the word scare you. In this context, it’s enough to just think of a matrix as a big box of numbers.</p>
+<p>Now, we currently have two boxes of numbers. One is <code>mtc_predictors</code>. Each row is an observation (so there are 32 rows), and each row has 11 entries, corresponding to the intercept term and ten additional predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>( mtc_predictors )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32 11</code></pre>
+</div>
+</div>
+<p>The other box of numbers is our collection of coefficients. One row for each of the models we fit (i.e., <span class="math inline">\(\lambda\)</span> values), and one column for each predictor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>beta_matrix <span class="ot">&lt;-</span> <span class="fu">coef</span>( ridge_models )</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(beta_matrix);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10 11</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>beta_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    cyl          disp           hp      drat         wt
+  0 12.30337 -0.1114405  0.0133352399 -0.021482119 0.7871110 -3.7153039
+  1 16.53766 -0.1624028  0.0023330776 -0.014934856 0.9246313 -2.4611460
+  2 18.55460 -0.2212878 -0.0007347273 -0.013481440 0.9597173 -2.0619305
+  5 20.72198 -0.3079969 -0.0036206803 -0.012460649 1.0060841 -1.6219933
+ 10 21.27391 -0.3563891 -0.0048700433 -0.011966312 1.0409643 -1.3618221
+ 20 20.88322 -0.3792044 -0.0054324669 -0.011248991 1.0545238 -1.1389693
+ 50 19.85752 -0.3614183 -0.0052401829 -0.009609992 0.9828882 -0.8673112
+100 19.37410 -0.3092845 -0.0044742424 -0.007814946 0.8353896 -0.6656981
+200 19.29829 -0.2337711 -0.0033702943 -0.005732613 0.6286426 -0.4706006
+500 19.54099 -0.1331434 -0.0019134597 -0.003201881 0.3567082 -0.2559721
+          qsec        vs        am      gear        carb
+  0 0.82104075 0.3177628 2.5202269 0.6554130 -0.19941925
+  1 0.49258752 0.3746517 2.3083758 0.6857159 -0.57579125
+  2 0.36772540 0.4389536 2.1835666 0.6545252 -0.64772938
+  5 0.23220486 0.5749017 1.9622086 0.5933014 -0.65548632
+ 10 0.17615173 0.7007040 1.7537869 0.5573491 -0.59737336
+ 20 0.15680180 0.8158626 1.5168704 0.5362044 -0.50497523
+ 50 0.15120048 0.8706103 1.1764833 0.4942313 -0.36858373
+100 0.13669747 0.7898063 0.9064651 0.4225302 -0.27224119
+200 0.10798351 0.6187171 0.6407444 0.3195920 -0.18719020
+500 0.06363418 0.3611011 0.3479026 0.1819390 -0.09983672</code></pre>
+</div>
+</div>
+<p>Once again, each column corresponds to one of 11 predictors (the intercept term and ten non-trivial predictors), and the rows correspond to the different choice of <span class="math inline">\(\lambda\)</span>.</p>
+<p>So, for each value of <span class="math inline">\(\lambda\)</span> (i.e., each row of <span class="math inline">\(\beta\)</span>), and each row of <code>mtc_predictors</code> (i.e., each observation in the data set), we want to sum up the products of the coefficients with their corresponding predictors.</p>
+<p>We are going to make a new matrix, whose rows correspond to the 32 data observations and whose columns correspond to different choices of <span class="math inline">\(\lambda\)</span>. We need to use some basic matrix algebra to construct that. Let’s do the computation, then unpack it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>mtc_mx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>( mtc_predictors );</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">'Dimensions of the predictors matrix: '</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dimensions of the predictors matrix: </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">dim</span>(mtc_mx)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>32 11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>beta_mx <span class="ot">&lt;-</span> <span class="fu">coef</span>( ridge_models );</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">'Dimensions of the coefficients matrix: '</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dimensions of the coefficients matrix: </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( <span class="fu">dim</span>(beta_mx) );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10 11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now compute the appropriate matrix product.</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to rows indexed by observations</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and the columns indexed by lambdas.</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="co"># That requires transposing the coefficients matrix, whose original form</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="co"># has rows indexed by lambda and columns indexed by the predictors.</span></span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We transpose a matrix in R with t( ).</span></span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>obs_by_lambda_predictions <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>( mtc_mx ) <span class="sc">%*%</span> <span class="fu">t</span>( beta_mx );</span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>obs_by_lambda_predictions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           0        1        2        5       10       20
+Mazda RX4           22.59951 22.30763 22.23051 22.13369 22.02501 21.85270
+Mazda RX4 Wag       22.11189 21.95588 21.91065 21.85012 21.77639 21.65007
+Datsun 710          26.25064 26.61821 26.68382 26.62668 26.42251 26.04170
+Hornet 4 Drive      21.23740 20.88953 20.78456 20.66661 20.59049 20.52290
+Hornet Sportabout   17.69343 17.20040 17.01742 16.78452 16.64525 16.59645
+Valiant             20.38304 20.37257 20.35076 20.31018 20.28168 20.26423
+Duster 360          14.38626 14.15765 14.13388 14.17680 14.29042 14.52925
+Merc 240D           22.49601 22.68287 22.80572 23.00581 23.14734 23.21667
+Merc 230            24.41909 23.91587 23.73479 23.58564 23.58592 23.62033
+Merc 280            18.69903 19.10420 19.31008 19.67422 20.00760 20.33982
+Merc 280C           19.19165 19.39975 19.53072 19.81354 20.11329 20.43390
+Merc 450SE          14.17216 14.91618 15.12809 15.35748 15.52382 15.75031
+Merc 450SL          15.59957 15.85149 15.90269 15.95540 16.02207 16.16892
+Merc 450SLC         15.74222 15.92546 15.94668 15.96718 16.02444 16.17470
+Cadillac Fleetwood  12.03401 11.67687 11.64501 11.75998 12.02127 12.49759
+Lincoln Continental 10.93644 11.05719 11.16858 11.42987 11.76777 12.30084
+Chrysler Imperial   10.49363 10.99657 11.21759 11.58203 11.96222 12.51055
+Fiat 128            27.77291 27.88472 27.85376 27.69494 27.44262 27.01867
+Honda Civic         29.89674 29.26876 29.06962 28.80821 28.54153 28.10115
+Toyota Corolla      29.51237 29.12150 28.91791 28.56765 28.21014 27.70198
+Toyota Corona       23.64310 23.78667 23.85479 23.91651 23.89758 23.77409
+Dodge Challenger    16.94305 16.84439 16.79091 16.69114 16.60761 16.57993
+AMC Javelin         17.73218 17.59335 17.50887 17.37192 17.27326 17.23149
+Camaro Z28          13.30602 13.73881 13.92543 14.19839 14.43699 14.75698
+Pontiac Firebird    16.69168 16.24701 16.09680 15.91932 15.83133 15.84875
+Fiat X1-9           28.29347 28.25684 28.19035 27.99133 27.70163 27.22949
+Porsche 914-2       26.15295 26.45050 26.49502 26.40196 26.15825 25.72990
+Lotus Europa        27.63627 27.46919 27.38886 27.19338 26.92047 26.48469
+Ford Pantera L      18.87004 18.79097 18.67829 18.47524 18.33544 18.26423
+Ferrari Dino        19.69383 19.73505 19.79328 19.91247 20.01800 20.11261
+Maserati Bora       13.94112 13.74682 13.72632 13.83990 14.10487 14.56029
+Volvo 142E          24.36827 24.93714 25.10820 25.23790 25.21281 25.03481
+                          50      100      200      500
+Mazda RX4           21.52222 21.21442 20.89232 20.52801
+Mazda RX4 Wag       21.38573 21.12122 20.83279 20.49838
+Datsun 710          25.19341 24.25687 23.15477 21.80461
+Hornet 4 Drive      20.44289 20.37973 20.30828 20.21609
+Hornet Sportabout   16.82946 17.31265 17.99524 18.89895
+Valiant             20.25478 20.24265 20.21593 20.16802
+Duster 360          15.18740 16.02340 17.06870 18.38818
+Merc 240D           23.04180 22.62447 22.01421 21.19076
+Merc 230            23.45483 23.00816 22.32148 21.37321
+Merc 280            20.63826 20.68452 20.59553 20.39937
+Merc 280C           20.72898 20.76654 20.66032 20.43755
+Merc 450SE          16.28647 16.94379 17.75743 18.77860
+Merc 450SL          16.61160 17.19747 17.93903 18.87836
+Merc 450SLC         16.62871 17.21886 17.95869 18.89101
+Cadillac Fleetwood  13.57618 14.77514 16.18498 17.90822
+Lincoln Continental 13.43666 14.67145 16.11294 17.86941
+Chrysler Imperial   13.63141 14.83376 16.23293 17.93646
+Fiat 128            26.06659 24.98855 23.70223 22.11461
+Honda Civic         27.04746 25.80880 24.31247 22.45784
+Toyota Corolla      26.63521 25.44909 24.03979 22.30309
+Toyota Corona       23.35933 22.81202 22.11937 21.23728
+Dodge Challenger    16.81441 17.29638 17.98109 18.89022
+AMC Javelin         17.40983 17.80019 18.35988 19.10525
+Camaro Z28          15.45171 16.26403 17.25580 18.49633
+Pontiac Firebird    16.20433 16.80970 17.62907 18.69568
+Fiat X1-9           26.20867 25.08570 23.76438 22.14560
+Porsche 914-2       24.84061 23.92121 22.88154 21.63991
+Lotus Europa        25.55719 24.54521 23.36083 21.91658
+Ford Pantera L      18.35395 18.59356 18.94851 19.43374
+Ferrari Dino        20.18278 20.18662 20.16519 20.13150
+Maserati Bora       15.45915 16.35277 17.35633 18.56415
+Volvo 142E          24.45802 23.71104 22.77794 21.60303</code></pre>
+</div>
+</div>
+<p>So this matrix has rows indexed by observations (i.e., cars) and columns indexed by choices of <span class="math inline">\(\lambda\)</span>. So the <span class="math inline">\((i,j)\)</span> entry of this matrix is the prediction made for the <span class="math inline">\(i\)</span>-th car by the model with the <span class="math inline">\(j\)</span>-th lambda value.</p>
+<p>We are now ready (finally!) to compute the mean squared residuals for these different choices of <span class="math inline">\(\lambda\)</span>. We just need to</p>
+<ol type="1">
+<li>Compute the errors between these predictions and the true <code>mpg</code> values for the cars</li>
+<li>Square those errors.</li>
+<li>Sum along the columns (because each column corresponds to a different choice of <span class="math inline">\(\lambda\)</span>, and hence a different fitted model).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>errors <span class="ot">&lt;-</span> mtcars<span class="sc">$</span>mpg <span class="sc">-</span> obs_by_lambda_predictions;</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Just to check, each column of errors should be length-32, because we have</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 32 data points in the mtcars data set.</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="co"># And there should be 32 columns, one for each of our ten lambda values.</span></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>( errors );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32 10</code></pre>
+</div>
+</div>
+<p>So we’re going to square those errors and take a mean along each column</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We're going to squares the entries of errors,</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="co"># then take a mean along the columns (that's the 2 argument to apply)</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>RSS_by_model <span class="ot">&lt;-</span> <span class="fu">apply</span>( errors<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">FUN=</span>mean);</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>RSS_by_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        0         1         2         5        10        20        50       100 
+ 4.609201  4.724319  4.816983  4.986377  5.192462  5.590303  6.937583  9.407707 
+      200       500 
+13.821594 21.567053 </code></pre>
+</div>
+</div>
+<p>This is easier to see in a plot– and we’ll put the <span class="math inline">\(\lambda\)</span> values on a log-scale, because the <code>lambda_vals</code> vector spans multiple orders of magnitude.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="fu">log</span>(lambda_vals), RSS_by_model, <span class="at">type=</span><span class="st">'b'</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="cv_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Let’s unpack this. We have the smallest RSS when <span class="math inline">\(\lambda = 0\)</span>, and RSS increases as <span class="math inline">\(\lambda\)</span> increases. This is exactly what we expect. Recall that our loss function is <span class="math display">\[
+\sum_{i=1}^n \left( Y_i - \sum_{j=0}^p \beta_j X_{i,j} \right)^2
++ \lambda \sum_{j=1}^p \beta_j^2
+\]</span> As <span class="math inline">\(\lambda\)</span> gets bigger, we pay a bigger and bigger penalty for making coefficients non-zero. Thus, as <span class="math inline">\(\lambda\)</span> get bigger, it becomes “harder” or “more expensive” to make the coefficients take the values that would make the RSS term smaller. As a result, for larger values of <span class="math inline">\(\lambda\)</span>, the RSS of our solution is larger.</p>
+</section>
+<section id="why-is-ridge-regression-helpful" class="level4" data-number="32.13.1.3">
+<h4 data-number="32.13.1.3" class="anchored" data-anchor-id="why-is-ridge-regression-helpful"><span class="header-section-number">32.13.1.3</span> Why is ridge regression helpful?</h4>
+<p>Well, the short answer is that ridge regression (and other shrinkage methods) prevents over-fitting. <span class="math inline">\(\lambda\)</span> makes it more expensive to simply choose whatever coefficients we please, which in turn prevents us from over-fitting to the data.</p>
+<p>In essence, this is the bias-variance tradeoff again! As <span class="math inline">\(\lambda\)</span> increases, our freedom to choose the coefficients becomes more constrained, and the variance decreases (and the bias increases).</p>
+<p>Here’s an example from ISLR.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/ISLR_biasvar_ridge.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">MSE (pink), squared bias (black) and variance (green), estimated from performance on previously unseen data, as a function of <span class="math inline">\(\lambda\)</span> (ISLR fig.&nbsp;6.5)</figcaption>
+</figure>
+</div>
+<p>Notice that the variance decreases as <span class="math inline">\(\lambda\)</span> increases, while squares bias increases, but there is a “sweet spot” that minimizes the MSE. The whole point of model selection (CV, AIC, ridge regression, etc.) is to find this sweet spot (or spot close to it).</p>
+</section>
+</section>
+<section id="the-lasso" class="level3" data-number="32.13.2">
+<h3 data-number="32.13.2" class="anchored" data-anchor-id="the-lasso"><span class="header-section-number">32.13.2</span> The LASSO</h3>
+<p>Now, there’s one issue with ridge regression, which becomes evident when we compare it with subset selection methods. Except when <span class="math inline">\(\lambda\)</span> is truly huge (i.e., infinite), ridge regression fits a model that still has all of the coefficients in it (i.e., all of the coefficients are nonzero, though perhaps small). Said another way, we haven’t simplified the model in the sense of reducing the number of predictors or only keeping the “useful” predictors around.</p>
+<p>This isn’t a problem for prediction. After all, more predictors often make prediction better, especially when we have regularization to prevent us from over-fitting.</p>
+<p>But this <em>is</em> a problem if our goal is to simplify our model by selecting only some predictors to include in our model. One way to do this would be to make it so that coefficients that aren’t “pulling their weight” in the sense of helping our prediction error will be set to zero. This is precisely the goal of the LASSO.</p>
+<p>The LASSO looks a lot like ridge regression, except that the penalty is slightly different: <span class="math display">\[
+\sum_{i=1}^n \left( Y_i - \sum_{j=0}^p \beta_j X_{i,j} \right)^2
++ \lambda \sum_{j=1}^p \left| \beta_j \right|
+= \operatorname{RSS} + \lambda \sum_{j=1}^p \left| \beta_j \right|
+\]</span></p>
+<p>The penalty term now involves a sum of absolute values of the coefficients instead of a sum of squares.</p>
+<p>The interesting thing is that this small change has a big effect on what our estimated coefficients look like. The LASSO penalty encourages coefficients to be set <em>precisely</em> equal to zero if they aren’t useful predictors (i.e., if they do not help to decrease the RSS).</p>
+<p>There is an interesting geometric reason for this, though it is outside the scope of the course. See the end of Section 6.6.2 in ISLR.</p>
+<p>The important point is that the LASSO performs <em>variable selection</em> for us by setting many coefficients to zero.</p>
+<p>The <code>glmnet</code> package has a very good LASSO implementation. This is generally a very useful package for doing all kinds of different penalized regression, and you’ll likely use it extensively in your regression course(s). You’ll get a bit of practice with it in discussion section.</p>
+</section>
+<section id="how-to-choose-lambda-cv-to-the-rescue" class="level3" data-number="32.13.3">
+<h3 data-number="32.13.3" class="anchored" data-anchor-id="how-to-choose-lambda-cv-to-the-rescue"><span class="header-section-number">32.13.3</span> How to choose <span class="math inline">\(\lambda\)</span>? CV to the rescue!</h3>
+<p>A natural question in both ridge and the LASSO concerns how we should choose the term <span class="math inline">\(\lambda\)</span> that controls the “strength” of the penalty term.</p>
+<p>We said a few lectures ago that CV was useful beyond just variable selection, and here’s the payoff.</p>
+<p>CV is also a great way to choose <span class="math inline">\(\lambda\)</span> in these kinds of <em>penalized</em> problems. We choose different values of <span class="math inline">\(\lambda\)</span>, fit the corresponding models, and use CV to select among them!</p>
+<p>Section 6.2.3 has a more detailed discussion of this, using <span class="math inline">\(10\)</span>-fold CV to compare different choices of <span class="math inline">\(\lambda\)</span>.</p>
+</section>
+</section>
+<section id="review" class="level2" data-number="32.14">
+<h2 data-number="32.14" class="anchored" data-anchor-id="review"><span class="header-section-number">32.14</span> Review</h2>
+<p>In these notes we covered</p>
+<ul>
+<li>The concept of over-fitting to training data</li>
+<li>Training / Validation data splits</li>
+<li>Single Split Validation</li>
+<li>Leave One Out Cross Validation</li>
+<li>K-Fold CV</li>
+<li>Bias - Variance Tradeoff</li>
+<li>Bias &amp; Variance of CV Methods</li>
+<li>Bias &amp; Variance of Model Error by Model Complexity</li>
+<li>Model Selection - Best Subset, Forward Stepwise, Backwards Stepwise</li>
+<li>Model Comparison Statistics (Adjusted <span class="math inline">\(R^2\)</span>, AIC, BIC)</li>
+<li>Ridge Regression - shrinkage of coefficients</li>
+<li>LASSO regression - shrinkage and variable selection</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./cv_practice.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

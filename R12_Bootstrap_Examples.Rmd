@@ -1,0 +1,680 @@
+---
+title: "R13_Bootstrap"
+author: "Brian Powers"
+date: "2023-12-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Simple Example - Estimating the mean of a Weibull Distribution
+
+The Weibull distribution is a flexible random variable distribution which takes a shape and scale parameter. 
+The Expected value of the distribution is not a pretty expression, but it's true that the expected value of the sample mean is the mean of the RV. Suppose we have some data which comes from a Weibull shaped population
+```{r}
+plot(x=seq(0.1,20,.1), y=dweibull(seq(0.1,20,.1), 4,10), type="l", main="Population Shape")
+myData <- rweibull(15, shape=4, scale=10)
+myData
+hist(myData)
+```
+
+We wish to come up with a 95% confidence interval for the population mean.
+We'll use 10000 bootstrapped resamples
+```{r}
+B <- 10000
+bootstrap.mean <- vector("numeric")
+for(i in 1:B){
+  b.sample <- sample(myData, size=length(myData), replace=TRUE)
+  bootstrap.mean[i]<-mean(b.sample)  
+}
+
+hist(bootstrap.mean)
+quantile(bootstrap.mean, c(.025, .975))
+
+#True mean?
+10*gamma(1+1/4)
+```
+
+What if we wanted to use a MC estimate? Well we'd need to parameterize the weibull distribution. Finding estimates for the shape and scale are... annoying to do by hand. You would have to use software to fit these parameters using some method. The MASS library has a function `fitdistr` that can be used.
+
+```{r}
+library(MASS)
+param.hat <- fitdistr(myData,"weibull")    
+NMC <- 10000
+shape.hat <- param.hat$estimate[1]
+scale.hat <- param.hat$estimate[2]
+mc.mean <- replicate(NMC, mean(rweibull(length(myData), shape=shape.hat, scale=scale.hat)))
+hist(mc.mean)
+quantile(mc.mean, c(.025, .975))
+```
+
+### A bootstrap estimate for the standard deviation of the population
+
+Let's look at the standard deviation of the distribution
+```{r}
+bootstrap.sd <- vector("numeric")
+for(i in 1:B){
+  b.sample <- sample(myData, size=length(myData), replace=TRUE)
+  bootstrap.sd[i]<-sd(b.sample)  
+}
+
+hist(bootstrap.sd)
+quantile(bootstrap.sd, c(.025, .975))
+```
+
+
+
+## Another Bootstrap estimation of the standard deviation
+
+Start with some data. Where did it come from?
+```{r}
+mysteryData <- c(0.26,10.87,5.05,0.25,4.03,19.66,1.64,4.85,6.64,4.01,0.76,4.82,9.53,4.11,2.05,0.47)
+hist(mysteryData)
+```
+
+Suppose we want to estimate the population standard deviation. A good point estimate is of course the sample standard deviation
+```{r}
+sd(mysteryData)
+```
+
+A 95% bootstrapped confidence interval can be produced easily because we don't have to make any population assumptions.
+```{r}
+sd.boot <- 0
+for(i in 1:10000){
+  sd.boot[i] <- sd(sample(mysteryData, replace=TRUE))
+}
+hist(sd.boot, breaks=50)
+quantile(sd.boot, c(0.025, 0.975))
+```
+
+
+
+## MC vs Bootstrap Intervals
+
+Let's compare MC estimation vs bootstrapping methods. The difference will become apparent when we make the correct decision about the model to use for the population.
+
+
+### Correctly Identifying the Model
+
+Suppose the data is drawn from a normal distribution. We can actually compare 3 methods of estimating the variance of the population.
+
+* The classical statistical approach is to use a chi squared distribution for the sampling distribution of $S^2$
+* The Monte Carlo approach requires us to simulate new data from $N(\hat{\mu}, \hat{\sigma^2})$
+* The bootstrap approach has us re-sample from the initial data.
+
+We'll simulate using all three of these methods over and over to get coverage estimates as well as precision estimates (average width of the intervals)
+
+```{r}
+MC.coverage <- FALSE; boot.coverage <- FALSE; param.coverage <- FALSE
+MC.width <- 0; boot.width <- 0; param.width <- 0;
+
+for(i in 1:500){
+  myData <- rnorm(15, 37, 2) #The data is actually coming from a normal distr.
+  trueSigma2 <- 2^2
+  n <- length(myData)
+  MC.var <- 0
+  Boot.var <- 0
+  xbar <- mean(myData)
+  sd <- sd(myData)
+  for(j in 1:1000){
+    #Assuming the data was drawn from a normal population
+    MC.var[j] <- var(rnorm(n, xbar, sd))
+
+    Boot.var[j] <- var(sample(myData, replace=TRUE))
+  }
+  MC.ci <- unname(quantile(MC.var, c(0.025, 0.975)))
+  Boot.ci <- unname(quantile(Boot.var, c(0.025, 0.975)))
+  param.ci <- (n-1)*var(myData)/qchisq(c(0.975, 0.025), n-1)
+  MC.coverage[i] <- MC.ci[1] <= trueSigma2 & MC.ci[2] >= trueSigma2
+  boot.coverage[i] <- Boot.ci[1] <= trueSigma2 & Boot.ci[2] >= trueSigma2
+  param.coverage[i] <- param.ci[1] <= trueSigma2 & param.ci[2] >= trueSigma2
+  MC.width[i] <- diff(MC.ci)
+  boot.width[i] <- diff(Boot.ci)
+  param.width[i] <- diff(param.ci)
+}
+results <- data.frame('method' = c("Classic","MC","Bootstrap"),
+                      'coverage'=c(mean(param.coverage),mean(MC.coverage),mean(boot.coverage)),
+                      'width' = c(mean(param.width),mean(MC.width), mean(boot.width)))
+results
+```
+
+
+### Incorrectly identifying the model - a slight skew.
+
+What if the population is skewed. Take t population is skewed
+```{r}
+plot(density(rgamma(1000, 2, scale=2)), main="Population Shape")
+```
+```{r}
+MC.coverage <- FALSE
+boot.coverage <- FALSE
+param.coverage <- FALSE
+
+for(i in 1:500){
+  myData <- rgamma(15, 2, scale=2) #data is simulated from a gamma
+  trueSigma2 <- 2*2^2
+  n <- length(myData)
+  MC.var <- 0
+  Boot.var <- 0
+  xbar <- mean(myData)
+  sd <- sd(myData)
+  for(j in 1:1000){
+    #Assuming the data was drawn from a normal population
+    MC.var[j] <- var(rnorm(n, xbar, sd))
+
+    Boot.var[j] <- var(sample(myData, replace=TRUE))
+  }
+  MC.ci <- quantile(MC.var, c(0.025, 0.975))
+  Boot.ci <- quantile(Boot.var, c(0.025, 0.975))
+  param.ci <- (n-1)*var(myData)/qchisq(c(0.975, 0.025), n-1)
+  MC.coverage[i] <- MC.ci[1] <= trueSigma2 & MC.ci[2] >= trueSigma2
+  boot.coverage[i] <- Boot.ci[1] <= trueSigma2 & Boot.ci[2] >= trueSigma2
+  param.coverage[i] <- param.ci[1] <= trueSigma2 & param.ci[2] >= trueSigma2
+  MC.width[i] <- diff(MC.ci)
+  boot.width[i] <- diff(Boot.ci)
+  param.width[i] <- diff(param.ci)
+}
+results <- data.frame('method' = c("Classic","MC","Bootstrap"),
+                      'coverage'=c(mean(param.coverage),mean(MC.coverage),mean(boot.coverage)),
+                      'width' = c(mean(param.width),mean(MC.width), mean(boot.width)))
+results
+```
+
+
+### Misidentifying the population - A very skewed population
+
+```{r}
+plot(density(rgamma(1000, .5, scale=2)), main="Population Shape - very skewed")
+```
+
+```{r}
+MC.coverage <- FALSE
+boot.coverage <- FALSE
+param.coverage <- FALSE
+
+for(i in 1:200){
+  myData <- rgamma(15, .5, scale=2)
+  trueSigma2 <- .5*2^2
+  n <- length(myData)
+  MC.var <- 0
+  Boot.var <- 0
+  xbar <- mean(myData)
+  sd <- sd(myData)
+  for(j in 1:1000){
+    #Assuming the data was drawn from a normal population
+    MC.var[j] <- var(rnorm(n, xbar, sd))
+    Boot.var[j] <- var(sample(myData, replace=TRUE))
+  }
+  MC.ci <- quantile(MC.var, c(0.025, 0.975))
+  Boot.ci <- quantile(Boot.var, c(0.025, 0.975))
+  param.ci <- (n-1)*var(myData)/qchisq(c(0.975, 0.025), n-1)
+  MC.coverage[i] <- MC.ci[1] <= trueSigma2 & MC.ci[2] >= trueSigma2
+  boot.coverage[i] <- Boot.ci[1] <= trueSigma2 & Boot.ci[2] >= trueSigma2
+  param.coverage[i] <- param.ci[1] <= trueSigma2 & param.ci[2] >= trueSigma2
+  MC.width[i] <- diff(MC.ci)
+  boot.width[i] <- diff(Boot.ci)
+  param.width[i] <- diff(param.ci)
+}
+results <- data.frame('method' = c("Classic","MC","Bootstrap"),
+                      'coverage'=c(mean(param.coverage),mean(MC.coverage),mean(boot.coverage)),
+                      'width' = c(mean(param.width),mean(MC.width), mean(boot.width)))
+results
+```
+
+Bottom line - if we misidentify the model MC methods can underperform bootstrap. Why do all three of these do so bad though? Small sample size is the answer. Let's dig further into the effect of sample size on the performance of bootstrap estimation.
+
+## Sensitivity to sample size
+We will look at samples of size 10, 20, 30,..., 100 and how the three methods perform on this same population.
+
+```{r}
+n <- seq(10, 100, 10)
+MC.rate <- 0
+boot.rate <- 0
+param.rate <- 0
+results <- data.frame(n, MC.rate, boot.rate, param.rate)
+
+for(samplesize in n){
+  MC.coverage <- FALSE
+  boot.coverage <- FALSE
+  param.coverage <- FALSE
+  
+  for(i in 1:200){
+    myData <- rgamma(samplesize, .5, scale=2)
+    trueSigma2 <- .5*2^2
+    MC.var <- 0
+    Boot.var <- 0
+    xbar <- mean(myData)
+    sd <- sd(myData)
+    for(j in 1:1000){
+      #Assuming the data was drawn from a normal population
+      MC.var[j] <- var(rnorm(samplesize, xbar, sd))
+      Boot.var[j] <- var(sample(myData, replace=TRUE))
+    }
+    MC.ci <- quantile(MC.var, c(0.025, 0.975))
+    Boot.ci <- quantile(Boot.var, c(0.025, 0.975))
+    param.ci <- (samplesize-1)*var(myData)/qchisq(c(0.975, 0.025), samplesize-1)
+    MC.coverage[i] <- MC.ci[1] <= trueSigma2 & MC.ci[2] >= trueSigma2
+    boot.coverage[i] <- Boot.ci[1] <= trueSigma2 & Boot.ci[2] >= trueSigma2
+    param.coverage[i] <- param.ci[1] <= trueSigma2 & param.ci[2] >= trueSigma2
+  }
+  results[results$n==samplesize, 2:4]=c(mean(MC.coverage),
+                                        mean(boot.coverage),
+                                        mean(param.coverage))
+    
+}
+
+plot(x=results$n, y=results$MC.rate, type="l", ylim=c(0,1), main="'95%' CI Coverage Rate vs Sample Size (skewed population)",
+     xlab="Sample Size", ylab="Coverage Rate")
+abline(h=.95, lty=2)
+lines(x=results$n, y=results$boot.rate, col="blue")
+lines(x=results$n, y=results$param.rate, col="red")
+legend(x=10, y=.4, legend=c("MC","Boot","Parametric"), col=c("black","blue","red"), lwd=2)
+```
+
+The larger sample size allows bootstrap confidence intervals to improve and improve in terms of coverage rate, approaching 95%. This improvement is not seen in the MC or parametric (classical) method. They are both suffering from mis-identifying the population shape, thinking the population is a normal distribution. The bootstrap does not make any population assumptions, and the sample better represents the population as the sample size grows so naturally resampling will provide more representative simulated samples as $n$ increases.
+
+
+## Confidence Interval for the difference of two population means
+
+Example: A mean experiment on crickets
+
+In this experiment the treatment group of crickets were starved and we observed the time it took for the starved females to mate with males (they get to eat them after mating - do hungry females mate faster on average?)
+```{r}
+Starved<-c(1.9, 2.1, 3.8, 9.0, 9.6, 13.0, 14.7, 17.9, 21.7, 29.0, 72.3)
+Fed<-c(1.5, 1.7, 2.4, 3.6, 5.7, 22.6, 22.8, 39.0, 54.4, 72.1, 73.6, 79.5, 88.9)
+boxplot(Starved, Fed)
+```
+
+We want to estimate $\mu_{starved}-\mu_{fed}$ using bootstrapping
+```{r}
+B <- 1000
+diff.mean.boot <- 0 #empty vector to store the estimated difference of means
+for(i in 1:B){
+  #bootstrap both samples at the same time
+  boot.fed <- sample(Fed, replace=TRUE)
+  boot.starved <- sample(Starved, replace=TRUE)
+  #calculate the difference of means
+  diff.mean.boot[i] <- mean(boot.starved) - mean(boot.fed)
+}
+hist(diff.mean.boot, breaks=50)
+abline(v=mean(Starved)-mean(Fed), col="red")
+quantile(diff.mean.boot, c(0.025,.975))
+```
+
+
+
+
+## Bootstrap estimation of Correlation
+
+Generate some data with a certain correlation matrix
+The variables each have a standard deviation of 1, and a correlation of .6
+Thus covariance =  $1\times 1 \times .6$
+```{r}
+library(MASS)
+Sigma <- matrix(c(1, .6,
+                  .6, 1), byrow=TRUE, nrow=2)
+df<-as.data.frame(mvrnorm(n=15, mu=c(5,10), Sigma=Sigma))
+plot(df)
+```
+
+Get a 95% confidence interval estimate of the correlation
+
+```{r}
+boot.correlations <- 0
+B <- 10000
+
+for(i in 1:B){
+  #A bootstrapped sample
+  boot.df <- df[sample(1:nrow(df), replace=TRUE),]
+  boot.correlations[i] = cor(boot.df$V1, boot.df$V2)
+}
+hist(boot.correlations)
+```
+
+We can use two methods to construct a 95% confidence interval.
+
+a. We can take the 2.5th and 97.5th quantiles from the simulated correlations
+b. We could find the standard deviation and take $\hat\rho \pm 1.96 sd(\hat{\rho})$
+
+```{r}
+quantile(boot.correlations, c(.025, .975), names=FALSE)
+#alternative
+cor(df$V1, df$V2) + c(-1,1)*1.96*sd(boot.correlations)
+``` 
+
+Which method do we prefer? Let's repeat the experiment to see how good each method's coverage rate is. Our aim is 95%.
+
+```{r}
+a.coverage <- FALSE
+b.coverage <- FALSE
+boot.correlations <- 0
+B <- 1000 #lowering to 1000
+
+for(j in 1:1000){
+  Sigma <- matrix(c(1,.6,.6,1), byrow=TRUE, nrow=2)
+  df<-as.data.frame(mvrnorm(n=15, mu=c(5,10), Sigma=Sigma))
+  for(i in 1:B){
+    #A bootstrapped sample
+    boot.df <- df[sample(1:nrow(df), replace=TRUE),]
+    boot.correlations[i] = cor(boot.df$V1, boot.df$V2)
+  }
+  a.CI <- quantile(boot.correlations, c(.025, .975))
+  #alternative
+  b.CI <- cor(df$V1, df$V2) + c(-1,1)*1.96*sd(boot.correlations)
+  
+  a.coverage[j] <- a.CI[1] <= .6 & a.CI[2] >= .6
+  b.coverage[j] <- b.CI[1] <= .6 & b.CI[2] >= .6
+}
+mean(a.coverage)
+mean(b.coverage)
+```
+They both under-cover, but the second method's under-coverage is worse. 
+
+
+
+
+## Bootstrap Linear Regression
+
+Now let's bootstrap a linear regression model. Suppose the population has the relationship
+$$Y = 10 + 4X + \epsilon$$
+Where $\epsilon \sim exp(.1)$. We can generate a small sample from such a population.
+
+```{r}
+#Generate data from a model: y = 10 + 4x + e
+set.seed(2024)
+x <- runif(25, 0, 10)
+e <- rexp(25, .1)
+y <- 10 + 4*x + e
+```
+
+And look at the scatter plot:
+```{r}
+plot(x,y)
+```
+
+Note here that the assumptions of the linear model are not true; the errors are not normally distributed but actually exponentially distributed. This becomes a little clearer when we look at the residual QQ plot:
+```{r}
+plot(lm(y~x), which=2)
+```
+
+Now we will pretend we don't know the true parameter values. What can we do with bootstrapping to help us with our estimate of the model?
+$$ y = \beta_0 + \beta_1 X + \epsilon$$
+Fit a linear model first - save those coefficients. Fitting the model will be done with least squares estimation. Bootstrapping will be used 
+```{r}
+as.vector(lm(y ~ 1 + x)$coeff)
+```
+
+Now let's bootstrap the data, fit the coefficients and repeat, keeping track of all of them
+
+```{r}
+nB <- 1000
+slopes <- rep(0, nB)
+intercepts <- rep(0,nB)
+n <- length(x)
+
+for(i in 1:nB){
+  boot.index <- sample(1:n, n, replace=TRUE)
+  boot.x <- x[boot.index]
+  boot.y <- y[boot.index]
+  boot.coeffs <- as.vector(lm(boot.y~1+boot.x)$coeff)
+  intercepts[i] <- boot.coeffs[1]
+  slopes[i] <- boot.coeffs[2]
+}
+
+```
+
+Plot the data, and all of the bootstrap lines
+```{r}
+plot(x,y)
+for(i in 1:nB){
+  abline(a=intercepts[i], b=slopes[i], col=rgb(.5,.5,.5,.05))
+}
+points(x,y)
+```
+
+
+average the bootstrapped intercepts and slopes - let this be the bootstrapped linear model.
+```{r}
+mean(intercepts)
+mean(slopes)
+
+as.vector(lm(y ~ 1 + x)$coeff)
+```
+
+How well does it match the original linear model?  How well does it match the population model? Plot it all on the same plot.
+```{r}
+plot(x,y, col="gray")
+abline(a=10+10, b=4, col="black") #E(e)=10 so
+abline(a=mean(intercepts), b=mean(slopes), col="red")
+abline(lm(y ~ 1 + x), col="blue")
+```
+
+Now construct a bootstrapped confidence interval for the intercept, and a bootstrap interval for the slope.
+```{r}
+quantile(intercepts, c(0.025, 0.975))
+quantile(slopes, c(0.025, 0.975))
+
+#compared to the parametric method
+confint(lm(y ~ 1 + x))
+
+```
+
+Come up with a bootstrap confidence interval for E(Y|x=5.8)
+```{r}
+# This is the parametric model fit
+xy.fit <- lm(y ~ 1 + x)
+predict(xy.fit, newdata = data.frame(x=5.8))
+
+#Using the bootstrapped linear model
+b.intercept <- mean(intercepts)
+b.slope <- mean(slopes)
+
+#point estimate
+b.intercept + b.slope * 5.8
+
+#Let's estimate y-hat for every single bootstrapped model fit and use that as a distribution of means / expected values of y
+b.y.hats <- intercepts + slopes * 5.8
+
+quantile(b.y.hats, c(0.025, .975))
+
+#compared to a parametric estimate
+predict(xy.fit, newdata = data.frame(x=5.8), interval="confidence")
+```
+
+Come up with a bootstrap prediction interval for Y|x=5.8
+
+```{r}
+# NOW BY BOOTSTRAP 95%-PREDICTION INTERVAL
+B <- 1000
+pred <- numeric(B)
+data <- data.frame(x,y)
+for (i in 1:B) {
+  boot <- sample(n, n, replace = TRUE)
+  fit.b <- lm(y ~ x, data = data[boot,])
+  pred[i] <- predict(fit.b, list(x = 5.8)) + sample(resid(fit.b), size = 1)
+}
+quantile(pred, c(0.025, 0.975))
+
+#compared to a parametric estimate
+predict(xy.fit, newdata = data.frame(x=5.8), interval="prediction")
+
+#What is the true interval for 95% likelihood?
+10+4*5.8 + qexp(c(.025, .975), .1)
+```
+
+## Bootstrap Interval for sigma in linear model
+
+We can also use bootstrapping to estimate the sigma.
+Here however I will go back to a linear model with normal errors. Let's suppose our population can be described by
+$$Y = 10 + 4X + e$$
+Where $\epsilon \sim N(0, 10^2)$
+
+```{r}
+#Generate data from a model: y = 10 + 4x + e
+set.seed(2024)
+x <- runif(25, 0, 10)
+e <- rnorm(25, 10)
+y <- 10 + 4*x + e
+```
+
+
+A point estimate is obtained from the residual standard error. The summary output from linear regression calls it `sigma`
+```{r}
+xy.fit <- lm(y~x)
+summary(xy.fit)$sigma   
+```
+
+We can create bootstrap samples from our residuals to come up with a bootstrap distribution for the residual standard error
+```{r}
+
+resid.se <- 0
+for(i in 1:1000){
+  resid.se[i] <- sqrt(sum(sample(resid(xy.fit), replace=TRUE)^2)/summary(xy.fit)$df[2])
+}
+quantile(resid.se, c(0.025, 0.975))
+```
+
+
+
+## Draft Data
+
+```{r}
+draft <- read.csv("Celtics_Heat_Game_6_Actual.csv")
+```
+This dataset is the last post-season game between two NBA teams -- Celtics and Heat -- at DraftKings. The dataset contains four variables: Player, Roster Position, %Drafted, and FPTS.
+
+ - Player: NBA players' names
+ - Roster Position: the position the player held in the DraftKings lineups, whether as Captain (CPT) or Utility (UTIL). DraftKings has a 1.5 multiplication power over the captain.
+ - %Drafted: the percentage of people drafted this player
+ - FPTS: Fantasy Points
+
+This project focuses on the last two variables -- %Drafted and FPTS -- and tries to understand how strongly they correlate with repeated samplings.
+
+Now let's repeat this on the draft model; come up with a bootstrapped linear regression model to predict fantasy points (FPTS) from % drafted (X.Drafted). Compare it to the parametric model
+
+```{r}
+draft.intercepts <- 0
+draft.slopes <- 0
+
+for(i in 1:1000){
+  draft.boot <- draft[sample(nrow(draft), replace=TRUE),]
+  draft.boot.fit <- lm(FPTS ~ X.Drafted, data=draft.boot)
+  draft.intercepts[i] <- coef(draft.boot.fit)[1]
+  draft.slopes[i] <- coef(draft.boot.fit)[2]
+}
+#Bootstrap linear model
+mean(draft.intercepts)
+mean(draft.slopes)
+
+#Parametric linear model
+lm(FPTS ~ X.Drafted, data=draft)
+
+```
+
+
+## Bootstrap Hypothesis Test
+
+Bootstrapped One Sample Test function: What it does is comes up with a bootstraped estimate of the sampling distribution of a test statistic without relying on the central limit theorem or a population model. The `t.hat` returned is the bootstraped test statistic distribution.
+
+```{r}
+bootstrap=function(x,n.boot){
+  n<-length(x)
+  x.bar<-mean(x)
+  t.hat<-rep(0, n.boot) 
+  #create vector that we will fill with "t" values
+  for (i in 1:n.boot){
+    x.star<-sample(x, size=n, replace=TRUE)
+    x.bar.star<-mean(x.star)
+    s.star<-sd(x.star)
+    t.hat[i]<-(x.bar.star-x.bar)/(s.star/sqrt(n))
+  }
+  return(t.hat)
+}
+```
+
+### Example: Steel Conduits
+Steel conduits are buried for 2 years and the maximum depth of corrosion is measured on each conduit. If the average max penetration exceeds 50 micrometers then the conduits have to be re-engineered.
+
+Is there evidence that the mean maxPen > 50?
+
+$H_0: \mu \leq 50$
+$H_1: \mu > 50$
+```{r}
+maxPen<-c(53, 61.1, 49.6, 59.3, 57.2, 57.4, 46.2, 55.1, 63, 54, 61.9, 62.2, 52.4, 45.4, 57.7, 45.1)
+
+x.bar<-mean(maxPen)
+sd.maxPen<-sd(maxPen)
+t.obs = (x.bar - 50)/(sd.maxPen/sqrt(length(maxPen)))
+t.obs
+
+set.seed(1)
+n.boot<-10000
+MaxPen.boot<-bootstrap(x=maxPen, n.boot)
+hist(MaxPen.boot, breaks=50)
+abline(v=t.obs)
+
+#pvalue
+sum(MaxPen.boot>=t.obs) 
+sum(MaxPen.boot<=t.obs) 
+
+#Right-tailed test p-value - mean calculates the proportion for me
+mean(MaxPen.boot>=t.obs) 
+
+#if it were a 2 tailed test
+p_upper = mean(MaxPen.boot >= t.obs)
+p_lower = mean(MaxPen.boot <= t.obs)
+2*min(p_upper, p_lower)
+```
+
+
+### Two Sample Bootstrap Test
+
+You can use bootstrapping as opposed to permutation testing. The nice thing about this method is the null hypothesis does not have to assume that the populations are equal to each others - we can directly test whether the population means are unequal. We calculate the bootstrapped test statistic distribution by resampling from each sample with the appropriate sample size. This function calculates a t-type statistic, but you can modify it to use any 2 sample test statistic that is useful for quantifying evidence for the alternative hypothesis.
+
+
+Bootstrap Function from 2 independent samples
+```{r}
+boottwo = function(dat1, dat2, nboot) {
+  bootstat = numeric(nboot)		#Make Empty Vector for t* to fill
+  obsdiff = mean(dat1) - mean(dat2)
+  n1 = length(dat1)
+  n2 = length(dat2)
+  for(i in 1:nboot) {
+    samp1 = sample(dat1, size = n1, replace = T)	#Sample From Sample Data
+    samp2 = sample(dat2, size = n2, replace = T)
+    bootmean1 = mean(samp1)
+    bootmean2 = mean(samp2)
+    bootvar1 = var(samp1)
+    bootvar2 = var(samp2)
+    bootstat[i] = ((bootmean1 - bootmean2) - obsdiff)/sqrt((bootvar1/n1) + (bootvar2/n2))		  
+    #Compute and Save “bootstrap t” value
+  }
+  return(bootstat)
+}
+
+```
+
+
+### Example: A mean experiment on crickets
+
+In this experiment the treatmetn group of crickets were starved and we observed the time it took for the starved females to mate with males (they get to eat them after mating - do hungry females mate faster on average?)
+```{r}
+Starved<-c(1.9, 2.1, 3.8, 9.0, 9.6, 13.0, 14.7, 17.9, 21.7, 29.0, 72.3)
+Fed<-c(1.5, 1.7, 2.4, 3.6, 5.7, 22.6, 22.8, 39.0, 54.4, 72.1, 73.6, 79.5, 88.9)
+boxplot(Starved, Fed)
+```
+A permutation test would make the null hypothesis assumption that the two populations are identically shaped, and we can see that really is not the case. No need to test that. 
+
+```{r}
+t.Obs <- (mean(Starved)-mean(Fed))/sqrt(var(Starved)/length(Starved)+var(Fed)/length(Fed))
+
+boot.t <- boottwo(Starved, Fed, 10000)
+hist(boot.t)
+abline(v=t.Obs)
+
+#2-tailed p-value
+mean(boot.t<t.Obs)*2
+```

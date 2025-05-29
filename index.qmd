@@ -20,5 +20,5 @@ app should be in a file app.R
 run the code: shinylive::export(appdir="shiny/appname", destdir="docs/appname")
 
 to test
-httpuv::runStaticServer("docs/onetwotail", port=8008)
+httpuv::runStaticServer("docs/appname", port=8008)
 -->

@@ -32,26 +32,43 @@ book:
       - R04_Monte_Carlo_Testing.Rmd
       - testing1_practice.qmd
       - text: "---"
+      - testing2.qmd
       - R05_testing_Additional_Examples.Rmd
       - testing2_practice.qmd
     - part: "Estimation"
       chapters:
+      - estimation1.qmd
       - estimation1_practice.qmd
       - R06_More_Estimation_Examples.Rmd
       - text: "---"
+      - estimation2.qmd
       - estimation2_practice.qmd
       - R07_More_Estimation_and_CI_Examples.Rmd
     - part: "Prediction"
       chapters:
+      - prediction1.qmd
       - slr_practice.qmd
       - R08_prediction_examples.Rmd
       - text: "---"
+      - prediction2.qmd
+      - R09_Multiple_Regression.Rmd
       - mlr_practice.qmd
       - text: "---"
+      - logistic.qmd
+      - R10_LogisticReg_Extended.rmd
       - logistic_practice.qmd
       - text: "---"
+      - cv.qmd
+      - R11_cv-MSEcomparison.Rmd
+      - R11_Bias_Variance.Rmd
+      - R11_Model_Selection.Rmd
+      - R11_Ridge_LASSO.Rmd
       - cv_practice.qmd
       - text: "---"
+    - part: "Bootstrapping"
+      chapters:
+      - bootstrap.qmd
+      - R12_Bootstrap_Examples.Rmd
       - bootstrap_practice.qmd
   appendices:
     - RV_summary.qmd

@@ -1,0 +1,611 @@
+---
+title: "R10 multiple regression further concepts"
+author: "Brian Powers"
+date: "2025-03-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Squared and Correlation
+
+Consider a simple linear model on mtcars:
+
+$$ hp = \beta_0 + \beta_1 wt  + \epsilon$$
+```{r}
+mt.fit <- lm(hp ~ 1+wt, data=mtcars)
+summary(mt.fit)
+```
+$R^2 = 0.4339$
+
+What is the sample correlation between wt and hp? We use "r" to refer to this statistic. 
+
+```{r}
+cor(mtcars$wt, mtcars$hp)
+```
+And if we square that
+```{r}
+cor(mtcars$wt, mtcars$hp)^2
+```
+
+In general, $R^2$ is the correlation between $\hat{y}_i$ and $y_i$. So for a multiple regression model:
+
+```{r}
+mt.fit2 <- lm(qsec ~ 1+disp + wt + hp, data=mtcars)
+summary(mt.fit2)$r.sq
+plot(mtcars$qsec, predict(mt.fit2))
+cor(mtcars$qsec, predict(mt.fit2))^2
+```
+
+## Interaction plot for mtcars - looking for an interaction
+
+```{r}
+library(interactions)
+#In the mtcars dataset, am and vs are simply numerical variable
+# I want to treat them as categorical variables - aka "factor variables"
+mtcars$am <- factor(mtcars$am)
+mtcars$vs <- factor(mtcars$vs)
+
+mt.fit.cat <- lm(qsec ~ 1+ am * vs , data=mtcars)
+cat_plot(mt.fit.cat, pred="vs", modx="am", geom="line", plot.points=TRUE, data=mtcars, interval=F)
+```
+The fact that these are parallel indicates that there is no measurable interaction - the effects of engine shape and transmission type seem to be additive. We also see that when we look at the model output:
+```{r}
+summary(mt.fit.cat)$coefficients
+```
+The $p$-value on the am-vs interaction term is really high: that's .917 indicating that we have no statistical evidence of an interaction. In other words, the inclusion of an interaction term in the model is not statistically justified.
+
+
+
+
+## Multiple categorical levels : the iris dataset
+
+The iris dataset is somewhat famous - we have 50 samples from each of three iris species: Setosa, Versicolor and Virginica. Four characteristics are measured: Sepal length & width, and Petal length & width. 
+
+```{r}
+head(iris)
+#fix the factor leveling just in case
+iris$Species <- factor(iris$Species, levels = c("setosa", "versicolor", "virginica"))
+```
+Species is a categorical (factor) variable with three values. In a case like this we still need a numerical encoding of the categorical variable. But using 0, 1 and 2 would be problematic for two reasons. First it implies a progression - an ordering - across the three categorical levels. Secondly, it implies that the effect moving from level 0 to 1 is the same effect of moving from level 1 to level 2. 
+
+The proper way to model such a situation is to identify one of the categorical levels (values) to be a "baseline". R will do this for you alphabetically. In this case setosa is the first alphabetically. Then we create a dummy (indicator) variable for each of the remaining levels. Again - this is automatically done for us by R.
+
+If we were to predict sepal length based only on species, the model would look like this:
+$$Y_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \epsilon$$
+The three cases are handled by the indicator variables as follows:
+```{}
+Species       X_1     X2   
+-------------------------
+setosa        0       0
+versicolor    1       0
+virginica     0       1
+```
+
+The model fit is easy in R.
+
+```{r}
+sepal.fit <- lm(Sepal.Length ~ 1 + Species, data=iris)
+summary(sepal.fit)
+```
+$$\hat{Y} = 5.0060 + .93 X_{vers} + 1.582 X_{vir}$$
+- For a setosa variety, $X_1=0, X_2=0$ so the predicted sepal length is just 5.006
+- For versicolor, $X_1=1, X_2=0$ so the predicted length is 5.006+.93=5.936
+- For viginica, $X_1=0, X_2=1$ so the predicted length is 5.006 + 1.582 = 6.588
+
+```{r}
+aggregate(Sepal.Length ~ Species, data=iris, FUN=mean)
+```
+
+In other words, the intercept is the mean response for the baseline, the $\beta_1, \beta_2$ coefficients are the mean difference between each other case and the baseline.
+
+If you wanted versicolor to be the baseline instead you can refactor your variable
+```{r}
+iris$Species <- factor(iris$Species, 
+                       levels = c("versicolor","setosa","virginica"))
+sepal.fit <- lm(Sepal.Length ~ 1+Species, data=iris)
+summary(sepal.fit)
+```
+If you are curious about the dummy variable encoding that R is doing, you can look at the "model matrix"
+
+```{r, eval=F}
+model.matrix(sepal.fit)
+```
+But I don't want to refactor the variable, so I'm going to revert the dataset to its default factoring.
+```{r}
+rm(iris)
+```
+
+
+## A Model with categorical and quantitative variables
+
+If we were attempting to predict Sepal Length from Petal Length and Species, a model might look like this:
+$$Sepal.L = \beta_0 + \beta_1 Species_{Vers} + \beta_2 Species_{Vir} + \beta_3 Petal.L + \epsilon$$
+```{r}
+plot(Sepal.Length ~ Petal.Length, data=iris, col=iris$Species, pch=16)
+```
+
+A fitted model (without an interaction) would look like this:
+```{r}
+sepal.fit1 <- lm(Sepal.Length ~ 1+Species+Petal.Length, data=iris)
+summary(sepal.fit1)
+```
+Let's just interpret the coefficients for a moment:
+
+First off, setosa is the baseline case. The coefficient of Petal length is 0.90456; this means that controlling for species (i.e. holding species constant) a 1 cm increase in Petal Length is associated with a .90456 cm average increase in Sepal Length. 
+$$\hat{sepal.L}_{set} = 3.68 + .906 petal.L$$
+
+
+For the versicolor coefficient, -1.60097 is interpreted as the average difference in sepal length between a versicolor compared to a setosa iris, controlling for petal length. 
+$$\hat{sepal.L}_{vers} = (3.68 -1.6) + .906 petal.L$$
+
+I'm not going to check the model assumptions at the moment because that's not my primary focus. I want to plot the model with the quantitative and categorical predictor:
+
+```{r, warning=F}
+interact_plot( lm(Sepal.Length ~ Species+Petal.Length, data=iris), pred=Petal.Length, modx=Species, plot.points=TRUE)
+```
+
+You can see clearly that the model fit encodes three parallel lines. We can get the linear equations by writing out the cases. Take setosa first:
+$$\hat{Sepal.L}_{Set} = 3.68 + 0.90456 Petal.L$$
+For versicolor we have
+$$\hat{Sepal.L}_{Vers} = 3.68 - 1.6 + 0.90456 Petal.L = 2.08 + .90456 Petal.L$$
+
+For virginica
+$$\hat{Sepal.L}_{Vers} = 3.68 - 2.12 + 0.90456 Petal.L = 1.56 + .90456 Petal.L$$
+
+
+## Interactions between categorical and quantitative variables
+
+Adding an interaction between the categorical predictor and the quantitative predictor allows more model flexibility. It allows for different intercepts *and* different slopes. 
+
+```{r}
+iris.fit<-lm(Sepal.Length ~ 1+ Petal.Length + Species + Petal.Length:Species, data=iris)
+# or I can use 1 + Petal.Length * Species
+
+interact_plot(iris.fit, pred=Petal.Length, modx=Species, plot.points=TRUE)
+```
+
+Looking at the model summary tells us which of the interactions are statistically supported. 
+```{r}
+summary(iris.fit)
+```
+
+In this case neither of them. 
+
+The interpretation of these interaction coefficients gives us an adjustment to the slope on `Petal.Length`. Here's the full model with coefficient estimates (rounded):
+
+$$\hat{Sepal.L} = 4.2 + .54Petal.L + -1.8 Species_{Ver} - \\ 3.2 Species_{Vir}+0.29Petal.L\cdot Species_{Ver} + .45 Petal.L \cdot Species_{Vir}$$
+
+The indicator variables $Species_{Ver}$ and $Species_{Vir}$ are (0,0) for setosa, (1,0) for versicolor and (0,1) for virginica.
+
+For instance, the model for Setosa would be:
+
+$$\hat{Sepal.L}_{Vers} = 4.2 + .54Petal.L$$
+For the versicolor two more coefficients will play a part:
+$$\hat{Sepal.L}_{Ver} = 4.2 + .54Petal.L + -1.8(1) +0.29Petal.L(1)$$
+Which simplifies to
+$$\hat{Sepal.L}_{Ver} = 2.4 + .83 Petal.L$$
+This is the linear equation for the orange dotted line above. We could do the same for virginica but the idea is the same.
+
+So the coefficients of the interaction terms can be interpreted as the difference in slope between the base case (versicolor) and the other cases (setosa or virginica). 
+
+That is how we use interactions between categorical variables and quantitative variables.
+
+You can actually calculate these coefficients by subsetting the data into three species and fitting three linear models!
+```{r}
+coef(lm(Sepal.Length ~ 1 + Petal.Length, data=subset(iris, Species=="setosa")))
+coef(lm(Sepal.Length ~ 1 + Petal.Length, data=subset(iris, Species=="versicolor")))
+coef(lm(Sepal.Length ~ 1 + Petal.Length, data=subset(iris, Species=="virginica")))
+```
+The coefficient estimate for the interaction term Petal.Length:Speciessetosa is 
+```{r}
+0.5422926 - 0.828281
+```
+
+## More on Interactions - two quantitative predictors
+
+```{r}
+library(interactions)
+```
+
+An interaction of two quantitative variables $X1$ and $X2$ would allow for a model that looks something like this:
+
+$$ Y = 10 + 5X1 + 3X2 - 2 X1 \times X2 + \epsilon$$
+
+This describes a hyperbolic paraboloid
+
+```{r, echo=F}
+url <- "https://mathcurve.com/surfaces.gb/paraboloidhyperbolic/ph-droites.gif"
+knitr::include_graphics(url)
+```
+
+An interaction between two quantitative variables is one form of a non-additive relationship with the response variable. 
+
+Here is a dataset where the linear model includes an interaction between two continuous variables.
+
+```{r}
+states <- as.data.frame(state.x77)
+summary(states)
+```
+
+First I want to fit a model that does not include an interaction term.
+```{r}
+fit.noi <- lm(Income ~ Illiteracy + Murder + `HS Grad`, data = states)
+summary(fit.noi)
+```
+The interaction term can be added to the formula explicitly by including an addition `Illiteracy:Murder` term, or just use the asterisk to include the interaction and both single terms as well. 
+```{r}
+fiti <- lm(Income ~ Illiteracy * Murder + `HS Grad`, data = states)
+summary(fiti)
+```
+
+The interactions between variables can be explored using interaction plots:
+```{r}
+interact_plot(fiti, pred = Illiteracy, modx = Murder)
+```
+
+The interaction plot takes the other quantitative variable (HS Grad) and sets its value to be the mean (53.11). Three lines are given here indicating how the line changes as the Murder variable may vary from its average mean value. 
+
+$$\hat{Income} = 1414.46+753 Ill + 130.60 Mur + 40.76(53.11) -97.04 Ill \times Mur$$
+You can see that as the murder rate increases the effect of illiteracy on income changes. This is reflected in the negative value for the interaction. In this case the Mur variable is continuous rather than categorical. The interpretation of the coefficient on the interaction term is a little more tricky to put into words. That's beyond this course. 
+
+The important take-away here is that the interaction term is statistically significant, so we have strong evidence from the data that there is a real interaction in the model. The average effect of Illiteracy and Murder rate on per capita income is not purely additive.
+
+## MT Cars polynomial model
+
+Let's briefly compare a linear model with a second order model
+
+```{r}
+plot(mpg~hp, data=mtcars)
+mtcars.pow1 <- lm(mpg ~ 1 + hp, data=mtcars)
+summary(mtcars.pow1)
+plot(mtcars.pow1, which=1)
+
+```
+
+```{r}
+mtcars.pow2 <- lm(mpg ~ 1 + hp + I(hp^2), data=mtcars)
+summary(mtcars.pow2)
+plot(mtcars.pow2, which=1)
+
+```
+
+For the moment let's consider a third order polynomial just to see if the linearity is better satisfied.
+
+```{r}
+mtcars.pow3 <- lm(mpg ~ 1 + hp + I(hp^2) + I(hp^3), data=mtcars)
+summary(mtcars.pow3)
+plot(mtcars.pow3, which=1)
+```
+
+
+## Variable Transformations
+
+Variable transformations can be effective at remedying violated regression assumptions. Briefly here are the assumptions:
+
+- The error term has a normal distribution
+- The response variable has a linear relationship with the predictors. In other words, the errors have zero mean
+- The error term has constant variance
+- The errors are independent.
+
+The fourth assumption is hard to check, but the first three can be checked with diagnostic plots of the residuals.
+
+Transformation of either a predictor variable or the response variable may be appropriate, often with theoretical justification. But first let's explore the effect of variable transformation.
+
+Here is some left-skewed data
+```{r}
+set.seed(1)
+left.skew.data <- rbeta(60, 2, 1)*10
+hist(left.skew.data)
+```
+And here are histograms of the data taken to different powers
+```{r}
+par(mfrow=c(2,2))
+hist(log(left.skew.data), main="Log transform")
+hist((left.skew.data)^.5, main="square root transform")
+hist((left.skew.data)^2, main="squaring")
+hist((left.skew.data)^3, main="cubing")
+```
+
+You can see that squaring the values give us a more symmetric distribution. Generally speaking, if you have left-skewed data, raising your values to a power $>1$ can do this for you.
+
+On the other hand, here is some right-skewed data - an exponential population
+```{r}
+set.seed(1)
+right.skew.data <- rexp(60, 2)
+hist(right.skew.data, breaks=25)
+```
+
+```{r}
+par(mfrow=c(2,2))
+hist(log(right.skew.data), main="log")
+hist((right.skew.data)^.5, main="sqrt")
+hist((right.skew.data)^2, main="Square", breaks=20)
+hist((right.skew.data)^3, main="cube", breaks=20)
+```
+
+A right skew is amplified by taking your data to a higher power, but square roots and log transformations can make your data more symmetric and sometimes more normally distributed.
+
+Variable transformations can often be effective means to remedy violated regression assumptions.
+
+### Real Estate Air Conditioning
+
+The real estate data is in the `realestate.txt` file. 
+```{r}
+real.estate <- read.table("realestate.txt", header=T)
+real.estate$Air <- factor(real.estate$Air)
+```
+
+While there are many variables, we'll focus only on three: 
+- Y = sale price of the home (in 1000s of dollars)
+- X1 = square footage of the home (in 1000s of sqft)
+- X2 = whether or not the home has air conditioning
+
+The interaction model is
+$$Y_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \beta_3 X_{i,1}X_{i,2} + \epsilon_i$$
+```{r}
+real.fit <- lm(SalePrice ~ 1+SqFeet*Air, data=real.estate)
+library(interactions)
+interact_plot(real.fit, pred=SqFeet, modx=Air, plot.points = TRUE)
+summary(real.fit)
+plot(real.fit, which=1:2)
+```
+
+There is strong evidence supporting the interaction in the model, and both preditors are strong predictors of sale price. However there are two big problems. One is the residuals spread is not constant, and the residuals do not seem to be normally distributed. The non constant spread can be seen in the plot
+```{r}
+interact_plot(real.fit, pred=SqFeet, modx=Air, plot.points = TRUE)
+hist(resid(real.fit))
+```
+the residuals are unimodal but the right tail is too long - this is shown in the QQ plot but more obviously emphasized in the histogram above.
+
+When large values of $y$ have higher variance than low values of $y$ a log transformation of the response variable will often fix the problem. This is because error is not in absolute term but rather relative to the magnitude of $y$. Logs fix this mathematically.
+
+We'll transform Sale Price in the model:
+$$\ln Y_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \beta_3 X_{i,1}X_{i,2} + \epsilon_i$$
+```{r}
+real.fit.log <- lm(log(SalePrice) ~ 1+SqFeet*Air, data=real.estate)
+summary(real.fit.log)
+plot(real.fit.log, which=1:2)
+interact_plot(real.fit.log, pred=SqFeet, modx=Air, plot.points = TRUE)
+hist(resid(real.fit.log))
+```
+The predictor variable SqFeet also exhibits a right skew
+```{r}
+hist(real.estate$SqFeet)
+```
+In a case like this a linear model may possibly fit better if the predictor is log transformed too. This is worth checking
+
+```{r}
+real.estate$logSqFeet <- log(real.estate$SqFeet)
+real.fit.log <- lm(log(SalePrice) ~ 1+logSqFeet*Air, data=real.estate)
+summary(real.fit.log)
+plot(real.fit.log, which=1:2)
+interact_plot(real.fit.log, pred=logSqFeet, modx=Air, plot.points = TRUE)
+hist(resid(real.fit.log))
+```
+The interaction of air conditioning and square feet is brought out more clearly when this transformation is done, as shown in the significance of the predictor. This model also has the strongest $R^2$ of all three models considered.
+
+Let's consider how this model would estimate / predict the sale price of a 1800 sqft house with air conditioning.
+```{r}
+predict(real.fit.log, newdata=data.frame(logSqFeet = log(1.800), Air="1"))
+#to conver this to our units, we take e^<this>
+exp(predict(real.fit.log, newdata=data.frame(logSqFeet = log(1.800), Air="1"))
+)
+#to convert a 95% confidence interval back to original units, do the same
+#this is my 95% prediction interval for ONE particular house that is 1800 sqft
+exp(predict(real.fit.log, newdata=data.frame(logSqFeet = log(1.800), Air="1"), interval="prediction")
+)
+```
+
+
+## Multicollinearity
+
+When predictor variables exhibit high correlation we call this multicollinearity. This can cause a number of problems which we'll discuss. First let's consider some synthetic data where the predictors are perfectly correlated - this is an extreme case.
+
+$$ X_2 = 2.5 X_1-1$$
+If the true model looks like this:
+$$Y = 10 + 2X_1 +.3 X_2 + \epsilon, \quad \epsilon \sim N(0, 4^2)$$
+We could actually write $X_2$ in terms of $X_1$ or vice versa. For instance, we could substitute in the expression $2.5X_1-1$ and get
+$$Y = 10 + 2X_1 + .3(2.5X_1-1) + \epsilon = 9.7 + 2.75X_1 + \epsilon$$
+Or we could substitute $X_1 = \frac{X_2+1}{2.5}$ and get
+$$ Y = 10 + 2\frac{X_2+1}{2.5}+.3X_2+\epsilon = 10.8 + 1.1 X_2+ \epsilon$$
+Both of these models are perfectly true. The fact is that both would fit the data just as well.
+
+In fact, if your predictors exhibit perfect correlation then R will be unable to properly fit a linear model to the data.
+
+I'll simulate a sample of size 30.
+```{r}
+X1 <- runif(30, 10,20) 
+X2 <- 2.5 * X1 -1
+Y <- 10+2*X1+.3*X2 + rnorm(30, 0, 4)
+summary(lm(Y~1+X1+X2))
+```
+
+The case of perfect correlation is rare but a strong correlation could certainly arise. I'll add a little bit of random spice in to the calculation of $X_2$ and we'll look at the correlation plots.
+
+```{r}
+set.seed(1)
+X1 <- runif(30, 10,20) 
+X2 <- 2.5 * X1 -1 + rnorm(30,0,1)
+Y <- 10+2*X1+.3*X2 + rnorm(30, 0, 4)
+plot(data.frame(Y,X1,X2))
+```
+We can numerically measure the correlation using the `cor` function
+```{r}
+cor(data.frame(Y,X1,X2))
+```
+
+If we attempt to fit a linear model this is what we get:
+```{r}
+summary(lm(Y~1+X1+X2))$coefficients
+```
+In the true model the coefficients of $X_1$ and $X_2$ are $2$ and $.3$. These quite far off! The intercept is way off as well.
+
+I'll repeat again with newly generated data to see how it differs
+```{r}
+X1 <- runif(30, 10,20) 
+X2 <- 2.5 * X1 -1 + rnorm(30,0,1)
+Y <- 10+2*X1+.3*X2 + rnorm(30, 0, 4)
+summary(lm(Y~X1+X2))$coefficients
+```
+Notice that the coefficient of $X_1$ is now a lot lower (and negative) and the coefficient of $X_2$ is positive now! Furthermore, the $p$-values for the coefficients are all $>0.05$. This is common when predictors are highly correlated. Typical problems that you will see when you have multicollinearity are:
+
+- Parameters of the model become indeterminate
+- Standard errors of the estimates become large
+- addition or removal of a predictor can drastically change the coefficients - even flip their signs
+- it becomes difficult or impossible to interpret the coefficients
+- predictions risk extrapolation
+
+The first two problems are understandable if we think about the extreme case. We actually had three models that were equally valid when we had perfect correlation (ignoring $\epsilon$ for simplicity):
+
+$$Y = 10 + 2X_1 +.3 X_2, \quad Y=9.7 + 2.75X_1, \quad Y=10.8 + 1.1 X_2$$
+In fact, there are an infinite number of models you could fit that would fit equally well. This means we have no certainty of either of the coefficient values. In fact, the uncertainty of $\beta_1$ and $\beta_2$ affects our uncertainty of $\beta_0$ as well! This causes the standard errors to be large.
+
+What happens when we remove a predictor? I'll refit the model with only $X_1$ and only $X_2$ to see
+```{r}
+summary(lm(Y~X1+X2))$coefficients
+summary(lm(Y~X1))$coefficients
+summary(lm(Y~X2))$coefficients
+```
+Notice that in the models with only 1 predictor the $p$-value shoots down to close to zero. The standard error shrinks as well. When we have a model with only one of these correlated predictors we can focus on the predictive power of that one predictor and it is not muddied by the influence of the other one. 
+
+This leads to the fourth problem. Interpretation of coefficients in a multiple regression model requires us to say something like "holding other variables constant". But if $X_1$ and $X_2$ exhibit strong correlation in the real world, then it's not reasonable to hold one constant while changing the other.
+
+What about the fifth problem about extrapolations? Let's look at the data summaries:
+```{r}
+summary(data.frame(X1,X2))
+```
+Our dataset includes $X1$ over the range 10 to 20 roughly, and $X2$ over the range 23 to 50. So one might think that $Y$ could be predicted for any pair of $X1,X2$ values in the range $[10,20]\times[25,50]$. For example, can we predict $\hat{Y}|X_1=11, X_2=48$ ? 
+```{r}
+lmfit <- lm(Y~X1+X2)
+predict(lmfit, newdata=data.frame(X1=11, X2=48))
+```
+No problem there. But let's look again at the data range as a scatterplot
+```{r}
+plot(X1,X2)
+```
+The only data we've observed is over thin diagonal strip. Our model is not supported outside of this range, so predicting $Y$ for $X1=11, X2=48$ has a tremendous amount of uncertainty.
+
+### Detecting Multicollinearity
+
+A simple statistic that measures multicollinearity is the Variance Inflation Factor or VIF. The idea is that we take each predictor and fit a linear model with this predictor as the response and the other predictors as predictors. We measure how strong the coefficient of determination ($R^2$) is, and calculate
+$$VIF_j = \frac{1}{1-R^2_j}$$
+For instance, in this case we have
+```{r}
+rsq = summary(lm(X1~X2))$r.square
+1/(1-rsq)
+```
+This is very high - a VIF more than 10 is extremely problematic.
+
+There's a function in the `car` package to calculate VIF for all predictors in a model.
+```{r}
+library(car)
+vif(lmfit)
+
+```
+Note that in this case both predictors have the same VIF. This is because when we regress $X1$ on $X2$ the correlation is the same as if we regress $X2$ on $X1$. 
+
+### How to handle Multicollinearity
+
+There are some more advanced methods but probably the simplest method is to remove one of the problematic predictors. In this case we could choose arbitrarily to keep $X1$ or $X2$ in the model and drop the other one. Either choice would be fine. 
+
+Note that in the case of multicollinearity this dropping of a redundant variable will not cause $R^2$ to suffer much at all. Observe:
+```{r}
+summary(lm(Y~X1+X2))
+
+summary(lm(Y~X1))
+
+```
+
+### A Data Example
+
+The datafile (`wages85.txt`) is downloaded from http://lib.stat.cmu.edu/datasets/. It contains 534 observations on 11 variables sampled from the Current Population Survey of 1985. The Current Population Survey (CPS) is used to supplement census information between census years. These data consist of a random sample of 534 persons from the CPS, with information on wages and other characteristics of the workers, including sex, number of years of education, years of work experience, occupational status, region of residence and union membership. We wish to determine whether wages are related to these characteristics.
+In particular, we are seeking for the following model:
+
+$wage = \beta_0 + \beta_1 south + \beta_2 sex + \beta_3 exp + \beta_4 union + \beta_5 age + \beta_6 race_2 + \beta_7 race_3 + \cdots$
+
+```{r}
+wages <- read.table("wages85.txt", header=TRUE)
+```
+But we should understand how the data is encoded. In particular some of the variables are categorical variables: SOUTH, SEX, RACE, SECTOR, MARR, OCCUPATION, UNION. We should convert these to categorical `factor` type variables rather than numeric.
+
+```{r}
+wages$SOUTH <- factor(wages$SOUTH)
+wages$SEX <- factor(wages$SEX)
+wages$RACE <- factor(wages$RACE)
+wages$SECTOR <- factor(wages$SECTOR)
+wages$MARR <- factor(wages$MARR)
+wages$OCCUPATION <- factor(wages$OCCUPATION)
+wages$UNION <- factor(wages$UNION)
+```
+
+Now we can fit the model. Note that with all of these categorical variables we will have a lot of model coefficients. With a sample size of 500+ that's not a huge concern right now. Anyway, the point is going to be about multicollinearity.
+
+```{r}
+# the "." indicates I want to use ALL predictors in the model. No interactions though.
+wage.lm <- lm(WAGE ~ . , data=wages)
+summary(wage.lm)
+plot(wage.lm, which=1:2)
+```
+
+Without going into the summary, it's clear that variance increases with predicted wage; this is a good indication that a log transformation or square root transformation of the response variable could be useful. In fact that could even fix the non normality of residuals
+```{r}
+hist(resid(wage.lm), breaks=50)
+```
+
+```{r, warning=F}
+wage.log.lm <- lm(log(WAGE) ~ ., data=wages)
+plot(wage.log.lm, which=1:2)
+hist(resid(wage.log.lm), breaks=50)
+```
+The log transform fixed both problems. So instead of predicting wage, we'll predict log(wage). But let's look at the summary output.
+
+```{r}
+summary(wage.log.lm)
+```
+
+By looking at the model summary, the R-squared value of 0.362 is not bad for a cross sectional data of 534 observations. The F-value is highly significant implying that all the explanatory variables together significantly explain the log of wages. However, coming to the individual regression coefficients, it is seen that as many as five variables (race, education, experience, age, marriage) are not statistically significant.
+
+For further diagnosis of the problem, let us first look at the pair-wise correlation among the numerical variables.
+
+
+```{r}
+X<-wages[,c("EDUCATION","EXPERIENCE","WAGE","AGE")]
+library(GGally)
+ggpairs(X)
+```
+
+The high correlation between age and experience might be the root cause of multicollinearity.
+Again by looking at the partial correlation coefficient matrix among the variables, it is also clear that the partial correlation between experience – education, age – education and age – experience are quite high.
+```{r}
+cor(X)
+```
+
+If we look at the VIF for the model we can get a sense of how bad it really is.
+Note that VIF is defined for quantitative variables, so if I use the vif function I will get a "generalized" vif since I have so many categorical predictors. That's ok. It has the same general interpretation.
+```{r}
+vif(wage.log.lm)
+```
+Education, age and experience all have extremely high VIF measures. This is not surprising. 
+
+The simplest remedy for the problem is to remove one of these correlated predictors from the model. Since experience has the highest VIF, let's remove EXPERIENCE. This can be done by adding `-EXPERIENCE` to the model. 
+
+```{r}
+wage.log.fit2 <- lm(log(WAGE) ~ . - EXPERIENCE, data=wages)
+summary(wage.log.fit2)
+```
+Notice that now age and education are statistically significant. Also the $R^2$ is still about the same - it's gone down from .362 to .361. Plus now we can be much more confident in the coefficient estimates.
+
+Let's check the VIF values to see if that problem has been fixed
+```{r}
+vif(wage.log.fit2)
+```
+Yes. We'd really only be concerned if a single VIF value was greater than 10, or if the average was much bigger than 2.5 or so. This is nothing to be concerned with.
+
+Checking other model diagnostics - to make sure our linear regression assumptions are still met
+```{r}
+plot(wage.log.fit2, which=1:2)
+
+```
