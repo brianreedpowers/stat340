@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STAT 340: Data Science II - 30&nbsp; Logistic Regression</title>
+<title>31&nbsp; Logistic Regression – STAT 340: Data Science II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./logistic_practice.html" rel="next">
+<link href="./R10_LogisticReg_Extended.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -80,7 +80,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -89,13 +95,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -105,12 +140,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prediction1.html">Prediction</a></li><li class="breadcrumb-item"><a href="./logistic.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Logistic Regression</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prediction1.html">Prediction</a></li><li class="breadcrumb-item"><a href="./logistic.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -120,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
@@ -154,9 +189,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Sampling</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -227,9 +262,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Testing</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -275,9 +310,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
  <span class="menu-text">Estimation</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -323,9 +358,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Prediction</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -357,34 +392,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./R09_Multiple_Regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R10_LogisticReg_Extended.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R11_cv-MSEcomparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R11_Bias_Variance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R11_Model_Selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R11_Ridge_LASSO.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
@@ -392,9 +463,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
  <span class="menu-text">Bootstrapping</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -402,22 +473,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R12_Bootstrap_Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -433,38 +510,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">30.1</span> Learning objectives</a></li>
-  <li><a href="#logistic-regression-motivation" id="toc-logistic-regression-motivation" class="nav-link" data-scroll-target="#logistic-regression-motivation"><span class="header-section-number">30.2</span> Logistic regression: motivation</a></li>
-  <li><a href="#formulating-a-model" id="toc-formulating-a-model" class="nav-link" data-scroll-target="#formulating-a-model"><span class="header-section-number">30.3</span> Formulating a model</a>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">31.1</span> Learning objectives</a></li>
+  <li><a href="#logistic-regression-motivation" id="toc-logistic-regression-motivation" class="nav-link" data-scroll-target="#logistic-regression-motivation"><span class="header-section-number">31.2</span> Logistic regression: motivation</a></li>
+  <li><a href="#formulating-a-model" id="toc-formulating-a-model" class="nav-link" data-scroll-target="#formulating-a-model"><span class="header-section-number">31.3</span> Formulating a model</a>
   <ul class="collapse">
-  <li><a href="#example-linear-regression-on-the-pima-data-set" id="toc-example-linear-regression-on-the-pima-data-set" class="nav-link" data-scroll-target="#example-linear-regression-on-the-pima-data-set"><span class="header-section-number">30.3.1</span> Example: linear regression on the <code>Pima</code> data set</a></li>
-  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression"><span class="header-section-number">30.3.2</span> Logistic regression</a></li>
+  <li><a href="#example-linear-regression-on-the-pima-data-set" id="toc-example-linear-regression-on-the-pima-data-set" class="nav-link" data-scroll-target="#example-linear-regression-on-the-pima-data-set"><span class="header-section-number">31.3.1</span> Example: linear regression on the <code>Pima</code> data set</a></li>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression"><span class="header-section-number">31.3.2</span> Logistic regression</a></li>
   </ul></li>
-  <li><a href="#logistic-regression-in-r" id="toc-logistic-regression-in-r" class="nav-link" data-scroll-target="#logistic-regression-in-r"><span class="header-section-number">30.4</span> Logistic regression in R</a></li>
-  <li><a href="#interpreting-model-coefficients" id="toc-interpreting-model-coefficients" class="nav-link" data-scroll-target="#interpreting-model-coefficients"><span class="header-section-number">30.5</span> Interpreting model coefficients</a></li>
-  <li><a href="#fitting-the-model" id="toc-fitting-the-model" class="nav-link" data-scroll-target="#fitting-the-model"><span class="header-section-number">30.6</span> Fitting the model</a>
+  <li><a href="#logistic-regression-in-r" id="toc-logistic-regression-in-r" class="nav-link" data-scroll-target="#logistic-regression-in-r"><span class="header-section-number">31.4</span> Logistic regression in R</a></li>
+  <li><a href="#interpreting-model-coefficients" id="toc-interpreting-model-coefficients" class="nav-link" data-scroll-target="#interpreting-model-coefficients"><span class="header-section-number">31.5</span> Interpreting model coefficients</a></li>
+  <li><a href="#fitting-the-model" id="toc-fitting-the-model" class="nav-link" data-scroll-target="#fitting-the-model"><span class="header-section-number">31.6</span> Fitting the model</a>
   <ul class="collapse">
-  <li><a href="#a-bit-of-philosophy-maximum-likelihood" id="toc-a-bit-of-philosophy-maximum-likelihood" class="nav-link" data-scroll-target="#a-bit-of-philosophy-maximum-likelihood"><span class="header-section-number">30.6.1</span> A bit of philosophy: maximum likelihood</a></li>
-  <li><a href="#example-mean-of-a-normal" id="toc-example-mean-of-a-normal" class="nav-link" data-scroll-target="#example-mean-of-a-normal"><span class="header-section-number">30.6.2</span> Example: mean of a normal</a></li>
+  <li><a href="#a-bit-of-philosophy-maximum-likelihood" id="toc-a-bit-of-philosophy-maximum-likelihood" class="nav-link" data-scroll-target="#a-bit-of-philosophy-maximum-likelihood"><span class="header-section-number">31.6.1</span> A bit of philosophy: maximum likelihood</a></li>
+  <li><a href="#example-mean-of-a-normal" id="toc-example-mean-of-a-normal" class="nav-link" data-scroll-target="#example-mean-of-a-normal"><span class="header-section-number">31.6.2</span> Example: mean of a normal</a></li>
   </ul></li>
-  <li><a href="#prediction-versus-feature-selection-the-two-cultures" id="toc-prediction-versus-feature-selection-the-two-cultures" class="nav-link" data-scroll-target="#prediction-versus-feature-selection-the-two-cultures"><span class="header-section-number">30.7</span> Prediction versus feature selection: the two cultures</a></li>
-  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">30.8</span> Review</a></li>
+  <li><a href="#prediction-versus-feature-selection-the-two-cultures" id="toc-prediction-versus-feature-selection-the-two-cultures" class="nav-link" data-scroll-target="#prediction-versus-feature-selection-the-two-cultures"><span class="header-section-number">31.7</span> Prediction versus feature selection: the two cultures</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">31.8</span> Review</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prediction1.html">Prediction</a></li><li class="breadcrumb-item"><a href="./logistic.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Logistic Regression</span></h1>
+<h1 class="title"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></h1>
 </div>
 
 
@@ -477,11 +554,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
 
+
 <p>These notes concern the problem of <em>logistic regression</em>. This is a regression method that allows us to handle the situation where we have predictors and responses, but the predictors are binary rather than continuous. Fitting a linear regression model in this situation would be a bit silly, for reasons illustrated below. Logistic regression lets us keep all the “nice” things about linear regression (i.e., that we like linear functions), while being better suited to this different data setting.</p>
-<section id="learning-objectives" class="level2" data-number="30.1">
-<h2 data-number="30.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">30.1</span> Learning objectives</h2>
+<section id="learning-objectives" class="level2" data-number="31.1">
+<h2 data-number="31.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">31.1</span> Learning objectives</h2>
 <p>After this lecture, you will be able to</p>
 <ul>
 <li>Explain the motivation for logistic regression</li>
@@ -489,15 +568,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Interpret estimated coefficients in a logistic regression model</li>
 </ul>
 </section>
-<section id="logistic-regression-motivation" class="level2" data-number="30.2">
-<h2 data-number="30.2" class="anchored" data-anchor-id="logistic-regression-motivation"><span class="header-section-number">30.2</span> Logistic regression: motivation</h2>
+<section id="logistic-regression-motivation" class="level2" data-number="31.2">
+<h2 data-number="31.2" class="anchored" data-anchor-id="logistic-regression-motivation"><span class="header-section-number">31.2</span> Logistic regression: motivation</h2>
 <p>Consider the following data, which you’ll play with more in discussion section: the Pima Indian data set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'MASS' was built under R version 4.2.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Pima.te)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Pima.te)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  npreg glu bp skin  bmi   ped age type
 1     6 148 72   35 33.6 0.627  50  Yes
@@ -521,20 +597,20 @@ Y_i = \begin{cases} 1 &amp;\mbox{ if subject } i \text{ has the disease/disorder
                     \end{cases}
 \]</span> Our predictors <span class="math inline">\(X_i\)</span> for subject <span class="math inline">\(i \in \{1,2,\dots,n\}\)</span> might consist of a collection of features derived from the brain imagining (e.g., average pixel values or correlations between different locations in the brain). In my own research, <span class="math inline">\(X_i\)</span> is a network that describes brain structure, constructed from the imaging data. In other studies, <span class="math inline">\(X_i\)</span> might even be the brain imaging data itself. Our goal is to predict <span class="math inline">\(Y_i\)</span> based on the observed imaging data (or image-derived features) <span class="math inline">\(X_i\)</span>.</p>
 </section>
-<section id="formulating-a-model" class="level2" data-number="30.3">
-<h2 data-number="30.3" class="anchored" data-anchor-id="formulating-a-model"><span class="header-section-number">30.3</span> Formulating a model</h2>
+<section id="formulating-a-model" class="level2" data-number="31.3">
+<h2 data-number="31.3" class="anchored" data-anchor-id="formulating-a-model"><span class="header-section-number">31.3</span> Formulating a model</h2>
 <p>A natural approach to this problem would be to just take our existing knowledge of linear regression and apply it here. If our predictor <span class="math inline">\(X_i\)</span> has <span class="math inline">\(p\)</span> dimensions, <span class="math display">\[
 X_i = (X_{i,1}, X_{i,2}, X_{i,3}, \dots, X_{i,p} )^T \in \mathbb{R}^p,
 \]</span> then we might try to fit a model of the form <span class="math display">\[
 Y_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \cdots + \beta_p X_{i,p}
 \]</span></p>
 <p>The obvious problem with this is that the right-hand side of this equation is an arbitrary real number, whereas the left-hand side (i.e., <span class="math inline">\(Y_i\)</span>) is <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>.</p>
-<section id="example-linear-regression-on-the-pima-data-set" class="level3" data-number="30.3.1">
-<h3 data-number="30.3.1" class="anchored" data-anchor-id="example-linear-regression-on-the-pima-data-set"><span class="header-section-number">30.3.1</span> Example: linear regression on the <code>Pima</code> data set</h3>
+<section id="example-linear-regression-on-the-pima-data-set" class="level3" data-number="31.3.1">
+<h3 data-number="31.3.1" class="anchored" data-anchor-id="example-linear-regression-on-the-pima-data-set"><span class="header-section-number">31.3.1</span> Example: linear regression on the <code>Pima</code> data set</h3>
 <p>For easier coding later, let’s add a column to the <code>Pima.te</code> data set. The <code>type</code> column is <code>Yes</code> or <code>No</code> according to whether or not each subject has diabetes. Let’s add a column with a more straightforward name and which directly encodes this diabetes status as <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Pima.te<span class="sc">$</span>diabetes <span class="ot">&lt;-</span> <span class="fu">ifelse</span>( Pima.te<span class="sc">$</span>type<span class="sc">==</span><span class="st">'Yes'</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Pima.te)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Pima.te<span class="sc">$</span>diabetes <span class="ot">&lt;-</span> <span class="fu">ifelse</span>( Pima.te<span class="sc">$</span>type<span class="sc">==</span><span class="st">'Yes'</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Pima.te)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  npreg glu bp skin  bmi   ped age type diabetes
 1     6 148 72   35 33.6 0.627  50  Yes        1
@@ -547,8 +623,8 @@ Y_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \cdots + \beta_p X_{i,p}
 </div>
 <p>Now, let’s pick a predictor and fit a simple linear regression model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pima_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( diabetes <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> glu, <span class="at">data=</span>Pima.te );</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pima_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pima_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>( diabetes <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> glu, <span class="at">data=</span>Pima.te );</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pima_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -572,31 +648,39 @@ F-statistic: 122.3 on 1 and 330 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>Looks like we managed to capture some signal there, at least according to the F-statistic! Let’s look at a plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>Pima.te, <span class="fu">aes</span>(<span class="at">x=</span>glu, <span class="at">y=</span>diabetes)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">formula=</span><span class="st">'y ~ 1 + x'</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>Pima.te, <span class="fu">aes</span>(<span class="at">x=</span>glu, <span class="at">y=</span>diabetes)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">formula=</span><span class="st">'y ~ 1 + x'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="logistic_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="logistic_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Hmm… so our fitted model takes in a number (i.e., <code>glu</code>) and outputs a number that is our prediction for <span class="math inline">\(Y_i\)</span>. The trouble is that our responses are binary, but our outputs can be anything. If our goal is to predict <span class="math inline">\(y\)</span>, and we predict <span class="math inline">\(y\)</span> to be <span class="math inline">\(\hat{\beta}_0 + \hat{\beta}_1 x\)</span>, then we can (potentially) predict arbitrary large or small values for <span class="math inline">\(y\)</span>, if <span class="math inline">\(x\)</span> is suitably large or small. That’s a bit of an awkward fact– after all, we want our prediction to be <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. This isn’t the end of the world. We could do something like “clipping” our output <span class="math inline">\(\hat{\beta}_0 + \hat{\beta}_1 x\)</span> to whichever of <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span> is closest or something like that. But this feels clumsy, at best. Is there a more appropriate approach?</p>
 <p>Well, there are many, but an especially simple one is <em>logistic regression</em>, which seeks to keep the “linear combination of predictors” idea that we like so much from linear regression, but modify how we make predictions to be better-suited to the “binary response” setting.</p>
 </section>
-<section id="logistic-regression" class="level3" data-number="30.3.2">
-<h3 data-number="30.3.2" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">30.3.2</span> Logistic regression</h3>
+<section id="logistic-regression" class="level3" data-number="31.3.2">
+<h3 data-number="31.3.2" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">31.3.2</span> Logistic regression</h3>
 <p>The core problem with applying linear regression to a binary response is that the output of linear regression can be any number, while we are really only interested in outputs in <span class="math inline">\(\{0,1\}\)</span>. How might we transform our <em>linear</em> prediction, <span class="math inline">\(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\)</span>, into something more sensible?</p>
 <p>Logistic regression solves this problem by taking our linear prediction <span class="math inline">\(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\)</span> and turning it into a <em>probability</em>, i.e., a number between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. We do that using the <em>logistic function</em>, <span class="math display">\[
 \sigma( z ) = \frac{ 1 }{1 + e^{-z}} = \frac{ e^{z} }{ 1 + e^{z} }.
 \]</span></p>
 <p>Here is a plot of the function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>,<span class="fl">0.01</span>);</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( z, <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>z)), <span class="at">col=</span><span class="st">'blue'</span> );</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>); <span class="fu">abline</span>(<span class="at">h=</span><span class="dv">1</span>);</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>z<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>,<span class="fl">0.01</span>);</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( z, <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>z)), <span class="at">col=</span><span class="st">'blue'</span> );</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>); <span class="fu">abline</span>(<span class="at">h=</span><span class="dv">1</span>);</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="logistic_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="logistic_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The logistic function is an example of a <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> (fancy Greek for “S-shaped”).</p>
@@ -636,23 +720,19 @@ X_i = \left( X_{i,1}, X_{i,2}, \dots, X_{i,p} \right),
 \]</span></p>
 </section>
 </section>
-<section id="logistic-regression-in-r" class="level2" data-number="30.4">
-<h2 data-number="30.4" class="anchored" data-anchor-id="logistic-regression-in-r"><span class="header-section-number">30.4</span> Logistic regression in R</h2>
+<section id="logistic-regression-in-r" class="level2" data-number="31.4">
+<h2 data-number="31.4" class="anchored" data-anchor-id="logistic-regression-in-r"><span class="header-section-number">31.4</span> Logistic regression in R</h2>
 <p>Let’s ignore, for now, the question of <em>how</em> we fit this model (spoiler alert: least squares isn’t going to make a lot of sense anymore; we’ll need something more clever), let’s ask R to fit a logistic regression model to our problem of predicting diabetes from the <code>glu</code> variable in the Pima data set.</p>
 <p>The function that we use in R is <code>glm</code>. “GLM” stands for <em>generalized</em> linear model. That is, we are generalizing linear regression. In particular, we are generalizing linear regression by doing linear regression, but then passing the linear regression prediction <span class="math inline">\(\beta_0 + \beta_1 x\)</span> through another function.</p>
 <p>To perform <em>logistic</em> regression, we need to specify to R that we are using a “binomial” family of responses– our response <span class="math inline">\(Y\)</span> is binary, so it can be thought of as a Binomial random variable, with <span class="math inline">\(\Pr[ Y = 1] = \sigma( \beta_0 + \beta_1 X)\)</span>.</p>
 <p>Other than that, fitting a model with <code>glm</code> is basically the same as using plain old <code>lm</code>. Even the model summary output looks about the same:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pima_logistic <span class="ot">&lt;-</span> <span class="fu">glm</span>( diabetes <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> glu, <span class="at">data=</span>Pima.te, <span class="at">family=</span>binomial );</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pima_logistic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pima_logistic <span class="ot">&lt;-</span> <span class="fu">glm</span>( diabetes <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> glu, <span class="at">data=</span>Pima.te, <span class="at">family=</span>binomial );</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pima_logistic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
 glm(formula = diabetes ~ 1 + glu, family = binomial, data = Pima.te)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--2.2343  -0.7270  -0.4985   0.6663   2.3268  
 
 Coefficients:
              Estimate Std. Error z value Pr(&gt;|z|)    
@@ -672,28 +752,32 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 <p>But notice now that our model’s outputs are always between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( Pima.te, <span class="fu">aes</span>(<span class="at">x=</span>glu, <span class="at">y=</span>diabetes) ) <span class="sc">+</span> <span class="fu">geom_point</span>();</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">formula=</span><span class="st">'y ~ 1+x'</span>, <span class="at">se=</span><span class="cn">FALSE</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method=</span><span class="st">'glm'</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family =</span> <span class="st">"binomial"</span>) );</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that geom_smooth needs an extra list() of arguments to specify the</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># extra arguments that we passed to the glm() function above.</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># In particular, we need to tell the GLM to use a binomial response.</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( Pima.te, <span class="fu">aes</span>(<span class="at">x=</span>glu, <span class="at">y=</span>diabetes) ) <span class="sc">+</span> <span class="fu">geom_point</span>();</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">formula=</span><span class="st">'y ~ 1+x'</span>, <span class="at">se=</span><span class="cn">FALSE</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method=</span><span class="st">'glm'</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family =</span> <span class="st">"binomial"</span>) );</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that geom_smooth needs an extra list() of arguments to specify the</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># extra arguments that we passed to the glm() function above.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># In particular, we need to tell the GLM to use a binomial response.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="logistic_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="logistic_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>If we interpret our model’s output as a probability, namely the probability that we observe label <span class="math inline">\(Y\)</span> for predictors <span class="math inline">\(X\)</span>, then it is clear that as <code>glu</code> increases, our model thinks it is more likely that a person has diabetes.</p>
 <p>Just as with linear regression, our logistic model object will make predictions for new, previously unseen predictors if we use the <code>predict</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: we pass a data frame into the predict function, and our model</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># will produce an output for ease row of that data frame.</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># So this is making a prediction for a subject with `glu=200`.</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Looking at our scatter plot above, it's clear that `glu=200` is at the</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># far upper end of our data distribution, so we should expect our model to</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># produce an output close to 1.</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(pima_logistic, <span class="at">type=</span><span class="st">'response'</span>, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">glu=</span><span class="dv">200</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: we pass a data frame into the predict function, and our model</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># will produce an output for ease row of that data frame.</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># So this is making a prediction for a subject with `glu=200`.</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Looking at our scatter plot above, it's clear that `glu=200` is at the</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># far upper end of our data distribution, so we should expect our model to</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># produce an output close to 1.</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(pima_logistic, <span class="at">type=</span><span class="st">'response'</span>, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">glu=</span><span class="dv">200</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        1 
 0.9267217 </code></pre>
@@ -701,19 +785,23 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 <p>Generally speaking, as <code>glu</code> increases, our model is more confident that the subject has diabetes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glu_vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">50</span>,<span class="dv">200</span>,<span class="dv">10</span>);</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>logistic_outputs <span class="ot">&lt;-</span> <span class="fu">predict</span>(pima_logistic, <span class="at">type=</span><span class="st">'response'</span>,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">glu=</span>glu_vals) )</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( glu_vals, logistic_outputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>glu_vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">50</span>,<span class="dv">200</span>,<span class="dv">10</span>);</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>logistic_outputs <span class="ot">&lt;-</span> <span class="fu">predict</span>(pima_logistic, <span class="at">type=</span><span class="st">'response'</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">glu=</span>glu_vals) )</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( glu_vals, logistic_outputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="logistic_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="logistic_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Again, these are our model’s predicted outputs for given input values for glucose levels. As <code>glu</code> increases, our model assigns higher and higher probabilities to the possibility that a subject has diabetes.</p>
 <p>You’ll play around with logistic regression and the Pima data set more in discussion section, where you’ll find that if we choose our predictors more carefully (and use more predictors), we can build a pretty good model!</p>
 </section>
-<section id="interpreting-model-coefficients" class="level2" data-number="30.5">
-<h2 data-number="30.5" class="anchored" data-anchor-id="interpreting-model-coefficients"><span class="header-section-number">30.5</span> Interpreting model coefficients</h2>
+<section id="interpreting-model-coefficients" class="level2" data-number="31.5">
+<h2 data-number="31.5" class="anchored" data-anchor-id="interpreting-model-coefficients"><span class="header-section-number">31.5</span> Interpreting model coefficients</h2>
 <p>In linear regression, our model coefficients had a simple interpretation: <span class="math inline">\(\beta_1\)</span> was the change in response associated with a unit change in the corresponding predictor. Is there an analogous interpretation for logistic regression?</p>
 <p>Well, there is, but it requires a bit of extra work to define some terms so that we can talk sensibly about <em>what</em> changes in response to a change in a predictor.</p>
 <p>The <em>odds</em> of an event <span class="math inline">\(E\)</span> with probability <span class="math inline">\(p\)</span> are given by <span class="math display">\[
@@ -740,8 +828,8 @@ p(x) = \frac{ 1 }{ 1 + \exp\{ -(\beta_0 + \beta_1 x) \} }.
 <p>In other words, under our logistic regression model, the “slope” <span class="math inline">\(\beta_1\)</span> is the increase in the log-odds of the response being <span class="math inline">\(1\)</span> associated with a unit increase in <span class="math inline">\(x\)</span>.</p>
 <p>Said yet another way, logistic regression is what happens if we use a linear regression model to predict the log-odds of the event that the response is <span class="math inline">\(1\)</span>, i.e., the log-odds of the event <span class="math inline">\(Y_i = 1\)</span>.</p>
 </section>
-<section id="fitting-the-model" class="level2" data-number="30.6">
-<h2 data-number="30.6" class="anchored" data-anchor-id="fitting-the-model"><span class="header-section-number">30.6</span> Fitting the model</h2>
+<section id="fitting-the-model" class="level2" data-number="31.6">
+<h2 data-number="31.6" class="anchored" data-anchor-id="fitting-the-model"><span class="header-section-number">31.6</span> Fitting the model</h2>
 <p>We said previously that we were going to ignore, for the time being, the matter of <em>how</em> we fit out logistic regression model. Well, let’s come back to that question.</p>
 <p>Let’s start by recalling <em>ordinary least squares</em> regression, where we had the following <em>loss function</em>:</p>
 <p><span class="math display">\[
@@ -818,14 +906,14 @@ y_i \log \left( \frac{ 1 }{1 + \exp\{ -(\beta_0 + \beta_1 x) \}} \right)
 \]</span></p>
 <p>That is, while our <em>loss function</em> for linear regression is the sum of squared errors, our loss function for logistic regression is the <em>negative log likelihood</em>.</p>
 <p>Unlike in the least squares case, these optimized coefficients do not have nice closed form solutions. Still, when we conduct logistic regression in R, this minimization problem is solved for us using tools from optimization.</p>
-<section id="a-bit-of-philosophy-maximum-likelihood" class="level3" data-number="30.6.1">
-<h3 data-number="30.6.1" class="anchored" data-anchor-id="a-bit-of-philosophy-maximum-likelihood"><span class="header-section-number">30.6.1</span> A bit of philosophy: maximum likelihood</h3>
+<section id="a-bit-of-philosophy-maximum-likelihood" class="level3" data-number="31.6.1">
+<h3 data-number="31.6.1" class="anchored" data-anchor-id="a-bit-of-philosophy-maximum-likelihood"><span class="header-section-number">31.6.1</span> A bit of philosophy: maximum likelihood</h3>
 <p>It turns out that this idea of choosing our parameters to maximize the probability of the data is so popular in statistics that it has a name: <em>maximum likelihood estimation</em>. When we need to estimate the value of a parameter, we choose the one that maximizes the likelihood of the data.</p>
 <p>Interestingly, in many situations, the <em>least squares</em> estimate and the <em>maximum likelihood</em> estimate of a parameter are, in fact, the same. In many situations, the sample mean <em>is</em> the least squares estimate of our parameter, and it is <em>also</em> the estimate that we would obtain if we maximize the likelihood. Examples of this kind of situation include: linear regression, estimating the mean of a normal, and estimating the rate parameter of the Poisson.</p>
 <p>You’ll see many more connections between these ideas, and establish some of the interesting properties of maximum likelihood estimation in your more advanced statistics classes. For now, let’s very quickly establish that the sample mean of the normal is <em>both</em> the least squares estimator <em>and</em> the maximum likelihood estimator.</p>
 </section>
-<section id="example-mean-of-a-normal" class="level3" data-number="30.6.2">
-<h3 data-number="30.6.2" class="anchored" data-anchor-id="example-mean-of-a-normal"><span class="header-section-number">30.6.2</span> Example: mean of a normal</h3>
+<section id="example-mean-of-a-normal" class="level3" data-number="31.6.2">
+<h3 data-number="31.6.2" class="anchored" data-anchor-id="example-mean-of-a-normal"><span class="header-section-number">31.6.2</span> Example: mean of a normal</h3>
 <p>Consider the setting in which we observe data <span class="math inline">\(X_1,X_2,\dots,X_n\)</span> drawn independently and identically distributed according to a normal distribution with <em>unknown</em> mean <span class="math inline">\(\mu\)</span> and <em>known</em> variance <span class="math inline">\(\sigma^2\)</span> (assuming the variance is known is just for the sake of making some things simpler– a similar story is true if we have to estimate the variance, as well).</p>
 <p>So let’s suppose that we observe <span class="math inline">\(X_1=x_1, X_2=x_2, \dots, X_n=x_n\)</span>. Let’s consider two different ways to estimate the mean <span class="math inline">\(\mu\)</span>.</p>
 <p><strong>Least squares estimation.</strong> In least squares, we want to choose the number that minimizes the sum of squares between our estimate and the data: <span class="math display">\[
@@ -894,8 +982,8 @@ m &amp;= \frac{1}{n} \sum_{i=1}^n x_i
 <p>This “specialness” of the sample mean is actually very common in the “nice” distributions that we see a lot in our early statistics courses, but it’s worth bearing in mind that this isn’t generally the case: in more “interesting” settings, least squares and maximum likelihood estimators can be very different! Stay tuned in your later courses to learn more.</p>
 </section>
 </section>
-<section id="prediction-versus-feature-selection-the-two-cultures" class="level2" data-number="30.7">
-<h2 data-number="30.7" class="anchored" data-anchor-id="prediction-versus-feature-selection-the-two-cultures"><span class="header-section-number">30.7</span> Prediction versus feature selection: the two cultures</h2>
+<section id="prediction-versus-feature-selection-the-two-cultures" class="level2" data-number="31.7">
+<h2 data-number="31.7" class="anchored" data-anchor-id="prediction-versus-feature-selection-the-two-cultures"><span class="header-section-number">31.7</span> Prediction versus feature selection: the two cultures</h2>
 <p>We have motivated most of our discussion of regression the last few weeks by talking about <em>prediction</em>. We see data <span class="math inline">\(X_i\)</span>, and our goal is to predict (i.e., guess) an associated response or label <span class="math inline">\(Y_i\)</span>. A “good” model is one that does well at predicting these labels or responses.</p>
 <p><strong>Example: image recognition</strong> Consider once again the problem of detecting whether or not an image contains a cat. We observe <span class="math inline">\((X_i, Y_i)\)</span> pairs in which each image <span class="math inline">\(X_i\)</span> has an associated label <span class="math display">\[
 Y_i = \begin{cases} 1 &amp;\mbox{ if image } i \text{ contains a cat }\\
@@ -921,8 +1009,8 @@ Y_i = \begin{cases} 1 &amp;\mbox{ if image } i \text{ contains a cat }\\
 <p>This tension, between prediction and modeling, was discussed extensively in a <a href="https://projecteuclid.org/journals/statistical-science/volume-16/issue-3/Statistical-Modeling--The-Two-Cultures-with-comments-and-a/10.1214/ss/1009213726.full">famous paper</a> from 2001 by Leo Breiman, titled <em>Statistical Modeling: The Two Cultures</em>.</p>
 <p>Now, it’s not as though there’s some huge fight between “prediction people” and “modeling people”. We work together all the time! But it’s useful to understand the distinction between these two different kinds of problems and to be able to distinguish when one or the other is the more appropriate “hat” to be wearing. Keep an eye out for these kinds of things as you progress in your data science career!</p>
 </section>
-<section id="review" class="level2" data-number="30.8">
-<h2 data-number="30.8" class="anchored" data-anchor-id="review"><span class="header-section-number">30.8</span> Review</h2>
+<section id="review" class="level2" data-number="31.8">
+<h2 data-number="31.8" class="anchored" data-anchor-id="review"><span class="header-section-number">31.8</span> Review</h2>
 <ul>
 <li>Relationship between probability, odds and log-odds</li>
 <li>Sigmoid function <span class="math inline">\(\sigma(z)=\frac{1}{1+e^{-z}}\)</span></li>
@@ -974,18 +1062,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1017,11 +1094,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1031,8 +1147,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1044,7 +1169,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1088,6 +1336,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1113,6 +1362,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1176,12 +1451,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./logistic_practice.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./R10_LogisticReg_Extended.html" class="pagination-link" aria-label="Logistic Regression - Extended Examples">
+        <span class="nav-page-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

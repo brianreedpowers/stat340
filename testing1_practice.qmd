@@ -177,7 +177,88 @@ Circuit 2: 250, 253, 249, 256, 259, 252, 260, 251
 
 ##  Rank-based permutation test
 
+Researchers compared the effectiveness of conventional textbook worked examples to modified worked examples, which present the algebraic manipulations and explanation as part of the graphical display. They are interested if the time to complete problems improves if students can study from the modified examples compared to the conventional examples.
+
+Subjects: 28 ninth-year students in Sydney, Australia, with no previous exposure to coordinate geometry but have adequate math to deal with the problems given The 28 subjects were randomized to self-study one of two instructional materials. The two materials covered exactly the same problems, presented differently. Students were given as much time as they wished to study the material, but not allowed to ask questions. Following the instructional phase, all students were tested with a common examination over three problems of different difficulty. Response: the time (in seconds) required to arrive at a solution to the moderately difficult problem.
+
+Modified Group: 68, 70, 73, 75, 77, 80, 80, 132, 148, 155, 183, 197, 206, 210 
+
+Conventional Group: 130, 139, 146, 150, 161, 177, 228, 242, 265, 300\*, 300\* ,300\* ,300\* ,300\* 
+
+Note the response is censored at 300 seconds because the time allotment for the problem is 5 minutes Five students did not complete the problem in the 5-minute (300 seconds) time allotment.
+
+::: {.callout-note collapse="true" title="Solution"}
+
+Because of the data truncated at 300, it's reasonable to convert the values to ranks. This will also handle strangeness in distribution shape. We could use any statistic based on rank as a test statistic. We'll use the mean rank from the modified group. Difference of means would be equivalent - it wouldn't be a more powerful test statistic (you can verify this).
+
+We would find evidence for the claim if the mean rank from the modified group is particularly *low*, so this is a left-sided test.
+
+```{r}
+set.seed(1)
+mod.g <- c(68, 70, 73, 75, 77, 80, 80, 132, 148, 155, 183, 197, 206, 210)
+conv.g <- c(130, 139, 146, 150, 161, 177, 228, 242, 265, 300, 300 ,300 ,300 ,300)
+
+ranks <- rank(c(mod.g, conv.g))
+mod.rank <- ranks[1:length(mod.g)]
+
+obs.T <- mean(mod.rank)
+
+NMC <- 10000
+sim.T <- numeric(NMC)
+for(i in 1:NMC){
+  ranks.sim <- sample(ranks)
+  mod.rank.sim <- ranks.sim[1:length(mod.g)]
+  sim.T[i] <- mean(mod.rank.sim)
+}
+
+hist(sim.T)
+abline(v=obs.T, col="red")
+
+more.Extreme <- sum(sim.T <= obs.T)
+(p.value <- more.Extreme / NMC)
+```
+
+The $p$-value is extremely low, we have overwhelming evidence that the modified problems tend to result in lower completion time
+
+:::
+
 ##  Paired sample permutation test
+Two body designs are being considered for a new car model. The time (in seconds) to parallel park each body design was recorded for 14 drivers. The following results were obtained.
+
+| **Driver**  |   1|   2|   3|   4|   5|   6|   7|   8|   9|  10|  11|  12|  13|  14|
+|-------------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| **Model 1** |37.0|25.8|16.2|24.2|22.0|33.4|23.8|43.2|33.6|24.4|23.4|21.2|36.2|32.8|
+| **Model 2** |17.8|20.2|16.8|41.4|21.4|38.4|16.8|34.2|27.8|23.2|29.6|20.6|32.2|41.8|
+
+Does this data give us strong evidence that the mean time to parallel park
+is different for the two body designs? Use a Monte Carlo test
+
+::: {.callout-note collapse="true" title="Solution"}
+
+The null hypothesis is that each pair of values are equally likely to be for Model 1/ Model 2 as it would be for Model 2/Model 1. The permutation thus would not be across drivers, but across models.
+
+```{r}
+set.seed(1)
+model1 <- c(37.0,25.8,16.2,24.2,22.0,33.4,23.8,43.2,33.6,24.4,23.4,21.2,36.2,32.8)
+model2 <- c(17.8,20.2,16.8,41.4,21.4,38.4,16.8,34.2,27.8,23.2,29.6,20.6,32.2,41.8)
+
+obs.T <- mean(model1 - model2)
+
+NMC <- 10000
+sim.T <- numeric(NMC)
+for(i in 1:NMC){
+  signs <- sample(c(-1,1), length(model1), replace=TRUE)
+  sim.T[i] <- mean(model1*signs - model2*signs)
+}
+hist(sim.T); abline(v=obs.T, col="red")
+
+more.Extreme <- min(sum(sim.T >= obs.T), sum(sim.T <= obs.T))
+(p.value <- 2* more.Extreme / NMC)
+
+```
+
+The $p$-value is above .65; If the null hypothesis were true, and the two times were just due to driver and had nothing to do with the model, we'd see a test statistic this extreme (or more) 65% of the time. 
+:::
 
 
 # Beyond STAT 340
