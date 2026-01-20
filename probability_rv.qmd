@@ -53,7 +53,7 @@ A *probability* is a function that maps events to numbers, with the properties t
 
 -   $\Pr[ E ] \in [0,1]$ for all events $E$
 -   $\Pr[ \Omega ] = 1$
--   For $E_1,E_2 \in \Omega$ with $E_1 \cap E_2 = \emptyset$, $\Pr[ E_1 \cup E_2 ] = \Pr[ E_1 ] + \Pr[ E_2 ]$
+-   For $E_1,E_2 \subseteq \Omega$ with $E_1 \cap E_2 = \emptyset$, $\Pr[ E_1 \cup E_2 ] = \Pr[ E_1 ] + \Pr[ E_2 ]$
 
 If $\Pr[E_1 \cap E_2]=0$, we say that $E_1$ and $E_2$ are *mutually exclusive* (or *disjoint*)
 
