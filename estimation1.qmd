@@ -128,7 +128,9 @@ $$
 
 If we examine enough widgets, we know that we can estimate $p$ very well using the sample mean
 
-$$\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i = \frac{ \text{# of functional widgets} }{ n }.$$
+$$
+\overline{X}=\frac1n\sum_{i=1}^nX_i=\frac{\text{\# of functional widgets}}{n}
+$$
 
 Again, the law of large numbers (which we'll discuss more formally soon), says that once $n$ is big, this estimate will be really close to $\mathbb{E} \bar{X} = p$.
 More specifically, the more widgets we examine, the more accurate our estimate will be (on average).
