@@ -542,7 +542,7 @@ Similarly, we can **divide the number of YY by the number of YN** to get an esti
 Now, note that **if the "hot hands" effect really exists** in the data, then **YY/YN should be larger than NY/NN** in a large enough sample. We use this fact to define the following quantity:
 
 $$
-R=\frac{(\text{# of YY})/(\text{# of YN})}{(\text{# of NY})/(\text{# of NN})}
+R=\frac{(\text{\# of YY})/(\text{\# of YN})}{(\text{\# of NY})/(\text{\# of NN})}
 $$
 
 The ratio $R$ represents, in some sense, **how much more likely** the player is to **make the next shot** if he **made the previous shot _vs_ if he didn't make the previous shot** (note the **_vs_**). This is exactly what we're trying to investigate!
