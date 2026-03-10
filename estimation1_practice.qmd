@@ -84,7 +84,7 @@ t <- c(5, 11, 21, 31, 46, 75, 98, 122, 145, 165, 196, 224, 245, 293, 321, 330, 3
 
 Suppose $X_1, \ldots, X_n \sim Unif(a, b)$, but both $a$ and $b$ are unknown. 
 
-a. Construct simultaneous method of moment estimators $\hat{a}$ and $\hat{b}$ from the facts that $E(X)=\frac{b-a}{2}$ and $Var(X)=\frac{(b-a)^2}{12}$.
+a. Construct simultaneous method of moment estimators $\hat{a}$ and $\hat{b}$ from the facts that $E(X)=\frac{a+b}{2}$ and $Var(X)=\frac{(b-a)^2}{12}$.
 
 b. One could also use the estimator $\hat{b}=\frac{n+1}{n}\max(X_1, \ldots, X_n)$, which is unbiased. Show that $\frac{n+1}{n}(\max(X)-\min(X))$ is an unbiased estimator for $b-a$ using Monte Carlo.
 
