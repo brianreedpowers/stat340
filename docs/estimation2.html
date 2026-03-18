@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -68,15 +68,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./R07_More_Estimation_and_CI_Examples.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -119,7 +118,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -159,9 +158,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -631,9 +628,9 @@ window.Quarto = {
 <p>Let’s use R to compute the exact quantiles of this distribution.</p>
 <p><strong>Reminder:</strong> We do that with the function <code>qnorm</code>. Analogously to <code>rnorm</code>, <code>pnorm</code> and <code>dnorm</code>, think “<code>q</code> for quantiles”</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The first argument to qnorm is a vector of the quantiles we want (given as probabilities).</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The first argument to qnorm is a vector of the quantiles we want (given as probabilities).</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Asking for the 2.5% and 97.5% quantiles.</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>( <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>( <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6080072 1.3919928</code></pre>
 </div>
@@ -678,7 +675,7 @@ window.Quarto = {
 <p>Well, the standard deviation of <span class="math inline">\(S\)</span> is <span class="math inline">\(\sigma/\sqrt{n}\)</span>. If we increase <span class="math inline">\(n\)</span>, the standard deviation of <span class="math inline">\(S\)</span> decreases, and our resulting confidence interval gets narrower.</p>
 <p>For example, if <span class="math inline">\(n=100\)</span>, then <span class="math inline">\(S \sim \operatorname{Normal}(\mu=1,\sigma=1/10)\)</span>, and our quantiles become</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>( <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">100</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>( <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">100</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8040036 1.1959964</code></pre>
 </div>
@@ -710,12 +707,12 @@ window.Quarto = {
 <p>Now, let’s generate data from this model, this time imagining that we don’t know the parameter <span class="math inline">\(\lambda\)</span>.</p>
 <p>Instead, we’ll estimate <span class="math inline">\(\lambda\)</span> from our data, and to get a “confidence interval” for <span class="math inline">\(\lambda\)</span>, we will pretend that our estimate <span class="math inline">\(\bar{X}\)</span> is the truth and generate new copies of the data using <span class="math inline">\(\lambda = \bar{X}\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">80</span>; <span class="co"># Sample size of our data</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">80</span>; <span class="co"># Sample size of our data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lambda_true <span class="ot">&lt;-</span> <span class="fl">2.718</span>; <span class="co"># True (but unknown!) Poisson parameter</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n=</span>n, <span class="at">lambda=</span>lambda_true);</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span>.<span class="dv">5</span>,<span class="fu">max</span>(data)<span class="sc">+</span>.<span class="dv">5</span>,<span class="dv">1</span>)); <span class="co"># Always good to look at your data!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span>.<span class="dv">5</span>,<span class="fu">max</span>(data)<span class="sc">+</span>.<span class="dv">5</span>,<span class="dv">1</span>)); <span class="co"># Always good to look at your data!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -726,7 +723,7 @@ window.Quarto = {
 </div>
 <p>Now, let’s get our estimate (just the sample mean!), pretend it’s the true value of <span class="math inline">\(\lambda\)</span>, and generate data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: we say lambdahat to remind ourselves this is</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: we say lambdahat to remind ourselves this is</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># an estimate of lambda.</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>lambda_hat <span class="ot">&lt;-</span> <span class="fu">mean</span>(data); <span class="co"># Sample mean is our estimate of lambda.</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -734,7 +731,7 @@ window.Quarto = {
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># To reiterate, we're pretending that our estimate is the truth and seeing what our data would look like.</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>fake_data <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n=</span>n, <span class="at">lambda=</span>lambda_hat);</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(fake_data, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span>.<span class="dv">5</span>,<span class="fu">max</span>(fake_data)<span class="sc">+</span>.<span class="dv">5</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(fake_data, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span>.<span class="dv">5</span>,<span class="fu">max</span>(fake_data)<span class="sc">+</span>.<span class="dv">5</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -755,7 +752,7 @@ window.Quarto = {
 </ul>
 <p>Let’s implement that:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: sample size and true parameter</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reminder: sample size and true parameter</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n<span class="ot">&lt;-</span> <span class="dv">80</span>; lambda_true <span class="ot">&lt;-</span> <span class="fl">2.718</span>;</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate data from the true distribution</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rpois</span>( <span class="at">n=</span>n, <span class="at">lambda=</span>lambda_true);</span>
@@ -770,9 +767,9 @@ window.Quarto = {
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Now construct the confidence interval</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">quantile</span>( replicates, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>) );</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(CI)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(CI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.95 2.6</code></pre>
+<pre><code>2.837188 3.625</code></pre>
 </div>
 </div>
 <p>Most of the time, when we run the code above, we should find that <span class="math inline">\(\lambda=2.718\)</span> is inside of that interval.</p>
@@ -780,7 +777,7 @@ window.Quarto = {
 <p>Now, how often does that happen? Well, let’s try creating lots of intervals like the one above and count how often our interval contains the true value of <span class="math inline">\(\lambda\)</span>.</p>
 <p>First, we’ll implement a function to run one instance of the experiment we just ran above.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>run_trial <span class="ot">&lt;-</span> <span class="cf">function</span>(lambdatrue, n, Nrep) {</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>run_trial <span class="ot">&lt;-</span> <span class="cf">function</span>(lambdatrue, n, Nrep) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run one instance of our experiment above, wherein we</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1) Generate data from Pois(lambda_true)</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2) Estimate lambdahat from that data.</span></span>
@@ -801,21 +798,21 @@ window.Quarto = {
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the names=FALSE tells R to return the quantiles with no header</span></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  CI <span class="ot">&lt;-</span> <span class="fu">quantile</span>( replicates, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">names=</span><span class="cn">FALSE</span> );</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( (CI[<span class="dv">1</span>] <span class="sc">&lt;</span> lambdatrue) <span class="sc">&amp;</span> (lambdatrue <span class="sc">&lt;</span> CI[<span class="dv">2</span>]) );</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, let’s try repeating the experiment many times by calling <code>run_trial(lambdatrue=2.718, n=80, Nrep=1000 )</code> a bunch.</p>
 <p><strong>Important note:</strong> This section of code might take a minute or two to run. Each time we call <code>run_trial</code>, we are generating <code>n</code> Poisson variables <code>Nrep</code> times. And here we are about to call <code>run_trial</code> many times (the variable is <code>Nexpt</code> below). So, in total, we’re generating <code>n*Nrep*Nexpt</code> random variables, and random variables aren’t cheap (think back to our discussion of randomness in our Monte Carlo lectures)!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: This section of code might take a minute or two to run!</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: This section of code might take a minute or two to run!</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Nexpt <span class="ot">&lt;-</span> <span class="dv">500</span>; <span class="co"># Number of times to run the experiment</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>expt_results <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,Nexpt); <span class="co"># Vector to store results</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Nexpt) {</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  expt_results[i] <span class="ot">&lt;-</span> <span class="fu">run_trial</span>(<span class="at">lambdatrue=</span><span class="fl">2.718</span>, <span class="at">n=</span><span class="dv">80</span>, <span class="at">Nrep=</span><span class="dv">1000</span>)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count what fraction of the time we were correct.</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(expt_results)<span class="sc">/</span><span class="fu">length</span>(expt_results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(expt_results)<span class="sc">/</span><span class="fu">length</span>(expt_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.952</code></pre>
+<pre><code>[1] 0.94</code></pre>
 </div>
 </div>
 <p>The result <em>should</em> be about .95.</p>
@@ -833,7 +830,7 @@ window.Quarto = {
 <li>Use the histogram of the resulting “fake” estimates to estimate our interval.</li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>true_rate <span class="ot">&lt;-</span> <span class="dv">5</span>;</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>true_rate <span class="ot">&lt;-</span> <span class="dv">5</span>;</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">25</span>; <span class="co">#sample size in the data that we generate.</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>obsd_data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span>nsamp, <span class="at">rate=</span>true_rate);</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the rate parameter lambda from the data.</span></span>
@@ -854,18 +851,18 @@ window.Quarto = {
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Now construct the confidence interval</span></span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"># the names=FALSE tells R to return the quantiles with no header</span></span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">quantile</span>( replicates, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">names=</span><span class="cn">FALSE</span> );</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>CI</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>CI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.503153 7.823887</code></pre>
+<pre><code>[1]  4.971536 10.926713</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(CI[<span class="dv">1</span>] <span class="sc">&lt;</span> true_rate) <span class="sc">&amp;</span> (true_rate <span class="sc">&lt;</span> CI[<span class="dv">2</span>]) ;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(CI[<span class="dv">1</span>] <span class="sc">&lt;</span> true_rate) <span class="sc">&amp;</span> (true_rate <span class="sc">&lt;</span> CI[<span class="dv">2</span>]) ;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
 <p>Okay, let’s package that up in a function and run it a bunch of times to check whether or not our CI is achieve its stated rate of <span class="math inline">\(0.95\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( nsamp, true_rate ) {</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( nsamp, true_rate ) {</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  obsd_data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span>nsamp, <span class="at">rate=</span>true_rate);</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate the rate parameter lambda from the data.</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Recall that the mean is 1/rate, so we can estimate the</span></span>
@@ -887,10 +884,10 @@ window.Quarto = {
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the names=FALSE tells R to return the quantiles with no header</span></span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  CI <span class="ot">&lt;-</span> <span class="fu">quantile</span>( replicates, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">names=</span><span class="cn">FALSE</span> );</span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( (CI[<span class="dv">1</span>] <span class="sc">&lt;</span> true_rate) <span class="sc">&amp;</span> (true_rate <span class="sc">&lt;</span> CI[<span class="dv">2</span>]) );</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's run the above experiment a few thousand times</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's run the above experiment a few thousand times</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and see how often we "catch" the true value of lambda.</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>lambda_true <span class="ot">&lt;-</span> <span class="dv">2</span>;</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">25</span>;</span>
@@ -900,9 +897,9 @@ window.Quarto = {
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  reps[i] <span class="ot">&lt;-</span> <span class="fu">run_exprate_expt</span>( nsamp, lambda_true )</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(reps)<span class="sc">/</span>M</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(reps)<span class="sc">/</span>M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9315</code></pre>
+<pre><code>[1] 0.9375</code></pre>
 </div>
 </div>
 <p>One important thing to bear in mind is that while the simulation-based recipe demonstrated above is a fairly general approach, it only produces an <em>approximately correct</em> confidence interval, which relies on how well we can estimate the model parameter to begin with.</p>
@@ -930,7 +927,7 @@ window.Quarto = {
 <p>Again, the CLT says that if we take a sample of i.i.d. random variables, take their mean, center it about their expectation, and rescale them by their standard deviation, they should be <em>approximately</em> normal.</p>
 <p>Let’s have a look.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="fl">1e3</span>;</span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="fl">1e3</span>;</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Code to draw n iid RVs from exp(1) and compute their sample mean.</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>generate_sample_mean <span class="ot">&lt;-</span> <span class="cf">function</span>( n ) {</span>
@@ -949,7 +946,7 @@ window.Quarto = {
 <span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># We center about the mean 1,</span></span>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># and rescale by the standard deviation of the sample mean,</span></span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># sqrt( ( Var X_1 )/10 ) = sqrt(1/10)</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -959,7 +956,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's try again, but with a larger sample size.</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's try again, but with a larger sample size.</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing n=10 to n=15.</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>Xbar_sample_means <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="cn">NA</span>, NMC);</span>
@@ -967,7 +964,7 @@ window.Quarto = {
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  Xbar_sample_means[i] <span class="ot">&lt;-</span> <span class="fu">generate_sample_mean</span>(<span class="dv">15</span>);</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">15</span>)) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">15</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -978,12 +975,12 @@ window.Quarto = {
 </div>
 <p>Let’s try one more, this time with <span class="math inline">\(n=20\)</span> data points.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Xbar_sample_means <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="cn">NA</span>, NMC);</span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Xbar_sample_means <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="cn">NA</span>, NMC);</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC ) {</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  Xbar_sample_means[i] <span class="ot">&lt;-</span> <span class="fu">generate_sample_mean</span>(<span class="dv">20</span>);</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">20</span>)) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">20</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -994,12 +991,12 @@ window.Quarto = {
 </div>
 <p>Now let’s crank it all the way up to <span class="math inline">\(n=30\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Xbar_sample_means <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="cn">NA</span>, NMC);</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Xbar_sample_means <span class="ot">&lt;-</span> <span class="fu">rep</span>( <span class="cn">NA</span>, NMC);</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC ) {</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  Xbar_sample_means[i] <span class="ot">&lt;-</span> <span class="fu">generate_sample_mean</span>(<span class="dv">30</span>);</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">30</span>)) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (Xbar_sample_means<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">30</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1011,11 +1008,11 @@ window.Quarto = {
 <p>With just <span class="math inline">\(20\)</span> to <span class="math inline">\(30\)</span> samples, the CLT is really kicking in– that last histogram looks pretty undeniably normal to me!</p>
 <p>Just to reiterate, the underlying data here look nothing like normals:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">40</span>, <span class="at">rate=</span><span class="dv">1</span>);</span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">40</span>, <span class="at">rate=</span><span class="dv">1</span>);</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># X has mean 1, variance 1</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># See https://en.wikipedia.org/wiki/Exponential_distribution</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( X<span class="dv">-1</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( X<span class="dv">-1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1026,7 +1023,7 @@ window.Quarto = {
 </div>
 <p>Now, the variance of our data above is <span class="math inline">\(1\)</span>, so there is no need to worry about the rescaling part of the CLT. Let’s look at a different example where the variance is not <span class="math inline">\(1\)</span> to see what that means.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="fl">1e3</span>;</span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="fl">1e3</span>;</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>generate_sample_mean <span class="ot">&lt;-</span> <span class="cf">function</span>( n ) {</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10</span>, <span class="at">mean=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">2</span>);</span>
@@ -1038,7 +1035,7 @@ window.Quarto = {
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  Xbar_sample_means[i] <span class="ot">&lt;-</span> <span class="fu">generate_sample_mean</span>(n);</span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( Xbar_sample_means<span class="dv">-1</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( Xbar_sample_means<span class="dv">-1</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1082,7 +1079,7 @@ window.Quarto = {
 <p>should be (approximately) normal with mean zero and variance one.</p>
 <p>Let’s first check that this is the case.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ptrue <span class="ot">&lt;-</span> <span class="fl">0.1</span>;</span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ptrue <span class="ot">&lt;-</span> <span class="fl">0.1</span>;</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">30</span>;</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">2000</span>;</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>replicates <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, M);</span>
@@ -1093,7 +1090,7 @@ window.Quarto = {
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>true_mean <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>ptrue)<span class="sc">/</span>ptrue;</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>true_var <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>ptrue)<span class="sc">/</span>ptrue<span class="sc">^</span><span class="dv">2</span>;</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (replicates<span class="sc">-</span>true_mean)<span class="sc">/</span><span class="fu">sqrt</span>(true_var<span class="sc">/</span>nsamp) );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( (replicates<span class="sc">-</span>true_mean)<span class="sc">/</span><span class="fu">sqrt</span>(true_var<span class="sc">/</span>nsamp) );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1107,12 +1104,12 @@ window.Quarto = {
 <p>Now, let’s use this fact to construct a CLT-based confidence interval for the mean <span class="math inline">\(1/p\)</span> under the geometric distribution.</p>
 <p>Suppose that we observe the following data:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Our sample mean is</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(data);</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>xbar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(data);</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>xbar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.333333</code></pre>
 </div>
@@ -1123,25 +1120,25 @@ window.Quarto = {
 <p>One option for estimating the variance would be to estimate <span class="math inline">\(p\)</span> and then plug that into the expression for the variance. <strong>Exercise:</strong> try that!</p>
 <p>Here, though, let’s estimate the variance the easy way– computing the sample variance of the data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>varhat <span class="ot">&lt;-</span> <span class="fu">var</span>( data );</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>varhat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>varhat <span class="ot">&lt;-</span> <span class="fu">var</span>( data );</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>varhat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.988506</code></pre>
 </div>
 </div>
 <p>Plugging this into the CLT, a <span class="math inline">\(0.95\)</span> confidence interval is</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>( data )</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( xbar <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>( varhat<span class="sc">/</span>n ), xbar <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>( varhat<span class="sc">/</span>n ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>( data )</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( xbar <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>( varhat<span class="sc">/</span>n ), xbar <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>( varhat<span class="sc">/</span>n ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5340869 2.1325797</code></pre>
 </div>
 </div>
 <p>The true parameter was <span class="math inline">\(p = 0.33\)</span>, so the true mean is</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>truep <span class="ot">&lt;-</span> <span class="fl">0.33</span>;</span>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>truep <span class="ot">&lt;-</span> <span class="fl">0.33</span>;</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>truemean <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>truep)<span class="sc">/</span>truep</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>truemean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>truemean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.030303</code></pre>
 </div>
@@ -1259,14 +1256,13 @@ H_0 : \theta = \theta_0.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

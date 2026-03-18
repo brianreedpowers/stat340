@@ -170,7 +170,7 @@ var(sampleVars)
 var(sampleMeans)
 ```
 
-$\bar{X}$ clearly has a much lowe variance.
+$\bar{X}$ clearly has a much lower variance.
 
 :::
 
@@ -185,21 +185,118 @@ Suppose that You have a sample size $n=25$ and a true $M=100$.
 
 a. Use Monte Carlo  to estimate the bias of each of these estimators.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+M1 <- 0; M2<-0
+for(i in 1:100000){
+  x <- runif(25, 0, 100)
+  M1[i] <- max(x)
+  M2[i] <- 26/25*max(x)
+}
+mean(M1)-100
+mean(M2)-100
+
+```
+The first estimator seems to be negatively biased, but the second seems to be approximately unbiased.
+:::
+
 b. Use Monte Carlo to estimate the variance of both of these estimators. 
+
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+var(M1)
+var(M2)
+```
+M1 (which is biased) has a smaller variance M2 is unbiased and has a larger variance. 
+:::
 
 c. The Mean Squared Error is $E\left[(\hat\theta-\theta)^2\right]$. This can be approximated by Monte Carlo by estimating the parameter repeatedly, squaring the error and averaging. Use Monte Carlo to estimate the MSE of both $\hat{M}_1$ and $\hat{M}_2$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+mean((M1-100)^2)
+mean((M2-100)^2)
+
+```
+The second estimator, $\hat M_2$ has a lower mean squared error.
+:::
+
+d. Consider the estimator $$\hat{M}_k=\frac{n+k}{n}\max(X_1,\ldots,X_n)$$ for values of $k \in [-1,3]$. For which value of $k$ is the MSE minimized? Can you plot the squared bias, variance and MSE on one plot?
+
+::: {.callout-note collapse="true" title="Solution"}
+We can just get 10000 sample maximums and construct these estimators easily. Since I've already got my `M1` object, I can use that.
+
+```{r}
+n <- 25
+bias2 <- 0
+variance <- 0
+mse <- 0
+k <- seq(-1,3, by=.1)
+
+for(i in 1:length(k)){
+  bias2[i]=(mean((n+k[i])/n*M1)-100)^2
+  variance[i]=var((n+k[i])/n*M1)
+  mse[i] = mean(((n+k[i])/n*M1-100)^2)
+}
+
+plot(x=k, y=variance, col="red",type="l", ylim=c(0,max(c(bias2,variance,mse))), ylab="")
+lines(x=k, y=bias2, col="blue")
+lines(x=k, y=mse)
+legend(x="top", legend=c("variance","squared bias","mse"), col=c("red","blue","black"), lty=1)
+
+k[which.min(mse)]
+
+```
+It seems the $k$ value that minimizes the mean squared error is $k=1$.
+:::
+
+
 ## Tricky Sample Maximum II
 
-Another couple estimators for $M$ from the previous problem is $\hat{M}_3=2\bar{X}$, twice the sample mean and $\hat{M}_4=2\tilde{X}$, twice the sample median. 
+Another couple estimators for $M$ from the previous problem are $\hat{M}_3=2\bar{X}$, twice the sample mean and $\hat{M}_4=2\tilde{X}$, twice the sample median. 
 
 Suppose that You have a sample size $n=25$ and a true $M=100$.
 
 a. Use Monte Carlo to estimate the bias and variance of each estimator.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+M3 <- 0; M4<-0
+for(i in 1:100000){
+  x <- runif(25, 0, 100)
+  M3[i] <- 2*mean(x)
+  M4[i] <- 2*median(x)
+}
+#biases
+mean(M3)-100
+mean(M4)-100
+#variances
+var(M3)
+var(M4)
+```
+M3 has a slight negative bias, M4 seems to be more negatively biased. The variance of M4 is also higher than the variance of M3.
+
+:::
+
 b. Use Monte Carlo to approximate the MSE of each estimator.
 
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean((M3-100)^2)
+mean((M4-100)^2)
+```
+Both of these estimators have a far worse MSE than either of the first two.
+:::
+
 c. Between $\hat{M}_1$ through $\hat{M}_4$, which estimator would you prefer? What are some pros and cons of each of them?
+
+::: {.callout-note collapse="true" title="Solution"}
+Between all four estimators, M2 definitely has the smallest MSE and it is an unbiased estimator. It's definitely the preferred estimator. 
+:::
 
 ## Exponential Data
 
@@ -209,6 +306,15 @@ Consider the data below given by Wang (2000) on failure times of an electrical c
 t <- c(5, 11, 21, 31, 46, 75, 98, 122, 145, 165, 196, 224, 245, 293, 321, 330, 350, 420)
 ```
 
+::: {.callout-note collapse="true" title="Solution"}
+For an exponential random variable $X$, $EX=\frac 1\lambda$. The method of moments suggests that $\bar {X} \approx \frac1\lambda$, so $\hat\lambda = \frac1{\bar{X}}$
+
+```{r}
+1/mean(t)
+```
+We'd estimate $\hat\lambda=.0058102$.
+:::
+
 
 ## A uniform mystery
 
@@ -216,9 +322,45 @@ Suppose $X_1, \ldots, X_n \sim Unif(a, b)$, but both $a$ and $b$ are unknown.
 
 a. Construct simultaneous method of moment estimators $\hat{a}$ and $\hat{b}$ from the facts that $E(X)=\frac{a+b}{2}$ and $Var(X)=\frac{(b-a)^2}{12}$.
 
+::: {.callout-note collapse="true" title="Solution"}
+As above, we can say that $\bar{X} \approx \frac{a+b}{2}$ and $S^2 \approx \frac{(b-a)^2}{12}$
+
+We can rearrange these and state
+$$2\bar{X} \approx a+b \quad\quad 12S^2 \approx b^2-2ab+a^2$$
+A substitution of $b\approx 2\bar{X}-a$ can be made in the second equation. Using the quadratic formula (details are omitted) you get $\hat a = \bar{X} \pm \sqrt{3}S$. The same solution is found for $\hat b$ and it stands to reason then that the higher value is the estimator for $b$ while the lower value is the estimator for $a$.
+
+$$\hat a = \bar{X}-\sqrt3 S, \hat b = \bar{X}+\sqrt 3 S$$
+
+:::
+
 b. One could also use the estimator $\hat{b}=\frac{n+1}{n}\max(X_1, \ldots, X_n)$, which is unbiased. Show that $\frac{n+1}{n}(\max(X)-\min(X))$ is an unbiased estimator for $b-a$ using Monte Carlo.
 
+
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+# Let's use a=0 and b=1, so b-a=1.
+# We'll use n=25
+n<-25
+range.hat <- 0
+
+for(i in 1:100000){
+  unifData <- runif(n)
+  range.hat <- (n+1)/n * diff(range(unifData))
+}
+mean(range.hat)-1 #bias
+
+```
+Repeating this a few times I find the estimated bias is between -0.015 and +.015 so I would venture to guess that the estimator is in deed unbiased.
+:::
+
 c. From Part b, use algebra to figure out an estimator $\hat{a}$ for the lower bound of the support.
+
+::: {.callout-note collapse="true" title="Solution"}
+
+
+
+:::
 
 d. Is the estimator from part (c) unbiased? Is it possible that $\hat{a} > \min(X)$?
 

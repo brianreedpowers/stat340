@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,15 +69,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./testing2_practice.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -120,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -160,9 +159,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -621,20 +618,20 @@ window.Quarto = {
 <p>We’ll imagine that we take a sample of widgets from the production line at UW-Madison, and use that sample to try and estimate <span class="math inline">\(p\)</span>.</p>
 <p>Having chosen a model for our data, the first thing we need to do is implement it in R. For now, we’ll make arbitrary choices for the number of widgets <code>n</code> and the probability <code>p</code> of a widget being functional.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; <span class="co"># We will examine n=200 widgets</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; <span class="co"># We will examine n=200 widgets</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Suppose that 80% of widgets are functional</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>functional_widgets <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, p); <span class="co"># Draw one sample of widgets.</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>functional_widgets; <span class="co"># How many of the n widgets are functional?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>functional_widgets; <span class="co"># How many of the n widgets are functional?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 164</code></pre>
+<pre><code>[1] 160</code></pre>
 </div>
 </div>
 <p><strong>Question:</strong> why is the binomial distribution the right thing to use, here?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's wrap that up in a function for use later.</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's wrap that up in a function for use later.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>generate_widgets <span class="ot">&lt;-</span> <span class="cf">function</span>(n,p) {</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, p) );</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Step 2: Estimating <span class="math inline">\(p\)</span></strong></p>
 <p>Suppose that we can collect data by observing widgets <span class="math inline">\(1,2,\dots,n\)</span>.</p>
@@ -656,7 +653,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>So, to start, what do we mean when we say that our estimate will be close to <span class="math inline">\(p\)</span>?</p>
 <p>Let’s see this in action with a simulation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>;</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This time, we'll generate lots of iterations</span></span>
@@ -671,7 +668,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets<span class="sc">/</span>n );</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -706,7 +703,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>So, let’s turn back to the first of our two questions: If we are willing to tolerate an error of, say, 2%, how many widgets do we need to examine?</p>
 <p>Well, let’s start by looking at the histogram of estimates from <span class="math inline">\(2000\)</span> different runs with <span class="math inline">\(n=200\)</span> and <span class="math inline">\(p=0.8\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll generate lots of iterations</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">2000</span>;</span>
@@ -717,7 +714,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets<span class="sc">/</span>n );</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -729,7 +726,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Most of the estimates are between <span class="math inline">\(0.72\)</span> and <span class="math inline">\(0.88\)</span>.</p>
 <p>Let’s try increasing <span class="math inline">\(n\)</span> from <span class="math inline">\(n=200\)</span> to <span class="math inline">\(n=500\)</span>. That is, let’s try gathering more data, in the form of <em>more widgets</em>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n=500 widgets instead of 200, but still 80% are functional.</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n=500 widgets instead of 200, but still 80% are functional.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>;</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll generate lots of iterations</span></span>
@@ -741,7 +738,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets_larger<span class="sc">/</span>n );</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -752,7 +749,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 </div>
 <p>If you compare this plot to the one above, you’ll see that the values are more tightly concentrated about <span class="math inline">\(p=0.8\)</span>. In fact, let’s just display them both in one plot.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Put the data into a data frame to pass to ggplot2.</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">c</span>(functional_widgets<span class="sc">/</span><span class="dv">200</span>, functional_widgets_larger<span class="sc">/</span><span class="dv">500</span> ); <span class="co"># "p hat", i.e., estimate of p.</span></span>
@@ -763,7 +760,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df, <span class="fu">aes</span>(<span class="at">x=</span>phat, <span class="at">color=</span>n, <span class="at">fill=</span>n));</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_histogram</span>( <span class="fu">aes</span>(), <span class="at">position=</span><span class="st">'identity'</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">binwidth=</span><span class="fl">0.01</span>);</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>);</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -776,7 +773,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Gathering more data (i.e., observing more widgets) gives us a more accurate (on average!) estimate of <span class="math inline">\(p\)</span>.</p>
 <p>Just to drive this home, let’s increase <span class="math inline">\(n\)</span> even more.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using 80% functional rate.</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using 80% functional rate.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: there are "cleaner" ways to build this data frame,</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># but those ways are harder to understand on a first glance.</span></span>
@@ -796,13 +793,13 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="st">'n'</span><span class="ot">=</span><span class="fu">as.factor</span>(n), <span class="st">'phat'</span><span class="ot">=</span>phat);</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df, <span class="fu">aes</span>(<span class="at">x=</span>phat, <span class="at">color=</span>n ));</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a smoothed density instead of histogram for easy comparison</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_density</span>( <span class="at">size=</span><span class="dv">2</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_density</span>( <span class="at">size=</span><span class="dv">2</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>, <span class="at">size=</span><span class="fl">1.5</span>);</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>, <span class="at">size=</span><span class="fl">1.5</span>);</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -930,7 +927,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <p>Instead of trying to do more math, let’s try and code up an experiment to get a handle on this.</p>
 <p>Let’s simplify things a bit by writing a function that will generate a random copy of <span class="math inline">\(S(X_1,X_2,\dots,X_n) = \hat{p}\)</span> given a choice of <span class="math inline">\(n\)</span> and the true value of <span class="math inline">\(p\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>simulate_S <span class="ot">&lt;-</span> <span class="cf">function</span>( n, p ) {</span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>simulate_S <span class="ot">&lt;-</span> <span class="cf">function</span>( n, p ) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  functional_widgets <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p);</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Our statistic is the fraction of the n widgets</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># that are functional.</span></span>
@@ -938,9 +935,9 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate n=200 widgets with functional probability p=0.8</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_S</span>(<span class="dv">200</span>, <span class="fl">0.8</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_S</span>(<span class="dv">200</span>, <span class="fl">0.8</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.775</code></pre>
+<pre><code>[1] 0.76</code></pre>
 </div>
 </div>
 <p>Now, we want to use this function to estimate the probability that our estimate is within <span class="math inline">\(0.02\)</span> of <span class="math inline">\(p\)</span>.</p>
@@ -951,7 +948,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 \]</span> We <em>could</em> explicitly compute this number. After all, we know how to compute the probability distribution of the Bernoulli and/or Binomial distributions.</p>
 <p>But instead, let’s just use Monte Carlo estimation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here's a function that will take our estimate S (= phat) and check if it is within 0.02 of p or not.</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here's a function that will take our estimate S (= phat) and check if it is within 0.02 of p or not.</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>check_if_S_is_good <span class="ot">&lt;-</span> <span class="cf">function</span>( S, p ) {</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="fu">abs</span>(S<span class="sc">-</span>p) <span class="sc">&lt;</span> <span class="fl">0.02</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -966,7 +963,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>monte_carlo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">replicate =</span> <span class="dv">1</span><span class="sc">:</span>N_MC, <span class="at">S =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, N_MC), <span class="at">S_good =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, N_MC));</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's just check what the data frame looks like before we populate it.</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( monte_carlo )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( monte_carlo )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  replicate  S S_good
 1         1 NA     NA
@@ -978,22 +975,22 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each replicate, run the experiment and record results.</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each replicate, run the experiment and record results.</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to keep track of the value of S and whether or not S was good.</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N_MC){</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    monte_carlo<span class="sc">$</span>S[i] <span class="ot">&lt;-</span> <span class="fu">simulate_S</span>( n, p );</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    monte_carlo<span class="sc">$</span>S_good[i] <span class="ot">&lt;-</span> <span class="fu">check_if_S_is_good</span>(monte_carlo<span class="sc">$</span>S[i], p)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.536</code></pre>
+<pre><code>[1] 0.5195</code></pre>
 </div>
 </div>
 <p>So about half of our estimates were within <span class="math inline">\(0.02\)</span> of <span class="math inline">\(p\)</span>.</p>
 <p>Our experiments above suggested that we could improve this by increasing <span class="math inline">\(n\)</span>, so let’s try that.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the exact same setup except we're changing n from 200 to 400.</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the exact same setup except we're changing n from 200 to 400.</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>N_MC <span class="ot">&lt;-</span> <span class="dv">2000</span>; n <span class="ot">&lt;-</span> <span class="dv">400</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using p=0.8 and 2000 Monte Carlo trials.</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that we don't really have to create the data frame again.</span></span>
@@ -1009,17 +1006,17 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  monte_carlo<span class="sc">$</span>S_good[i] <span class="ot">&lt;-</span> <span class="fu">check_if_S_is_good</span>(monte_carlo<span class="sc">$</span>S[i], p)</span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.681</code></pre>
+<pre><code>[1] 0.689</code></pre>
 </div>
 </div>
 <p>That’s an improvement! But still about 30% of the time we’re going to be more than 0.02 away from <span class="math inline">\(p\)</span>…</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Just as a check, let's plot a histogram again.</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Just as a check, let's plot a histogram again.</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monte_carlo, <span class="fu">aes</span>(<span class="at">x =</span> S)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">col=</span><span class="st">'red'</span> )</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1083,7 +1080,7 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <p>and for large <span class="math inline">\(n\)</span>, <span class="math inline">\(S\)</span> will be close to <span class="math inline">\(\lambda\)</span>. That is, as <span class="math inline">\(n\)</span> gets large, <span class="math inline">\(\bar{X}\)</span> is close to <span class="math inline">\(\mathbb{E} \bar{X}\)</span>, and therefore <span class="math inline">\(\frac{1}{\bar{X}}\)</span> is close to <span class="math inline">\(1/ \mathbb{E} \bar{X}\)</span>.</p>
 <p>Okay, but this isn’t a math class. Let’s try simulating and see what happens.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( n, rate ) {</span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( n, rate ) {</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span>n, <span class="at">rate=</span><span class="dv">5</span>);</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  Xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>( data )</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="dv">1</span><span class="sc">/</span>Xbar )</span>
@@ -1095,7 +1092,7 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  replicates[i] <span class="ot">&lt;-</span> <span class="fu">run_exprate_expt</span>(<span class="dv">200</span>, <span class="at">rate=</span><span class="dv">5</span>);</span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(replicates);</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">4</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">4</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1185,14 +1182,13 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
