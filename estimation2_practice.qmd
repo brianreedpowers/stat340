@@ -73,7 +73,7 @@ mean(polls$hit)
 If these confidence intervals are constructed correctly, and the theory holds up, what proportion should include $p$?
 
 ::: {.callout-note collapse="true" title="Solution"}
-95% of the confidnece intervals should include p.
+95% of the confidence intervals should include p.
 :::
 
 ## Polling Part 6

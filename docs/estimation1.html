@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>19&nbsp; Estimation Part 1 – STAT 340: Data Science II</title>
+<title>20&nbsp; Estimation Part 1 – STAT 340: Data Science II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./testing2_practice.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -119,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -146,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -159,7 +160,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -236,29 +239,35 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Random Variable Distribution Practice</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
   </div>
 </li>
       </ul>
@@ -275,38 +284,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R05_testing_Additional_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -323,38 +332,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R06_More_Estimation_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R07_More_Estimation_and_CI_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -371,94 +380,94 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R08_prediction_examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R09_Multiple_Regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R10_LogisticReg_Extended.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_cv-MSEcomparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Bias_Variance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Model_Selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Ridge_LASSO.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
@@ -476,19 +485,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R12_Bootstrap_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -505,7 +514,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
   </div>
 </li>
       </ul>
@@ -520,33 +529,33 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">19.1</span> Learning objectives</a></li>
-  <li><a href="#statistical-estimation" id="toc-statistical-estimation" class="nav-link" data-scroll-target="#statistical-estimation"><span class="header-section-number">19.2</span> Statistical Estimation</a>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">20.1</span> Learning objectives</a></li>
+  <li><a href="#statistical-estimation" id="toc-statistical-estimation" class="nav-link" data-scroll-target="#statistical-estimation"><span class="header-section-number">20.2</span> Statistical Estimation</a>
   <ul class="collapse">
-  <li><a href="#example-universal-widgets-of-madison" id="toc-example-universal-widgets-of-madison" class="nav-link" data-scroll-target="#example-universal-widgets-of-madison"><span class="header-section-number">19.2.1</span> Example: Universal Widgets of Madison</a></li>
+  <li><a href="#example-universal-widgets-of-madison" id="toc-example-universal-widgets-of-madison" class="nav-link" data-scroll-target="#example-universal-widgets-of-madison"><span class="header-section-number">20.2.1</span> Example: Universal Widgets of Madison</a></li>
   </ul></li>
-  <li><a href="#aside-estimators-estimates-and-statistics" id="toc-aside-estimators-estimates-and-statistics" class="nav-link" data-scroll-target="#aside-estimators-estimates-and-statistics"><span class="header-section-number">19.3</span> Aside: Estimators, Estimates and Statistics</a></li>
-  <li><a href="#more-data-better-accuracy" id="toc-more-data-better-accuracy" class="nav-link" data-scroll-target="#more-data-better-accuracy"><span class="header-section-number">19.4</span> More data, better accuracy</a></li>
-  <li><a href="#more-data-how-much-better-accuracy" id="toc-more-data-how-much-better-accuracy" class="nav-link" data-scroll-target="#more-data-how-much-better-accuracy"><span class="header-section-number">19.5</span> More data, <em>how much</em> better accuracy?</a></li>
-  <li><a href="#taking-stock-more-data-less-variance" id="toc-taking-stock-more-data-less-variance" class="nav-link" data-scroll-target="#taking-stock-more-data-less-variance"><span class="header-section-number">19.6</span> Taking stock: more data less variance</a></li>
-  <li><a href="#aside-probability-of-bad-events" id="toc-aside-probability-of-bad-events" class="nav-link" data-scroll-target="#aside-probability-of-bad-events"><span class="header-section-number">19.7</span> Aside: probability of “bad” events</a></li>
-  <li><a href="#more-data-better-accuracy-part-ii" id="toc-more-data-better-accuracy-part-ii" class="nav-link" data-scroll-target="#more-data-better-accuracy-part-ii"><span class="header-section-number">19.8</span> More data, better accuracy part II</a></li>
-  <li><a href="#what-are-we-trying-to-estimate" id="toc-what-are-we-trying-to-estimate" class="nav-link" data-scroll-target="#what-are-we-trying-to-estimate"><span class="header-section-number">19.9</span> What are we trying to estimate?</a></li>
-  <li><a href="#point-estimation-a-good-place-to-begin" id="toc-point-estimation-a-good-place-to-begin" class="nav-link" data-scroll-target="#point-estimation-a-good-place-to-begin"><span class="header-section-number">19.10</span> Point estimation: a good place to begin</a>
+  <li><a href="#aside-estimators-estimates-and-statistics" id="toc-aside-estimators-estimates-and-statistics" class="nav-link" data-scroll-target="#aside-estimators-estimates-and-statistics"><span class="header-section-number">20.3</span> Aside: Estimators, Estimates and Statistics</a></li>
+  <li><a href="#more-data-better-accuracy" id="toc-more-data-better-accuracy" class="nav-link" data-scroll-target="#more-data-better-accuracy"><span class="header-section-number">20.4</span> More data, better accuracy</a></li>
+  <li><a href="#more-data-how-much-better-accuracy" id="toc-more-data-how-much-better-accuracy" class="nav-link" data-scroll-target="#more-data-how-much-better-accuracy"><span class="header-section-number">20.5</span> More data, <em>how much</em> better accuracy?</a></li>
+  <li><a href="#taking-stock-more-data-less-variance" id="toc-taking-stock-more-data-less-variance" class="nav-link" data-scroll-target="#taking-stock-more-data-less-variance"><span class="header-section-number">20.6</span> Taking stock: more data less variance</a></li>
+  <li><a href="#aside-probability-of-bad-events" id="toc-aside-probability-of-bad-events" class="nav-link" data-scroll-target="#aside-probability-of-bad-events"><span class="header-section-number">20.7</span> Aside: probability of “bad” events</a></li>
+  <li><a href="#more-data-better-accuracy-part-ii" id="toc-more-data-better-accuracy-part-ii" class="nav-link" data-scroll-target="#more-data-better-accuracy-part-ii"><span class="header-section-number">20.8</span> More data, better accuracy part II</a></li>
+  <li><a href="#what-are-we-trying-to-estimate" id="toc-what-are-we-trying-to-estimate" class="nav-link" data-scroll-target="#what-are-we-trying-to-estimate"><span class="header-section-number">20.9</span> What are we trying to estimate?</a></li>
+  <li><a href="#point-estimation-a-good-place-to-begin" id="toc-point-estimation-a-good-place-to-begin" class="nav-link" data-scroll-target="#point-estimation-a-good-place-to-begin"><span class="header-section-number">20.10</span> Point estimation: a good place to begin</a>
   <ul class="collapse">
-  <li><a href="#example-estimating-the-rate-parameter-in-the-exponential-distribution." id="toc-example-estimating-the-rate-parameter-in-the-exponential-distribution." class="nav-link" data-scroll-target="#example-estimating-the-rate-parameter-in-the-exponential-distribution."><span class="header-section-number">19.10.1</span> Example: Estimating the rate parameter in the exponential distribution.</a></li>
+  <li><a href="#example-estimating-the-rate-parameter-in-the-exponential-distribution." id="toc-example-estimating-the-rate-parameter-in-the-exponential-distribution." class="nav-link" data-scroll-target="#example-estimating-the-rate-parameter-in-the-exponential-distribution."><span class="header-section-number">20.10.1</span> Example: Estimating the rate parameter in the exponential distribution.</a></li>
   </ul></li>
-  <li><a href="#how-many-samples-are-enough" id="toc-how-many-samples-are-enough" class="nav-link" data-scroll-target="#how-many-samples-are-enough"><span class="header-section-number">19.11</span> How many samples are enough?</a></li>
-  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">19.12</span> Review</a></li>
+  <li><a href="#how-many-samples-are-enough" id="toc-how-many-samples-are-enough" class="nav-link" data-scroll-target="#how-many-samples-are-enough"><span class="header-section-number">20.11</span> How many samples are enough?</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">20.12</span> Review</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></h1>
+<h1 class="title"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></h1>
 </div>
 
 
@@ -565,8 +574,8 @@ window.Quarto = {
 
 <p>These notes will discuss the problem of <em>estimation</em>. They are based in part on notes by <a href="http://pages.stat.wisc.edu/~karlrohe/index.html">Karl Rohe</a>.</p>
 <p>Estimation refers to the task of giving a value or range of values that are a “good guess” about some quantity out there in the world. Often this quantity is the parameter of a model, such as the mean of a distribution, but other times it is a number or quantity out there in the world. We’ve already seen an example of estimation problems this semester: we’ve used Monte Carlo methods many times so far to <em>estimate</em> the probability of an event. We’ve also discussed the problem of estimating numbers like the average human height. We’ll delve more into these and related problems this week and next.</p>
-<section id="learning-objectives" class="level2" data-number="19.1">
-<h2 data-number="19.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">19.1</span> Learning objectives</h2>
+<section id="learning-objectives" class="level2" data-number="20.1">
+<h2 data-number="20.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">20.1</span> Learning objectives</h2>
 <p>After this lesson, you will be able to</p>
 <ul>
 <li>Explain the statistical task of estimation and give examples of real-world estimation problems.</li>
@@ -575,8 +584,8 @@ window.Quarto = {
 <li>Use the law of large numbers to explain why larger sample sizes are generally preferable when performing estimation.</li>
 </ul>
 </section>
-<section id="statistical-estimation" class="level2" data-number="19.2">
-<h2 data-number="19.2" class="anchored" data-anchor-id="statistical-estimation"><span class="header-section-number">19.2</span> Statistical Estimation</h2>
+<section id="statistical-estimation" class="level2" data-number="20.2">
+<h2 data-number="20.2" class="anchored" data-anchor-id="statistical-estimation"><span class="header-section-number">20.2</span> Statistical Estimation</h2>
 <p>The goal of estimation is to (approximately) determine the value of a quantity out there in the world. Often, we identify this quantity with a parameter in a model, such as the mean of a normal.</p>
 <p><strong>Example:</strong> Human heights</p>
 <p>Let’s think back to our human height example from our first lecture. Recall that our goal was to determine the average human height, <span class="math inline">\(\mu\)</span>.</p>
@@ -591,8 +600,8 @@ window.Quarto = {
 <p>In addition to our estimate <span class="math inline">\(\hat{\mu}\)</span>, we would like to have some kind of notion of how certain we are in our estimate.</p>
 <p>Said another way, if we say that “we estimate the average human height to be 172.1 cm”, we might also be willing to say that <span class="math inline">\(172.3\)</span> cm or <span class="math inline">\(171.8\)</span> cm are also reasonable estimates.</p>
 <p>If you have seen <em>confidence intervals</em> (CIs) before, both of these ideas should sound somewhat familiar. If you haven’t seen CIs before, not to worry– we’ll discuss them in great detail next week. This week, we’ll talk primarily about point estimates, but we’re also building the groundwork needed to talk about confidence intervals next week.</p>
-<section id="example-universal-widgets-of-madison" class="level3" data-number="19.2.1">
-<h3 data-number="19.2.1" class="anchored" data-anchor-id="example-universal-widgets-of-madison"><span class="header-section-number">19.2.1</span> Example: Universal Widgets of Madison</h3>
+<section id="example-universal-widgets-of-madison" class="level3" data-number="20.2.1">
+<h3 data-number="20.2.1" class="anchored" data-anchor-id="example-universal-widgets-of-madison"><span class="header-section-number">20.2.1</span> Example: Universal Widgets of Madison</h3>
 <p>The Universal Widgets of Madison (UW-Madison) company manufactures <a href="https://en.wiktionary.org/wiki/widget">widgets</a> Their widget machine produces widgets all day.</p>
 <p>Unfortunately, making widgets is hard, and not all widgets produced by the machine are functional. Due to randomness in the manufacturing process, a widget is functional with probability <span class="math inline">\(p\)</span>, and dysfunctional with probability <span class="math inline">\(1-p\)</span>. The engineers on the UW-Madison production line are quite confident that widgets are independent of one another– that is, whether or not one widget is dysfunctional has no bearing on whether or not any other widgets coming off the production line are dysfunctional.</p>
 <p>UW ships widgets in batches, and they want to ensure that every batch ships with at least 5 functional widgets in it.</p>
@@ -612,20 +621,20 @@ window.Quarto = {
 <p>We’ll imagine that we take a sample of widgets from the production line at UW-Madison, and use that sample to try and estimate <span class="math inline">\(p\)</span>.</p>
 <p>Having chosen a model for our data, the first thing we need to do is implement it in R. For now, we’ll make arbitrary choices for the number of widgets <code>n</code> and the probability <code>p</code> of a widget being functional.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; <span class="co"># We will examine n=200 widgets</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; <span class="co"># We will examine n=200 widgets</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Suppose that 80% of widgets are functional</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>functional_widgets <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, p); <span class="co"># Draw one sample of widgets.</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>functional_widgets; <span class="co"># How many of the n widgets are functional?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>functional_widgets; <span class="co"># How many of the n widgets are functional?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 166</code></pre>
+<pre><code>[1] 164</code></pre>
 </div>
 </div>
 <p><strong>Question:</strong> why is the binomial distribution the right thing to use, here?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's wrap that up in a function for use later.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's wrap that up in a function for use later.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>generate_widgets <span class="ot">&lt;-</span> <span class="cf">function</span>(n,p) {</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, p) );</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Step 2: Estimating <span class="math inline">\(p\)</span></strong></p>
 <p>Suppose that we can collect data by observing widgets <span class="math inline">\(1,2,\dots,n\)</span>.</p>
@@ -633,7 +642,9 @@ window.Quarto = {
 X_i = 1_{\large \text{ widget } i \text{ is functional } }
 \]</span></p>
 <p>If we examine enough widgets, we know that we can estimate <span class="math inline">\(p\)</span> very well using the sample mean</p>
-<p><span class="math display">\[\overline{X}=\frac1n\sum_{i=1}^nX_i=\frac{\text{\# of functional widgets}}{n}\]</span></p>
+<p><span class="math display">\[
+\overline{X}=\frac1n\sum_{i=1}^nX_i=\frac{\text{\# of functional widgets}}{n}
+\]</span></p>
 <p>Again, the law of large numbers (which we’ll discuss more formally soon), says that once <span class="math inline">\(n\)</span> is big, this estimate will be really close to <span class="math inline">\(\mathbb{E} \bar{X} = p\)</span>. More specifically, the more widgets we examine, the more accurate our estimate will be (on average).</p>
 <p>Unfortunately, widgets aren’t free. So, here are two questions:</p>
 <ol type="1">
@@ -645,7 +656,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>So, to start, what do we mean when we say that our estimate will be close to <span class="math inline">\(p\)</span>?</p>
 <p>Let’s see this in action with a simulation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>;</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This time, we'll generate lots of iterations</span></span>
@@ -660,7 +671,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets<span class="sc">/</span>n );</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -676,8 +687,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Sometimes our estimate is a bit higher than the true value of <span class="math inline">\(p\)</span>, sometimes it is lower. But as we can see, most of the time our estimate is close to <span class="math inline">\(p\)</span>, within about <span class="math inline">\(0.06\)</span>.</p>
 </section>
 </section>
-<section id="aside-estimators-estimates-and-statistics" class="level2" data-number="19.3">
-<h2 data-number="19.3" class="anchored" data-anchor-id="aside-estimators-estimates-and-statistics"><span class="header-section-number">19.3</span> Aside: Estimators, Estimates and Statistics</h2>
+<section id="aside-estimators-estimates-and-statistics" class="level2" data-number="20.3">
+<h2 data-number="20.3" class="anchored" data-anchor-id="aside-estimators-estimates-and-statistics"><span class="header-section-number">20.3</span> Aside: Estimators, Estimates and Statistics</h2>
 <p>Before continuing our investigation of widgets, let’s take a moment to discuss things in more generality and establish some vocabulary.</p>
 <p>Suppose we have our data <span class="math inline">\(X_1,X_2,\dots,X_n\)</span>. If we performed another experiment, we would presumably see a different set of values for our data. That is reflected in the fact that we model the observations <span class="math inline">\(X_1,X_2,\dots,X_n\)</span> as being random variables.</p>
 <p>So, in our example above, <span class="math inline">\(X_i\)</span> is a Bernoulli random variable representing whether or not widget <span class="math inline">\(i\)</span> is functional.</p>
@@ -690,12 +701,12 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Now, since the data <span class="math inline">\(X_1,X_2,\dots,X_n\)</span> are random, and <span class="math inline">\(S = S(X_1,X_2,\dots,X_n)\)</span> is a function of the data, that means that our statistic <span class="math inline">\(S\)</span> is also random. So, in just the same way that <span class="math inline">\(X_i\)</span> has a distribution (e.g., <span class="math inline">\(X_i \sim \operatorname{Bernoulli}(p)\)</span> above), <span class="math inline">\(S\)</span> also has a distribution.</p>
 <p>We usually call this distribution the <em>sampling distribution</em>, because it describes the behavior of our statistic, which is a function of the sample.</p>
 </section>
-<section id="more-data-better-accuracy" class="level2" data-number="19.4">
-<h2 data-number="19.4" class="anchored" data-anchor-id="more-data-better-accuracy"><span class="header-section-number">19.4</span> More data, better accuracy</h2>
+<section id="more-data-better-accuracy" class="level2" data-number="20.4">
+<h2 data-number="20.4" class="anchored" data-anchor-id="more-data-better-accuracy"><span class="header-section-number">20.4</span> More data, better accuracy</h2>
 <p>So, let’s turn back to the first of our two questions: If we are willing to tolerate an error of, say, 2%, how many widgets do we need to examine?</p>
 <p>Well, let’s start by looking at the histogram of estimates from <span class="math inline">\(2000\)</span> different runs with <span class="math inline">\(n=200\)</span> and <span class="math inline">\(p=0.8\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll generate lots of iterations</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">2000</span>;</span>
@@ -706,7 +717,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets<span class="sc">/</span>n );</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -718,7 +729,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Most of the estimates are between <span class="math inline">\(0.72\)</span> and <span class="math inline">\(0.88\)</span>.</p>
 <p>Let’s try increasing <span class="math inline">\(n\)</span> from <span class="math inline">\(n=200\)</span> to <span class="math inline">\(n=500\)</span>. That is, let’s try gathering more data, in the form of <em>more widgets</em>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n=500 widgets instead of 200, but still 80% are functional.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n=500 widgets instead of 200, but still 80% are functional.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>;</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll generate lots of iterations</span></span>
@@ -730,7 +741,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot estimates of p, #functional/#observations</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( functional_widgets_larger<span class="sc">/</span>n );</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a vertical line at the true value of p</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>( <span class="at">v=</span>p, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">4</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -741,7 +752,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 </div>
 <p>If you compare this plot to the one above, you’ll see that the values are more tightly concentrated about <span class="math inline">\(p=0.8\)</span>. In fact, let’s just display them both in one plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still n=200 widgets, 80% of which are functional.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Put the data into a data frame to pass to ggplot2.</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">c</span>(functional_widgets<span class="sc">/</span><span class="dv">200</span>, functional_widgets_larger<span class="sc">/</span><span class="dv">500</span> ); <span class="co"># "p hat", i.e., estimate of p.</span></span>
@@ -752,7 +763,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df, <span class="fu">aes</span>(<span class="at">x=</span>phat, <span class="at">color=</span>n, <span class="at">fill=</span>n));</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_histogram</span>( <span class="fu">aes</span>(), <span class="at">position=</span><span class="st">'identity'</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">binwidth=</span><span class="fl">0.01</span>);</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>);</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -765,7 +776,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <p>Gathering more data (i.e., observing more widgets) gives us a more accurate (on average!) estimate of <span class="math inline">\(p\)</span>.</p>
 <p>Just to drive this home, let’s increase <span class="math inline">\(n\)</span> even more.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using 80% functional rate.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using 80% functional rate.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: there are "cleaner" ways to build this data frame,</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># but those ways are harder to understand on a first glance.</span></span>
@@ -785,13 +796,13 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="st">'n'</span><span class="ot">=</span><span class="fu">as.factor</span>(n), <span class="st">'phat'</span><span class="ot">=</span>phat);</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( df, <span class="fu">aes</span>(<span class="at">x=</span>phat, <span class="at">color=</span>n ));</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a smoothed density instead of histogram for easy comparison</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_density</span>( <span class="at">size=</span><span class="dv">2</span> );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_density</span>( <span class="at">size=</span><span class="dv">2</span> );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>, <span class="at">size=</span><span class="fl">1.5</span>);</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">color=</span><span class="st">'red'</span>, <span class="at">size=</span><span class="fl">1.5</span>);</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -801,8 +812,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }
 </div>
 </div>
 </section>
-<section id="more-data-how-much-better-accuracy" class="level2" data-number="19.5">
-<h2 data-number="19.5" class="anchored" data-anchor-id="more-data-how-much-better-accuracy"><span class="header-section-number">19.5</span> More data, <em>how much</em> better accuracy?</h2>
+<section id="more-data-how-much-better-accuracy" class="level2" data-number="20.5">
+<h2 data-number="20.5" class="anchored" data-anchor-id="more-data-how-much-better-accuracy"><span class="header-section-number">20.5</span> More data, <em>how much</em> better accuracy?</h2>
 <p>The plot above certainly seems to indicate that as we increase the number of samples (i.e., the number of widgets <span class="math inline">\(n\)</span>), our estimate becomes more accurate, in the sense that it is closer to the true value of <span class="math inline">\(p\)</span> (on average, anyway).</p>
 <p>But when we increase our sample from, say <span class="math inline">\(n=100\)</span> to <span class="math inline">\(n=800\)</span>, like in the experiment above, just how much better does our estimate become?</p>
 <p>As a reminder, we are denoting our data by <span class="math inline">\(X_1,X_2,\dots,X_n\)</span>, where <span class="math inline">\(X_i=1\)</span> if the <span class="math inline">\(i\)</span>-th widget is functional and <span class="math inline">\(X_i=0\)</span> if it is dysfunctional. That is, recalling our indicator function notation yet again, <span class="math display">\[
@@ -874,8 +885,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 \operatorname{Var} \hat{p} = n \frac{ p(1-p) }{ n^2 } = \frac{ p(1-p) }{ n}.
 \]</span></p>
 </section>
-<section id="taking-stock-more-data-less-variance" class="level2" data-number="19.6">
-<h2 data-number="19.6" class="anchored" data-anchor-id="taking-stock-more-data-less-variance"><span class="header-section-number">19.6</span> Taking stock: more data less variance</h2>
+<section id="taking-stock-more-data-less-variance" class="level2" data-number="20.6">
+<h2 data-number="20.6" class="anchored" data-anchor-id="taking-stock-more-data-less-variance"><span class="header-section-number">20.6</span> Taking stock: more data less variance</h2>
 <p>Dang, that was a lot of math. What did we learn as a result of it?</p>
 <p>Well, the variance of our estimator <span class="math inline">\(\hat{p}\)</span>, based on a sample of size <span class="math inline">\(n\)</span>, is <span class="math display">\[
 \operatorname{Var} \hat{p} = \frac{ p(1-p) }{ n}.
@@ -893,8 +904,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <p>Multiplying <span class="math inline">\(n\)</span> by <span class="math inline">\(4\)</span> decreases <span class="math inline">\(\operatorname{sd} \hat{p}\)</span> by <span class="math inline">\(\sqrt{4} = 2\)</span>. So to halve our standard deviation, we have to increase our sample size by 4. To decrease our standard deviation by a factor of ten, we need to increase our sample size by a factor of 100.</p>
 <p>That’s going to get our of hand quickly, especially if samples are challenging or expensive to get (e.g., subjects in a medical study)…</p>
 </section>
-<section id="aside-probability-of-bad-events" class="level2" data-number="19.7">
-<h2 data-number="19.7" class="anchored" data-anchor-id="aside-probability-of-bad-events"><span class="header-section-number">19.7</span> Aside: probability of “bad” events</h2>
+<section id="aside-probability-of-bad-events" class="level2" data-number="20.7">
+<h2 data-number="20.7" class="anchored" data-anchor-id="aside-probability-of-bad-events"><span class="header-section-number">20.7</span> Aside: probability of “bad” events</h2>
 <p>So more data (increasing <span class="math inline">\(n\)</span>) gives us a more accurate estimate (i.e., makes our estimate concentrate closer to the true <span class="math inline">\(p\)</span> on average).</p>
 <p>But we started our widgets example asking about how to <em>guarantee</em> that our estimate is close to the probability <span class="math inline">\(p\)</span>.</p>
 <p>There is a problem with this, though. Our data is random, and sometimes we get unlucky. So we can never guarantee that our estimate is close.</p>
@@ -914,12 +925,12 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <p>Now, with that said, notice that as <span class="math inline">\(n\)</span> gets larger, the probability of this bad “all widgets are functional” event gets smaller and smaller. Roughly speaking, this is what we mean when we say that more data gives us a more accurate estimate. The probability that our estimate is far from the true value of <span class="math inline">\(p\)</span> gets smaller and smaller as we increase <span class="math inline">\(n\)</span>.</p>
 <p>The law of large numbers, which we will (finally) discuss soon, will let us say something both stronger and more precise than this, but the above example is a good illustration of the core idea.</p>
 </section>
-<section id="more-data-better-accuracy-part-ii" class="level2" data-number="19.8">
-<h2 data-number="19.8" class="anchored" data-anchor-id="more-data-better-accuracy-part-ii"><span class="header-section-number">19.8</span> More data, better accuracy part II</h2>
+<section id="more-data-better-accuracy-part-ii" class="level2" data-number="20.8">
+<h2 data-number="20.8" class="anchored" data-anchor-id="more-data-better-accuracy-part-ii"><span class="header-section-number">20.8</span> More data, better accuracy part II</h2>
 <p>Instead of trying to do more math, let’s try and code up an experiment to get a handle on this.</p>
 <p>Let’s simplify things a bit by writing a function that will generate a random copy of <span class="math inline">\(S(X_1,X_2,\dots,X_n) = \hat{p}\)</span> given a choice of <span class="math inline">\(n\)</span> and the true value of <span class="math inline">\(p\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>simulate_S <span class="ot">&lt;-</span> <span class="cf">function</span>( n, p ) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>simulate_S <span class="ot">&lt;-</span> <span class="cf">function</span>( n, p ) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  functional_widgets <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p);</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Our statistic is the fraction of the n widgets</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># that are functional.</span></span>
@@ -927,9 +938,9 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate n=200 widgets with functional probability p=0.8</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_S</span>(<span class="dv">200</span>, <span class="fl">0.8</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_S</span>(<span class="dv">200</span>, <span class="fl">0.8</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.835</code></pre>
+<pre><code>[1] 0.775</code></pre>
 </div>
 </div>
 <p>Now, we want to use this function to estimate the probability that our estimate is within <span class="math inline">\(0.02\)</span> of <span class="math inline">\(p\)</span>.</p>
@@ -940,7 +951,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 \]</span> We <em>could</em> explicitly compute this number. After all, we know how to compute the probability distribution of the Bernoulli and/or Binomial distributions.</p>
 <p>But instead, let’s just use Monte Carlo estimation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here's a function that will take our estimate S (= phat) and check if it is within 0.02 of p or not.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here's a function that will take our estimate S (= phat) and check if it is within 0.02 of p or not.</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>check_if_S_is_good <span class="ot">&lt;-</span> <span class="cf">function</span>( S, p ) {</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="fu">abs</span>(S<span class="sc">-</span>p) <span class="sc">&lt;</span> <span class="fl">0.02</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -955,7 +966,7 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>monte_carlo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">replicate =</span> <span class="dv">1</span><span class="sc">:</span>N_MC, <span class="at">S =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, N_MC), <span class="at">S_good =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, N_MC));</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's just check what the data frame looks like before we populate it.</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( monte_carlo )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( monte_carlo )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  replicate  S S_good
 1         1 NA     NA
@@ -967,22 +978,22 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each replicate, run the experiment and record results.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each replicate, run the experiment and record results.</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to keep track of the value of S and whether or not S was good.</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N_MC){</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    monte_carlo<span class="sc">$</span>S[i] <span class="ot">&lt;-</span> <span class="fu">simulate_S</span>( n, p );</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    monte_carlo<span class="sc">$</span>S_good[i] <span class="ot">&lt;-</span> <span class="fu">check_if_S_is_good</span>(monte_carlo<span class="sc">$</span>S[i], p)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5535</code></pre>
+<pre><code>[1] 0.536</code></pre>
 </div>
 </div>
 <p>So about half of our estimates were within <span class="math inline">\(0.02\)</span> of <span class="math inline">\(p\)</span>.</p>
 <p>Our experiments above suggested that we could improve this by increasing <span class="math inline">\(n\)</span>, so let’s try that.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the exact same setup except we're changing n from 200 to 400.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the exact same setup except we're changing n from 200 to 400.</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>N_MC <span class="ot">&lt;-</span> <span class="dv">2000</span>; n <span class="ot">&lt;-</span> <span class="dv">400</span>; p <span class="ot">&lt;-</span> <span class="fl">0.8</span>; <span class="co"># Still using p=0.8 and 2000 Monte Carlo trials.</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that we don't really have to create the data frame again.</span></span>
@@ -998,17 +1009,17 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  monte_carlo<span class="sc">$</span>S_good[i] <span class="ot">&lt;-</span> <span class="fu">check_if_S_is_good</span>(monte_carlo<span class="sc">$</span>S[i], p)</span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>( monte_carlo<span class="sc">$</span>S_good )<span class="sc">/</span>N_MC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.679</code></pre>
+<pre><code>[1] 0.681</code></pre>
 </div>
 </div>
 <p>That’s an improvement! But still about 30% of the time we’re going to be more than 0.02 away from <span class="math inline">\(p\)</span>…</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Just as a check, let's plot a histogram again.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Just as a check, let's plot a histogram again.</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monte_carlo, <span class="fu">aes</span>(<span class="at">x =</span> S)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span> <span class="fu">geom_vline</span>( <span class="at">xintercept=</span>p, <span class="at">col=</span><span class="st">'red'</span> )</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>pp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>pp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1021,8 +1032,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <p>So we can never have a perfect guarantee that our estimate is within, say, <span class="math inline">\(0.02\)</span> of the truth. Instead, we have to settle for guarantees like “with probability 0.95, our estimate is within <span class="math inline">\(0.02\)</span> of the truth.”</p>
 <p>This is the idea behind <em>confidence intervals</em>, which we’ll discuss in more detail next week.</p>
 </section>
-<section id="what-are-we-trying-to-estimate" class="level2" data-number="19.9">
-<h2 data-number="19.9" class="anchored" data-anchor-id="what-are-we-trying-to-estimate"><span class="header-section-number">19.9</span> What are we trying to estimate?</h2>
+<section id="what-are-we-trying-to-estimate" class="level2" data-number="20.9">
+<h2 data-number="20.9" class="anchored" data-anchor-id="what-are-we-trying-to-estimate"><span class="header-section-number">20.9</span> What are we trying to estimate?</h2>
 <p>In our discussions above, we are interested in</p>
 <ol type="1">
 <li>Estimating <span class="math inline">\(p\)</span> and</li>
@@ -1043,8 +1054,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <li>We only observe one example of it, but we want to estimate <span class="math inline">\(\mathbb{E} S\)</span>.</li>
 </ul>
 </section>
-<section id="point-estimation-a-good-place-to-begin" class="level2" data-number="19.10">
-<h2 data-number="19.10" class="anchored" data-anchor-id="point-estimation-a-good-place-to-begin"><span class="header-section-number">19.10</span> Point estimation: a good place to begin</h2>
+<section id="point-estimation-a-good-place-to-begin" class="level2" data-number="20.10">
+<h2 data-number="20.10" class="anchored" data-anchor-id="point-estimation-a-good-place-to-begin"><span class="header-section-number">20.10</span> Point estimation: a good place to begin</h2>
 <p>So, we want an estimate of <span class="math inline">\(\mathbb{E} S\)</span>. Well, what better estimate than <span class="math inline">\(S\)</span> itself? This isn’t an arbitrary decision– there are good mathematical reasons behind this. The simplest of these reasons comes from the definition of the expectation: “on average”, <span class="math inline">\(S = \mathbb{E} S\)</span>, and <span class="math inline">\(S\)</span> is “usually” close to <span class="math inline">\(\mathbb{E} S\)</span>.</p>
 <p>We’ve mentioned the law of large numbers (LLN) a couple of times already this semester. Let’s look at it a bit closer.</p>
 <p>The <em>weak law of large numbers</em> states that if <span class="math inline">\(X_1,X_2,\dots\)</span> are i.i.d. with mean <span class="math inline">\(\mu\)</span>, then for any <span class="math inline">\(\epsilon &gt; 0\)</span>, <span class="math display">\[
@@ -1057,8 +1068,8 @@ X_i = 1_{\large \text{ widget } i \text{ is functional } }.
 <p>It turns out that this can be extended to include more complicated functions than the sample mean. In fact, so long as <span class="math inline">\(S\)</span> is a “nice” function of the data (and so long as <span class="math inline">\(S\)</span> is constructed in an appropriate way), then <span class="math inline">\(S\)</span> will be close to the parameter that we want to estimate with high probability. That is, for “nice” estimators <span class="math inline">\(S = S(X_1,X_2,\dots,X_n)\)</span>, letting <span class="math inline">\(\theta\)</span> denote our parameter of interest, <span class="math display">\[
 \Pr\left[ \left| S - \theta \right| &gt; \epsilon \right] \le \delta.
 \]</span></p>
-<section id="example-estimating-the-rate-parameter-in-the-exponential-distribution." class="level3" data-number="19.10.1">
-<h3 data-number="19.10.1" class="anchored" data-anchor-id="example-estimating-the-rate-parameter-in-the-exponential-distribution."><span class="header-section-number">19.10.1</span> Example: Estimating the rate parameter in the exponential distribution.</h3>
+<section id="example-estimating-the-rate-parameter-in-the-exponential-distribution." class="level3" data-number="20.10.1">
+<h3 data-number="20.10.1" class="anchored" data-anchor-id="example-estimating-the-rate-parameter-in-the-exponential-distribution."><span class="header-section-number">20.10.1</span> Example: Estimating the rate parameter in the exponential distribution.</h3>
 <p>Let’s see an example that will also illustrate a useful trick for constructing new estimators.</p>
 <p>Suppose that we have data <span class="math inline">\(X_1,X_2,\dots,X_n\)</span> i.i.d. from an exponential distribution with rate parameter <span class="math inline">\(\lambda\)</span>. You can look up on <a href="https://en.wikipedia.org/wiki/Exponential_distribution">Wikipedia</a> that the mean of an exponential with rate <span class="math inline">\(\lambda\)</span> is <span class="math inline">\(\mathbb{E} X_1 = 1/\lambda\)</span>. Suppose that we want to estimate <span class="math inline">\(\lambda\)</span>. How can we do that?</p>
 <p>Well, we know that <span class="math display">\[
@@ -1072,7 +1083,7 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <p>and for large <span class="math inline">\(n\)</span>, <span class="math inline">\(S\)</span> will be close to <span class="math inline">\(\lambda\)</span>. That is, as <span class="math inline">\(n\)</span> gets large, <span class="math inline">\(\bar{X}\)</span> is close to <span class="math inline">\(\mathbb{E} \bar{X}\)</span>, and therefore <span class="math inline">\(\frac{1}{\bar{X}}\)</span> is close to <span class="math inline">\(1/ \mathbb{E} \bar{X}\)</span>.</p>
 <p>Okay, but this isn’t a math class. Let’s try simulating and see what happens.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( n, rate ) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>run_exprate_expt <span class="ot">&lt;-</span> <span class="cf">function</span>( n, rate ) {</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n=</span>n, <span class="at">rate=</span><span class="dv">5</span>);</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  Xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>( data )</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="dv">1</span><span class="sc">/</span>Xbar )</span>
@@ -1084,7 +1095,7 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  replicates[i] <span class="ot">&lt;-</span> <span class="fu">run_exprate_expt</span>(<span class="dv">200</span>, <span class="at">rate=</span><span class="dv">5</span>);</span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(replicates);</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">4</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">4</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1100,16 +1111,16 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <p>For now, the important thing is just that you’ve seen this and recognize that there are methods out there for <em>constructing an estimator</em> once we’ve written down a model and chosen a parameter of interest in it.</p>
 </section>
 </section>
-<section id="how-many-samples-are-enough" class="level2" data-number="19.11">
-<h2 data-number="19.11" class="anchored" data-anchor-id="how-many-samples-are-enough"><span class="header-section-number">19.11</span> How many samples are enough?</h2>
+<section id="how-many-samples-are-enough" class="level2" data-number="20.11">
+<h2 data-number="20.11" class="anchored" data-anchor-id="how-many-samples-are-enough"><span class="header-section-number">20.11</span> How many samples are enough?</h2>
 <p>So we can appeal to the law of large numbers to support our assumption that <span class="math inline">\(S\)</span> is close to <span class="math inline">\(\mathbb{E} S\)</span>. But we said above that we also want to communicate how certain we are about this estimate.</p>
 <p>There’s a problem there– the law of large numbers doesn’t tell us anything about how close <span class="math inline">\(S\)</span> is to <span class="math inline">\(\mathbb{E} S\)</span> for finite sample size <span class="math inline">\(n\)</span>. It just says that if <span class="math inline">\(n\)</span> is suitably large, then the probability that <span class="math inline">\(S\)</span> is “far” from <span class="math inline">\(\mathbb{E} S\)</span> is arbitrarily small.</p>
 <p>This is the… limitation? of limit results (I’m so sorry).</p>
 <p>So, <span class="math inline">\(S\)</span> is close to <span class="math inline">\(\mathbb{E} S\)</span>, but we don’t know how close.</p>
 <p>The best we can do is to create an interval of values that is “usually right”, in that it “usually” contains the true value of <span class="math inline">\(\mathbb{E} S\)</span>. This is the motivation for <em>confidence intervals</em> and <em>uncertainty quantification</em>, the subject of next week’s lectures.</p>
 </section>
-<section id="review" class="level2" data-number="19.12">
-<h2 data-number="19.12" class="anchored" data-anchor-id="review"><span class="header-section-number">19.12</span> Review</h2>
+<section id="review" class="level2" data-number="20.12">
+<h2 data-number="20.12" class="anchored" data-anchor-id="review"><span class="header-section-number">20.12</span> Review</h2>
 <ul>
 <li>Create a parametric model for simulation</li>
 <li>Understand the difference between an estimator, an estimate and a statistic</li>
@@ -1174,13 +1185,14 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1525,12 +1537,12 @@ S(X_1,X_2,\dots,X_n) = \frac{1}{ \bar{X} },
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./testing2_practice.html" class="pagination-link" aria-label="Testing and Power Practice">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./R06_More_Estimation_Examples.html" class="pagination-link" aria-label="Estimation Examples">
-        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

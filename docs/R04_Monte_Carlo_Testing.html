@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Brian Powers">
 <meta name="dcterms.date" content="2024-02-15">
 
-<title>14&nbsp; Monte Carlo Testing – STAT 340: Data Science II</title>
+<title>15&nbsp; Monte Carlo Testing – STAT 340: Data Science II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./testing1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -121,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -148,7 +149,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./testing1.html">Testing</a></li><li class="breadcrumb-item"><a href="./R04_Monte_Carlo_Testing.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./testing1.html">Testing</a></li><li class="breadcrumb-item"><a href="./R04_Monte_Carlo_Testing.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -161,7 +162,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -238,29 +241,35 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Random Variable Distribution Practice</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
   </div>
 </li>
       </ul>
@@ -277,38 +286,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R05_testing_Additional_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -325,38 +334,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R06_More_Estimation_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R07_More_Estimation_and_CI_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -373,94 +382,94 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R08_prediction_examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R09_Multiple_Regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R10_LogisticReg_Extended.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_cv-MSEcomparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Bias_Variance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Model_Selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Ridge_LASSO.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
@@ -478,19 +487,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R12_Bootstrap_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -507,7 +516,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
   </div>
 </li>
       </ul>
@@ -522,19 +531,21 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#example-groundhogs-day" id="toc-example-groundhogs-day" class="nav-link active" data-scroll-target="#example-groundhogs-day"><span class="header-section-number">14.1</span> Example: Groundhog’s Day</a>
+  <li><a href="#permutation-test" id="toc-permutation-test" class="nav-link active" data-scroll-target="#permutation-test"><span class="header-section-number">15.1</span> Permutation Test</a></li>
+  <li><a href="#testing-uniformity" id="toc-testing-uniformity" class="nav-link" data-scroll-target="#testing-uniformity"><span class="header-section-number">15.2</span> Testing Uniformity</a></li>
+  <li><a href="#example-groundhogs-day" id="toc-example-groundhogs-day" class="nav-link" data-scroll-target="#example-groundhogs-day"><span class="header-section-number">15.3</span> Example: Groundhog’s Day</a>
   <ul class="collapse">
-  <li><a href="#early-spring-february-warmer-than-average" id="toc-early-spring-february-warmer-than-average" class="nav-link" data-scroll-target="#early-spring-february-warmer-than-average"><span class="header-section-number">14.1.1</span> Early Spring = February warmer than average</a></li>
-  <li><a href="#early-spring-warmer-than-average-march-temperatures" id="toc-early-spring-warmer-than-average-march-temperatures" class="nav-link" data-scroll-target="#early-spring-warmer-than-average-march-temperatures"><span class="header-section-number">14.1.2</span> Early Spring = warmer than average March temperatures</a></li>
-  <li><a href="#early-spring-mean-of-feb-march-temps-above-average" id="toc-early-spring-mean-of-feb-march-temps-above-average" class="nav-link" data-scroll-target="#early-spring-mean-of-feb-march-temps-above-average"><span class="header-section-number">14.1.3</span> Early Spring = Mean of Feb &amp; March temps above average</a></li>
-  <li><a href="#measuring-accuracy" id="toc-measuring-accuracy" class="nav-link" data-scroll-target="#measuring-accuracy"><span class="header-section-number">14.1.4</span> Measuring Accuracy</a></li>
-  <li><a href="#looking-at-deviation-from-a-moving-average" id="toc-looking-at-deviation-from-a-moving-average" class="nav-link" data-scroll-target="#looking-at-deviation-from-a-moving-average"><span class="header-section-number">14.1.5</span> Looking at Deviation from a moving average</a></li>
+  <li><a href="#early-spring-february-warmer-than-average" id="toc-early-spring-february-warmer-than-average" class="nav-link" data-scroll-target="#early-spring-february-warmer-than-average"><span class="header-section-number">15.3.1</span> Early Spring = February warmer than average</a></li>
+  <li><a href="#early-spring-warmer-than-average-march-temperatures" id="toc-early-spring-warmer-than-average-march-temperatures" class="nav-link" data-scroll-target="#early-spring-warmer-than-average-march-temperatures"><span class="header-section-number">15.3.2</span> Early Spring = warmer than average March temperatures</a></li>
+  <li><a href="#early-spring-mean-of-feb-march-temps-above-average" id="toc-early-spring-mean-of-feb-march-temps-above-average" class="nav-link" data-scroll-target="#early-spring-mean-of-feb-march-temps-above-average"><span class="header-section-number">15.3.3</span> Early Spring = Mean of Feb &amp; March temps above average</a></li>
+  <li><a href="#measuring-accuracy" id="toc-measuring-accuracy" class="nav-link" data-scroll-target="#measuring-accuracy"><span class="header-section-number">15.3.4</span> Measuring Accuracy</a></li>
+  <li><a href="#looking-at-deviation-from-a-moving-average" id="toc-looking-at-deviation-from-a-moving-average" class="nav-link" data-scroll-target="#looking-at-deviation-from-a-moving-average"><span class="header-section-number">15.3.5</span> Looking at Deviation from a moving average</a></li>
   </ul></li>
-  <li><a href="#example-autocorrelation" id="toc-example-autocorrelation" class="nav-link" data-scroll-target="#example-autocorrelation"><span class="header-section-number">14.2</span> Example: Autocorrelation</a>
+  <li><a href="#example-autocorrelation" id="toc-example-autocorrelation" class="nav-link" data-scroll-target="#example-autocorrelation"><span class="header-section-number">15.4</span> Example: Autocorrelation</a>
   <ul class="collapse">
-  <li><a href="#a-parametric-test-of-autocorrelation" id="toc-a-parametric-test-of-autocorrelation" class="nav-link" data-scroll-target="#a-parametric-test-of-autocorrelation"><span class="header-section-number">14.2.1</span> A Parametric Test of Autocorrelation</a></li>
-  <li><a href="#a-permutation-test-of-autocorrelation" id="toc-a-permutation-test-of-autocorrelation" class="nav-link" data-scroll-target="#a-permutation-test-of-autocorrelation"><span class="header-section-number">14.2.2</span> A Permutation Test of Autocorrelation</a></li>
-  <li><a href="#a-permutation-test-of-constant-variance" id="toc-a-permutation-test-of-constant-variance" class="nav-link" data-scroll-target="#a-permutation-test-of-constant-variance"><span class="header-section-number">14.2.3</span> A Permutation test of constant variance</a></li>
+  <li><a href="#a-parametric-test-of-autocorrelation" id="toc-a-parametric-test-of-autocorrelation" class="nav-link" data-scroll-target="#a-parametric-test-of-autocorrelation"><span class="header-section-number">15.4.1</span> A Parametric Test of Autocorrelation</a></li>
+  <li><a href="#a-permutation-test-of-autocorrelation" id="toc-a-permutation-test-of-autocorrelation" class="nav-link" data-scroll-target="#a-permutation-test-of-autocorrelation"><span class="header-section-number">15.4.2</span> A Permutation Test of Autocorrelation</a></li>
+  <li><a href="#a-permutation-test-of-constant-variance" id="toc-a-permutation-test-of-constant-variance" class="nav-link" data-scroll-target="#a-permutation-test-of-constant-variance"><span class="header-section-number">15.4.3</span> A Permutation test of constant variance</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -542,9 +553,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./testing1.html">Testing</a></li><li class="breadcrumb-item"><a href="./R04_Monte_Carlo_Testing.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./testing1.html">Testing</a></li><li class="breadcrumb-item"><a href="./R04_Monte_Carlo_Testing.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></h1>
 </div>
 
 
@@ -573,30 +584,137 @@ window.Quarto = {
 </header>
 
 
-<section id="example-groundhogs-day" class="level2" data-number="14.1">
-<h2 data-number="14.1" class="anchored" data-anchor-id="example-groundhogs-day"><span class="header-section-number">14.1</span> Example: Groundhog’s Day</h2>
+<section id="permutation-test" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="permutation-test"><span class="header-section-number">15.1</span> Permutation Test</h2>
+<p>Here is the general form of the permutation test, which can generate a simulate the distribution of the test statistic</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>permute_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>( ctrl_data, trmt_data ) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pool the data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  pooled_data <span class="ot">&lt;-</span> <span class="fu">c</span>( ctrl_data, trmt_data );</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomly shuffle the data and assign to groups.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  n_ctrl <span class="ot">&lt;-</span> <span class="fu">length</span>( ctrl_data ); n_trmt <span class="ot">&lt;-</span> <span class="fu">length</span>( trmt_data );</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  n_total <span class="ot">&lt;-</span> n_ctrl <span class="sc">+</span> n_trmt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Shuffle the combined data</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  shuffled_data <span class="ot">&lt;-</span> <span class="fu">sample</span>( pooled_data, <span class="at">size=</span>n_total, <span class="at">replace=</span><span class="cn">FALSE</span> );</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now, the first n_ctrl of these data points are our new control group</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># and the remaining elements are assigned to our treatment group.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  shuffled_ctrl <span class="ot">&lt;-</span> shuffled_data[<span class="dv">1</span><span class="sc">:</span>n_ctrl];</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  shuffled_trmt <span class="ot">&lt;-</span> shuffled_data[(n_ctrl<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>n_total];</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the difference in means of our two samples.</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( <span class="fu">mean</span>(shuffled_trmt)<span class="sc">-</span><span class="fu">mean</span>(shuffled_ctrl) );</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="testing-uniformity" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="testing-uniformity"><span class="header-section-number">15.2</span> Testing Uniformity</h2>
+<p>There’s an interesting connection between two distributions we’ve studied this semester: The uniform distribution and the exponential distribution. If we have a sample <span class="math inline">\(n\)</span> of uniformly distributed values between 0 and 1, sort them in increasing order and look at the sizes of the gaps between the values, the distribution of gaps will be exponentially distributed with <span class="math inline">\(\lambda\approx n\)</span>. Let’s see if this is really true, and devise a test for uniformity!</p>
+<p>Let’s visually check if this seems true.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="at">min=</span><span class="dv">0</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) <span class="co">#says I want to plot 1 row, 2 columns of plots together</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">diff</span>(<span class="fu">sort</span>(U)), <span class="at">main=</span><span class="st">"gaps of uniforms"</span>) <span class="do">## histogram of differences of sorted uniform values</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rexp</span>(<span class="dv">9999</span>, <span class="at">rate=</span><span class="dv">10000</span>), <span class="at">main=</span><span class="st">"exponential rv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here’s a recipe to test if a set of data could be uniformly distributed:</p>
+<ol type="1">
+<li>Sort the values</li>
+<li>Find the differences</li>
+<li>Calculate a test statistic on those difference….. use the coefficient of variation. <span class="math display">\[CV = \frac{S}{\bar{X}}\]</span> Because it takes both spread and center into account.</li>
+</ol>
+<p>For an exponential, the CV = <span class="math inline">\(\frac{1/\lambda}{1/\lambda}=1\)</span></p>
+<ol start="4" type="1">
+<li>Simulate exponential data and look at the distribution of CVs.</li>
+</ol>
+<p>#months of the year</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>myData <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1000</span>, <span class="dv">1</span>, <span class="fl">1.4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#let's calculate a test statistic -</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>diffSortMydata <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">sort</span>(myData))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tobs <span class="ot">&lt;-</span> <span class="fu">sd</span>(diffSortMydata)<span class="sc">/</span><span class="fu">mean</span>(diffSortMydata)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>tobs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.134621</code></pre>
+</div>
+</div>
+<p>Now let’s generate a distribution for this from an exponential</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(diffSortMydata)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>){</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  exp.sim <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate=</span><span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  t.sim[i] <span class="ot">&lt;-</span> <span class="fu">sd</span>(exp.sim)<span class="sc">/</span><span class="fu">mean</span>(exp.sim)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">min</span>(t.sim, tobs)), <span class="fu">max</span>(<span class="fu">max</span>(t.sim),tobs)))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>tobs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because evidence of non-uniformity can be found in either extreme, we need to account for that when we calculate a <span class="math inline">\(p\)</span>-value.</p>
+<p>Because this is not a symmetric distribution, it would not be a good idea to just look at <span class="math display">\[P( X &lt;= -|tobs|) + P( X &gt; |tobs|)\]</span> Also because the distribution isn’t even centered at 0!!!</p>
+<p>Here’s what we do: we calculate <span class="math inline">\(P(T \geq tobs)\)</span> and <span class="math inline">\(P(T \leq tobs)\)</span>, find which is the smaller tail, and double that value. That’s how we get our two-sided p-value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(t.sim <span class="sc">&lt;=</span> tobs) <span class="sc">/</span> <span class="fu">length</span>(t.sim)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(t.sim <span class="sc">&gt;=</span> tobs) <span class="sc">/</span> <span class="fu">length</span>(t.sim)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(p1, p2) <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2e-04</code></pre>
+</div>
+</div>
+<p>A histogram of the data (should have looked at this earlier)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(myData)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-groundhogs-day" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="example-groundhogs-day"><span class="header-section-number">15.3</span> Example: Groundhog’s Day</h2>
 <p>How well has Punxsutawney Phil done in predicting the weather?</p>
 <p>Thousands gather at Gobbler’s Knob in Punxsutawney, Pennsylvania, on the second day of February to await the spring forecast from a groundhog known as Punxsutawney Phil. According to legend, if Phil sees his shadow the United States is in store for six more weeks of winter weather. But, if Phil doesn’t see his shadow, the country should expect warmer temperatures and the arrival of an early spring.</p>
 <p>Source: https://www.kaggle.com/datasets/groundhogclub/groundhog-day?resource=download</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"data/archive.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Get rid of rows with no record or partial shadow. Let's be serious!</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>groundhog <span class="ot">&lt;-</span> <span class="fu">subset</span>(groundhog, groundhog<span class="sc">$</span>Punxsutawney.Phil <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(groundhog<span class="sc">$</span>February.Average.Temperature))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"data/archive.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Get rid of rows with no record or partial shadow. Let's be serious!</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>groundhog <span class="ot">&lt;-</span> <span class="fu">subset</span>(groundhog, groundhog<span class="sc">$</span>Punxsutawney.Phil <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(groundhog<span class="sc">$</span>February.Average.Temperature))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s do a permutation test</p>
 <p><span class="math inline">\(H_0:\)</span> Phil’s not a true forecasting groundhog <span class="math inline">\(H_1:\)</span> Phil has some forecasting power.</p>
-<section id="early-spring-february-warmer-than-average" class="level3" data-number="14.1.1">
-<h3 data-number="14.1.1" class="anchored" data-anchor-id="early-spring-february-warmer-than-average"><span class="header-section-number">14.1.1</span> Early Spring = February warmer than average</h3>
+<section id="early-spring-february-warmer-than-average" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="early-spring-february-warmer-than-average"><span class="header-section-number">15.3.1</span> Early Spring = February warmer than average</h3>
 <p>We will compare mean temperature in February as a measure of early spring. We will take those years of “early spring” prediction and those of “regular spring” and compare the average average Feb temperature in those two groups.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Isolate feb avg temperature for full shadow years</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#isolate feb avg temperature for no shadow years</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>feb.avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>feb.avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>feb.avg.shadow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Isolate feb avg temperature for full shadow years</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#isolate feb avg temperature for no shadow years</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>feb.avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>feb.avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>feb.avg.shadow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1] 35.37 30.76 29.86 28.42 31.59 26.94 33.69 35.46 33.01 35.02 29.30 33.66
  [13] 31.08 29.50 29.52 35.94 33.03 30.09 33.82 32.25 33.69 36.90 31.95 29.57
@@ -608,122 +726,122 @@ window.Quarto = {
  [85] 31.87 35.69 38.71 39.78 33.98 36.39 32.79 33.57 37.94 34.83 34.70 36.77
  [97] 31.80 37.51 32.13 32.99</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>feb.avg.noshadow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>feb.avg.noshadow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 34.32 35.55 35.35 32.76 36.86 35.85 33.69 36.70 37.36 36.05 39.49 32.41
 [13] 33.04 34.77 39.47</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We will use mean feb no shadow - mean feb shadow; if this &gt;0 that is evidence that the predictions work.</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(feb.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(feb.avg.shadow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We will use mean feb no shadow - mean feb shadow; if this &gt;0 that is evidence that the predictions work.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(feb.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(feb.avg.shadow)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.8655</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>permute_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>(sampleA, sampleB){</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remember - sampleA is no shadow</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample B is shadow</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  pooledData <span class="ot">&lt;-</span> <span class="fu">c</span>(sampleA, sampleB)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  shuffledData <span class="ot">&lt;-</span> <span class="fu">sample</span>(pooledData)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  sim.sampleA <span class="ot">&lt;-</span> shuffledData[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(sampleA)]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  sim.sampleB <span class="ot">&lt;-</span> shuffledData[(<span class="fu">length</span>(sampleA)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(shuffledData)]</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we may modify this if we want to use a different test statistic</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(sim.sampleA)<span class="sc">-</span><span class="fu">mean</span>(sim.sampleB)) </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(feb.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(feb.avg.shadow)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(feb.avg.noshadow, feb.avg.shadow)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>permute_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>(sampleA, sampleB){</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remember - sampleA is no shadow</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample B is shadow</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  pooledData <span class="ot">&lt;-</span> <span class="fu">c</span>(sampleA, sampleB)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  shuffledData <span class="ot">&lt;-</span> <span class="fu">sample</span>(pooledData)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  sim.sampleA <span class="ot">&lt;-</span> shuffledData[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(sampleA)]</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  sim.sampleB <span class="ot">&lt;-</span> shuffledData[(<span class="fu">length</span>(sampleA)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(shuffledData)]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we may modify this if we want to use a different test statistic</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(sim.sampleA)<span class="sc">-</span><span class="fu">mean</span>(sim.sampleB)) </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(feb.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(feb.avg.shadow)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(feb.avg.noshadow, feb.avg.shadow)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs) <span class="co">#p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs) <span class="co">#p-value</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0169</code></pre>
+<pre><code>[1] 0.0159</code></pre>
 </div>
 </div>
 </section>
-<section id="early-spring-warmer-than-average-march-temperatures" class="level3" data-number="14.1.2">
-<h3 data-number="14.1.2" class="anchored" data-anchor-id="early-spring-warmer-than-average-march-temperatures"><span class="header-section-number">14.1.2</span> Early Spring = warmer than average March temperatures</h3>
+<section id="early-spring-warmer-than-average-march-temperatures" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="early-spring-warmer-than-average-march-temperatures"><span class="header-section-number">15.3.2</span> Early Spring = warmer than average March temperatures</h3>
 <p>Maybe he’s better at predicting March temperatures?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mar.avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>March.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mar.avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>March.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(mar.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(mar.avg.shadow)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(mar.avg.noshadow, mar.avg.shadow)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mar.avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>March.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mar.avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>March.Average.Temperature[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(mar.avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(mar.avg.shadow)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(mar.avg.noshadow, mar.avg.shadow)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0601</code></pre>
+<pre><code>[1] 0.0592</code></pre>
 </div>
 </div>
 </section>
-<section id="early-spring-mean-of-feb-march-temps-above-average" class="level3" data-number="14.1.3">
-<h3 data-number="14.1.3" class="anchored" data-anchor-id="early-spring-mean-of-feb-march-temps-above-average"><span class="header-section-number">14.1.3</span> Early Spring = Mean of Feb &amp; March temps above average</h3>
+<section id="early-spring-mean-of-feb-march-temps-above-average" class="level3" data-number="15.3.3">
+<h3 data-number="15.3.3" class="anchored" data-anchor-id="early-spring-mean-of-feb-march-temps-above-average"><span class="header-section-number">15.3.3</span> Early Spring = Mean of Feb &amp; March temps above average</h3>
 <p>What if we average Feb and March temperatures together.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>FebMarAvg <span class="ot">&lt;-</span> (groundhog<span class="sc">$</span>February.Average.Temperature<span class="sc">+</span>groundhog<span class="sc">$</span>March.Average.Temperature)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(avg.shadow)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(avg.noshadow, avg.shadow)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>FebMarAvg <span class="ot">&lt;-</span> (groundhog<span class="sc">$</span>February.Average.Temperature<span class="sc">+</span>groundhog<span class="sc">$</span>March.Average.Temperature)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(avg.shadow)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(avg.noshadow, avg.shadow)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0078</code></pre>
+<pre><code>[1] 0.0058</code></pre>
 </div>
 </div>
 <p>I don’t know about you, but this is staring to seem a little bit weird.</p>
 </section>
-<section id="measuring-accuracy" class="level3" data-number="14.1.4">
-<h3 data-number="14.1.4" class="anchored" data-anchor-id="measuring-accuracy"><span class="header-section-number">14.1.4</span> Measuring Accuracy</h3>
+<section id="measuring-accuracy" class="level3" data-number="15.3.4">
+<h3 data-number="15.3.4" class="anchored" data-anchor-id="measuring-accuracy"><span class="header-section-number">15.3.4</span> Measuring Accuracy</h3>
 <p>(New idea of what “early spring” means)</p>
 <p>If both February temperatures and march temperature are greater than average, then we say we have an early spring.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>feb.avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(groundhog<span class="sc">$</span>February.Average.Temperature)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mar.avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(groundhog<span class="sc">$</span>March.Average.Temperature)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>EarlySpring <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature<span class="sc">&gt;</span>feb.avg <span class="sc">&amp;</span> groundhog<span class="sc">$</span>March.Average.Temperature<span class="sc">&gt;</span>mar.avg</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>feb.avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(groundhog<span class="sc">$</span>February.Average.Temperature)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mar.avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(groundhog<span class="sc">$</span>March.Average.Temperature)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>EarlySpring <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature<span class="sc">&gt;</span>feb.avg <span class="sc">&amp;</span> groundhog<span class="sc">$</span>March.Average.Temperature<span class="sc">&gt;</span>mar.avg</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             
               FALSE TRUE Sum
@@ -734,88 +852,88 @@ window.Quarto = {
 </div>
 <p>when earlySpring = TRUE, and prediction was “no shadow” that would be correct when earlySpring = FALSE and prediction is “full shadow” that would be correct</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="cf">function</span>(guesses, weather){</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  predictEarlySpring <span class="ot">&lt;-</span> guesses<span class="sc">==</span><span class="st">"No Shadow"</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  nCorrect <span class="ot">&lt;-</span> <span class="fu">sum</span>(weather<span class="sc">==</span>predictEarlySpring)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(nCorrect<span class="sc">/</span><span class="fu">length</span>(weather))</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="cf">function</span>(guesses, weather){</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  predictEarlySpring <span class="ot">&lt;-</span> guesses<span class="sc">==</span><span class="st">"No Shadow"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  nCorrect <span class="ot">&lt;-</span> <span class="fu">sum</span>(weather<span class="sc">==</span>predictEarlySpring)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(nCorrect<span class="sc">/</span><span class="fu">length</span>(weather))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7217391</code></pre>
 </div>
 </div>
 <p>Let’s call our simulated Groundhog “Bernoulli Phil”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Full Shadow   No Shadow 
   0.8695652   0.1304348 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#A randomly guessing groundhog would see his shadow this proportion of the time</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>p.shadow <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil))[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#A randomly guessing groundhog would see his shadow this proportion of the time</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>p.shadow <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil))[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(accuracy.obs <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>(accuracy.obs <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, groundhog<span class="sc">$</span>EarlySpring))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7217391</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate guesses by Bernoulli Phil</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>randomGuesses <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">115</span>, <span class="at">p=</span><span class="fl">0.8695652</span>){</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>), <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(p,<span class="dv">1</span><span class="sc">-</span>p)))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,NMC)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(groundhog)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(<span class="fu">randomGuesses</span>(n, p.shadow), groundhog<span class="sc">$</span>EarlySpring)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks=</span><span class="dv">40</span>)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>accuracy.obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate guesses by Bernoulli Phil</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>randomGuesses <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">115</span>, <span class="at">p=</span><span class="fl">0.8695652</span>){</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>), <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(p,<span class="dv">1</span><span class="sc">-</span>p)))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,NMC)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(groundhog)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(<span class="fu">randomGuesses</span>(n, p.shadow), groundhog<span class="sc">$</span>EarlySpring)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks=</span><span class="dv">40</span>)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>accuracy.obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> accuracy.obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> accuracy.obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0271</code></pre>
+<pre><code>[1] 0.0253</code></pre>
 </div>
 </div>
 <p>The actual groundhog’s accuracy is statistically much better than the simulated “random guessing” groundhog - at least better at predicting if both Feb &amp; March will be above average temperature.</p>
 <p>The scatterplot colored by shadow status makes this pattern suspiciously clear</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(groundhog<span class="sc">$</span>February.Average.Temperature, groundhog<span class="sc">$</span>March.Average.Temperature, <span class="at">col=</span>(<span class="fu">as.numeric</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>) <span class="sc">+</span><span class="dv">1</span>), <span class="at">xlab=</span><span class="st">"Avg. Feb Temp"</span>, <span class="at">ylab=</span><span class="st">"Avg. Mar Temp"</span>, <span class="at">main=</span><span class="st">"National Feb/Mar Temp vs Shadow"</span>, <span class="at">pch=</span><span class="dv">16</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(groundhog<span class="sc">$</span>February.Average.Temperature))</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">mean</span>(groundhog<span class="sc">$</span>March.Average.Temperature))</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="dv">25</span>, <span class="at">y=</span><span class="dv">50</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"early spring"</span>,<span class="st">"6 wks winter"</span>), <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(groundhog<span class="sc">$</span>February.Average.Temperature, groundhog<span class="sc">$</span>March.Average.Temperature, <span class="at">col=</span>(<span class="fu">as.numeric</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>) <span class="sc">+</span><span class="dv">1</span>), <span class="at">xlab=</span><span class="st">"Avg. Feb Temp"</span>, <span class="at">ylab=</span><span class="st">"Avg. Mar Temp"</span>, <span class="at">main=</span><span class="st">"National Feb/Mar Temp vs Shadow"</span>, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(groundhog<span class="sc">$</span>February.Average.Temperature))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">mean</span>(groundhog<span class="sc">$</span>March.Average.Temperature))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="dv">25</span>, <span class="at">y=</span><span class="dv">50</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"early spring"</span>,<span class="st">"6 wks winter"</span>), <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>O ye unbelievers! Witness the prognosticating powers of Phil the groundhog!</p>
 </section>
-<section id="looking-at-deviation-from-a-moving-average" class="level3" data-number="14.1.5">
-<h3 data-number="14.1.5" class="anchored" data-anchor-id="looking-at-deviation-from-a-moving-average"><span class="header-section-number">14.1.5</span> Looking at Deviation from a moving average</h3>
+<section id="looking-at-deviation-from-a-moving-average" class="level3" data-number="15.3.5">
+<h3 data-number="15.3.5" class="anchored" data-anchor-id="looking-at-deviation-from-a-moving-average"><span class="header-section-number">15.3.5</span> Looking at Deviation from a moving average</h3>
 <p>However we have to be cautious - think about climate change and Phil’s predictions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(smooth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(smooth)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: greybox</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Package "greybox", v2.0.6 loaded.</code></pre>
+<pre><code>Package "greybox", v2.0.7 loaded.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -827,7 +945,7 @@ Attaching package: 'greybox'</code></pre>
     accuracy</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>This is package "smooth", v4.3.1</code></pre>
+<pre><code>This is package "smooth", v4.4.0</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -838,120 +956,10 @@ Attaching package: 'smooth'</code></pre>
 
     accuracy</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>MA <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>FebMarAvg, <span class="at">order=</span><span class="dv">20</span>)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">#predict(MA)</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>groundhog<span class="sc">$</span>FebMarAvg, <span class="at">x=</span>groundhog<span class="sc">$</span>Year, <span class="at">col=</span><span class="fu">as.numeric</span>((<span class="fu">as.factor</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil)))<span class="sc">+</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">16</span>)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">predict</span>(MA)<span class="sc">$</span>mean, <span class="at">x=</span>groundhog<span class="sc">$</span>Year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Notice that he has been predicting early springs more often since the 60s, and also we’ve been having warmer and warmer temperatures. Perhaps he’s predicting early spring more often because of climate change, and thus he is correct more often.</p>
-<p>This whole analysis really hinges on what we mean by an “early spring”. One could argue that with rising global temperatures, spring is actually coming earlier more often than it used to, and THAT’s why he’s seeing no shadow more often.</p>
-<p>If we repeat this analysis and look not at whether the temperature is above average, but rather whether the temperature is above the <code>moving average</code> then it changes the conclusion a bit</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>tempDev <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg <span class="sc">-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MA)<span class="sc">$</span>mean)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>groundhog<span class="sc">$</span>tempDev,<span class="at">x=</span>groundhog<span class="sc">$</span>Year, <span class="at">col=</span><span class="fu">as.numeric</span>((<span class="fu">as.factor</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil)))<span class="sc">+</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">ylab=</span><span class="st">"dev from moving avg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>tempDev[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>tempDev[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(avg.shadow)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(avg.noshadow, avg.shadow)</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0559</code></pre>
-</div>
-</div>
-<p>Last let’s consider an “early spring” when both Feb and March average temps are above the moving average.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>MAfeb <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>February.Average.Temperature, <span class="at">order=</span><span class="dv">20</span>)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>MAmar <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>March.Average.Temperature, <span class="at">order=</span><span class="dv">20</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>earlySpring <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature <span class="sc">&gt;</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MAfeb)<span class="sc">$</span>mean)  <span class="sc">&amp;</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  groundhog<span class="sc">$</span>March.Average.Temperature <span class="sc">&gt;</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MAmar)<span class="sc">$</span>mean)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, earlySpring)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7130435</code></pre>
-</div>
-</div>
-<p>The accuracy is now not much better than a flip of a coin. But that’s not statistical thinking - we need to see if he is better than a randomly guessing groundhog.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>(accuracy.obs <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, earlySpring))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7130435</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate guesses by Bernoulli Phil</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>randomGuesses <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">115</span>, <span class="at">p=</span><span class="fl">0.8695652</span>){</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>), <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(p,<span class="dv">1</span><span class="sc">-</span>p)))</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(groundhog)</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">replicate</span>(NMC, <span class="fu">accuracy</span>(<span class="fu">randomGuesses</span>(n, p.shadow), earlySpring))</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks=</span><span class="dv">40</span>)</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>accuracy.obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> accuracy.obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0314</code></pre>
-</div>
-</div>
-<p>I’m still convinced - the groundhog does significantly better than a random guesser.</p>
-</section>
-</section>
-<section id="example-autocorrelation" class="level2" data-number="14.2">
-<h2 data-number="14.2" class="anchored" data-anchor-id="example-autocorrelation"><span class="header-section-number">14.2</span> Example: Autocorrelation</h2>
-<p>A question of particular importance in time series analysis is whether there is any autocorrelation. If your data is recorded regularly at timesteps <span class="math inline">\(1,2,\ldots\)</span> we could look at the relationship between <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_{i+1}\)</span> to see if they exhibit correlation.</p>
-<p>consider the following time series data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>time_series <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/time_series_data.csv"</span>)</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(time_series<span class="sc">$</span>x, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>One possible model for how this data came about is that it is independent draws from a random variable. A quick check of the histogram can help us determine a good random variable to model the data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(time_series<span class="sc">$</span>x, <span class="at">breaks=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>MA <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>FebMarAvg, <span class="at">order=</span><span class="dv">20</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#predict(MA)</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>groundhog<span class="sc">$</span>FebMarAvg, <span class="at">x=</span>groundhog<span class="sc">$</span>Year, <span class="at">col=</span><span class="fu">as.numeric</span>((<span class="fu">as.factor</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil)))<span class="sc">+</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">predict</span>(MA)<span class="sc">$</span>mean, <span class="at">x=</span>groundhog<span class="sc">$</span>Year)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -960,14 +968,124 @@ Attaching package: 'smooth'</code></pre>
 </div>
 </div>
 </div>
-<p>The distribution is somewhat symmetric, bell-shape. It could be a normal distribution. A better check for the distribution fit is a <code>qqnorm</code> plot.</p>
+<p>Notice that he has been predicting early springs more often since the 60s, and also we’ve been having warmer and warmer temperatures. Perhaps he’s predicting early spring more often because of climate change, and thus he is correct more often.</p>
+<p>This whole analysis really hinges on what we mean by an “early spring”. One could argue that with rising global temperatures, spring is actually coming earlier more often than it used to, and THAT’s why he’s seeing no shadow more often.</p>
+<p>If we repeat this analysis and look not at whether the temperature is above average, but rather whether the temperature is above the <code>moving average</code> then it changes the conclusion a bit</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqPlot</span>(time_series<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>groundhog<span class="sc">$</span>tempDev <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>FebMarAvg <span class="sc">-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MA)<span class="sc">$</span>mean)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>groundhog<span class="sc">$</span>tempDev,<span class="at">x=</span>groundhog<span class="sc">$</span>Year, <span class="at">col=</span><span class="fu">as.numeric</span>((<span class="fu">as.factor</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil)))<span class="sc">+</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">ylab=</span><span class="st">"dev from moving avg"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>avg.shadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>tempDev[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"Full Shadow"</span>]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>avg.noshadow <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>tempDev[groundhog<span class="sc">$</span>Punxsutawney.Phil<span class="sc">==</span><span class="st">"No Shadow"</span>]</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(avg.noshadow)<span class="sc">-</span><span class="fu">mean</span>(avg.shadow)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>test.stats <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#lazy empty vector - R will add more to it without complaining</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  test.stats[i] <span class="ot">&lt;-</span> <span class="fu">permute_and_compute</span>(avg.noshadow, avg.shadow)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(test.stats, <span class="at">breaks=</span><span class="dv">50</span>)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>t_obs, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(test.stats <span class="sc">&gt;=</span> t_obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0634</code></pre>
+</div>
+</div>
+<p>Last let’s consider an “early spring” when both Feb and March average temps are above the moving average.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>MAfeb <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>February.Average.Temperature, <span class="at">order=</span><span class="dv">20</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>MAmar <span class="ot">&lt;-</span><span class="fu">sma</span>(groundhog<span class="sc">$</span>March.Average.Temperature, <span class="at">order=</span><span class="dv">20</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>earlySpring <span class="ot">&lt;-</span> groundhog<span class="sc">$</span>February.Average.Temperature <span class="sc">&gt;</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MAfeb)<span class="sc">$</span>mean)  <span class="sc">&amp;</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  groundhog<span class="sc">$</span>March.Average.Temperature <span class="sc">&gt;</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(MAmar)<span class="sc">$</span>mean)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, earlySpring)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7217391</code></pre>
+</div>
+</div>
+<p>The accuracy is now not much better than a flip of a coin. But that’s not statistical thinking - we need to see if he is better than a randomly guessing groundhog.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>(accuracy.obs <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(groundhog<span class="sc">$</span>Punxsutawney.Phil, earlySpring))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7217391</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate guesses by Bernoulli Phil</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>randomGuesses <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">115</span>, <span class="at">p=</span><span class="fl">0.8695652</span>){</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Full Shadow"</span>,<span class="st">"No Shadow"</span>), <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(p,<span class="dv">1</span><span class="sc">-</span>p)))</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(groundhog)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">replicate</span>(NMC, <span class="fu">accuracy</span>(<span class="fu">randomGuesses</span>(n, p.shadow), earlySpring))</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks=</span><span class="dv">40</span>)</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>accuracy.obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> accuracy.obs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0242</code></pre>
+</div>
+</div>
+<p>I’m still convinced - the groundhog does significantly better than a random guesser.</p>
+</section>
+</section>
+<section id="example-autocorrelation" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="example-autocorrelation"><span class="header-section-number">15.4</span> Example: Autocorrelation</h2>
+<p>A question of particular importance in time series analysis is whether there is any autocorrelation. If your data is recorded regularly at timesteps <span class="math inline">\(1,2,\ldots\)</span> we could look at the relationship between <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_{i+1}\)</span> to see if they exhibit correlation.</p>
+<p>consider the following time series data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>time_series <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/time_series_data.csv"</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(time_series<span class="sc">$</span>x, <span class="at">type=</span><span class="st">"l"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One possible model for how this data came about is that it is independent draws from a random variable. A quick check of the histogram can help us determine a good random variable to model the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(time_series<span class="sc">$</span>x, <span class="at">breaks=</span><span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The distribution is somewhat symmetric, bell-shape. It could be a normal distribution. A better check for the distribution fit is a <code>qqnorm</code> plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqPlot</span>(time_series<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -977,11 +1095,11 @@ Attaching package: 'smooth'</code></pre>
 </div>
 <p>Let’s just pull the point estimates for the <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> parameters for a normal distribution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(time_series<span class="sc">$</span>x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(time_series<span class="sc">$</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 100.1767</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>(sigma <span class="ot">&lt;-</span> <span class="fu">sd</span>(time_series<span class="sc">$</span>x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>(sigma <span class="ot">&lt;-</span> <span class="fu">sd</span>(time_series<span class="sc">$</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.166514</code></pre>
 </div>
@@ -989,96 +1107,96 @@ Attaching package: 'smooth'</code></pre>
 <p>If we are reasonably comfortable with the assumption that the data came from a normal distribution (seems supported by the QQ plot) we could model <span class="math inline">\(X\)</span> as independent draws from <span class="math inline">\(N(100.17, 4.17^2)\)</span>.</p>
 <p>A natural test statistic to look at which measures autocorrelation is the correlation of <span class="math inline">\(X_i\)</span> with <span class="math inline">\(X_{i+1}\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>test.stat <span class="ot">&lt;-</span> <span class="cf">function</span>(X){</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cor</span>(X[<span class="sc">-</span><span class="dv">1</span>], X[<span class="sc">-</span><span class="fu">length</span>(X)] ) )</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>(obs.t <span class="ot">&lt;-</span> <span class="fu">test.stat</span>(time_series<span class="sc">$</span>x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>test.stat <span class="ot">&lt;-</span> <span class="cf">function</span>(X){</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cor</span>(X[<span class="sc">-</span><span class="dv">1</span>], X[<span class="sc">-</span><span class="fu">length</span>(X)] ) )</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>(obs.t <span class="ot">&lt;-</span> <span class="fu">test.stat</span>(time_series<span class="sc">$</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2991791</code></pre>
 </div>
 </div>
-<section id="a-parametric-test-of-autocorrelation" class="level3" data-number="14.2.1">
-<h3 data-number="14.2.1" class="anchored" data-anchor-id="a-parametric-test-of-autocorrelation"><span class="header-section-number">14.2.1</span> A Parametric Test of Autocorrelation</h3>
+<section id="a-parametric-test-of-autocorrelation" class="level3" data-number="15.4.1">
+<h3 data-number="15.4.1" class="anchored" data-anchor-id="a-parametric-test-of-autocorrelation"><span class="header-section-number">15.4.1</span> A Parametric Test of Autocorrelation</h3>
 <p>To perform a Monte Carlo test we can simulate datasets from our null hypothesis model and record the simulated test statistic.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">test.stat</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, mu, sigma)))</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">test.stat</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, mu, sigma)))</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We will consider what proportion of the simulated test statistics are more extreme than we observed. Because this is a two-tailed distribution - and evidence against the null would be found in either the upper or the lower tail, we should make our p-value calculation by doubling the smaller of the two tails</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t),</span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(t.sim <span class="sc">&lt;=</span> obs.t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t),</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(t.sim <span class="sc">&lt;=</span> obs.t))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.002</code></pre>
+<pre><code>[1] 0.001</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We have a very low p-value, indicating that if the data were in fact independent draws, we’d have a very very small chance of seeing data like this.</p>
 </section>
-<section id="a-permutation-test-of-autocorrelation" class="level3" data-number="14.2.2">
-<h3 data-number="14.2.2" class="anchored" data-anchor-id="a-permutation-test-of-autocorrelation"><span class="header-section-number">14.2.2</span> A Permutation Test of Autocorrelation</h3>
+<section id="a-permutation-test-of-autocorrelation" class="level3" data-number="15.4.2">
+<h3 data-number="15.4.2" class="anchored" data-anchor-id="a-permutation-test-of-autocorrelation"><span class="header-section-number">15.4.2</span> A Permutation Test of Autocorrelation</h3>
 <p>We could also take a different approach for our null model. We could use a permutation test. Under the null hypothesis, every permutation of the data is equally likely. So we could produce a simulated test statistic distribution by shuffling the data around each time. This is consistent with our null hypothesis because there’s no trend in this model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>,</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">test.stat</span>(<span class="fu">sample</span>(time_series<span class="sc">$</span>x)))</span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t),</span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(t.sim <span class="sc">&lt;=</span> obs.t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>,</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">test.stat</span>(<span class="fu">sample</span>(time_series<span class="sc">$</span>x)))</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t),</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(t.sim <span class="sc">&lt;=</span> obs.t))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8e-04</code></pre>
+<pre><code>[1] 0.0022</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The p-value is pretty much the same, and so is our conclusion.</p>
 </section>
-<section id="a-permutation-test-of-constant-variance" class="level3" data-number="14.2.3">
-<h3 data-number="14.2.3" class="anchored" data-anchor-id="a-permutation-test-of-constant-variance"><span class="header-section-number">14.2.3</span> A Permutation test of constant variance</h3>
+<section id="a-permutation-test-of-constant-variance" class="level3" data-number="15.4.3">
+<h3 data-number="15.4.3" class="anchored" data-anchor-id="a-permutation-test-of-constant-variance"><span class="header-section-number">15.4.3</span> A Permutation test of constant variance</h3>
 <p>Another violation of the null model would be if the variance of the simulated values is not consistent. We could simply split the data in half and calculate the variance of the first half of the data, comparing it with the variance of the second half of the data. We can look at the absolute value of the difference.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>test.stat <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  n1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">length</span>(x)<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abs</span>(<span class="fu">var</span>(x[<span class="dv">1</span><span class="sc">:</span>n1]) <span class="sc">-</span> <span class="fu">var</span>(x[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span>n1)]))</span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>(obs.t <span class="ot">&lt;-</span> <span class="fu">test.stat</span>(time_series<span class="sc">$</span>x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>test.stat <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  n1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">length</span>(x)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abs</span>(<span class="fu">var</span>(x[<span class="dv">1</span><span class="sc">:</span>n1]) <span class="sc">-</span> <span class="fu">var</span>(x[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span>n1)]))</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>(obs.t <span class="ot">&lt;-</span> <span class="fu">test.stat</span>(time_series<span class="sc">$</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 13.25346</code></pre>
 </div>
 </div>
 <p>This test statistic is designed to be a one-sided test statistic, only large values of <span class="math inline">\(T\)</span> represent evidence against the null hypothesis that <span class="math inline">\(\sigma^2\)</span> is constant.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">test.stat</span>(<span class="fu">sample</span>(time_series<span class="sc">$</span>x)))</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t) <span class="co">#right-tailed p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>t.sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">test.stat</span>(<span class="fu">sample</span>(time_series<span class="sc">$</span>x)))</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(t.sim <span class="sc">&gt;=</span> obs.t) <span class="co">#right-tailed p-value</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0052</code></pre>
+<pre><code>[1] 0.0059</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(t.sim)</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>obs.t, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="R04_Monte_Carlo_Testing_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1141,13 +1259,14 @@ Attaching package: 'smooth'</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1492,12 +1611,12 @@ Attaching package: 'smooth'</code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./testing1.html" class="pagination-link" aria-label="Introduction to Statistical Testing">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./testing1_practice.html" class="pagination-link" aria-label="Monte Carlo Testing Practice">
-        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

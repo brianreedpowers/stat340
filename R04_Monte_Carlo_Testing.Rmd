@@ -9,6 +9,105 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Permutation Test
+Here is the general form of the permutation test, which can generate a simulate the distribution of the test statistic
+```{r}
+permute_and_compute <- function( ctrl_data, trmt_data ) {
+  # Pool the data
+  pooled_data <- c( ctrl_data, trmt_data );
+  
+  # Randomly shuffle the data and assign to groups.
+  n_ctrl <- length( ctrl_data ); n_trmt <- length( trmt_data );
+  n_total <- n_ctrl + n_trmt;
+  
+  # Shuffle the combined data
+  shuffled_data <- sample( pooled_data, size=n_total, replace=FALSE );
+  
+  # Now, the first n_ctrl of these data points are our new control group
+  # and the remaining elements are assigned to our treatment group.
+  shuffled_ctrl <- shuffled_data[1:n_ctrl];
+  shuffled_trmt <- shuffled_data[(n_ctrl+1):n_total];
+  
+  # Compute the difference in means of our two samples.
+  return( mean(shuffled_trmt)-mean(shuffled_ctrl) );
+}
+
+```
+
+
+
+
+
+
+
+## Testing Uniformity
+
+There's an interesting connection between two distributions we've studied this semester: The uniform distribution and the exponential distribution. If we have a sample $n$ of uniformly distributed values between 0 and 1, sort them in increasing order and look at the sizes of the gaps between the values, the distribution of gaps will be exponentially distributed with $\lambda\approx n$. Let's see if this is really true, and devise a test for uniformity!
+
+Let's visually check if this seems true.
+
+```{r}
+U <- runif(10000, min=0, max=1)
+
+par(mfrow=c(1,2)) #says I want to plot 1 row, 2 columns of plots together
+hist(diff(sort(U)), main="gaps of uniforms") ## histogram of differences of sorted uniform values
+hist(rexp(9999, rate=10000), main="exponential rv")
+
+```
+Here's a recipe to test if a set of data could be uniformly distributed:
+
+1. Sort the values
+2. Find the differences
+3. Calculate a test statistic on those difference..... use the coefficient of variation.
+$$CV = \frac{S}{\bar{X}}$$
+Because it takes both spread and center into account.
+
+For an exponential, the CV = $\frac{1/\lambda}{1/\lambda}=1$
+
+4. Simulate exponential data and look at the distribution of CVs.
+
+#months of the year
+```{r}
+myData <- rbeta(1000, 1, 1.4)
+#let's calculate a test statistic -
+
+diffSortMydata <- diff(sort(myData))
+tobs <- sd(diffSortMydata)/mean(diffSortMydata)
+tobs
+```
+Now let's generate a distribution for this from an exponential
+```{r}
+n <- length(diffSortMydata)
+
+t.sim <- rep(0, 10000)
+for(i in 1:10000){
+  exp.sim <- rexp(n, rate=1)
+  t.sim[i] <- sd(exp.sim)/mean(exp.sim)
+}
+hist(t.sim, xlim=c(min(min(t.sim, tobs)), max(max(t.sim),tobs)))
+abline(v=tobs)
+
+```
+Because evidence of non-uniformity can be found in either extreme, we need to account for that when we calculate a $p$-value.
+
+Because this is not a symmetric distribution, it would not be a good idea to just look at $$P( X <= -|tobs|) + P( X > |tobs|)$$
+Also because the distribution isn't even centered at 0!!!
+
+Here's what we do:
+we calculate $P(T \geq tobs)$ and $P(T \leq tobs)$, find which is the smaller tail, and double that value. That's how we get our two-sided p-value.
+
+```{r}
+p1 <- sum(t.sim <= tobs) / length(t.sim)
+p2 <- sum(t.sim >= tobs) / length(t.sim)
+min(p1, p2) * 2
+
+```
+A histogram of the data (should have looked at this earlier)
+```{r}
+hist(myData)
+```
+
+
 ## Example: Groundhog's Day
 
 How well has Punxsutawney Phil done in predicting the weather?

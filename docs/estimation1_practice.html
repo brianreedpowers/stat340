@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>21&nbsp; Point Estimation Practice – STAT 340: Data Science II</title>
+<title>22&nbsp; Point Estimation Practice – STAT 340: Data Science II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -68,14 +68,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./R06_More_Estimation_Examples.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -118,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,7 +146,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1_practice.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1_practice.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -158,7 +159,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -235,29 +238,35 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Random Variable Distribution Practice</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+  </div>
+</li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R03_MonteCarloExamples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mc_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Practice</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R_MonteCarlo_Battleship.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Monte Carlo Battleship</span></span></a>
   </div>
 </li>
       </ul>
@@ -274,38 +283,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Introduction to Statistical Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R04_Monte_Carlo_Testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing1_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Monte Carlo Testing Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Statistical Testing, Continued</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R05_testing_Additional_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Monte Carlo Testing: Additional Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./testing2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Testing and Power Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,38 +331,38 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Part 1</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R06_More_Estimation_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation1_practice.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Estimation Part 2</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R07_More_Estimation_and_CI_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./estimation2_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interval Estimation Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -370,94 +379,94 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Prediction (Simple Linear Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R08_prediction_examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression - Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./slr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Simple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./prediction2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Prediction (Multiple Linear Regression)</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R09_Multiple_Regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">R10 multiple regression further concepts</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mlr_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Multiple Linear Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R10_LogisticReg_Extended.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression - Extended Examples</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./logistic_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Logistic Regression Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Model Selection and Cross Validation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_cv-MSEcomparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">cv-extra</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Bias_Variance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Bias Variance Tradeoff</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Model_Selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11 Model Selection</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R11_Ridge_LASSO.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">R11: Ridge and Lasso</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cv_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Cross Validation Practice</span></span></a>
   </div>
 </li>
           <li class="px-0"><hr class="sidebar-divider hi "></li>
@@ -475,19 +484,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Bootstrapping</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./R12_Bootstrap_Examples.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">R13_Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bootstrap_practice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Bootstrap Practice</span></span></a>
   </div>
 </li>
       </ul>
@@ -504,7 +513,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./RV_summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Random Variable Summary</span></span></a>
   </div>
 </li>
       </ul>
@@ -519,32 +528,32 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">22</span> Practice Problems</a>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link active" data-scroll-target="#practice-problems"><span class="header-section-number">23</span> Practice Problems</a>
   <ul class="collapse">
-  <li><a href="#method-of-moments-i" id="toc-method-of-moments-i" class="nav-link" data-scroll-target="#method-of-moments-i"><span class="header-section-number">22.1</span> Method of Moments I</a></li>
-  <li><a href="#method-of-moments-ii" id="toc-method-of-moments-ii" class="nav-link" data-scroll-target="#method-of-moments-ii"><span class="header-section-number">22.2</span> Method of Moments II</a></li>
-  <li><a href="#method-of-moments-iii" id="toc-method-of-moments-iii" class="nav-link" data-scroll-target="#method-of-moments-iii"><span class="header-section-number">22.3</span> Method of Moments III</a></li>
-  <li><a href="#method-of-moments-iv" id="toc-method-of-moments-iv" class="nav-link" data-scroll-target="#method-of-moments-iv"><span class="header-section-number">22.4</span> Method of Moments IV</a></li>
-  <li><a href="#method-of-moments-v" id="toc-method-of-moments-v" class="nav-link" data-scroll-target="#method-of-moments-v"><span class="header-section-number">22.5</span> Method of Moments V</a></li>
-  <li><a href="#bias-sample-sd" id="toc-bias-sample-sd" class="nav-link" data-scroll-target="#bias-sample-sd"><span class="header-section-number">22.6</span> Bias Sample SD</a></li>
-  <li><a href="#a-poisson-estimator" id="toc-a-poisson-estimator" class="nav-link" data-scroll-target="#a-poisson-estimator"><span class="header-section-number">22.7</span> A Poisson Estimator</a></li>
-  <li><a href="#the-tricky-sample-maximum" id="toc-the-tricky-sample-maximum" class="nav-link" data-scroll-target="#the-tricky-sample-maximum"><span class="header-section-number">22.8</span> The Tricky Sample Maximum</a></li>
-  <li><a href="#tricky-sample-maximum-ii" id="toc-tricky-sample-maximum-ii" class="nav-link" data-scroll-target="#tricky-sample-maximum-ii"><span class="header-section-number">22.9</span> Tricky Sample Maximum II</a></li>
-  <li><a href="#exponential-data" id="toc-exponential-data" class="nav-link" data-scroll-target="#exponential-data"><span class="header-section-number">22.10</span> Exponential Data</a></li>
-  <li><a href="#a-uniform-mystery" id="toc-a-uniform-mystery" class="nav-link" data-scroll-target="#a-uniform-mystery"><span class="header-section-number">22.11</span> A uniform mystery</a></li>
-  <li><a href="#another-uniform-estimation" id="toc-another-uniform-estimation" class="nav-link" data-scroll-target="#another-uniform-estimation"><span class="header-section-number">22.12</span> Another Uniform Estimation</a></li>
-  <li><a href="#goldfish" id="toc-goldfish" class="nav-link" data-scroll-target="#goldfish"><span class="header-section-number">22.13</span> Goldfish</a></li>
+  <li><a href="#method-of-moments-i" id="toc-method-of-moments-i" class="nav-link" data-scroll-target="#method-of-moments-i"><span class="header-section-number">23.1</span> Method of Moments I</a></li>
+  <li><a href="#method-of-moments-ii" id="toc-method-of-moments-ii" class="nav-link" data-scroll-target="#method-of-moments-ii"><span class="header-section-number">23.2</span> Method of Moments II</a></li>
+  <li><a href="#method-of-moments-iii" id="toc-method-of-moments-iii" class="nav-link" data-scroll-target="#method-of-moments-iii"><span class="header-section-number">23.3</span> Method of Moments III</a></li>
+  <li><a href="#method-of-moments-iv" id="toc-method-of-moments-iv" class="nav-link" data-scroll-target="#method-of-moments-iv"><span class="header-section-number">23.4</span> Method of Moments IV</a></li>
+  <li><a href="#method-of-moments-v" id="toc-method-of-moments-v" class="nav-link" data-scroll-target="#method-of-moments-v"><span class="header-section-number">23.5</span> Method of Moments V</a></li>
+  <li><a href="#bias-sample-sd" id="toc-bias-sample-sd" class="nav-link" data-scroll-target="#bias-sample-sd"><span class="header-section-number">23.6</span> Bias Sample SD</a></li>
+  <li><a href="#a-poisson-estimator" id="toc-a-poisson-estimator" class="nav-link" data-scroll-target="#a-poisson-estimator"><span class="header-section-number">23.7</span> A Poisson Estimator</a></li>
+  <li><a href="#the-tricky-sample-maximum" id="toc-the-tricky-sample-maximum" class="nav-link" data-scroll-target="#the-tricky-sample-maximum"><span class="header-section-number">23.8</span> The Tricky Sample Maximum</a></li>
+  <li><a href="#tricky-sample-maximum-ii" id="toc-tricky-sample-maximum-ii" class="nav-link" data-scroll-target="#tricky-sample-maximum-ii"><span class="header-section-number">23.9</span> Tricky Sample Maximum II</a></li>
+  <li><a href="#exponential-data" id="toc-exponential-data" class="nav-link" data-scroll-target="#exponential-data"><span class="header-section-number">23.10</span> Exponential Data</a></li>
+  <li><a href="#a-uniform-mystery" id="toc-a-uniform-mystery" class="nav-link" data-scroll-target="#a-uniform-mystery"><span class="header-section-number">23.11</span> A uniform mystery</a></li>
+  <li><a href="#another-uniform-estimation" id="toc-another-uniform-estimation" class="nav-link" data-scroll-target="#another-uniform-estimation"><span class="header-section-number">23.12</span> Another Uniform Estimation</a></li>
+  <li><a href="#goldfish" id="toc-goldfish" class="nav-link" data-scroll-target="#goldfish"><span class="header-section-number">23.13</span> Goldfish</a></li>
   </ul></li>
-  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">23</span> Beyond STAT 340</a></li>
+  <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">24</span> Beyond STAT 340</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1_practice.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./estimation1.html">Estimation</a></li><li class="breadcrumb-item"><a href="./estimation1_practice.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></h1>
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Point Estimation Practice</span></h1>
 </div>
 
 
@@ -561,50 +570,274 @@ window.Quarto = {
 </header>
 
 
-<section id="practice-problems" class="level1" data-number="22">
-<h1 data-number="22"><span class="header-section-number">22</span> Practice Problems</h1>
-<section id="method-of-moments-i" class="level2" data-number="22.1">
-<h2 data-number="22.1" class="anchored" data-anchor-id="method-of-moments-i"><span class="header-section-number">22.1</span> Method of Moments I</h2>
+<section id="practice-problems" class="level1" data-number="23">
+<h1 data-number="23"><span class="header-section-number">23</span> Practice Problems</h1>
+<section id="method-of-moments-i" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="method-of-moments-i"><span class="header-section-number">23.1</span> Method of Moments I</h2>
 <p>Use the method of moments to construct an estimator for the parameter <span class="math inline">\(N\)</span> when your data <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> each are drawn independently from <span class="math inline">\(Binom(N, p)\)</span>. In this case assume that <span class="math inline">\(p\)</span> is known to you. Note the sample size you’re working with is not the same as the <span class="math inline">\(N\)</span> parameter from the binomial distribution.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Since <span class="math inline">\(EX=Np\)</span>, if <span class="math inline">\(p\)</span> is known, and since <span class="math inline">\(\bar{X}\approx EX\)</span> we can create an estimator for <span class="math inline">\(N\)</span> by substituting <span class="math inline">\(\bar X\)</span> for <span class="math inline">\(EX\)</span> and replace the equals with approximation.</p>
+<p><span class="math display">\[\bar{X} \approx N p\]</span> so <span class="math display">\[N \approx \frac{\bar X}{p}\]</span></p>
+</div>
+</div>
+</div>
 </section>
-<section id="method-of-moments-ii" class="level2" data-number="22.2">
-<h2 data-number="22.2" class="anchored" data-anchor-id="method-of-moments-ii"><span class="header-section-number">22.2</span> Method of Moments II</h2>
+<section id="method-of-moments-ii" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="method-of-moments-ii"><span class="header-section-number">23.2</span> Method of Moments II</h2>
 <p>Continuing from the previous problem, suppose that your data <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> each are drawn independently from <span class="math inline">\(Binom(N, p)\)</span> but both <span class="math inline">\(N\)</span> and <span class="math inline">\(p\)</span> are unknown. Use the method of moments to construct two simultaneous estimators <span class="math inline">\(\hat{N}\)</span> and <span class="math inline">\(\hat{p}\)</span>. You can only use sample statistics in your estimator functions, you cannot use <span class="math inline">\(N\)</span> or <span class="math inline">\(p\)</span> because both of these parameters are unknown.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This will require us to use both the first and second moments. In place of the second moment <span class="math inline">\(EX^2\)</span> we can use the variance, with the approximation that <span class="math inline">\(VarX \approx S^2\)</span>.</p>
+<p>So we can make two approximations relating the sample mean and sample variance:</p>
+<p><span class="math display">\[\bar X \approx EX = Np\]</span> <span class="math display">\[S^2 \approx VarX = Np(1-p)\]</span> We can take a ratio to remove the <span class="math inline">\(N\)</span>: <span class="math display">\[\frac{Var X}{\bar X} \approx \frac{Np(1-p)}{Np}=1-p\]</span> Solve for <span class="math inline">\(p\)</span> and we get <span class="math display">\[\hat p = 1-\frac{Var X}{\bar X}\]</span></p>
+<p>With this, we can find the estimator for <span class="math inline">\(N\)</span></p>
+<p><span class="math display">\[\bar{X} \approx Np \Rightarrow N \approx \frac{\bar{X}}{p}\]</span> we can substitute in <span class="math inline">\(\hat p\)</span> <span class="math display">\[\hat N = \frac{\bar{X}}{\hat p}=\frac{\bar X}{1-VarX/\bar{X}}=\frac{\bar{X}^2}{\bar X - Var X}\]</span></p>
+</div>
+</div>
+</div>
 </section>
-<section id="method-of-moments-iii" class="level2" data-number="22.3">
-<h2 data-number="22.3" class="anchored" data-anchor-id="method-of-moments-iii"><span class="header-section-number">22.3</span> Method of Moments III</h2>
-<p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(0, M)\)</span>. Use the method of moments to construct an estimator <span class="math inline">\(\hat{M}\)</span>.</p>
+<section id="method-of-moments-iii" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="method-of-moments-iii"><span class="header-section-number">23.3</span> Method of Moments III</h2>
+<p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(0, M)\)</span>. Use the method of moments to construct an estimator <span class="math inline">\(\hat{M}\)</span>. ::: {.callout-note collapse=“true” title=“Solution”} Since <span class="math inline">\(EX=\frac{M+0}{2}\)</span>, We can say <span class="math inline">\(\bar{X}\approx \frac{M}{2}\)</span> <span class="math display">\[\hat M = 2\bar{X}\]</span> :::</p>
 </section>
-<section id="method-of-moments-iv" class="level2" data-number="22.4">
-<h2 data-number="22.4" class="anchored" data-anchor-id="method-of-moments-iv"><span class="header-section-number">22.4</span> Method of Moments IV</h2>
+<section id="method-of-moments-iv" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="method-of-moments-iv"><span class="header-section-number">23.4</span> Method of Moments IV</h2>
 <p>The gamma distribution takes two parameters, the shape parameter <span class="math inline">\(\alpha&gt;0\)</span> and the scale parameter <span class="math inline">\(\theta&gt;0\)</span>. For <span class="math inline">\(X\sim Gamma(\alpha, \theta)\)</span>, we have two properties of the distribution: <span class="math inline">\(EX=\alpha\theta\)</span> and <span class="math inline">\(VarX=\alpha\theta^2\)</span>. Suppose we have a random sample <span class="math inline">\(X_1, \ldots, X_n\)</span> from such a gamma distribution.</p>
 <ol type="a">
-<li><p>If you know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>.</p></li>
-<li><p>If you do not know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>. Note this estimator will need to use both sample mean and sample variance in some way.</p></li>
+<li>If you know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>.</li>
 </ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Since <span class="math inline">\(\bar X \approx EX = \alpha\theta\)</span>, if <span class="math inline">\(\theta\)</span> is known, then we can simply use <span class="math display">\[\hat\alpha = \frac{\bar{X}}{\theta}\]</span></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>If you do not know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>. Note this estimator will need to use both sample mean and sample variance in some way.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Now we must invoke the approximation <span class="math display">\[S^2 \approx Var X = \alpha\theta^2\]</span> If we square the expected value we get <span class="math display">\[E^2X = \alpha^2\theta^2\]</span> The ratio will be <span class="math inline">\(\alpha\)</span>: <span class="math display">\[\frac{E^2X}{Var X}=\frac{\alpha^2\theta^2}{\alpha\theta^2}=\alpha\]</span> Thus <span class="math display">\[\hat\alpha = \frac{\bar{X}^2}{S^2}\]</span></p>
+</div>
+</div>
+</div>
 </section>
-<section id="method-of-moments-v" class="level2" data-number="22.5">
-<h2 data-number="22.5" class="anchored" data-anchor-id="method-of-moments-v"><span class="header-section-number">22.5</span> Method of Moments V</h2>
+<section id="method-of-moments-v" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="method-of-moments-v"><span class="header-section-number">23.5</span> Method of Moments V</h2>
 <p>Suppose we observe a sequence of independent trials where each trial is a success or a failure. Let <span class="math inline">\(X\)</span> denote the number of failures before the first success. This experiment is repeated <span class="math inline">\(n\)</span> times. Use the method of moments to construct an estimator for <span class="math inline">\(p\)</span>, the probability of success.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This describes a geometric random variable, as defined in STAT 340, and how it is defined in R. If <span class="math inline">\(X \sim Geometric(p)\)</span>, <span class="math inline">\(EX=\frac{1-p}{p}\)</span></p>
+<p>Thus we could make an approximation</p>
+<p><span class="math display">\[\bar X \approx \frac{1-p}{p}\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\bar X &amp;\approx \frac{1-p}{p}\\
+p\bar{X} &amp;\approx 1-p \\
+p\bar{X}+p &amp;\approx 1\\
+p(\bar{X}+1) &amp;\approx 1\\
+p &amp;\approx \frac{1}{\bar{X}+1}
+\end{align}
+\]</span> So this is our estimator <span class="math display">\[\hat p  = \frac{1}{\bar{X}+1}\]</span></p>
+</div>
+</div>
+</div>
 </section>
-<section id="bias-sample-sd" class="level2" data-number="22.6">
-<h2 data-number="22.6" class="anchored" data-anchor-id="bias-sample-sd"><span class="header-section-number">22.6</span> Bias Sample SD</h2>
+<section id="bias-sample-sd" class="level2" data-number="23.6">
+<h2 data-number="23.6" class="anchored" data-anchor-id="bias-sample-sd"><span class="header-section-number">23.6</span> Bias Sample SD</h2>
 <p>Suppose we have a normally distributed population, and an independent sample of size <span class="math inline">\(15\)</span> from this population. So our data <span class="math inline">\(X_1,\ldots,X_{15}\sim N(10, \sigma^2)\)</span>. For parts (a) and (b) you can set <span class="math inline">\(\sigma\)</span> to be whatever value you want.</p>
 <ol type="a">
-<li><p>Use Monte Carlo to demonstrate that <span class="math inline">\(S^2\)</span> is an unbiased estimator of <span class="math inline">\(\sigma^2\)</span>.</p></li>
-<li><p>Use Monte Carlo to demonstrate that <span class="math inline">\(S\)</span>, the sample standard deviation, is a <em>biased</em> estimator of <span class="math inline">\(\sigma\)</span>, the population variance.</p></li>
+<li>Use Monte Carlo to demonstrate that <span class="math inline">\(S^2\)</span> is an unbiased estimator of <span class="math inline">\(\sigma^2\)</span>.</li>
 </ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let’s generate a bunch of samples and show all of the estimates for <span class="math inline">\(\sigma^2\)</span> on a plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sampleVars <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">var</span>(<span class="fu">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>)))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleVars)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">25</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleVars), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation1_practice_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Use Monte Carlo to demonstrate that <span class="math inline">\(S\)</span>, the sample standard deviation, is a <em>biased</em> estimator of <span class="math inline">\(\sigma\)</span>, the population variance.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let’s generate a bunch of samples and show all of the sample standard deviations on a plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sampleSDs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>)))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleSDs)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleSDs), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation1_practice_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="a-poisson-estimator" class="level2" data-number="22.7">
-<h2 data-number="22.7" class="anchored" data-anchor-id="a-poisson-estimator"><span class="header-section-number">22.7</span> A Poisson Estimator</h2>
+<section id="a-poisson-estimator" class="level2" data-number="23.7">
+<h2 data-number="23.7" class="anchored" data-anchor-id="a-poisson-estimator"><span class="header-section-number">23.7</span> A Poisson Estimator</h2>
 <p>Your random sample <span class="math inline">\(X_1, \ldots, X_20 \sim Poisson(\lambda)\)</span>. For parts (a) and (b) let’s assume the true value of <span class="math inline">\(\lambda\)</span> is 5.</p>
 <ol type="a">
-<li><p>Use Monte Carlo to demonstrate that <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(S^2\)</span> are both unbiased estimators of <span class="math inline">\(\lambda\)</span>.</p></li>
-<li><p>Which estimator <span class="math inline">\(\bar{X}\)</span> or <span class="math inline">\(S^2\)</span> has a lower variance (i.e.&nbsp;is a more precise) estimator for <span class="math inline">\(\lambda\)</span>? Use Monte Carlo support your answer.</p></li>
+<li>Use Monte Carlo to demonstrate that <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(S^2\)</span> are both unbiased estimators of <span class="math inline">\(\lambda\)</span>.</li>
 </ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let’s generate a bunch of samples and show all of the estimates for <span class="math inline">\(\sigma^2\)</span> on a plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sampleVars <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">var</span>(<span class="fu">rpois</span>(<span class="dv">20</span>, <span class="dv">5</span>)))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sampleMeans <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rpois</span>(<span class="dv">20</span>, <span class="dv">5</span>)))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleVars, <span class="at">breaks=</span><span class="dv">40</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleVars), <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleMeans, <span class="at">breaks=</span><span class="dv">40</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleMeans), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation1_practice_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Which estimator <span class="math inline">\(\bar{X}\)</span> or <span class="math inline">\(S^2\)</span> has a lower variance (i.e.&nbsp;is a more precise) estimator for <span class="math inline">\(\lambda\)</span>? Use Monte Carlo support your answer.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We already have samples so we can just calculat ehte sample variances</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleVars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.901411</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleMeans)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2438868</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(\bar{X}\)</span> clearly has a much lowe variance.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="the-tricky-sample-maximum" class="level2" data-number="22.8">
-<h2 data-number="22.8" class="anchored" data-anchor-id="the-tricky-sample-maximum"><span class="header-section-number">22.8</span> The Tricky Sample Maximum</h2>
+<section id="the-tricky-sample-maximum" class="level2" data-number="23.8">
+<h2 data-number="23.8" class="anchored" data-anchor-id="the-tricky-sample-maximum"><span class="header-section-number">23.8</span> The Tricky Sample Maximum</h2>
 <p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(0, M)\)</span> (continuous). Consider two estimators for <span class="math inline">\(M\)</span>:</p>
 <p><span class="math display">\[\hat{M}_1 = \max(X_1, \ldots, X_n)\]</span> <span class="math display">\[\hat{M}_2 = \frac{n+1}{n}\max(X_1, \ldots, X_n)\]</span> Suppose that You have a sample size <span class="math inline">\(n=25\)</span> and a true <span class="math inline">\(M=100\)</span>.</p>
 <ol type="a">
@@ -613,8 +846,8 @@ window.Quarto = {
 <li><p>The Mean Squared Error is <span class="math inline">\(E\left[(\hat\theta-\theta)^2\right]\)</span>. This can be approximated by Monte Carlo by estimating the parameter repeatedly, squaring the error and averaging. Use Monte Carlo to estimate the MSE of both <span class="math inline">\(\hat{M}_1\)</span> and <span class="math inline">\(\hat{M}_2\)</span>.</p></li>
 </ol>
 </section>
-<section id="tricky-sample-maximum-ii" class="level2" data-number="22.9">
-<h2 data-number="22.9" class="anchored" data-anchor-id="tricky-sample-maximum-ii"><span class="header-section-number">22.9</span> Tricky Sample Maximum II</h2>
+<section id="tricky-sample-maximum-ii" class="level2" data-number="23.9">
+<h2 data-number="23.9" class="anchored" data-anchor-id="tricky-sample-maximum-ii"><span class="header-section-number">23.9</span> Tricky Sample Maximum II</h2>
 <p>Another couple estimators for <span class="math inline">\(M\)</span> from the previous problem is <span class="math inline">\(\hat{M}_3=2\bar{X}\)</span>, twice the sample mean and <span class="math inline">\(\hat{M}_4=2\tilde{X}\)</span>, twice the sample median.</p>
 <p>Suppose that You have a sample size <span class="math inline">\(n=25\)</span> and a true <span class="math inline">\(M=100\)</span>.</p>
 <ol type="a">
@@ -623,15 +856,15 @@ window.Quarto = {
 <li><p>Between <span class="math inline">\(\hat{M}_1\)</span> through <span class="math inline">\(\hat{M}_4\)</span>, which estimator would you prefer? What are some pros and cons of each of them?</p></li>
 </ol>
 </section>
-<section id="exponential-data" class="level2" data-number="22.10">
-<h2 data-number="22.10" class="anchored" data-anchor-id="exponential-data"><span class="header-section-number">22.10</span> Exponential Data</h2>
+<section id="exponential-data" class="level2" data-number="23.10">
+<h2 data-number="23.10" class="anchored" data-anchor-id="exponential-data"><span class="header-section-number">23.10</span> Exponential Data</h2>
 <p>Consider the data below given by Wang (2000) on failure times of an electrical component. Assuming an exponential distribution <span class="math inline">\(Exp(\lambda)\)</span>, find the method of moments estimate of <span class="math inline">\(\lambda\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">46</span>, <span class="dv">75</span>, <span class="dv">98</span>, <span class="dv">122</span>, <span class="dv">145</span>, <span class="dv">165</span>, <span class="dv">196</span>, <span class="dv">224</span>, <span class="dv">245</span>, <span class="dv">293</span>, <span class="dv">321</span>, <span class="dv">330</span>, <span class="dv">350</span>, <span class="dv">420</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">46</span>, <span class="dv">75</span>, <span class="dv">98</span>, <span class="dv">122</span>, <span class="dv">145</span>, <span class="dv">165</span>, <span class="dv">196</span>, <span class="dv">224</span>, <span class="dv">245</span>, <span class="dv">293</span>, <span class="dv">321</span>, <span class="dv">330</span>, <span class="dv">350</span>, <span class="dv">420</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="a-uniform-mystery" class="level2" data-number="22.11">
-<h2 data-number="22.11" class="anchored" data-anchor-id="a-uniform-mystery"><span class="header-section-number">22.11</span> A uniform mystery</h2>
+<section id="a-uniform-mystery" class="level2" data-number="23.11">
+<h2 data-number="23.11" class="anchored" data-anchor-id="a-uniform-mystery"><span class="header-section-number">23.11</span> A uniform mystery</h2>
 <p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(a, b)\)</span>, but both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are unknown.</p>
 <ol type="a">
 <li><p>Construct simultaneous method of moment estimators <span class="math inline">\(\hat{a}\)</span> and <span class="math inline">\(\hat{b}\)</span> from the facts that <span class="math inline">\(E(X)=\frac{a+b}{2}\)</span> and <span class="math inline">\(Var(X)=\frac{(b-a)^2}{12}\)</span>.</p></li>
@@ -640,16 +873,16 @@ window.Quarto = {
 <li><p>Is the estimator from part (c) unbiased? Is it possible that <span class="math inline">\(\hat{a} &gt; \min(X)\)</span>?</p></li>
 </ol>
 </section>
-<section id="another-uniform-estimation" class="level2" data-number="22.12">
-<h2 data-number="22.12" class="anchored" data-anchor-id="another-uniform-estimation"><span class="header-section-number">22.12</span> Another Uniform Estimation</h2>
+<section id="another-uniform-estimation" class="level2" data-number="23.12">
+<h2 data-number="23.12" class="anchored" data-anchor-id="another-uniform-estimation"><span class="header-section-number">23.12</span> Another Uniform Estimation</h2>
 <p>Suppose <span class="math inline">\(X_1, \ldots X_n \sim Unif(-\theta, theta)\)</span> are an independent random sample.</p>
 <ol type="a">
 <li><p>Use the method of moments to construct an estimator for <span class="math inline">\(\theta\)</span> (hint: the first moment will be useless!)</p></li>
 <li><p>Construct another estimator based on the sample max and sample min. Is it biased?</p></li>
 </ol>
 </section>
-<section id="goldfish" class="level2" data-number="22.13">
-<h2 data-number="22.13" class="anchored" data-anchor-id="goldfish"><span class="header-section-number">22.13</span> Goldfish</h2>
+<section id="goldfish" class="level2" data-number="23.13">
+<h2 data-number="23.13" class="anchored" data-anchor-id="goldfish"><span class="header-section-number">23.13</span> Goldfish</h2>
 <p>In 1997 Pepperidge Farm started putting faces on some of the goldfish crackers they produce. Roughly 40% of goldfish crackers have faces.</p>
 <p>Suppose you want to estimate this proportion, and you buy a 20 pack box as a representative sample of Goldfish. The box contains 20 1-oz packs of goldfish, each containing roughly 50 goldfish. Suppose we can model the number of goldfish in a pack using a normal distribution (rounded to the nearest integer), <span class="math inline">\(Y_i \sim N(50, 2^2)\)</span>.</p>
 <p>To estimate the proportion of smiley faces, you figure you could do three things:</p>
@@ -660,34 +893,34 @@ window.Quarto = {
 </ol>
 <p>Using a normal model for the number of fish in a bag, and a binomial for the number of smiley fish, determine the bias and variance of these three estimators.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method1=</span><span class="fu">numeric</span>(NMC),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method2=</span><span class="fu">numeric</span>(NMC),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method3=</span><span class="fu">numeric</span>(NMC))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">2</span>))</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">20</span>, Y, .<span class="dv">40</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  estimates[i,] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(X)<span class="sc">/</span><span class="fu">sum</span>(Y),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">mean</span>(X<span class="sc">/</span>Y),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">sum</span>(X<span class="sc">/</span>Y <span class="sc">*</span> Y<span class="sc">/</span><span class="fu">sum</span>(Y))) </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(estimates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method1=</span><span class="fu">numeric</span>(NMC),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method2=</span><span class="fu">numeric</span>(NMC),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method3=</span><span class="fu">numeric</span>(NMC))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">2</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">20</span>, Y, .<span class="dv">40</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  estimates[i,] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(X)<span class="sc">/</span><span class="fu">sum</span>(Y),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">mean</span>(X<span class="sc">/</span>Y),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">sum</span>(X<span class="sc">/</span>Y <span class="sc">*</span> Y<span class="sc">/</span><span class="fu">sum</span>(Y))) </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(estimates)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  method1   method2   method3 
-0.3999805 0.3999791 0.3999805 </code></pre>
+0.3999103 0.3999045 0.3999103 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(estimates, <span class="dv">2</span>, <span class="at">FUN=</span>var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(estimates, <span class="dv">2</span>, <span class="at">FUN=</span>var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     method1      method2      method3 
-0.0002383077 0.0002384396 0.0002383077 </code></pre>
+0.0002416835 0.0002420858 0.0002416835 </code></pre>
 </div>
 </div>
 <p>When working out the math, it becomes clear that method 1 and 3 are actually identical to each other. Running the MC a few times it seems that all 3 methods give an unbiased estimate. Method 2 however has a slightly larger variance. This seems consistent after re-running the MC multiple times. Thus method 1 is probably the best method to estimate <span class="math inline">\(p\)</span>.</p>
 </section>
 </section>
-<section id="beyond-stat-340" class="level1" data-number="23">
-<h1 data-number="23"><span class="header-section-number">23</span> Beyond STAT 340</h1>
+<section id="beyond-stat-340" class="level1" data-number="24">
+<h1 data-number="24"><span class="header-section-number">24</span> Beyond STAT 340</h1>
 <p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
 
 
@@ -745,13 +978,14 @@ window.Quarto = {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1096,7 +1330,7 @@ window.Quarto = {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./R06_More_Estimation_Examples.html" class="pagination-link" aria-label="Estimation Examples">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Estimation Examples</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -64,7 +64,7 @@ The coverage rate seems to be between 93.5% and 95%. The trend is not obvious, i
 
 The reason for this? Changing lambda only changes the scale of the distribution, not its shape. It shouldn't have an effect on how close $1/\bar{X}$ is to $\lambda$. What matters much more is the sample size $n$ that we have to work with.
 
-## Example: Estimating the maximum of a sample
+## Example: Estimating the maximum of a population
 
 Say we sample from a random variable $X \sim \text{Uniform}(0, M)$ and get the following data
 ```{r}
@@ -116,7 +116,7 @@ Would it contain .95 (the true max) 95% of the time?
 NMC1 <- 1000
 n <- length(X) 
 containsM <- rep(FALSE, NMC1)
-
+Mbelow  <- rep(FALSE, NMC1)
 for(j in 1:NMC1){
   X.sim <- runif(n, 0, .95) #Generate a new sample
   M.sim <- (n+1)*max(X.sim)/n
@@ -126,8 +126,11 @@ for(j in 1:NMC1){
     sim_S[i] <- (n+1)*max(simData)/n
   }
   containsM[j] <- quantile(sim_S,.025) <= .95 & quantile(sim_S, .975) >= .95
+  Mbelow[j] <- quantile(sim_S, .025) > .95
 }
+mean(Mbelow)
 mean(containsM)
+1-mean(Mbelow)-mean(containsM)
 ```
 Our coverage rate is not as good as we would hope. How does this improve with a larger sample size?
 
@@ -158,7 +161,7 @@ plot(x=ns, y=coverage, type="l", main="coverage rate with increasing n")
 Oh that's not pretty at all. Looks like our supposed 95\% interval is more like an 86\% interval. Why is this the case?
 Short answer - the population maximum / sample maximum relationship is not as friendly as the population mean/sample mean relationship. How could we modify our confidence interval estimate?
 
-Turns out (from a little research https://en.wikipedia.org/wiki/German_tank_problem) that the lower bound for a 95% confidence interval would be the sample max $\max(X)$ and the upper bound would be $\max(X)/\alpha^{1/n}$
+Turns out (from a little research https://en.wikipedia.org/wiki/German_tank_problem) that the lower bound for a 95% confidence interval would be the sample max $\max(X)$ and the upper bound would be $\max(X)/\alpha^{1/n}$ (for a 95% CI, $\alpha = .05$)
 
 We'll produce the same plot, looking at sample sizes of 50, 100, ..., 500 to see if there's a trend
 
@@ -184,6 +187,8 @@ No particular trend, a lot of fluctuation. It seems to be between .94 and .96 re
 
 
 ## Central Limit Theorem for a uniform population
+How well does the central limit theorem estimate the mean of a Uniform(0,1)
+First, let's see how "normal" the sampling distribution of Xbar is.
 
 ```{r}
 generate_data <- function(n){
@@ -192,7 +197,7 @@ generate_data <- function(n){
   return(mean(mydata))
 }
 
-my_means <- replicate(10000, generate_data(5))
+my_means <- replicate(10000, generate_data(20))
 hist(my_means, breaks=50)
 ```
 
@@ -212,8 +217,39 @@ generate_data <- function(n,x,px){
   return(mean(mydata))
 }
 
-my_means <- replicate(10000, generate_data(300, x, px))
+my_means <- replicate(10000, generate_data(360, x, px))
 hist(my_means, breaks=50)
+```
+
+
+
+
+### Assessing coverage rate
+Let's see how well the coverage rate of the CLT interval is for the uniform
+
+```{r}
+NMC2 <- 10000 #how many times I replicate my CI calculation to 
+             # assess coverage rate / accuracy
+
+constructCI <- function(uniformData){
+  #This constructs a 95% CI only, because 1.96 is hard-coded
+  xbar <- mean(uniformData)
+  s <- sd(uniformData)
+  n <- length(uniformData)
+  LB <- xbar - 1.96*s/sqrt(n)
+  UB <- xbar + 1.96*s/sqrt(n)
+  return(c(LB, UB))  
+}
+
+covered <- rep(FALSE, NMC2) #keep the results from my CI estimates
+                            #here
+for(i in 1:NMC2){
+  uniformData <- runif(80, 0, 1)
+  #note that pop mean = .5
+  CI <- constructCI(uniformData)
+  covered[i] <- CI[1] <= .5 & CI[2] >=.5
+}
+mean(covered) #this will say what proportion are TRUE in that vector
 ```
 
 

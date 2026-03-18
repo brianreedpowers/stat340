@@ -96,6 +96,89 @@ In this case the bias is positive, and it decreases (gets closer to zero) as sam
 
 This property - bias goes to zero as sample size increases - is called being "asymptotically unbiased". It is closely related to a concept called "consistency."
 
+
+## Other Estimators for $\lambda$
+
+Reading about the Exponential distribution, a few statistics could be used as estimator of $\lambda$. Suppose $X \sim Exponential(\lambda)$. The following are facts:
+
+$$E(X)=\frac{1}{\lambda}$$
+$$Var(X)=\frac{1}{\lambda^2}$$
+$$Median(X)=\frac{\ln 2}{\lambda}$$
+So we could perhaps build a few different estimators, using the method of moments. Since $$\bar{X} \approx E(X) = \frac{1}{\lambda}$$
+$$\hat{\lambda}_1 = \frac{1}{\bar X}$$
+Or using the Variance
+$$S^2 \approx Var(X) = \frac{1}{\lambda^2}$$
+So we could use $$\hat{\lambda}_2 = \frac{1}{S}$$
+Or we could use the sample median.
+
+$$\hat{\lambda}_3 = \frac{\ln 2}{median(X)}$$
+
+Let's estimate the bias if sample size = 20 and $\lambda=1$
+
+```{r}
+n <- 20
+lambda <- 1
+NMC <- 10000
+
+lambda_hat_1 <- vector("numeric", NMC)
+lambda_hat_2 <- vector("numeric", NMC)
+lambda_hat_3 <- vector("numeric", NMC)
+
+for(i in 1:NMC){
+  expData <- rexp(n, lambda)
+  lambda_hat_1[i] <- 1/mean(expData)
+  lambda_hat_2[i] <- 1/sd(expData)
+  lambda_hat_3[i] <- log(2)/median(expData)
+}
+
+mean(lambda_hat_1)-1
+mean(lambda_hat_2)-1
+mean(lambda_hat_3)-1
+
+```
+It seems that the first estimator has the lowest bias, the next highest is $\hat{\lambda_3}$ and then $\hat{\lambda}_2$ has the highest bias.
+
+What about variance? 
+
+```{r}
+var(lambda_hat_1)
+var(lambda_hat_2)
+var(lambda_hat_3)
+```
+
+The first estimator not only has the lowest bias, but it also has the smallest variance. These two metrics are connected through the measure "Mean Squared Error"
+
+$$MSE(\hat{\theta}) = E(\hat\theta-\theta)^2=bias^2(\hat\theta)+Var(\hat\theta)$$
+
+```{r}
+mean((lambda_hat_1-1)^2)
+mean((lambda_hat_2-1)^2)
+mean((lambda_hat_3-1)^2)
+```
+In this case there's not much comparison - the first estimator has lowest MSE. However, is there an unbiased estimator?
+
+Look it up and you'll find that an unbiased estimator for $\lambda$ is
+$$\hat{\lambda}_4 = \frac{n-1}{\sum X_i} = \frac{n-1}{n \bar{X}}$$
+Lets examine its MSE, squared bias and variance:
+```{r}
+lambda_hat_4 <- vector("numeric", NMC)
+
+for(i in 1:NMC){
+  expData <- rexp(n, lambda)
+  lambda_hat_4[i] <- (n-1)/(n*mean(expData))
+}
+#MSE
+mean((lambda_hat_4-1)^2)
+#squared bias
+(mean(lambda_hat_4)-1)^2
+#variance
+var(lambda_hat_4)
+```
+It seems to have slightly lower variance than $\hat{\lambda}_1$ and the bias does seem to be (effectively) zero.
+
+If we are lucky we can find one estimator that minimizes variance and bias. But sometimes we would introduce a little bit of bias because it brings down variance.
+
+
 ## Experiments with Estimator Bias
 
 Let's consider $S^2$, the sample variance.

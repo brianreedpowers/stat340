@@ -10,13 +10,45 @@ editor: source
 
 Use the method of moments to construct an estimator for the parameter $N$ when your data $X_1, X_2, \ldots, X_n$ each are drawn independently from $Binom(N, p)$. In this case assume that $p$ is known to you. Note the sample size you're working with is not the same as the $N$ parameter from the binomial distribution.
 
+::: {.callout-note collapse="true" title="Solution"}
+Since $EX=Np$, if $p$ is known, and since $\bar{X}\approx EX$ we can create an estimator for $N$ by substituting $\bar X$ for $EX$ and replace the equals with approximation.
+
+$$\bar{X} \approx N p$$ so
+$$N \approx \frac{\bar X}{p}$$
+:::
+
+
 ## Method of Moments II
 
 Continuing from the previous problem, suppose that your data $X_1, X_2, \ldots, X_n$ each are drawn independently from $Binom(N, p)$ but both $N$ and $p$ are unknown. Use the method of moments to construct two simultaneous estimators $\hat{N}$ and $\hat{p}$. You can only use sample statistics in your estimator functions, you cannot use $N$ or $p$ because both of these parameters are unknown.
 
+::: {.callout-note collapse="true" title="Solution"}
+This will require us to use both the first and second moments. In place of the second moment $EX^2$ we can use the variance, with the approximation that $VarX \approx S^2$.
+
+So we can make two approximations relating the sample mean and sample variance:
+
+$$\bar X \approx EX = Np$$
+$$S^2 \approx VarX = Np(1-p)$$
+We can take a ratio to remove the $N$:
+$$\frac{Var X}{\bar X} \approx \frac{Np(1-p)}{Np}=1-p$$
+Solve for $p$ and we get $$\hat p = 1-\frac{Var X}{\bar X}$$
+
+With this, we can find the estimator for $N$
+
+$$\bar{X} \approx Np \Rightarrow N \approx \frac{\bar{X}}{p}$$
+we can substitute in $\hat p$
+$$\hat N = \frac{\bar{X}}{\hat p}=\frac{\bar X}{1-VarX/\bar{X}}=\frac{\bar{X}^2}{\bar X - Var X}$$
+:::
+
+
 ## Method of Moments III
 
 Suppose $X_1, \ldots, X_n \sim Unif(0, M)$. Use the method of moments to construct an estimator $\hat{M}$. 
+::: {.callout-note collapse="true" title="Solution"}
+Since $EX=\frac{M+0}{2}$, We can say $\bar{X}\approx \frac{M}{2}$
+$$\hat M = 2\bar{X}$$
+:::
+
 
 ## Method of Moments IV
 
@@ -24,11 +56,47 @@ The gamma distribution takes two parameters, the shape parameter $\alpha>0$ and 
 
 a. If you know $\theta$, use the method of moments to find an estimator $\hat\alpha$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Since $\bar X \approx EX = \alpha\theta$, if $\theta$ is known, then we can simply use $$\hat\alpha = \frac{\bar{X}}{\theta}$$
+:::
+
+
 b. If you do not know $\theta$, use the method of moments to find an estimator $\hat\alpha$. Note this estimator will need to use both sample mean and sample variance in some way.
+
+::: {.callout-note collapse="true" title="Solution"}
+Now we must invoke the approximation $$S^2 \approx Var X = \alpha\theta^2$$
+If we square the expected value we get $$E^2X = \alpha^2\theta^2$$
+The ratio will be $\alpha$:
+$$\frac{E^2X}{Var X}=\frac{\alpha^2\theta^2}{\alpha\theta^2}=\alpha$$
+Thus $$\hat\alpha = \frac{\bar{X}^2}{S^2}$$
+:::
+
 
 ## Method of Moments V
 
 Suppose we observe a sequence of independent trials where each trial is a success or a failure. Let $X$ denote the number of failures before the first success. This experiment is repeated $n$ times. Use the method of moments to construct an estimator for $p$, the probability of success.
+
+::: {.callout-note collapse="true" title="Solution"}
+This describes a geometric random variable, as defined in STAT 340, and how it is defined in R. If $X \sim Geometric(p)$, $EX=\frac{1-p}{p}$
+
+Thus we could make an approximation
+
+$$\bar X \approx \frac{1-p}{p}$$
+
+$$
+\begin{align}
+\bar X &\approx \frac{1-p}{p}\\
+p\bar{X} &\approx 1-p \\
+p\bar{X}+p &\approx 1\\
+p(\bar{X}+1) &\approx 1\\
+p &\approx \frac{1}{\bar{X}+1}
+\end{align}
+$$
+So this is our estimator
+$$\hat p  = \frac{1}{\bar{X}+1}$$
+:::
+
 
 ## Bias Sample SD
 
@@ -36,14 +104,76 @@ Suppose we have a normally distributed population, and an independent sample of 
 
 a. Use Monte Carlo to demonstrate that $S^2$ is an unbiased estimator of $\sigma^2$. 
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the estimates for $\sigma^2$ on a plot.
+
+```{r}
+# Let sigma = 5
+sampleVars <- replicate(10000, var(rnorm(15, 10, 5)))
+hist(sampleVars)
+abline(v=25, col="red")
+abline(v=mean(sampleVars), lty=2)
+
+```
+
+:::
+
 b. Use Monte Carlo to demonstrate that $S$, the sample standard deviation, is a *biased* estimator of $\sigma$, the population variance. 
+
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the sample standard deviations on a plot.
+
+```{r}
+# Let sigma = 5
+sampleSDs <- replicate(10000, sd(rnorm(15, 10, 5)))
+hist(sampleSDs)
+abline(v=5, col="red")
+abline(v=mean(sampleSDs), lty=2)
+
+```
+
+:::
 
 ## A Poisson Estimator
 Your random sample $X_1, \ldots, X_20 \sim Poisson(\lambda)$. For parts (a) and (b) let's assume the true value of $\lambda$ is 5.
 
 a. Use Monte Carlo to demonstrate that $\bar{X}$ and $S^2$ are both unbiased estimators of $\lambda$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the estimates for $\sigma^2$ on a plot.
+
+```{r}
+# Let sigma = 5
+sampleVars <- replicate(10000, var(rpois(20, 5)))
+sampleMeans <- replicate(10000, mean(rpois(20, 5)))
+par(mfrow=c(1,2))
+hist(sampleVars, breaks=40)
+abline(v=5, col="red")
+abline(v=mean(sampleVars), lty=2)
+hist(sampleMeans, breaks=40)
+abline(v=5, col="red")
+abline(v=mean(sampleMeans), lty=2)
+```
+
+:::
+
+
 b. Which estimator $\bar{X}$ or $S^2$ has a lower variance (i.e. is a more precise) estimator for $\lambda$? Use Monte Carlo support your answer.
+
+::: {.callout-note collapse="true" title="Solution"}
+We already have samples so we can just calculat ehte sample variances
+```{r}
+var(sampleVars)
+var(sampleMeans)
+```
+
+$\bar{X}$ clearly has a much lowe variance.
+
+:::
+
 
 ## The Tricky Sample Maximum
 
