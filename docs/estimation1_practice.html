@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -68,14 +68,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./R06_More_Estimation_Examples.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -118,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -158,7 +159,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 340: Data Science II</a> 
         <div class="sidebar-tools-main">
@@ -537,9 +540,8 @@ window.Quarto = {
   <li><a href="#the-tricky-sample-maximum" id="toc-the-tricky-sample-maximum" class="nav-link" data-scroll-target="#the-tricky-sample-maximum"><span class="header-section-number">23.8</span> The Tricky Sample Maximum</a></li>
   <li><a href="#tricky-sample-maximum-ii" id="toc-tricky-sample-maximum-ii" class="nav-link" data-scroll-target="#tricky-sample-maximum-ii"><span class="header-section-number">23.9</span> Tricky Sample Maximum II</a></li>
   <li><a href="#exponential-data" id="toc-exponential-data" class="nav-link" data-scroll-target="#exponential-data"><span class="header-section-number">23.10</span> Exponential Data</a></li>
-  <li><a href="#a-uniform-mystery" id="toc-a-uniform-mystery" class="nav-link" data-scroll-target="#a-uniform-mystery"><span class="header-section-number">23.11</span> A uniform mystery</a></li>
-  <li><a href="#another-uniform-estimation" id="toc-another-uniform-estimation" class="nav-link" data-scroll-target="#another-uniform-estimation"><span class="header-section-number">23.12</span> Another Uniform Estimation</a></li>
-  <li><a href="#goldfish" id="toc-goldfish" class="nav-link" data-scroll-target="#goldfish"><span class="header-section-number">23.13</span> Goldfish</a></li>
+  <li><a href="#another-uniform-estimation" id="toc-another-uniform-estimation" class="nav-link" data-scroll-target="#another-uniform-estimation"><span class="header-section-number">23.11</span> Another Uniform Estimation</a></li>
+  <li><a href="#goldfish" id="toc-goldfish" class="nav-link" data-scroll-target="#goldfish"><span class="header-section-number">23.12</span> Goldfish</a></li>
   </ul></li>
   <li><a href="#beyond-stat-340" id="toc-beyond-stat-340" class="nav-link" data-scroll-target="#beyond-stat-340"><span class="header-section-number">24</span> Beyond STAT 340</a></li>
   </ul>
@@ -573,12 +575,12 @@ window.Quarto = {
 <h2 data-number="23.1" class="anchored" data-anchor-id="method-of-moments-i"><span class="header-section-number">23.1</span> Method of Moments I</h2>
 <p>Use the method of moments to construct an estimator for the parameter <span class="math inline">\(N\)</span> when your data <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> each are drawn independently from <span class="math inline">\(Binom(N, p)\)</span>. In this case assume that <span class="math inline">\(p\)</span> is known to you. Note the sample size you’re working with is not the same as the <span class="math inline">\(N\)</span> parameter from the binomial distribution.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -594,12 +596,12 @@ Solution
 <h2 data-number="23.2" class="anchored" data-anchor-id="method-of-moments-ii"><span class="header-section-number">23.2</span> Method of Moments II</h2>
 <p>Continuing from the previous problem, suppose that your data <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> each are drawn independently from <span class="math inline">\(Binom(N, p)\)</span> but both <span class="math inline">\(N\)</span> and <span class="math inline">\(p\)</span> are unknown. Use the method of moments to construct two simultaneous estimators <span class="math inline">\(\hat{N}\)</span> and <span class="math inline">\(\hat{p}\)</span>. You can only use sample statistics in your estimator functions, you cannot use <span class="math inline">\(N\)</span> or <span class="math inline">\(p\)</span> because both of these parameters are unknown.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -616,7 +618,23 @@ Solution
 </section>
 <section id="method-of-moments-iii" class="level2" data-number="23.3">
 <h2 data-number="23.3" class="anchored" data-anchor-id="method-of-moments-iii"><span class="header-section-number">23.3</span> Method of Moments III</h2>
-<p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(0, M)\)</span>. Use the method of moments to construct an estimator <span class="math inline">\(\hat{M}\)</span>. ::: {.callout-note collapse=“true” title=“Solution”} Since <span class="math inline">\(EX=\frac{M+0}{2}\)</span>, We can say <span class="math inline">\(\bar{X}\approx \frac{M}{2}\)</span> <span class="math display">\[\hat M = 2\bar{X}\]</span> :::</p>
+<p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(0, M)\)</span>. Use the method of moments to construct an estimator <span class="math inline">\(\hat{M}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Since <span class="math inline">\(EX=\frac{M+0}{2}\)</span>, We can say <span class="math inline">\(\bar{X}\approx \frac{M}{2}\)</span> <span class="math display">\[\hat M = 2\bar{X}\]</span></p>
+</div>
+</div>
+</div>
 </section>
 <section id="method-of-moments-iv" class="level2" data-number="23.4">
 <h2 data-number="23.4" class="anchored" data-anchor-id="method-of-moments-iv"><span class="header-section-number">23.4</span> Method of Moments IV</h2>
@@ -625,16 +643,16 @@ Solution
 <li>If you know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Since <span class="math inline">\(\bar X \approx EX = \alpha\theta\)</span>, if <span class="math inline">\(\theta\)</span> is known, then we can simply use <span class="math display">\[\hat\alpha = \frac{\bar{X}}{\theta}\]</span></p>
 </div>
@@ -644,16 +662,16 @@ Solution
 <li>If you do not know <span class="math inline">\(\theta\)</span>, use the method of moments to find an estimator <span class="math inline">\(\hat\alpha\)</span>. Note this estimator will need to use both sample mean and sample variance in some way.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Now we must invoke the approximation <span class="math display">\[S^2 \approx Var X = \alpha\theta^2\]</span> If we square the expected value we get <span class="math display">\[E^2X = \alpha^2\theta^2\]</span> The ratio will be <span class="math inline">\(\alpha\)</span>: <span class="math display">\[\frac{E^2X}{Var X}=\frac{\alpha^2\theta^2}{\alpha\theta^2}=\alpha\]</span> Thus <span class="math display">\[\hat\alpha = \frac{\bar{X}^2}{S^2}\]</span></p>
 </div>
@@ -664,16 +682,16 @@ Solution
 <h2 data-number="23.5" class="anchored" data-anchor-id="method-of-moments-v"><span class="header-section-number">23.5</span> Method of Moments V</h2>
 <p>Suppose we observe a sequence of independent trials where each trial is a success or a failure. Let <span class="math inline">\(X\)</span> denote the number of failures before the first success. This experiment is repeated <span class="math inline">\(n\)</span> times. Use the method of moments to construct an estimator for <span class="math inline">\(p\)</span>, the probability of success.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This describes a geometric random variable, as defined in STAT 340, and how it is defined in R. If <span class="math inline">\(X \sim Geometric(p)\)</span>, <span class="math inline">\(EX=\frac{1-p}{p}\)</span></p>
 <p>Thus we could make an approximation</p>
@@ -698,24 +716,24 @@ p &amp;\approx \frac{1}{\bar{X}+1}
 <li>Use Monte Carlo to demonstrate that <span class="math inline">\(S^2\)</span> is an unbiased estimator of <span class="math inline">\(\sigma^2\)</span>.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let’s generate a bunch of samples and show all of the estimates for <span class="math inline">\(\sigma^2\)</span> on a plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sampleVars <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">var</span>(<span class="fu">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>)))</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleVars)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">25</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleVars), <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleVars), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -731,24 +749,24 @@ Solution
 <li>Use Monte Carlo to demonstrate that <span class="math inline">\(S\)</span>, the sample standard deviation, is a <em>biased</em> estimator of <span class="math inline">\(\sigma\)</span>, the population variance.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let’s generate a bunch of samples and show all of the sample standard deviations on a plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sampleSDs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>)))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleSDs)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleSDs), <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleSDs), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -768,20 +786,20 @@ Solution
 <li>Use Monte Carlo to demonstrate that <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(S^2\)</span> are both unbiased estimators of <span class="math inline">\(\lambda\)</span>.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let’s generate a bunch of samples and show all of the estimates for <span class="math inline">\(\sigma^2\)</span> on a plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let sigma = 5</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sampleVars <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">var</span>(<span class="fu">rpois</span>(<span class="dv">20</span>, <span class="dv">5</span>)))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sampleMeans <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">mean</span>(<span class="fu">rpois</span>(<span class="dv">20</span>, <span class="dv">5</span>)))</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
@@ -790,7 +808,7 @@ Solution
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleVars), <span class="at">lty=</span><span class="dv">2</span>)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sampleMeans, <span class="at">breaks=</span><span class="dv">40</span>)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">5</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleMeans), <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(sampleMeans), <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -806,26 +824,26 @@ Solution
 <li>Which estimator <span class="math inline">\(\bar{X}\)</span> or <span class="math inline">\(S^2\)</span> has a lower variance (i.e.&nbsp;is a more precise) estimator for <span class="math inline">\(\lambda\)</span>? Use Monte Carlo support your answer.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We already have samples so we can just calculat ehte sample variances</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleVars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleVars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.89728</code></pre>
+<pre><code>[1] 2.965558</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleMeans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sampleMeans)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2503446</code></pre>
+<pre><code>[1] 0.25832</code></pre>
 </div>
 </div>
 <p><span class="math inline">\(\bar{X}\)</span> clearly has a much lower variance.</p>
@@ -841,31 +859,31 @@ Solution
 <li>Use Monte Carlo to estimate the bias of each of these estimators.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>M1 <span class="ot">&lt;-</span> <span class="dv">0</span>; M2<span class="ot">&lt;-</span><span class="dv">0</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>M1 <span class="ot">&lt;-</span> <span class="dv">0</span>; M2<span class="ot">&lt;-</span><span class="dv">0</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100000</span>){</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">25</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  M1[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(x)</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  M2[i] <span class="ot">&lt;-</span> <span class="dv">26</span><span class="sc">/</span><span class="dv">25</span><span class="sc">*</span><span class="fu">max</span>(x)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M1)<span class="sc">-</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M1)<span class="sc">-</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -3.831499</code></pre>
+<pre><code>[1] -3.866089</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M2)<span class="sc">-</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M2)<span class="sc">-</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01524156</code></pre>
+<pre><code>[1] -0.02073232</code></pre>
 </div>
 </div>
 <p>The first estimator seems to be negatively biased, but the second seems to be approximately unbiased.</p>
@@ -876,25 +894,25 @@ Solution
 <li>Use Monte Carlo to estimate the variance of both of these estimators.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 13.60056</code></pre>
+<pre><code>[1] 13.79834</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 14.71037</code></pre>
+<pre><code>[1] 14.92429</code></pre>
 </div>
 </div>
 <p>M1 (which is biased) has a smaller variance M2 is unbiased and has a larger variance.</p>
@@ -905,25 +923,25 @@ Solution
 <li>The Mean Squared Error is <span class="math inline">\(E\left[(\hat\theta-\theta)^2\right]\)</span>. This can be approximated by Monte Carlo by estimating the parameter repeatedly, squaring the error and averaging. Use Monte Carlo to estimate the MSE of both <span class="math inline">\(\hat{M}_1\)</span> and <span class="math inline">\(\hat{M}_2\)</span>.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M1<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M1<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 28.28081</code></pre>
+<pre><code>[1] 28.74485</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M2<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M2<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 14.71045</code></pre>
+<pre><code>[1] 14.92457</code></pre>
 </div>
 </div>
 <p>The second estimator, <span class="math inline">\(\hat M_2\)</span> has a lower mean squared error.</p>
@@ -934,20 +952,20 @@ Solution
 <li>Consider the estimator <span class="math display">\[\hat{M}_k=\frac{n+k}{n}\max(X_1,\ldots,X_n)\]</span> for values of <span class="math inline">\(k \in [-1,3]\)</span>. For which value of <span class="math inline">\(k\)</span> is the MSE minimized? Can you plot the squared bias, variance and MSE on one plot?</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We can just get 10000 sample maximums and construct these estimators easily. Since I’ve already got my <code>M1</code> object, I can use that.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>bias2 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>variance <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="dv">0</span></span>
@@ -962,7 +980,7 @@ Solution
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span>k, <span class="at">y=</span>variance, <span class="at">col=</span><span class="st">"red"</span>,<span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(<span class="fu">c</span>(bias2,variance,mse))), <span class="at">ylab=</span><span class="st">""</span>)</span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x=</span>k, <span class="at">y=</span>bias2, <span class="at">col=</span><span class="st">"blue"</span>)</span>
 <span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x=</span>k, <span class="at">y=</span>mse)</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="st">"top"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"variance"</span>,<span class="st">"squared bias"</span>,<span class="st">"mse"</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>,<span class="st">"black"</span>), <span class="at">lty=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="st">"top"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"variance"</span>,<span class="st">"squared bias"</span>,<span class="st">"mse"</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>,<span class="st">"black"</span>), <span class="at">lty=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -970,7 +988,7 @@ Solution
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>k[<span class="fu">which.min</span>(mse)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>k[<span class="fu">which.min</span>(mse)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
@@ -988,41 +1006,41 @@ Solution
 <li>Use Monte Carlo to estimate the bias and variance of each estimator.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>M3 <span class="ot">&lt;-</span> <span class="dv">0</span>; M4<span class="ot">&lt;-</span><span class="dv">0</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>M3 <span class="ot">&lt;-</span> <span class="dv">0</span>; M4<span class="ot">&lt;-</span><span class="dv">0</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100000</span>){</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">25</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  M3[i] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(x)</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  M4[i] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">median</span>(x)</span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#biases</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M3)<span class="sc">-</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M3)<span class="sc">-</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.006053955</code></pre>
+<pre><code>[1] -0.03661995</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M4)<span class="sc">-</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(M4)<span class="sc">-</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.01288954</code></pre>
+<pre><code>[1] -0.06683059</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#variances</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#variances</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 133.3608</code></pre>
+<pre><code>[1] 133.3395</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(M4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 372.4</code></pre>
+<pre><code>[1] 370.9879</code></pre>
 </div>
 </div>
 <p>M3 has a slight negative bias, M4 seems to be more negatively biased. The variance of M4 is also higher than the variance of M3.</p>
@@ -1033,25 +1051,25 @@ Solution
 <li>Use Monte Carlo to approximate the MSE of each estimator.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M3<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M3<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 133.3595</code></pre>
+<pre><code>[1] 133.3395</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M4<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((M4<span class="dv">-100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 372.3964</code></pre>
+<pre><code>[1] 370.9887</code></pre>
 </div>
 </div>
 <p>Both of these estimators have a far worse MSE than either of the first two.</p>
@@ -1062,16 +1080,16 @@ Solution
 <li>Between <span class="math inline">\(\hat{M}_1\)</span> through <span class="math inline">\(\hat{M}_4\)</span>, which estimator would you prefer? What are some pros and cons of each of them?</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Between all four estimators, M2 definitely has the smallest MSE and it is an unbiased estimator. It’s definitely the preferred estimator.</p>
 </div>
@@ -1082,23 +1100,23 @@ Solution
 <h2 data-number="23.10" class="anchored" data-anchor-id="exponential-data"><span class="header-section-number">23.10</span> Exponential Data</h2>
 <p>Consider the data below given by Wang (2000) on failure times of an electrical component. Assuming an exponential distribution <span class="math inline">\(Exp(\lambda)\)</span>, find the method of moments estimate of <span class="math inline">\(\lambda\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">46</span>, <span class="dv">75</span>, <span class="dv">98</span>, <span class="dv">122</span>, <span class="dv">145</span>, <span class="dv">165</span>, <span class="dv">196</span>, <span class="dv">224</span>, <span class="dv">245</span>, <span class="dv">293</span>, <span class="dv">321</span>, <span class="dv">330</span>, <span class="dv">350</span>, <span class="dv">420</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">46</span>, <span class="dv">75</span>, <span class="dv">98</span>, <span class="dv">122</span>, <span class="dv">145</span>, <span class="dv">165</span>, <span class="dv">196</span>, <span class="dv">224</span>, <span class="dv">245</span>, <span class="dv">293</span>, <span class="dv">321</span>, <span class="dv">330</span>, <span class="dv">350</span>, <span class="dv">420</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For an exponential random variable <span class="math inline">\(X\)</span>, <span class="math inline">\(EX=\frac 1\lambda\)</span>. The method of moments suggests that <span class="math inline">\(\bar {X} \approx \frac1\lambda\)</span>, so <span class="math inline">\(\hat\lambda = \frac1{\bar{X}}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span><span class="fu">mean</span>(t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span><span class="fu">mean</span>(t)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0058102</code></pre>
 </div>
@@ -1108,99 +1126,82 @@ Solution
 </div>
 </div>
 </section>
-<section id="a-uniform-mystery" class="level2" data-number="23.11">
-<h2 data-number="23.11" class="anchored" data-anchor-id="a-uniform-mystery"><span class="header-section-number">23.11</span> A uniform mystery</h2>
-<p>Suppose <span class="math inline">\(X_1, \ldots, X_n \sim Unif(a, b)\)</span>, but both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are unknown.</p>
+<section id="another-uniform-estimation" class="level2" data-number="23.11">
+<h2 data-number="23.11" class="anchored" data-anchor-id="another-uniform-estimation"><span class="header-section-number">23.11</span> Another Uniform Estimation</h2>
+<p>Suppose <span class="math inline">\(X_1, \ldots X_n \sim Unif(-\theta, theta)\)</span> are an independent random sample.</p>
 <ol type="a">
-<li>Construct simultaneous method of moment estimators <span class="math inline">\(\hat{a}\)</span> and <span class="math inline">\(\hat{b}\)</span> from the facts that <span class="math inline">\(E(X)=\frac{a+b}{2}\)</span> and <span class="math inline">\(Var(X)=\frac{(b-a)^2}{12}\)</span>.</li>
+<li>Use the method of moments to construct an estimator for <span class="math inline">\(\theta\)</span> (hint: the first moment will be useless!)</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>As above, we can say that <span class="math inline">\(\bar{X} \approx \frac{a+b}{2}\)</span> and <span class="math inline">\(S^2 \approx \frac{(b-a)^2}{12}\)</span></p>
-<p>We can rearrange these and state <span class="math display">\[2\bar{X} \approx a+b \quad\quad 12S^2 \approx b^2-2ab+a^2\]</span> A substitution of <span class="math inline">\(b\approx 2\bar{X}-a\)</span> can be made in the second equation. Using the quadratic formula (details are omitted) you get <span class="math inline">\(\hat a = \bar{X} \pm \sqrt{3}S\)</span>. The same solution is found for <span class="math inline">\(\hat b\)</span> and it stands to reason then that the higher value is the estimator for <span class="math inline">\(b\)</span> while the lower value is the estimator for <span class="math inline">\(a\)</span>.</p>
-<p><span class="math display">\[\hat a = \bar{X}-\sqrt3 S, \hat b = \bar{X}+\sqrt 3 S\]</span></p>
-</div>
-</div>
-</div>
-<ol start="2" type="a">
-<li>One could also use the estimator <span class="math inline">\(\hat{b}=\frac{n+1}{n}\max(X_1, \ldots, X_n)\)</span>, which is unbiased. Show that <span class="math inline">\(\frac{n+1}{n}(\max(X)-\min(X))\)</span> is an unbiased estimator for <span class="math inline">\(b-a\)</span> using Monte Carlo.</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use a=0 and b=1, so b-a=1.</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use n=25</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="dv">25</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>range.hat <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100000</span>){</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  unifData <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  range.hat <span class="ot">&lt;-</span> (n<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span>n <span class="sc">*</span> <span class="fu">diff</span>(<span class="fu">range</span>(unifData))</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(range.hat)<span class="sc">-</span><span class="dv">1</span> <span class="co">#bias</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.1328613</code></pre>
-</div>
-</div>
-<p>Repeating this a few times I find the estimated bias is between -0.015 and +.015 so I would venture to guess that the estimator is in deed unbiased.</p>
+<p>This is a fun one. Because <span class="math inline">\(EX={\frac{a+b}{2}}\)</span>, in this case that would be <span class="math inline">\(EX=\frac{-\theta + \theta}{2}=0\)</span>. The second moment (well, technically we’ll use the variance) is actually useful. <span class="math inline">\(VarX=\frac{(b-a)^2}{12}=\frac{(\theta- -\theta)^2}{12}=\frac{\theta^2}{12}\)</span></p>
+<p>So the method of moments approximates <span class="math inline">\(VarX\)</span> with <span class="math inline">\(S^2\)</span>: <span class="math display">\[S^2\approx \frac{\theta^2}{12} \Rightarrow \theta \approx \sqrt{12}S\]</span></p>
+<p>So our method of moments estimator would be <span class="math display">\[\hat\theta = \sqrt{12}S\]</span></p>
 </div>
 </div>
 </div>
-<ol start="3" type="a">
-<li>From Part b, use algebra to figure out an estimator <span class="math inline">\(\hat{a}\)</span> for the lower bound of the support.</li>
+<ol start="2" type="a">
+<li>Construct another estimator based on the sample max and sample min. Is it biased?</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-
+<p>An intuitive estimator based on these two sample stats (<span class="math inline">\(M_{(1)}\)</span> the sample minimum, and <span class="math inline">\(M_{(n)}\)</span> the sample maximum) would be <span class="math inline">\(\hat\theta_2=\frac{M_{(n)}-M_{(1)}}{2}\)</span>, but this is probably going to underestimate <span class="math inline">\(\theta\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Let theta be 1, and n=20</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>theta<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>ranges <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">diff</span>(<span class="fu">range</span>(<span class="fu">runif</span>(<span class="dv">20</span>, <span class="sc">-</span>theta,theta))))</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ranges<span class="sc">/</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9052567</code></pre>
+</div>
+</div>
+<p>Obviously we have underestimated <span class="math inline">\(\theta\)</span>. It turns out that an unbiased estimator for the range of a uniform distribution is <span class="math inline">\(\frac{n+1}{n-1}(\max(X)-\min(X))\)</span>. Since The range is <span class="math inline">\(2\theta\)</span>, if we divide this estimate by 2 we should get an unbiased estimate of <span class="math inline">\(\theta\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(((<span class="dv">20</span><span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span>(<span class="dv">19</span>)<span class="sc">*</span>ranges)<span class="sc">/</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.000547</code></pre>
 </div>
 </div>
 </div>
-<ol start="4" type="a">
-<li>Is the estimator from part (c) unbiased? Is it possible that <span class="math inline">\(\hat{a} &gt; \min(X)\)</span>?</li>
-</ol>
+</div>
+</div>
 </section>
-<section id="another-uniform-estimation" class="level2" data-number="23.12">
-<h2 data-number="23.12" class="anchored" data-anchor-id="another-uniform-estimation"><span class="header-section-number">23.12</span> Another Uniform Estimation</h2>
-<p>Suppose <span class="math inline">\(X_1, \ldots X_n \sim Unif(-\theta, theta)\)</span> are an independent random sample.</p>
-<ol type="a">
-<li><p>Use the method of moments to construct an estimator for <span class="math inline">\(\theta\)</span> (hint: the first moment will be useless!)</p></li>
-<li><p>Construct another estimator based on the sample max and sample min. Is it biased?</p></li>
-</ol>
-</section>
-<section id="goldfish" class="level2" data-number="23.13">
-<h2 data-number="23.13" class="anchored" data-anchor-id="goldfish"><span class="header-section-number">23.13</span> Goldfish</h2>
+<section id="goldfish" class="level2" data-number="23.12">
+<h2 data-number="23.12" class="anchored" data-anchor-id="goldfish"><span class="header-section-number">23.12</span> Goldfish</h2>
 <p>In 1997 Pepperidge Farm started putting faces on some of the goldfish crackers they produce. Roughly 40% of goldfish crackers have faces.</p>
 <p>Suppose you want to estimate this proportion, and you buy a 20 pack box as a representative sample of Goldfish. The box contains 20 1-oz packs of goldfish, each containing roughly 50 goldfish. Suppose we can model the number of goldfish in a pack using a normal distribution (rounded to the nearest integer), <span class="math inline">\(Y_i \sim N(50, 2^2)\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>To estimate the proportion of smiley faces, you figure you could do three things:</p>
 <ol type="1">
 <li>Open all 20 bags in one pile and calculate the sample proportion</li>
@@ -1209,35 +1210,39 @@ Solution
 </ol>
 <p>Using a normal model for the number of fish in a bag, and a binomial for the number of smiley fish, determine the bias and variance of these three estimators.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method1=</span><span class="fu">numeric</span>(NMC),</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method2=</span><span class="fu">numeric</span>(NMC),</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method3=</span><span class="fu">numeric</span>(NMC))</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">2</span>))</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">20</span>, Y, .<span class="dv">40</span>)</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  estimates[i,] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(X)<span class="sc">/</span><span class="fu">sum</span>(Y),</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">mean</span>(X<span class="sc">/</span>Y),</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">sum</span>(X<span class="sc">/</span>Y <span class="sc">*</span> Y<span class="sc">/</span><span class="fu">sum</span>(Y))) </span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(estimates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>NMC <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">method1=</span><span class="fu">numeric</span>(NMC),</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method2=</span><span class="fu">numeric</span>(NMC),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method3=</span><span class="fu">numeric</span>(NMC))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>NMC){</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">2</span>))</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">20</span>, Y, .<span class="dv">40</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  estimates[i,] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(X)<span class="sc">/</span><span class="fu">sum</span>(Y),</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">mean</span>(X<span class="sc">/</span>Y),</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">sum</span>(X<span class="sc">/</span>Y <span class="sc">*</span> Y<span class="sc">/</span><span class="fu">sum</span>(Y))) </span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(estimates)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  method1   method2   method3 
-0.3999461 0.3999519 0.3999461 </code></pre>
+0.3999420 0.3999432 0.3999420 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(estimates, <span class="dv">2</span>, <span class="at">FUN=</span>var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(estimates, <span class="dv">2</span>, <span class="at">FUN=</span>var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     method1      method2      method3 
-0.0002435102 0.0002438793 0.0002435102 </code></pre>
+0.0002416015 0.0002419244 0.0002416015 </code></pre>
 </div>
 </div>
 <p>When working out the math, it becomes clear that method 1 and 3 are actually identical to each other. Running the MC a few times it seems that all 3 methods give an unbiased estimate. Method 2 however has a slightly larger variance. This seems consistent after re-running the MC multiple times. Thus method 1 is probably the best method to estimate <span class="math inline">\(p\)</span>.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="beyond-stat-340" class="level1" data-number="24">
 <h1 data-number="24"><span class="header-section-number">24</span> Beyond STAT 340</h1>
 <p>These problems are excellent practice but they are beyond the material we cover in STAT 340.</p>
+<p>(none yet)</p>
 
 
 </section>
@@ -1294,13 +1299,14 @@ Solution
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

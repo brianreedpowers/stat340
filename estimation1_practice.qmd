@@ -44,6 +44,7 @@ $$\hat N = \frac{\bar{X}}{\hat p}=\frac{\bar X}{1-VarX/\bar{X}}=\frac{\bar{X}^2}
 ## Method of Moments III
 
 Suppose $X_1, \ldots, X_n \sim Unif(0, M)$. Use the method of moments to construct an estimator $\hat{M}$. 
+
 ::: {.callout-note collapse="true" title="Solution"}
 Since $EX=\frac{M+0}{2}$, We can say $\bar{X}\approx \frac{M}{2}$
 $$\hat M = 2\bar{X}$$
@@ -316,53 +317,7 @@ We'd estimate $\hat\lambda=.0058102$.
 :::
 
 
-## A uniform mystery
 
-Suppose $X_1, \ldots, X_n \sim Unif(a, b)$, but both $a$ and $b$ are unknown. 
-
-a. Construct simultaneous method of moment estimators $\hat{a}$ and $\hat{b}$ from the facts that $E(X)=\frac{a+b}{2}$ and $Var(X)=\frac{(b-a)^2}{12}$.
-
-::: {.callout-note collapse="true" title="Solution"}
-As above, we can say that $\bar{X} \approx \frac{a+b}{2}$ and $S^2 \approx \frac{(b-a)^2}{12}$
-
-We can rearrange these and state
-$$2\bar{X} \approx a+b \quad\quad 12S^2 \approx b^2-2ab+a^2$$
-A substitution of $b\approx 2\bar{X}-a$ can be made in the second equation. Using the quadratic formula (details are omitted) you get $\hat a = \bar{X} \pm \sqrt{3}S$. The same solution is found for $\hat b$ and it stands to reason then that the higher value is the estimator for $b$ while the lower value is the estimator for $a$.
-
-$$\hat a = \bar{X}-\sqrt3 S, \hat b = \bar{X}+\sqrt 3 S$$
-
-:::
-
-b. One could also use the estimator $\hat{b}=\frac{n+1}{n}\max(X_1, \ldots, X_n)$, which is unbiased. Show that $\frac{n+1}{n}(\max(X)-\min(X))$ is an unbiased estimator for $b-a$ using Monte Carlo.
-
-
-::: {.callout-note collapse="true" title="Solution"}
-
-```{r}
-# Let's use a=0 and b=1, so b-a=1.
-# We'll use n=25
-n<-25
-range.hat <- 0
-
-for(i in 1:100000){
-  unifData <- runif(n)
-  range.hat <- (n+1)/n * diff(range(unifData))
-}
-mean(range.hat)-1 #bias
-
-```
-Repeating this a few times I find the estimated bias is between -0.015 and +.015 so I would venture to guess that the estimator is in deed unbiased.
-:::
-
-c. From Part b, use algebra to figure out an estimator $\hat{a}$ for the lower bound of the support.
-
-::: {.callout-note collapse="true" title="Solution"}
-
-
-
-:::
-
-d. Is the estimator from part (c) unbiased? Is it possible that $\hat{a} > \min(X)$?
 
 ## Another Uniform Estimation
 
@@ -370,13 +325,43 @@ Suppose $X_1, \ldots X_n \sim Unif(-\theta, theta)$ are an independent random sa
 
 a. Use the method of moments to construct an estimator for $\theta$ (hint: the first moment will be useless!)
 
+::: {.callout-note collapse="true" title="Solution"}
+This is a fun one. Because $EX={\frac{a+b}{2}}$, in this case that would be $EX=\frac{-\theta + \theta}{2}=0$. The second moment (well, technically we'll use the variance) is actually useful. $VarX=\frac{(b-a)^2}{12}=\frac{(\theta- -\theta)^2}{12}=\frac{\theta^2}{12}$
+
+So the method of moments approximates $VarX$ with $S^2$: $$S^2\approx \frac{\theta^2}{12} \Rightarrow \theta \approx \sqrt{12}S$$
+
+So our method of moments estimator would be $$\hat\theta = \sqrt{12}S$$
+
+:::
+
 b. Construct another estimator based on the sample max and sample min. Is it biased?
+
+::: {.callout-note collapse="true" title="Solution"}
+
+An intuitive estimator based on these two  sample stats ($M_{(1)}$ the sample minimum, and $M_{(n)}$ the sample maximum) would be $\hat\theta_2=\frac{M_{(n)}-M_{(1)}}{2}$, but this is probably going to underestimate $\theta$.
+
+```{r}
+#Let theta be 1, and n=20
+theta=1
+ranges <- replicate(10000, diff(range(runif(20, -theta,theta))))
+mean(ranges/2)
+```
+Obviously we have underestimated $\theta$. It turns out that an unbiased estimator for the range of a uniform distribution is $\frac{n+1}{n-1}(\max(X)-\min(X))$. Since The range is $2\theta$, if we divide this estimate by 2 we should get an unbiased estimate of $\theta$.
+
+```{r}
+mean(((20+1)/(19)*ranges)/2)
+
+```
+
+:::
 
 ## Goldfish
 
 In 1997 Pepperidge Farm started putting faces on some of the goldfish crackers they produce. Roughly 40% of goldfish crackers have faces.
 
 Suppose you want to estimate this proportion, and you buy a 20 pack box as a representative sample of Goldfish. The box contains 20 1-oz packs of goldfish, each containing roughly 50 goldfish. Suppose we can model the number of goldfish in a pack using a normal distribution (rounded to the nearest integer), $Y_i \sim N(50, 2^2)$.
+
+::: {.callout-note collapse="true" title="Solution"}
 
 To estimate the proportion of smiley faces, you figure you could do three things:
 
@@ -405,8 +390,12 @@ apply(estimates, 2, FUN=var)
 When working out the math, it becomes clear that method 1 and 3 are actually identical to each other. 
 Running the MC a few times it seems that all 3 methods give an unbiased estimate. Method 2 however has a slightly larger variance. This seems consistent after re-running the MC multiple times. Thus method 1 is probably the best method to estimate $p$.
 
+:::
+
 # Beyond STAT 340
 
 These problems are excellent practice but they are beyond the material we cover in STAT 340.
 
+
+(none yet)
 
