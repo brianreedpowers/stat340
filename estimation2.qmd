@@ -387,11 +387,13 @@ run_exprate_expt <- function( nsamp, true_rate ) {
   CI <- quantile( replicates, probs=c(0.025, 0.975), names=FALSE );
   return( (CI[1] < true_rate) & (true_rate < CI[2]) );
 }
+```
 
+```{r}
 # Now let's run the above experiment a few thousand times
 # and see how often we "catch" the true value of lambda.
 lambda_true <- 2;
-nsamp <- 100;
+nsamp <- 25;
 M <- 2000;
 reps <- rep(NA, M);
 for (i in 1:M) {

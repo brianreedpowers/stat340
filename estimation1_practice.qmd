@@ -10,13 +10,46 @@ editor: source
 
 Use the method of moments to construct an estimator for the parameter $N$ when your data $X_1, X_2, \ldots, X_n$ each are drawn independently from $Binom(N, p)$. In this case assume that $p$ is known to you. Note the sample size you're working with is not the same as the $N$ parameter from the binomial distribution.
 
+::: {.callout-note collapse="true" title="Solution"}
+Since $EX=Np$, if $p$ is known, and since $\bar{X}\approx EX$ we can create an estimator for $N$ by substituting $\bar X$ for $EX$ and replace the equals with approximation.
+
+$$\bar{X} \approx N p$$ so
+$$N \approx \frac{\bar X}{p}$$
+:::
+
+
 ## Method of Moments II
 
 Continuing from the previous problem, suppose that your data $X_1, X_2, \ldots, X_n$ each are drawn independently from $Binom(N, p)$ but both $N$ and $p$ are unknown. Use the method of moments to construct two simultaneous estimators $\hat{N}$ and $\hat{p}$. You can only use sample statistics in your estimator functions, you cannot use $N$ or $p$ because both of these parameters are unknown.
 
+::: {.callout-note collapse="true" title="Solution"}
+This will require us to use both the first and second moments. In place of the second moment $EX^2$ we can use the variance, with the approximation that $VarX \approx S^2$.
+
+So we can make two approximations relating the sample mean and sample variance:
+
+$$\bar X \approx EX = Np$$
+$$S^2 \approx VarX = Np(1-p)$$
+We can take a ratio to remove the $N$:
+$$\frac{Var X}{\bar X} \approx \frac{Np(1-p)}{Np}=1-p$$
+Solve for $p$ and we get $$\hat p = 1-\frac{Var X}{\bar X}$$
+
+With this, we can find the estimator for $N$
+
+$$\bar{X} \approx Np \Rightarrow N \approx \frac{\bar{X}}{p}$$
+we can substitute in $\hat p$
+$$\hat N = \frac{\bar{X}}{\hat p}=\frac{\bar X}{1-VarX/\bar{X}}=\frac{\bar{X}^2}{\bar X - Var X}$$
+:::
+
+
 ## Method of Moments III
 
 Suppose $X_1, \ldots, X_n \sim Unif(0, M)$. Use the method of moments to construct an estimator $\hat{M}$. 
+
+::: {.callout-note collapse="true" title="Solution"}
+Since $EX=\frac{M+0}{2}$, We can say $\bar{X}\approx \frac{M}{2}$
+$$\hat M = 2\bar{X}$$
+:::
+
 
 ## Method of Moments IV
 
@@ -24,11 +57,47 @@ The gamma distribution takes two parameters, the shape parameter $\alpha>0$ and 
 
 a. If you know $\theta$, use the method of moments to find an estimator $\hat\alpha$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Since $\bar X \approx EX = \alpha\theta$, if $\theta$ is known, then we can simply use $$\hat\alpha = \frac{\bar{X}}{\theta}$$
+:::
+
+
 b. If you do not know $\theta$, use the method of moments to find an estimator $\hat\alpha$. Note this estimator will need to use both sample mean and sample variance in some way.
+
+::: {.callout-note collapse="true" title="Solution"}
+Now we must invoke the approximation $$S^2 \approx Var X = \alpha\theta^2$$
+If we square the expected value we get $$E^2X = \alpha^2\theta^2$$
+The ratio will be $\alpha$:
+$$\frac{E^2X}{Var X}=\frac{\alpha^2\theta^2}{\alpha\theta^2}=\alpha$$
+Thus $$\hat\alpha = \frac{\bar{X}^2}{S^2}$$
+:::
+
 
 ## Method of Moments V
 
 Suppose we observe a sequence of independent trials where each trial is a success or a failure. Let $X$ denote the number of failures before the first success. This experiment is repeated $n$ times. Use the method of moments to construct an estimator for $p$, the probability of success.
+
+::: {.callout-note collapse="true" title="Solution"}
+This describes a geometric random variable, as defined in STAT 340, and how it is defined in R. If $X \sim Geometric(p)$, $EX=\frac{1-p}{p}$
+
+Thus we could make an approximation
+
+$$\bar X \approx \frac{1-p}{p}$$
+
+$$
+\begin{align}
+\bar X &\approx \frac{1-p}{p}\\
+p\bar{X} &\approx 1-p \\
+p\bar{X}+p &\approx 1\\
+p(\bar{X}+1) &\approx 1\\
+p &\approx \frac{1}{\bar{X}+1}
+\end{align}
+$$
+So this is our estimator
+$$\hat p  = \frac{1}{\bar{X}+1}$$
+:::
+
 
 ## Bias Sample SD
 
@@ -36,14 +105,76 @@ Suppose we have a normally distributed population, and an independent sample of 
 
 a. Use Monte Carlo to demonstrate that $S^2$ is an unbiased estimator of $\sigma^2$. 
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the estimates for $\sigma^2$ on a plot.
+
+```{r}
+# Let sigma = 5
+sampleVars <- replicate(10000, var(rnorm(15, 10, 5)))
+hist(sampleVars)
+abline(v=25, col="red")
+abline(v=mean(sampleVars), lty=2)
+
+```
+
+:::
+
 b. Use Monte Carlo to demonstrate that $S$, the sample standard deviation, is a *biased* estimator of $\sigma$, the population variance. 
+
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the sample standard deviations on a plot.
+
+```{r}
+# Let sigma = 5
+sampleSDs <- replicate(10000, sd(rnorm(15, 10, 5)))
+hist(sampleSDs)
+abline(v=5, col="red")
+abline(v=mean(sampleSDs), lty=2)
+
+```
+
+:::
 
 ## A Poisson Estimator
 Your random sample $X_1, \ldots, X_20 \sim Poisson(\lambda)$. For parts (a) and (b) let's assume the true value of $\lambda$ is 5.
 
 a. Use Monte Carlo to demonstrate that $\bar{X}$ and $S^2$ are both unbiased estimators of $\lambda$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+Let's generate a bunch of samples and show all of the estimates for $\sigma^2$ on a plot.
+
+```{r}
+# Let sigma = 5
+sampleVars <- replicate(10000, var(rpois(20, 5)))
+sampleMeans <- replicate(10000, mean(rpois(20, 5)))
+par(mfrow=c(1,2))
+hist(sampleVars, breaks=40)
+abline(v=5, col="red")
+abline(v=mean(sampleVars), lty=2)
+hist(sampleMeans, breaks=40)
+abline(v=5, col="red")
+abline(v=mean(sampleMeans), lty=2)
+```
+
+:::
+
+
 b. Which estimator $\bar{X}$ or $S^2$ has a lower variance (i.e. is a more precise) estimator for $\lambda$? Use Monte Carlo support your answer.
+
+::: {.callout-note collapse="true" title="Solution"}
+We already have samples so we can just calculat ehte sample variances
+```{r}
+var(sampleVars)
+var(sampleMeans)
+```
+
+$\bar{X}$ clearly has a much lower variance.
+
+:::
+
 
 ## The Tricky Sample Maximum
 
@@ -55,21 +186,118 @@ Suppose that You have a sample size $n=25$ and a true $M=100$.
 
 a. Use Monte Carlo  to estimate the bias of each of these estimators.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+M1 <- 0; M2<-0
+for(i in 1:100000){
+  x <- runif(25, 0, 100)
+  M1[i] <- max(x)
+  M2[i] <- 26/25*max(x)
+}
+mean(M1)-100
+mean(M2)-100
+
+```
+The first estimator seems to be negatively biased, but the second seems to be approximately unbiased.
+:::
+
 b. Use Monte Carlo to estimate the variance of both of these estimators. 
+
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+var(M1)
+var(M2)
+```
+M1 (which is biased) has a smaller variance M2 is unbiased and has a larger variance. 
+:::
 
 c. The Mean Squared Error is $E\left[(\hat\theta-\theta)^2\right]$. This can be approximated by Monte Carlo by estimating the parameter repeatedly, squaring the error and averaging. Use Monte Carlo to estimate the MSE of both $\hat{M}_1$ and $\hat{M}_2$.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+mean((M1-100)^2)
+mean((M2-100)^2)
+
+```
+The second estimator, $\hat M_2$ has a lower mean squared error.
+:::
+
+d. Consider the estimator $$\hat{M}_k=\frac{n+k}{n}\max(X_1,\ldots,X_n)$$ for values of $k \in [-1,3]$. For which value of $k$ is the MSE minimized? Can you plot the squared bias, variance and MSE on one plot?
+
+::: {.callout-note collapse="true" title="Solution"}
+We can just get 10000 sample maximums and construct these estimators easily. Since I've already got my `M1` object, I can use that.
+
+```{r}
+n <- 25
+bias2 <- 0
+variance <- 0
+mse <- 0
+k <- seq(-1,3, by=.1)
+
+for(i in 1:length(k)){
+  bias2[i]=(mean((n+k[i])/n*M1)-100)^2
+  variance[i]=var((n+k[i])/n*M1)
+  mse[i] = mean(((n+k[i])/n*M1-100)^2)
+}
+
+plot(x=k, y=variance, col="red",type="l", ylim=c(0,max(c(bias2,variance,mse))), ylab="")
+lines(x=k, y=bias2, col="blue")
+lines(x=k, y=mse)
+legend(x="top", legend=c("variance","squared bias","mse"), col=c("red","blue","black"), lty=1)
+
+k[which.min(mse)]
+
+```
+It seems the $k$ value that minimizes the mean squared error is $k=1$.
+:::
+
+
 ## Tricky Sample Maximum II
 
-Another couple estimators for $M$ from the previous problem is $\hat{M}_3=2\bar{X}$, twice the sample mean and $\hat{M}_4=2\tilde{X}$, twice the sample median. 
+Another couple estimators for $M$ from the previous problem are $\hat{M}_3=2\bar{X}$, twice the sample mean and $\hat{M}_4=2\tilde{X}$, twice the sample median. 
 
 Suppose that You have a sample size $n=25$ and a true $M=100$.
 
 a. Use Monte Carlo to estimate the bias and variance of each estimator.
 
+::: {.callout-note collapse="true" title="Solution"}
+
+```{r}
+M3 <- 0; M4<-0
+for(i in 1:100000){
+  x <- runif(25, 0, 100)
+  M3[i] <- 2*mean(x)
+  M4[i] <- 2*median(x)
+}
+#biases
+mean(M3)-100
+mean(M4)-100
+#variances
+var(M3)
+var(M4)
+```
+M3 has a slight negative bias, M4 seems to be more negatively biased. The variance of M4 is also higher than the variance of M3.
+
+:::
+
 b. Use Monte Carlo to approximate the MSE of each estimator.
 
+::: {.callout-note collapse="true" title="Solution"}
+```{r}
+mean((M3-100)^2)
+mean((M4-100)^2)
+```
+Both of these estimators have a far worse MSE than either of the first two.
+:::
+
 c. Between $\hat{M}_1$ through $\hat{M}_4$, which estimator would you prefer? What are some pros and cons of each of them?
+
+::: {.callout-note collapse="true" title="Solution"}
+Between all four estimators, M2 definitely has the smallest MSE and it is an unbiased estimator. It's definitely the preferred estimator. 
+:::
 
 ## Exponential Data
 
@@ -79,18 +307,17 @@ Consider the data below given by Wang (2000) on failure times of an electrical c
 t <- c(5, 11, 21, 31, 46, 75, 98, 122, 145, 165, 196, 224, 245, 293, 321, 330, 350, 420)
 ```
 
+::: {.callout-note collapse="true" title="Solution"}
+For an exponential random variable $X$, $EX=\frac 1\lambda$. The method of moments suggests that $\bar {X} \approx \frac1\lambda$, so $\hat\lambda = \frac1{\bar{X}}$
 
-## A uniform mystery
+```{r}
+1/mean(t)
+```
+We'd estimate $\hat\lambda=.0058102$.
+:::
 
-Suppose $X_1, \ldots, X_n \sim Unif(a, b)$, but both $a$ and $b$ are unknown. 
 
-a. Construct simultaneous method of moment estimators $\hat{a}$ and $\hat{b}$ from the facts that $E(X)=\frac{a+b}{2}$ and $Var(X)=\frac{(b-a)^2}{12}$.
 
-b. One could also use the estimator $\hat{b}=\frac{n+1}{n}\max(X_1, \ldots, X_n)$, which is unbiased. Show that $\frac{n+1}{n}(\max(X)-\min(X))$ is an unbiased estimator for $b-a$ using Monte Carlo.
-
-c. From Part b, use algebra to figure out an estimator $\hat{a}$ for the lower bound of the support.
-
-d. Is the estimator from part (c) unbiased? Is it possible that $\hat{a} > \min(X)$?
 
 ## Another Uniform Estimation
 
@@ -98,13 +325,43 @@ Suppose $X_1, \ldots X_n \sim Unif(-\theta, theta)$ are an independent random sa
 
 a. Use the method of moments to construct an estimator for $\theta$ (hint: the first moment will be useless!)
 
+::: {.callout-note collapse="true" title="Solution"}
+This is a fun one. Because $EX={\frac{a+b}{2}}$, in this case that would be $EX=\frac{-\theta + \theta}{2}=0$. The second moment (well, technically we'll use the variance) is actually useful. $VarX=\frac{(b-a)^2}{12}=\frac{(\theta- -\theta)^2}{12}=\frac{\theta^2}{12}$
+
+So the method of moments approximates $VarX$ with $S^2$: $$S^2\approx \frac{\theta^2}{12} \Rightarrow \theta \approx \sqrt{12}S$$
+
+So our method of moments estimator would be $$\hat\theta = \sqrt{12}S$$
+
+:::
+
 b. Construct another estimator based on the sample max and sample min. Is it biased?
+
+::: {.callout-note collapse="true" title="Solution"}
+
+An intuitive estimator based on these two  sample stats ($M_{(1)}$ the sample minimum, and $M_{(n)}$ the sample maximum) would be $\hat\theta_2=\frac{M_{(n)}-M_{(1)}}{2}$, but this is probably going to underestimate $\theta$.
+
+```{r}
+#Let theta be 1, and n=20
+theta=1
+ranges <- replicate(10000, diff(range(runif(20, -theta,theta))))
+mean(ranges/2)
+```
+Obviously we have underestimated $\theta$. It turns out that an unbiased estimator for the range of a uniform distribution is $\frac{n+1}{n-1}(\max(X)-\min(X))$. Since The range is $2\theta$, if we divide this estimate by 2 we should get an unbiased estimate of $\theta$.
+
+```{r}
+mean(((20+1)/(19)*ranges)/2)
+
+```
+
+:::
 
 ## Goldfish
 
 In 1997 Pepperidge Farm started putting faces on some of the goldfish crackers they produce. Roughly 40% of goldfish crackers have faces.
 
 Suppose you want to estimate this proportion, and you buy a 20 pack box as a representative sample of Goldfish. The box contains 20 1-oz packs of goldfish, each containing roughly 50 goldfish. Suppose we can model the number of goldfish in a pack using a normal distribution (rounded to the nearest integer), $Y_i \sim N(50, 2^2)$.
+
+::: {.callout-note collapse="true" title="Solution"}
 
 To estimate the proportion of smiley faces, you figure you could do three things:
 
@@ -133,8 +390,12 @@ apply(estimates, 2, FUN=var)
 When working out the math, it becomes clear that method 1 and 3 are actually identical to each other. 
 Running the MC a few times it seems that all 3 methods give an unbiased estimate. Method 2 however has a slightly larger variance. This seems consistent after re-running the MC multiple times. Thus method 1 is probably the best method to estimate $p$.
 
+:::
+
 # Beyond STAT 340
 
 These problems are excellent practice but they are beyond the material we cover in STAT 340.
 
+
+(none yet)
 

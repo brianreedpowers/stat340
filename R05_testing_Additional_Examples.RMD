@@ -382,6 +382,8 @@ hist(t.dist)
 
 What are the two test statistics?
 We would use a 2-tailed p-value. We would consider a sequence of Hs and Ts to be weird if the max run length was too long or too short. 
+
+When the test statistic distribution is so asymmetric, I like to calculate the lower tail and upper tail probabilities, take the lower of the two (min) and double it. 
 ```{r}
 (t1 <- max(H.run.lengths1))
 2*(min(mean(t.dist <= t1),mean(t.dist >= t1)))
