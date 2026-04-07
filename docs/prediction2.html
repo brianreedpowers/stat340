@@ -918,7 +918,7 @@ F-statistic: 19.91 on 3 and 28 DF,  p-value: 4.134e-07</code></pre>
 {  \frac{1}{n-p-1} \sum_{i=1}^n \left( y_i - \hat{y}_i \right)^2 },
 \]</span> which is a ratio of “means” of squared errors (i.e., variance-like things!). After a bit of algebra (which will have to wait for a mathematical statistics class, I’m afraid), we can show that this ratio is equivalent to a ratio of sample variances.</p>
 <p>The important part is that under the null hypothesis in which all of the coefficients predictors are zero, <span class="math display">\[
-H_0 : \beta_0 = \beta_1 = \cdots = \beta_p = 0,
+H_0 : \beta_1 = \beta_2 = \cdots = \beta_p = 0,
 \]</span></p>
 <p>our ratio of squared error terms will follow an F-distribution with parameters given by <span class="math inline">\((n-p-1)\)</span> and <span class="math inline">\(p\)</span>. Knowing this distribution, we can test the null hypothesis above, and associate a p-value with the null hypothesis that our model has <em>no explanatory power</em>.</p>
 <p>Looking at our model summary again,</p>

@@ -377,7 +377,7 @@ After a bit of algebra (which will have to wait for a mathematical statistics cl
 
 The important part is that under the null hypothesis in which all of the coefficients predictors are zero,
 $$
-H_0 : \beta_0 = \beta_1 = \cdots = \beta_p = 0,
+H_0 : \beta_1 = \beta_2 = \cdots = \beta_p = 0,
 $$
 
 our ratio of squared error terms will follow an F-distribution with parameters given by $(n-p-1)$ and $p$.
