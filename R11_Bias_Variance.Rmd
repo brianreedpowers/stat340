@@ -145,6 +145,77 @@ lines(testingError~k, data=crossValidationResults, col="blue")
 abline(h=2^2, col="red")
 ```
 
+Here's a good question: What is better, performing 8-fold cross validation or performing 4-fold cross validation twice and averaging the errors. In one sense you could think they are equivalent, but then on the other hand bias and variance in the estimate of MSE in 4-fold CV come from higher model variance which won't be tamped down just by fitting 8 models - or will it? Let's test this out!
+
+```{r, warning=FALSE}
+NMC <- 500
+ks = 4
+nreps= 2
+crossValidationResults <- data.frame('k' = ks,
+                                     trainingError = 0,
+                                     testingError = 0,
+                                     testingVariance = 0,
+                                     testingBias2 = 0,
+                                     estimationError=0)
+
+for(K in ks){
+  trnErr <- 0
+  tstErr <- 0
+
+  for(j in 1:NMC){
+    set.seed(j) #same data, repeated once for each k
+    sampleData <- generate_data(32)
+  
+    trainingErrors <- 0
+    testingErrors <- 0
+    
+    for(rep in 1:nreps){
+    
+      #idx is a shuffled vector of row numbers
+      idx <- sample(1:nrow(sampleData))
+      #folds partitions the row indices
+      folds <- split(idx, as.factor(1:K))
+    
+      
+      for(k in 1:K){ 
+        training <- sampleData[-folds[[k]],]
+        testing <- sampleData[folds[[k]],]
+        #estimate MSE
+        #fit the model to the training data
+        modelFit <- lm(Y~X, data=training)
+        #calculate the average squared error on the testing data
+        trainingErrors[k+K*(rep-1)] <- mean(resid(modelFit)^2)
+        testingErrors[k+K*(rep-1)] <- mean((predict(modelFit, newdata=testing) - testing$Y)^2)
+      }
+      
+      trnErr[j] <- mean(trainingErrors)
+      tstErr[j] <- mean(testingErrors)
+    }
+  }
+  crossValidationResults[crossValidationResults$k==K, "trainingError"] <- mean(trnErr)
+  crossValidationResults[crossValidationResults$k==K, "testingError"] <- mean(tstErr)
+  
+  crossValidationResults[crossValidationResults$k==K, "testingVariance"] <- var(tstErr)
+  crossValidationResults[crossValidationResults$k==K, "testingBias2"] <- mean((tstErr-4))^2
+  crossValidationResults[crossValidationResults$k==K, "estimationError"] <- mean((tstErr-4)^2)
+}
+crossValidationResults
+```
+
+If we compare this with the results from 8-fold CV:
+
+```{}
+trainErr  testErr   testVar   testBias2   estErr
+3.680593	4.274024	1.316525	0.07508933	1.388982
+```
+8-fold CV has slightly higher training error and slightly lower testing error - these
+are not surprising since training on 28 rows of data will overfit less than trainining on 24 rows of data.
+
+8-fold has slightly lower testing variance, and lower testing bias, and a lower mean squared error.
+
+Intuition was correct - if you're going to fit 8 models, you're better of ensuring that (1) your training sets are larger and (2) you are have non-repeated validation sets.
+
+
 
 ## Another Example - A Multiple Regression Model
 

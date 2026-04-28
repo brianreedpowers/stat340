@@ -10,6 +10,34 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+## Sampling Distribution of S^2 does not converge to any particular shape
+
+If the population is normally distributed, then the sample variance will follow a Chi Square shape distribution
+```{r}
+#true variance = 25
+samp.var <- replicate(10000, var(rnorm(25, 20.5, sd=5)))
+hist(samp.var, probability=TRUE, breaks=50)
+
+#In theory the shape of this distribution is a chi square with 24 degrees of freedom, rescaled
+x<-0:60
+lines(x=x, y=dchisq(x*24/25,24)*24/25)
+```
+
+This is not true when you have samples from some other population shape.
+
+```{r}
+#true variance = 25
+n <- 10
+df <- n-1
+samp.var <- replicate(10000, var(rexp(n, 1)))
+hist(samp.var, probability=TRUE, breaks=50)
+
+#In theory the shape of this distribution is a chi square with 24 degrees of freedom, rescaled
+x<-seq(0,6,by=.01)
+lines(x=x, y=dchisq(x*df/1,df)*df/1)
+```
+
+
 ## Simple Example - Estimating the mean of a Weibull Distribution
 
 The Weibull distribution is a flexible random variable distribution which takes a shape and scale parameter. 
@@ -101,7 +129,7 @@ Let's compare MC estimation vs bootstrapping methods. The difference will become
 
 Suppose the data is drawn from a normal distribution. We can actually compare 3 methods of estimating the variance of the population.
 
-* The classical statistical approach is to use a chi squared distribution for the sampling distribution of $S^2$
+* The classical statistical approach is to use a chi squared distribution for the sampling distribution of $S^2$ (this assumes the population is Normal)
 * The Monte Carlo approach requires us to simulate new data from $N(\hat{\mu}, \hat{\sigma^2})$
 * The bootstrap approach has us re-sample from the initial data.
 
@@ -148,6 +176,8 @@ What if the population is skewed. Take t population is skewed
 ```{r}
 plot(density(rgamma(1000, 2, scale=2)), main="Population Shape")
 ```
+
+
 ```{r}
 MC.coverage <- FALSE
 boot.coverage <- FALSE
@@ -393,6 +423,7 @@ y <- 10 + 4*x + e
 And look at the scatter plot:
 ```{r}
 plot(x,y)
+abline(a=10, b=4)
 ```
 
 Note here that the assumptions of the linear model are not true; the errors are not normally distributed but actually exponentially distributed. This becomes a little clearer when we look at the residual QQ plot:
